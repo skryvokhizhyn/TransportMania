@@ -24,7 +24,7 @@
  *   apps/samples/hello-jni/project/src/com/example/hellojni/HelloJni.java
  */
 jstring
-Java_com_chilloutsoft_transportmania_HelloJni_stringFromJNI( JNIEnv* env,
+Java_com_chilloutsoft_transportmania_TransportManiaActivity_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
 {
     return (*env)->NewStringUTF(env, "Hello from JNI !");
