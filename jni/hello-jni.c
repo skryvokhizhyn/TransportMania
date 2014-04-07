@@ -27,5 +27,5 @@ jstring
 Java_com_chilloutsoft_transportmania_TransportManiaActivity_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
 {
-    return (*env)->NewStringUTF(env, "Hello from JNI !");
+    return (*env)->NewStringUTF(env, "Hello from JNI TROLOLO 2 !");
 }
