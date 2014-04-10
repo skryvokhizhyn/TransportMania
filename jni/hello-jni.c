@@ -23,9 +23,12 @@
  *
  *   apps/samples/hello-jni/project/src/com/example/hellojni/HelloJni.java
  */
+ 
+ const char * test();
+ 
 jstring
 Java_com_chilloutsoft_transportmania_TransportManiaActivity_stringFromJNI( JNIEnv* env,
                                                   jobject thiz )
 {
-    return (*env)->NewStringUTF(env, "11sdfsf");
+    return (*env)->NewStringUTF(env, test());
 }

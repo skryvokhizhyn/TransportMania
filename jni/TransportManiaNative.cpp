@@ -1,7 +1,10 @@
 #include <jni.h>
 #include <string>
-
-void test()
+extern "C" {
+const char * test()
 {
-	std::string a = "asdfs";
-}
+	static std::string a = "asdfs";
+	auto asd = [](){return "sdfhj";};
+	a = asd();
+	return a.c_str();
+}}
