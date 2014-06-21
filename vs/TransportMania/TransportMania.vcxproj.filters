@@ -1,6 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="TransportMania.cpp" />
+    <Filter Include="common">
+      <UniqueIdentifier>{d9dfc567-506a-41c5-bc13-3eafeaf81a6e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\TransportManiaMain.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

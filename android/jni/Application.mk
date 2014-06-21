@@ -7,8 +7,8 @@
 APP_CPPFLAGS += -std=c++11 -fexceptions -frtti
 # or use APP_CPPFLAGS := -std=gnu++11
 # Following is STL implementation. Can be use _static or _shared version, the last one need a call to loadLibrary BEFORE use the C++ code in the shared library
-#APP_STL := gnustl_static
-APP_STL := stlport_static
+APP_STL := gnustl_static
+#APP_STL := stlport_static
 
 #APP_ABI := armeabi armeabi-v7a x86
 #ifneq (,$(findstring Windows, $(OS)))
