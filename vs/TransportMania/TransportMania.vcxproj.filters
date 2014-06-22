@@ -1,13 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="common">
-      <UniqueIdentifier>{d9dfc567-506a-41c5-bc13-3eafeaf81a6e}</UniqueIdentifier>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{0f8cb419-e527-4fe3-b527-20c8359a3ab8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WinSpecific">
+      <UniqueIdentifier>{d501450f-7c9d-407d-8e36-9a95f0c4ad1f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\TransportManiaMain.cpp">
-      <Filter>common</Filter>
+    <ClCompile Include="..\..\src\Game.cpp" />
+    <ClCompile Include="..\..\src\TransportManiaMain.cpp" />
+    <ClCompile Include="Logger.cpp">
+      <Filter>WinSpecific</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\SafeExecute.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Logger.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Game.h" />
   </ItemGroup>
 </Project>

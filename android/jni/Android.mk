@@ -12,10 +12,16 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := TransportManiaNative
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../3rdparty/SDL2/include
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../src/
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../3rdparty/SDL2/include
+LOCAL_C_INCLUDES += $(BOOST_PATH)/
 
-LOCAL_SRC_FILES := SDL_android_main.c
-LOCAL_SRC_FILES += $(subst $(LOCAL_PATH)/,, $(wildcard $(LOCAL_PATH)/../../src/*.cpp))
+LOCAL_SRC_FILES := \
+	$(subst $(LOCAL_PATH)/,, \
+		$(wildcard $(LOCAL_PATH)/*.cpp) \
+		$(wildcard $(LOCAL_PATH)/*.c) \
+		$(wildcard $(LOCAL_PATH)/../../src/*.cpp) \
+	)
 
 LOCAL_LDLIBS := -ldl -lGLESv1_CM -lGLESv2 -llog -landroid 
 LOCAL_STATIC_LIBRARIES := libSDL2
