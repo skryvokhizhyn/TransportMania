@@ -122,8 +122,8 @@ namespace
 } // namespace
 
 Game::Game()
-	: gWindow(NULL)
-	, gContext(NULL)
+	: gWindow(nullptr)
+	, gContext(nullptr)
 {
 }
 
@@ -153,13 +153,13 @@ Game::Init()
 		width, height,
 		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
 
-	if (gWindow == NULL)
+	if (gWindow == nullptr)
 	{
 		throw std::runtime_error((boost::format("Window could not be created! SDL Error: %s") % SDL_GetError()).str());
 	}	
 
 	gContext = SDL_GL_CreateContext(gWindow);
-	if (gContext == NULL)
+	if (gContext == nullptr)
 	{
 		throw std::runtime_error((boost::format("OpenGL context could not be created! SDL Error: %s") % SDL_GetError()).str());
 	}
