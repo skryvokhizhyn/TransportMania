@@ -1,9 +1,9 @@
 #pragma once
 
-#define GL_GLEXT_PROTOTYPES
-
 #include <SDL.h>
-#include <SDL_opengles2.h>
+
+#include <memory>
+#include <type_traits>
 
 namespace trm
 {
@@ -11,14 +11,27 @@ namespace trm
 	{
 	public:
 		Game();
-
-		void Init();
 		void Run();
-		void Term();
 
 	private:
-		SDL_Window * gWindow;
-		SDL_GLContext gContext;
+		void InitSDL();
+		void InitGL();
+
+	private:
+		using SDLWindowPtr = std::shared_ptr<SDL_Window>;
+		using SDLContextPtr = std::shared_ptr<std::remove_pointer<SDL_GLContext>::type>;
+
+	private:
+		struct SDL_RAII
+		{
+			SDL_RAII();
+			~SDL_RAII();
+		};
+
+	private:
+		SDL_RAII sdl_;
+		SDLWindowPtr windowPtr_;
+		SDLContextPtr contextPtr_;
 	};
 
 } // namespace trm

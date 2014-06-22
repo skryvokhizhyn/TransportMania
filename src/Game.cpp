@@ -1,11 +1,20 @@
-#include "Game.h"
+#define GL_GLEXT_PROTOTYPES
 
+#include "Game.h"
 #include "Logger.h"
+
+#include <SDL_opengles2.h>
 
 #include <boost/format.hpp>
 #include <stdexcept>
 
 using namespace trm;
+
+namespace trm
+{
+	// exported for each platform
+	void GetScreenParameters(int & width, int & height, uint32_t & flags);
+}
 
 namespace
 {
@@ -14,7 +23,7 @@ namespace
 	GLuint gVBO = 0;
 	GLuint gIBO = 0;
 
-	void InitGL()
+	void InitGLObjects()
 	{
 		gProgramID = glCreateProgram();
 
@@ -121,20 +130,29 @@ namespace
 
 } // namespace
 
-Game::Game()
-	: gWindow(nullptr)
-	, gContext(nullptr)
-{
-}
-
-void
-Game::Init()
+Game::SDL_RAII::SDL_RAII()
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
 		throw std::runtime_error((boost::format("SDL could not initalize! SDL Error %s") % SDL_GetError()).str());
 	}
-	
+}
+
+Game::SDL_RAII::~SDL_RAII()
+{
+	SDL_Quit();
+}
+
+Game::Game()
+{
+	InitSDL();
+	InitGL();
+	InitGLObjects();
+}
+
+void
+Game::InitSDL()
+{
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
@@ -142,24 +160,33 @@ Game::Init()
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-	SDL_DisplayMode mode;
+	int width = 0;
+	int height = 0;
+	uint32_t flags = 0;
 
-	SDL_GetDisplayMode(0, 0, &mode);
-	int width = mode.w;
-	int height = mode.h;
+	GetScreenParameters(width, height, flags);
 
-	gWindow = SDL_CreateWindow("Transport Mania", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		//640, 480,
-		width, height,
-		SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
+	windowPtr_.reset(
+		SDL_CreateWindow("Transport Mania", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+			width, height, flags),
+		[](SDL_Window * p) { SDL_DestroyWindow(p); }
+	);
 
-	if (gWindow == nullptr)
+	if (!windowPtr_)
 	{
 		throw std::runtime_error((boost::format("Window could not be created! SDL Error: %s") % SDL_GetError()).str());
 	}	
+}
 
-	gContext = SDL_GL_CreateContext(gWindow);
-	if (gContext == nullptr)
+void
+Game::InitGL()
+{
+	contextPtr_.reset(
+		SDL_GL_CreateContext(windowPtr_.get()),
+		[](SDL_GLContext p) { SDL_GL_DeleteContext(p); }
+	);
+
+	if (!contextPtr_)
 	{
 		throw std::runtime_error((boost::format("OpenGL context could not be created! SDL Error: %s") % SDL_GetError()).str());
 	}
@@ -171,8 +198,6 @@ Game::Init()
 			utils::Logger().Warning() << (boost::format("Warning: Unable to set VSync! SDL Error: %s") % SDL_GetError()).str();
 		}
 	}
-
-	InitGL();
 }
 
 void
@@ -193,15 +218,6 @@ Game::Run()
 	
 		Render();
 	
-		SDL_GL_SwapWindow(gWindow);
+		SDL_GL_SwapWindow(windowPtr_.get());
 	}
-	
-	SDL_DestroyWindow(gWindow);
-	SDL_Quit();
-}
-
-void
-Game::Term()
-{
-
 }

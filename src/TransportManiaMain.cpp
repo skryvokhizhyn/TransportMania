@@ -243,9 +243,7 @@ int main(int /*argc*/, char ** /*argv*/)
 	[]()
 	{
 		trm::Game game;
-		game.Init();
 		game.Run();
-		game.Term();
 	});
 
 	return res ? 0 : 1;
