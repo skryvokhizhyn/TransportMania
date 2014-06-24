@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Application.h"
+
 #include <SDL.h>
 
 #include <memory>
@@ -11,6 +13,7 @@ namespace trm
 	{
 	public:
 		Game();
+		~Game();
 		void Run();
 
 	private:
@@ -32,6 +35,7 @@ namespace trm
 		SDL_RAII sdl_;
 		SDLWindowPtr windowPtr_;
 		SDLContextPtr contextPtr_;
+		Application app_;
 	};
 
 } // namespace trm

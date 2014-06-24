@@ -7,6 +7,39 @@
     <Filter Include="WinSpecific">
       <UniqueIdentifier>{d501450f-7c9d-407d-8e36-9a95f0c4ad1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{26f1a25f-74e7-48a1-b990-5ae004279b3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw">
+      <UniqueIdentifier>{5522abff-6784-4862-916c-e5823e54aa8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw\Railroad">
+      <UniqueIdentifier>{b9e3b191-1fbe-4243-ba1d-dc4b228402f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw\Railroad\Visitors">
+      <UniqueIdentifier>{7970fd1a-511b-4ca8-ad8f-f25b1349671f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw\Transport">
+      <UniqueIdentifier>{fee55e57-f658-48c4-a9b6-d9cf793c2572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Draw\Transport\Drawables">
+      <UniqueIdentifier>{234f542d-0218-469a-b1be-042e092351cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{7a871ab7-ecfb-4396-bfdf-32f53a589229}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RoadNetwork">
+      <UniqueIdentifier>{b0bd981e-6578-4ba7-ad11-7bb7bbc9f5a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{0575c033-2497-4cd2-bdf2-780467ad8988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain\LOD">
+      <UniqueIdentifier>{42153ba2-c584-4acf-a354-046b4020a680}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Transport">
+      <UniqueIdentifier>{828627ee-484d-4510-a91c-be06a6a99f14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Game.cpp" />
@@ -17,6 +50,205 @@
     <ClCompile Include="ScreenParameters.cpp">
       <Filter>WinSpecific</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Line.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MatrixFactory.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PointHash.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RangeRectangle.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TriangleMapper.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Vertex.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadMover.cpp">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadParametersTaker.cpp">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadRenderer.cpp">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadRendererArc.cpp">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadRendererLine.cpp">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadSizer.cpp">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoad.cpp">
+      <Filter>Draw\Railroad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadArc.cpp">
+      <Filter>Draw\Railroad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadDrawableObject.cpp">
+      <Filter>Draw\Railroad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadFactory.cpp">
+      <Filter>Draw\Railroad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadLine.cpp">
+      <Filter>Draw\Railroad</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\LocomotiveDrawableObject.cpp">
+      <Filter>Draw\Transport\Drawables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainDrawableObject.cpp">
+      <Filter>Draw\Transport\Drawables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainDrawableObjectFactory.cpp">
+      <Filter>Draw\Transport\Drawables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\VehicleDrawableObject.cpp">
+      <Filter>Draw\Transport\Drawables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WagonDrawableObject.cpp">
+      <Filter>Draw\Transport\Drawables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainEngine.cpp">
+      <Filter>Draw\Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainMovableObject.cpp">
+      <Filter>Draw\Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainMovablePart.cpp">
+      <Filter>Draw\Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainPartParameters.cpp">
+      <Filter>Draw\Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\VehicleMovableObject.cpp">
+      <Filter>Draw\Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DrawContext.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DynamicSceneObject.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DynamicSceneObjectFactory.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MovableObject.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ShaderLoader.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\StaticSceneObject.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\StaticSceneObjectFactory.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainSceneObject.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WorldProjection.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ModelDrawer.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ModelDrawerPool.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RoadNetwork.cpp">
+      <Filter>RoadNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RoadPoint.cpp">
+      <Filter>RoadNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RoadRoute.cpp">
+      <Filter>RoadNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RoadRouteHolder.cpp">
+      <Filter>RoadNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Patch.cpp">
+      <Filter>Terrain\LOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PatchGrid.cpp">
+      <Filter>Terrain\LOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PatchTriangleMapper.cpp">
+      <Filter>Terrain\LOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TriangleNode.cpp">
+      <Filter>Terrain\LOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TriangleNodeHandler.cpp">
+      <Filter>Terrain\LOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TriangleNodePool.cpp">
+      <Filter>Terrain\LOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Variance.cpp">
+      <Filter>Terrain\LOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMap.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapExtended.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapLoaderTest.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Terraformer.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerraformFunction.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRange.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRangeArc.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRangeCircle.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRangeLine.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapLoaderFile.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TransportManager.cpp">
+      <Filter>Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\GeometryUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MatrixUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Application.cpp" />
+    <ClCompile Include="..\..\src\Terrain.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Train.cpp">
+      <Filter>Draw\Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapLoaderFactory.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\BmpHandler.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -26,5 +258,285 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Game.h" />
+    <ClInclude Include="..\..\src\Angle.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\GlobalDefines.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Line.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Matrix.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\MatrixFactory.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Point2d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Point3d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Point4d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\PointHash.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\PointImpl.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\PointProxy.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RangeRectangle.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Size2d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Triangle2d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Triangle3d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TriangleMapper.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Types.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Vertex.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadMover.h">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadParametersTaker.h">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadRenderer.h">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadRendererArc.h">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadRendererLine.h">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadSizer.h">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadVisitor.h">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadVisitorTmpl.h">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoad.h">
+      <Filter>Draw\Railroad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadArc.h">
+      <Filter>Draw\Railroad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadDrawableObject.h">
+      <Filter>Draw\Railroad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadFactory.h">
+      <Filter>Draw\Railroad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadLine.h">
+      <Filter>Draw\Railroad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\LocomotiveDrawableObject.h">
+      <Filter>Draw\Transport\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainDrawableObject.h">
+      <Filter>Draw\Transport\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainDrawableObjectFactory.h">
+      <Filter>Draw\Transport\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\VehicleDrawableObject.h">
+      <Filter>Draw\Transport\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WagonDrawableObject.h">
+      <Filter>Draw\Transport\Drawables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainDynamicSceneObject.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainEngine.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainMovableObject.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainMovablePart.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainMoveParameters.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainPart.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainPartParameters.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainTypes.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\VehicleData.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\VehicleMovableObject.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\DrawableObject.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\DrawContext.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\DynamicSceneObject.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\DynamicSceneObjectFactory.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\MovableObject.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ShaderLoader.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\StaticSceneObject.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\StaticSceneObjectFactory.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainSceneObject.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WorldProjection.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ModelData.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ModelDrawer.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ModelDrawerPool.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RoadNetwork.h">
+      <Filter>RoadNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RoadNetworkImpl.h">
+      <Filter>RoadNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RoadPoint.h">
+      <Filter>RoadNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RoadRoute.h">
+      <Filter>RoadNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RoadRouteHolder.h">
+      <Filter>RoadNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Patch.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\PatchGrid.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\PatchTriangleMapper.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TriangleNode.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TriangleNodeHandler.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TriangleNodePool.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Variance.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMap.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapBase.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapExtended.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapLoader.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapLoaderFactory.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapLoaderTest.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Terraformer.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerraformFunction.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainRange.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainRangeArc.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainRangeCircle.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainRangeLine.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapLoaderFile.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainStateMachine.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TransportManager.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\CommonUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\GeometryUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\MatrixUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Application.h" />
+    <ClInclude Include="..\..\src\SymmetricMap.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Terrain.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Train.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\BmpHandler.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

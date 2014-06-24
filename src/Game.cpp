@@ -147,7 +147,16 @@ Game::Game()
 {
 	InitSDL();
 	InitGL();
-	InitGLObjects();
+	//InitGLObjects();
+
+	app_.InitApplication(640, 480);
+	app_.InitView();
+}
+
+Game::~Game()
+{
+	app_.ReleaseView();
+	app_.QuitApplication();
 }
 
 void
@@ -216,7 +225,8 @@ Game::Run()
 			}
 		}
 	
-		Render();
+		//Render();
+		app_.RenderScene();
 	
 		SDL_GL_SwapWindow(windowPtr_.get());
 	}
