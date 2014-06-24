@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="UnitTest.cpp" />
+    <ClCompile Include="MathTest.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="SymmetricMapTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="TiangleMapperTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="TrainStateMachineTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="WeakStoringCacheTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="PointTest.cpp">
+      <Filter>Point</Filter>
+    </ClCompile>
+    <ClCompile Include="PointImplTest.cpp">
+      <Filter>Point</Filter>
+    </ClCompile>
+    <ClCompile Include="RailRoadVisitorsTest.cpp">
+      <Filter>RoadNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadNetworkTest.cpp">
+      <Filter>RoadNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadPointTest.cpp">
+      <Filter>RoadNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="HeightMapTest.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="PatchGridTest.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="RangeTest.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="TerraformTest.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="TriangleNodeTest.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="VarianceTest.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldProjectionTest.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonUtilsTest.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryUtilsTest.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\GeometryUtils.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMap.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapExtended.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Line.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MatrixFactory.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MatrixUtils.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Patch.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PatchGrid.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PatchTriangleMapper.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PointHash.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoad.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadArc.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadFactory.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadLine.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadMover.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadParametersTaker.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadSizer.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RangeRectangle.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RoadNetwork.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RoadPoint.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RoadRoute.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Terraformer.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerraformFunction.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Terrain.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRange.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRangeArc.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRangeCircle.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRangeLine.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TriangleMapper.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TriangleNode.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TriangleNodeHandler.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Variance.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Vertex.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WorldProjection.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TransportMania\Logger.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TriangleNodePool.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Math">
+      <UniqueIdentifier>{c1b61b94-7fbb-484d-ba40-72cf892a4ce9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="obj">
+      <UniqueIdentifier>{f1786df4-5575-4676-94c0-5698fcf8410e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Other">
+      <UniqueIdentifier>{b2352dd1-bfe5-46c5-8879-29838ecb22aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Point">
+      <UniqueIdentifier>{9a770db6-bece-4d07-a672-0808aba8af7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RoadNetwork">
+      <UniqueIdentifier>{648cdc36-b786-4fef-bcdf-445f2894d72f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain">
+      <UniqueIdentifier>{c6f1990c-ad0f-4b96-adfb-6a3ef2042a1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{ab2b3bec-d8d5-4605-bab6-38d167d85d74}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
