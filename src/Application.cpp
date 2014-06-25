@@ -10,7 +10,9 @@
 #include "StaticSceneObjectFactory.h"
 #include "DynamicSceneObjectFactory.h"
 #include "Train.h"
+#include "Settings.h"
 #include <boost/range/algorithm.hpp>
+#include <boost/filesystem/path.hpp>
 
 using namespace trm;
 using namespace trm::terrain;
@@ -39,12 +41,11 @@ Application::InitView()
 {
 	context_.Init();
 
-	//Terrain terrain(HeightMapLoaderPtr(new terrain::HeightMapLoaderTest(4 * Terrain::PATCH_SIZE + 1)));
-	//HeightMapLoaderPtr hmlPtr = terrain::HeightMapLoaderFactory::GetTestLoader(16 * 8 + 1);
-	HeightMapLoaderPtr hmlPtr = terrain::HeightMapLoaderFactory::GetFileLoader("/sdcard/TransportMania/hf_513.bmp");
+	HeightMapLoaderPtr hmlPtr = terrain::HeightMapLoaderFactory::GetFileLoader(
+		(boost::filesystem::path(trm::GetDataFolderPath()) / "hf_513.bmp").string());
+	
 	terrainPtr_.reset(new Terrain(hmlPtr));
-	//Terrain terrain(HeightMapLoaderPtr(new terrain::HeightMapLoaderTest(8)));
-	//terrainScenePtr_ = std::make_shared<TerrainSceneObject>(std::move(terrain));
+
 	terrainScenePtr_ = std::make_shared<TerrainSceneObject>(terrainPtr_);
 
 	return true;

@@ -167,6 +167,12 @@
     <ClCompile Include="..\..\src\TriangleNodePool.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="SettingsTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Settings.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

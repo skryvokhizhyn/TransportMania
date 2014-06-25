@@ -50,6 +50,7 @@
     <ClCompile Include="..\..\src\RoadPoint.cpp" />
     <ClCompile Include="..\..\src\RoadRoute.cpp" />
     <ClCompile Include="..\..\src\RoadRouteHolder.cpp" />
+    <ClCompile Include="..\..\src\Settings.cpp" />
     <ClCompile Include="..\..\src\ShaderLoader.cpp" />
     <ClCompile Include="..\..\src\StaticSceneObject.cpp" />
     <ClCompile Include="..\..\src\StaticSceneObjectFactory.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="..\..\src\RoadRoute.h" />
     <ClInclude Include="..\..\src\RoadRouteHolder.h" />
     <ClInclude Include="..\..\src\SafeExecute.h" />
+    <ClInclude Include="..\..\src\Settings.h" />
     <ClInclude Include="..\..\src\ShaderLoader.h" />
     <ClInclude Include="..\..\src\Size2d.h" />
     <ClInclude Include="..\..\src\StaticSceneObject.h" />

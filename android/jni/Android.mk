@@ -12,6 +12,11 @@ LOCAL_SRC_FILES := $(BOOST_PATH)/lib32-gcc/libboost_system-gcc-mt-s-1_55.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE    := libBoostFilesystem 
+LOCAL_SRC_FILES := $(BOOST_PATH)/lib32-gcc/libboost_filesystem-gcc-mt-s-1_55.a
+include $(PREBUILT_STATIC_LIBRARY)
+
+include $(CLEAR_VARS)
 
 LOCAL_MODULE := TransportManiaNative
 
@@ -27,7 +32,7 @@ LOCAL_SRC_FILES := \
 	)
 
 LOCAL_LDLIBS := -ldl -lGLESv1_CM -lGLESv2 -llog -landroid 
-LOCAL_STATIC_LIBRARIES := libSDL2 libBoostSystem
+LOCAL_STATIC_LIBRARIES := libSDL2 libBoostSystem libBoostFilesystem
 
 include $(BUILD_SHARED_LIBRARY)
 

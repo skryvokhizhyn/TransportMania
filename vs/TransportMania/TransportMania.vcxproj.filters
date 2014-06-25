@@ -249,6 +249,9 @@
     <ClCompile Include="..\..\src\BmpHandler.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Settings.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -536,6 +539,9 @@
       <Filter>Draw\Transport</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\BmpHandler.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Settings.h">
       <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
