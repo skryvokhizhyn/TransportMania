@@ -173,6 +173,9 @@
     <ClCompile Include="..\..\src\Settings.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="EventStateMachineTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

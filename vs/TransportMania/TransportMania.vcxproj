@@ -16,6 +16,7 @@
     <ClCompile Include="..\..\src\DrawContext.cpp" />
     <ClCompile Include="..\..\src\DynamicSceneObject.cpp" />
     <ClCompile Include="..\..\src\DynamicSceneObjectFactory.cpp" />
+    <ClCompile Include="..\..\src\EventHandler.cpp" />
     <ClCompile Include="..\..\src\Game.cpp" />
     <ClCompile Include="..\..\src\GeometryUtils.cpp" />
     <ClCompile Include="..\..\src\HeightMap.cpp" />
@@ -93,6 +94,8 @@
     <ClInclude Include="..\..\src\DrawContext.h" />
     <ClInclude Include="..\..\src\DynamicSceneObject.h" />
     <ClInclude Include="..\..\src\DynamicSceneObjectFactory.h" />
+    <ClInclude Include="..\..\src\EventHandler.h" />
+    <ClInclude Include="..\..\src\EventStateMachine.h" />
     <ClInclude Include="..\..\src\Game.h" />
     <ClInclude Include="..\..\src\GeometryUtils.h" />
     <ClInclude Include="..\..\src\GlobalDefines.h" />

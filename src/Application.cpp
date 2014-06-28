@@ -11,6 +11,7 @@
 #include "DynamicSceneObjectFactory.h"
 #include "Train.h"
 #include "Settings.h"
+#include "Angle.h"
 #include <boost/range/algorithm.hpp>
 #include <boost/filesystem/path.hpp>
 
@@ -22,6 +23,8 @@ bool SCENE_UPDATED = false;
 bool 
 Application::InitApplication(const size_t width, const size_t height)
 {
+	stopped_ = false;
+
 	if (height == 0)
 		throw std::runtime_error("Zero screen height specified");
 
@@ -33,8 +36,6 @@ Application::InitApplication(const size_t width, const size_t height)
 	
 	return true;
 }
-
-#include "Angle.h"
 
 bool 
 Application::InitView()
@@ -68,6 +69,18 @@ Application::QuitApplication()
 	//TriangleNodePool::Term();
 
 	return true;
+}
+
+bool
+Application::IsStopped() const
+{
+	return stopped_;
+}
+
+void
+Application::Stop()
+{
+	stopped_ = true;
 }
 
 void 

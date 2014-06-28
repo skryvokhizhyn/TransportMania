@@ -27,6 +27,9 @@ namespace trm
 		bool QuitApplication();
 		bool RenderScene();
 
+		bool IsStopped() const;
+		void Stop();
+
 		void ShiftScene(const float x, const float y);
 		void ZoomScene(const float z);
 		void RotateScene(const float angle);
@@ -58,6 +61,7 @@ namespace trm
 		void Draw();
 
 	private:
+		bool stopped_;
 		DrawContext context_;
 		WorldProjection worldProjection_;
 		TerrainPtr terrainPtr_;

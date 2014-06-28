@@ -40,10 +40,11 @@
     <Filter Include="Transport">
       <UniqueIdentifier>{828627ee-484d-4510-a91c-be06a6a99f14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{acaf0267-5a1e-464a-a93a-f7148e7d0bd0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Game.cpp" />
-    <ClCompile Include="..\..\src\TransportManiaMain.cpp" />
     <ClCompile Include="Logger.cpp">
       <Filter>WinSpecific</Filter>
     </ClCompile>
@@ -236,7 +237,6 @@
     <ClCompile Include="..\..\src\MatrixUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Application.cpp" />
     <ClCompile Include="..\..\src\Terrain.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
@@ -252,6 +252,18 @@
     <ClCompile Include="..\..\src\Settings.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\TransportManiaMain.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Application.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Game.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\EventHandler.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -260,7 +272,6 @@
     <ClInclude Include="..\..\src\Logger.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Game.h" />
     <ClInclude Include="..\..\src\Angle.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -528,7 +539,6 @@
     <ClInclude Include="..\..\src\MatrixUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Application.h" />
     <ClInclude Include="..\..\src\SymmetricMap.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -543,6 +553,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Settings.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Application.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Game.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventHandler.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventStateMachine.h">
+      <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

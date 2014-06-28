@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\src\WorldProjection.cpp" />
     <ClCompile Include="..\TransportMania\Logger.cpp" />
     <ClCompile Include="CommonUtilsTest.cpp" />
+    <ClCompile Include="EventStateMachineTest.cpp" />
     <ClCompile Include="GeometryUtilsTest.cpp" />
     <ClCompile Include="HeightMapTest.cpp" />
     <ClCompile Include="MathTest.cpp" />
