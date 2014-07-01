@@ -33,7 +33,6 @@ namespace impl
 	private:
 		typedef impl::TrainStateMachine<TransportManager> StateMachine;
 		typedef std::shared_ptr<StateMachine> ImplPtr;
-		//typedef std::vector<DynamicSceneObjectPtr> DynamicSceneObjectPtrs;
 
 	private:
 		TrainPtr trainPtr_;

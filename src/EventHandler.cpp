@@ -8,7 +8,7 @@ using namespace trm::impl;
 #include "Logger.h"
 
 EventHandler::EventHandler(Application & app)
-	: eventSMPtr_(new impl::EventStateMachine<Application>(app))
+	: eventSMPtr_(std::make_shared<impl::EventStateMachine<Application>>(app))
 {}
 
 void

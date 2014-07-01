@@ -25,7 +25,7 @@ namespace trm
 		bool InitView();
 		bool ReleaseView();
 		bool QuitApplication();
-		bool RenderScene();
+		void RenderScene();
 
 		bool IsStopped() const;
 		void Stop();

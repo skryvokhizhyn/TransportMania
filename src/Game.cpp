@@ -3,6 +3,7 @@
 #include "Game.h"
 #include "Logger.h"
 #include "EventHandler.h"
+#include "FpsCounter.h"
 
 #include <boost/format.hpp>
 #include <stdexcept>
@@ -98,7 +99,10 @@ Game::Run()
 {
 	SDL_Event event;
 	EventHandler handler(app_);
+	FpsCounter fpsCounter(2); /*report each 2 seconds*/
 	
+	fpsCounter.Start();
+
 	for (;;)
 	{
 		while (SDL_PollEvent(&event))
@@ -114,5 +118,12 @@ Game::Run()
 		app_.RenderScene();
 	
 		SDL_GL_SwapWindow(windowPtr_.get());
+
+		if (fpsCounter.Tick())
+		{
+			const unsigned frames = fpsCounter.GetFrames();
+
+			utils::Logger().Debug() << "Frames " << frames;
+		}
 	}
 }

@@ -264,6 +264,9 @@
     <ClCompile Include="..\..\src\EventHandler.cpp">
       <Filter>Application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\FpsCounter.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -564,6 +567,9 @@
       <Filter>Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\EventStateMachine.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\FpsCounter.h">
       <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>

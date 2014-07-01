@@ -7,7 +7,6 @@ using namespace trm;
 
 DynamicSceneObject::DynamicSceneObject(const DrawableObjectPtr & oPtr, const MovableObjectPtr & mPtr/*, const TrainWPtr & trainPtr*/)
 	: mPtr_(mPtr)
-	//, trainPtr_(trainPtr)
 	, matrix_(MatrixFactory::Identity())
 {
 	ModelData md;
@@ -17,12 +16,6 @@ DynamicSceneObject::DynamicSceneObject(const DrawableObjectPtr & oPtr, const Mov
 	Update();
 }
 
-//bool
-//DynamicSceneObject::Valid() const
-//{
-//	return !trainPtr_.expired();
-//}
-
 void 
 DynamicSceneObject::Update()
 {
@@ -30,12 +23,11 @@ DynamicSceneObject::Update()
 	mPtr_->Move();
 	const Point3d & pT = mPtr_->GetPosition();
 
-	const Point3d dir = pT - pF;
-
 	if (pT == pF)
 	{
 		return;
 	}
+
 	const Matrix moveMatrix = MatrixFactory::Move(pT);
 
 	const Matrix rotateMatrix = MatrixFactory::Rotate(Point3d(1, 0, 0), pT - pF, Point3d(0, 0, 1));

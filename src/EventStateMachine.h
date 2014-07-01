@@ -22,7 +22,7 @@
 #define ACTION_IMPLEMENTATION(name) \
 	template<typename Subject> \
 	template<class Fsm, class Evt, class SourceState, class TargetState> \
-	void EventStateMachine<Subject>::EventSMImpl::Apply ## name ##::operator () \
+	void EventStateMachine<Subject>::EventSMImpl::Apply ## name ::operator () \
 		(Evt const & /*evt*/, Fsm & fsm, SourceState &, TargetState &) 
 
 namespace trm

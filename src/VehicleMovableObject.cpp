@@ -11,13 +11,6 @@ VehicleMovableObject::VehicleMovableObject(const RoadRoutePtr & r, const Heading
 void
 VehicleMovableObject::Move()
 {
-	/*static bool inited = false;
-
-	if (inited)
-	{
-		return;
-	}*/
-
 	static float dist = 1.0f;
 	if (roadPoint_.Move(dist))
 	{
@@ -27,6 +20,4 @@ VehicleMovableObject::Move()
 	{
 		dist *= -1.0f;
 	}
-
-	//inited = true;
 }

@@ -13,21 +13,15 @@ namespace trm
 		: boost::noncopyable
 	{
 	public:
-		Train(TrainPart head/*, RoadRoutePtr rrp, const Heading h*/);
+		Train(TrainPart head);
 
 		void Append(TrainPart tp);
 		void Clear();
-		//void SetLength(const float len);
 
 		const TrainPart Head() const;
 		const TrainParts & Parts() const;
-		//const TrainEngine & Engine() const;
-		/*const RoadRoute & Route() const;
-		Heading RouteHeading() const;*/
 		const TrainMoveParameters & MoveParameters() const;
 		float Length() const;
-
-		//bool Update();
 
 		void SetMoveDistance(const float dist);
 		float GetMoveDistance() const;
@@ -36,9 +30,6 @@ namespace trm
 		void ApplyParameters(const TrainPart & tp);
 
 	private:
-		//RoadRoutePtr roadRoutePtr_;
-		//Heading heading_;
-		//TrainEngine engine_;
 		float moveDistance_;
 		const TrainPart head_;
 		TrainParts trainParts_;

@@ -66,8 +66,6 @@ Application::ReleaseView()
 bool 
 Application::QuitApplication()
 {
-	//TriangleNodePool::Term();
-
 	return true;
 }
 
@@ -151,7 +149,7 @@ Application::Draw()
 	});*/
 }
 
-bool 
+void 
 Application::RenderScene()
 {
 	context_.Clear();
@@ -165,8 +163,6 @@ Application::RenderScene()
 	Draw();	
 
 	SCENE_UPDATED = true;
-
-	return true;
 }
 
 void 

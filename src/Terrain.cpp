@@ -13,7 +13,7 @@ const float Terrain::MAX_HEIGHT = 40.0f;
 const float Terrain::MIN_HEIGHT = -5.0f;
 
 Terrain::Terrain(const HeightMapLoaderPtr & hmlPtr)
-	:/* hmlPtr_(hmlPtr), */patchGrid_(PATCH_SIZE, boost::numeric_cast<unsigned short>((hmlPtr->getSize() - 1) / (PATCH_SIZE - 1)), hmlPtr)
+	: patchGrid_(PATCH_SIZE, boost::numeric_cast<unsigned short>((hmlPtr->getSize() - 1) / (PATCH_SIZE - 1)), hmlPtr)
 {
 	patchGrid_.Init();
 
@@ -26,8 +26,7 @@ Terrain::Terrain(const HeightMapLoaderPtr & hmlPtr)
 }
 
 Terrain::Terrain(Terrain && t)
-	: //hmlPtr_(std::move(t.hmlPtr_))
-	/*,*/ patchGrid_(std::move(t.patchGrid_))
+	: patchGrid_(std::move(t.patchGrid_))
 {
 }
 
