@@ -8,12 +8,14 @@
 #include "HeightMapLoaderFactory.h"
 #include "RailRoadFactory.h"
 #include "StaticSceneObjectFactory.h"
-#include "DynamicSceneObjectFactory.h"
 #include "Train.h"
 #include "Settings.h"
 #include "Angle.h"
+#include "TrainVisibilityHandler.h"
 #include <boost/range/algorithm.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/range/adaptor/map.hpp>
+#include <boost/lambda/bind.hpp>
 
 using namespace trm;
 using namespace trm::terrain;
@@ -84,38 +86,30 @@ Application::Stop()
 void 
 Application::Update()
 {
-	terrainScenePtr_->Update(worldProjection_);
-
-	const auto firstArrived = boost::range::remove_if(managers_,
-		[](const TransportManagers::value_type & v)
+	if (!SCENE_UPDATED)
 	{
-		return !v->Update();
-	});
+		terrainScenePtr_->Update(worldProjection_);
+	}
 
-	managers_.erase(firstArrived, managers_.end());
+	boost::for_each(managers1_, std::bind(&TransportManager::Update, std::placeholders::_1));
 
-	//const auto inactiveSceneObjects = boost::range::remove_if(dynamicSceneObjects_,
-	//	[](const DynamicSceneObjectPtr & dsoPtr)
-	//{
-	//	DynamicSceneObject & dso = *dsoPtr;
+	TrainVisibilityHandler visibilityHandler(worldProjection_, componentHolder_);
+	boost::for_each(componentHolder_.movables | boost::adaptors::map_values,
+		std::ref(visibilityHandler));
+	
+	auto it = boost::remove_if(componentHolder_.visibles,
+		!boost::bind(&TrainVisibleObject::Update, boost::lambda::_1));
 
-	//	if (!dso.Valid())
-	//	{
-	//		return true;
-	//	}
-
-	//	dso.Update();
-
-	//	return false;
-	//});
-
-	//dynamicSceneObjects_.erase(inactiveSceneObjects, dynamicSceneObjects_.end());
+	componentHolder_.visibles.erase(it, componentHolder_.visibles.end());
 }
 
 void 
 Application::Render()
 {
-	terrainScenePtr_->Render();
+	if (!SCENE_UPDATED)
+	{	
+		terrainScenePtr_->Render();
+	}
 }
 
 void 
@@ -130,23 +124,12 @@ Application::Draw()
 	std::for_each(staticSceneObjects_.cbegin(), staticSceneObjects_.cend(), 
 		[](const StaticSceneObjectPtr & ssoPtr){ssoPtr->Draw();});
 
-	boost::range::for_each(managers_,
-		[&](const TransportManagerUPtr & tmUPtr)
+	boost::for_each(componentHolder_.visibles,
+		[&](const TrainVisibleObject & tvo)
 	{
-		boost::range::for_each(tmUPtr->GetDynamicSceneObjects(),
-			[&](const DynamicSceneObjectPtr & dsoPtr)
-		{
-			context_.Transform(pvm, dsoPtr->GetModelMatrix());
-			dsoPtr->Draw();
-		});
+		context_.Transform(pvm, tvo.GetMatrix());
+		tvo.Draw();
 	});
-
-	/*std::for_each(dynamicSceneObjects_.cbegin(), dynamicSceneObjects_.cend(),
-		[&](const DynamicSceneObjectPtr & dsoPtr)
-	{
-		context_.Transform(pvm, dsoPtr->GetModelMatrix());
-		dsoPtr->Draw();
-	});*/
 }
 
 void 
@@ -154,12 +137,8 @@ Application::RenderScene()
 {
 	context_.Clear();
 
-	if (!SCENE_UPDATED)
-	{
-		Update();
-		Render();
-	}
-		
+	Update();
+	Render();
 	Draw();	
 
 	SCENE_UPDATED = true;
@@ -271,30 +250,20 @@ Application::PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle
 	staticSceneObjects_.push_back(StaticSceneObjectFactory::ForRailRoad(rrp));
 }
 
-//void 
-//Application::EmulateDynamicScene1()
-//{
-//	const Point3d p1(10, 10, 3);
-//	const Point3d p2(30, 10, 3);
-//	const Point2d c1(30, 20);
-//	const Angle a = Degrees(180);
-//	const Point3d p3(30, 30, 3);
-//	const Point3d p4(20, 30, 3);
-//	const Point2d c2(20, 40);
-//	const Point3d p5(20, 50, 3);
-//	const Point3d p6(40, 50, 3);
-//
-//	PutRailRoadLine(p1, p2);
-//	PutRailRoadArc(p2, c1, a, Direction::Right);
-//	PutRailRoadLine(p3, p4);
-//	PutRailRoadArc(p4, c2, a, Direction::Left);
-//	PutRailRoadLine(p5, p6);
-//	
-//	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p1, p6);
-//	roadRoutePtrs_.push_back(rrPtr);
-//
-//	dynamicSceneObjects_.push_back(DynamicSceneObjectFactory::ForVehicle(VehicleData(), rrPtr, Heading::Backward));
-//}
+void 
+Application::EmulateDynamicScene1()
+{
+	const Point3d p1(10, 10, 3);
+	const Point3d p2(50, 10, 3);
+	
+	const RailRoadPtr rrp = RailRoadFactory::Line(p1, p2);
+	
+	roadNetwork_.Insert(rrp);
+
+	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p1, p2);
+
+	managers1_.emplace_back(&componentHolder_, RoadRouteHolder1(rrPtr, Heading::Forward));
+}
 
 void 
 Application::EmulateDynamicScene2()
@@ -317,27 +286,5 @@ Application::EmulateDynamicScene2()
 	 
 	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p1, p6);
 
-	TrainPtr trainPtr = std::make_shared<Train>(TrainPart(TrainPartType::Locomotive)/*, rrPtr, Heading::Backward*/);
-	/*trainPtr->Append(TrainPart(TrainPartType::Locomotive));
-	trainPtr->Append(TrainPart(TrainPartType::Wagon));
-	trainPtr->Append(TrainPart(TrainPartType::Wagon));
-	trainPtr->Append(TrainPart(TrainPartType::Wagon));
-	trainPtr->Append(TrainPart(TrainPartType::Locomotive));*/
-
-	/*const float dist = rrPtr->Length() - trainPtr->Length();
-
-	if (dist < 0.0f)
-	{
-		return;
-	}*/
-
-
 	roadRoutePtrs_.push_back(rrPtr);
-	//activeTrains_.push_back(trainPtr);
-	//manipulators_.push_back(TransportMover(trainPtr, dist));
-	managers_.emplace_back(new TransportManager(trainPtr, RoadRouteHolder(rrPtr, Heading::Forward)));
-
-	//const auto dsos = DynamicSceneObjectFactory::ForTrain(trainPtr);
-
-	//dynamicSceneObjects_.insert(dynamicSceneObjects_.end(), dsos.begin(), dsos.end());
 }

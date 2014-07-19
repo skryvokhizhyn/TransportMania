@@ -53,6 +53,10 @@ EventHandler::OnKeyDown(const SDL_Event & e)
 		eventSMPtr_->Emit(MoveKeyPressed<MoveKeys::Down>());
 		break;
 
+	case SDLK_1:
+		eventSMPtr_->Emit(Key1Pressed());
+		break;
+
 	case SDLK_SPACE:
 		eventSMPtr_->Emit(QuitFired());
 		break;

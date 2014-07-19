@@ -1,28 +1,31 @@
 #ifndef _MODELDRAWER_H_
 #define _MODELDRAWER_H_
 
-#include "Types.h"
-#include <boost/noncopyable.hpp>
+#include <memory>
 
 namespace trm
 {
 	struct ModelData;
 
+namespace impl
+{
+	struct State;
+
+} // namespace impl
+
 	class ModelDrawer
-		: private boost::noncopyable
 	{
 	public:
 		ModelDrawer();
-		~ModelDrawer();
 
 		void Load(const ModelData & md);
 		void Draw() const;
 
 	private:
-		GLuintType buffVert_;
-		GLuintType buffIndx_;
-		GLuintType buffNorm_;
-		size_t indxCnt_;
+		using StatePtr = std::shared_ptr<impl::State>;
+
+	private:
+		StatePtr statePtr_;
 	};
 
 } // namespace trm

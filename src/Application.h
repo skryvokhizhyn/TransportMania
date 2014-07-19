@@ -1,17 +1,16 @@
 #ifndef _APPLICATION_H_
 #define _APPLICATION_H_
 
-#include "TerrainSceneOBject.h"
+#include "TerrainSceneObject.h"
 #include "DrawContext.h"
 #include "WorldProjection.h"
 #include "Terrain.h"
 #include "StaticSceneObject.h"
-#include "DynamicSceneObject.h"
 #include "RoadNetwork.h"
 #include "RailRoad.h"
 #include "Train.h"
 #include "TransportManager.h"
-#include <functional>
+#include "ComponentHolder.h"
 
 namespace trm
 {
@@ -42,18 +41,13 @@ namespace trm
 		void PutRailRoadArc();
 		void PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a, const Direction d);
 
-		//void EmulateDynamicScene1();
+		void EmulateDynamicScene1();
 		void EmulateDynamicScene2();
 
 	private:
 		typedef std::vector<StaticSceneObjectPtr> StaticSceneObjects;
-		typedef std::vector<DynamicSceneObjectPtr> DynamicSceneObjects;
 		typedef std::vector<RoadRoutePtr> RoadRoutePtrs;
-		//typedef std::vector<TrainPtr> TrainPark;
-		//typedef std::function<bool ()> ManipulatorType;
-		//typedef std::vector<ManipulatorType> Manipulators;
-		typedef std::unique_ptr<TransportManager> TransportManagerUPtr;
-		typedef std::vector<TransportManagerUPtr> TransportManagers;
+		typedef std::vector<TransportManager> TransportManagers1;
 
 	private:
 		void Update();
@@ -67,12 +61,10 @@ namespace trm
 		TerrainPtr terrainPtr_;
 		TerrainSceneObjectPtr terrainScenePtr_;
 		StaticSceneObjects staticSceneObjects_;
-		DynamicSceneObjects dynamicSceneObjects_;
 		RoadNetwork roadNetwork_;
 		RoadRoutePtrs roadRoutePtrs_;
-		//TrainPark activeTrains_;
-		//Manipulators manipulators_;
-		TransportManagers managers_;
+		TransportManagers1 managers1_;
+		ComponentHolder componentHolder_;
 	};
 
 } // namespace trm

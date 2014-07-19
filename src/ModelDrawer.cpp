@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "DrawContext.h"
 #include "GlobalDefines.h"
+#include "Types.h"
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
 
@@ -29,66 +30,80 @@ namespace
 		glBufferData(buffType, vec.size() * sizeof(T), &vec.at(0), GL_STATIC_DRAW);
 		glBindBuffer(buffType, 0);
 	}
+
 }
+
+namespace trm
+{
+namespace impl
+{
+	struct State
+		: boost::noncopyable
+	{
+		GLuintType buffVert;
+		GLuintType buffIndx;
+		GLuintType buffNorm;
+		size_t indxCnt;
+
+		State()
+			: buffVert(InitBuffer())
+			, buffIndx(InitBuffer())
+			, buffNorm(InitBuffer())
+			, indxCnt(0)
+		{}
+
+		~State()
+		{
+			glDeleteBuffers(1, &buffNorm);
+			glDeleteBuffers(1, &buffIndx);
+			glDeleteBuffers(1, &buffVert);
+		}
+	};
+
+} // namespace impl
+} // namespace trm
 
 ModelDrawer::ModelDrawer()
-	: buffVert_(InitBuffer())
-	, buffIndx_(InitBuffer())
-	, buffNorm_(InitBuffer())
-	, indxCnt_(0)
+	: statePtr_(std::make_shared<impl::State>())
 {
-}
-
-ModelDrawer::~ModelDrawer()
-{
-	//try
-	//{
-		glDeleteBuffers(1, &buffNorm_);
-		glDeleteBuffers(1, &buffIndx_);
-		glDeleteBuffers(1, &buffVert_);
-	//}
-	//catch (...)
-	//{
-	//	utils::Logger().Error() << "Exception caught in ModelDrawer::~ModelDrawer()";
-	//}
 }
 
 void 
 ModelDrawer::Load(const ModelData & md)
 {
-	indxCnt_ = md.indexes.size();
+	statePtr_->indxCnt = md.indexes.size();
 
 	if (md.points.empty())
 		return;
 
-	LoadBuffer(md.points, buffVert_, GL_ARRAY_BUFFER);
-	LoadBuffer(md.indexes, buffIndx_, GL_ELEMENT_ARRAY_BUFFER);
+	LoadBuffer(md.points, statePtr_->buffVert, GL_ARRAY_BUFFER);
+	LoadBuffer(md.indexes, statePtr_->buffIndx, GL_ELEMENT_ARRAY_BUFFER);
 #ifdef DRAWING_MODE_FULL
-	LoadBuffer(md.normales, buffNorm_, GL_ARRAY_BUFFER);
+	LoadBuffer(md.normales, statePtr_->buffNorm, GL_ARRAY_BUFFER);
 #endif // DRAWING_MODE_FULL
 }
 
 void 
 ModelDrawer::Draw() const
 {
-	glBindBuffer(GL_ARRAY_BUFFER, buffVert_);
+	glBindBuffer(GL_ARRAY_BUFFER, statePtr_->buffVert);
 	glEnableVertexAttribArray(DrawContext::VertexArray);
 	glVertexAttribPointer(DrawContext::VertexArray, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 #ifdef DRAWING_MODE_FULL
-	glBindBuffer(GL_ARRAY_BUFFER, buffNorm_);
+	glBindBuffer(GL_ARRAY_BUFFER, statePtr_->buffNorm);
 	glEnableVertexAttribArray(DrawContext::NormalArray);
 	glVertexAttribPointer(DrawContext::NormalArray, 3, GL_FLOAT, GL_FALSE, 0, 0);
 #endif // DRAWING_MODE_FULL
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffIndx_);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, statePtr_->buffIndx);
 	glDrawElements(
 #ifdef DRAWING_MODE_FULL
 		/*GL_POINTS*/GL_TRIANGLES, 
 #else
 		GL_LINES,
 #endif // DRAWING_MODE_FULL
-		indxCnt_, GL_UNSIGNED_INT, 0);
+		statePtr_->indxCnt, GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(DrawContext::VertexArray);
 	glDisableVertexAttribArray(DrawContext::NormalArray);

@@ -2,25 +2,68 @@
 
 using namespace trm;
 
-TrainMovableObject::TrainMovableObject(const RoadPoint & rp, const TrainWPtr & tPtr, const float initialShift)
-	: roadPoint_(rp)
-	, trainPtr_(tPtr)
+TrainMovableObject::TrainMovableObject(RoadPoint rp, TrainPartType type)
+	: roadPoint_(std::move(rp))
+	, type_(type)
+	, sharedPosition_(std::make_shared<Point3d>())
+	, visible_(false)
+{}
+
+void 
+TrainMovableObject::Move(const float dist)
 {
-	roadPoint_.Move(initialShift);
-	SetPosition(roadPoint_.Get());
+	roadPoint_.Move(dist);
+
+	if (sharedPosition_)
+	{
+		*sharedPosition_ = Position();
+	}
 }
 
-void
-TrainMovableObject::Move()
+const Point3d & 
+TrainMovableObject::Position() const
 {
-	const TrainPtr tPtr = trainPtr_.lock();
+	return roadPoint_.Get();
+}
 
-	if (!tPtr)
+Point3d 
+TrainMovableObject::MovedPosition(const float dist) const
+{
+	RoadPoint temp = roadPoint_;
+	temp.Move(dist);
+
+	return temp.Get();
+}
+
+TrainPartType 
+TrainMovableObject::Type() const
+{
+	return type_;
+}
+
+bool 
+TrainMovableObject::GetVisible() const
+{
+	return visible_;
+}
+
+void 
+TrainMovableObject::SetVisible(bool v)
+{
+	visible_ = v;
+
+	if (visible_)
 	{
-		throw std::logic_error("Train has already been disposed");
+		*sharedPosition_ = Position();
 	}
+	else
+	{
+		sharedPosition_.reset();
+	}
+}
 
-	const float dist = tPtr->GetMoveDistance();
-	roadPoint_.Move(dist);
-	SetPosition(roadPoint_.Get());
+PositionWPtr 
+TrainMovableObject::SharedPosition() const
+{
+	return sharedPosition_;
 }

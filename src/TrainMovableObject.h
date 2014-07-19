@@ -1,22 +1,40 @@
 #pragma once
 
-#include "MovableObject.h"
 #include "Train.h"
 #include "RoadPoint.h"
 
+#include <boost/range/algorithm/for_each.hpp>
+#include <boost/bind.hpp>
+
 namespace trm
 {
+	using PositionWPtr = std::weak_ptr<Point3d>;
+
 	class TrainMovableObject
-		: public MovableObject
 	{
 	public:
-		TrainMovableObject(const RoadPoint & rp, const TrainWPtr & tPtr, const float initialShift);
+		TrainMovableObject(RoadPoint rp, TrainPartType type);
 
-		void Move() override;
+		void Move(const float dist);
+
+		const Point3d & Position() const;
+		Point3d MovedPosition(const float dist) const;
+
+		TrainPartType Type() const;
+
+		bool GetVisible() const;
+		void SetVisible(bool v);
+
+		PositionWPtr SharedPosition() const;
+
+	private:
+		using PositionSPtr = std::shared_ptr<Point3d>;
 
 	private:
 		RoadPoint roadPoint_;
-		const TrainWPtr trainPtr_;
+		TrainPartType type_;
+		PositionSPtr sharedPosition_;
+		bool visible_;
 	};
 
 } // namespace trm

@@ -22,9 +22,6 @@
     <Filter Include="Draw\Transport">
       <UniqueIdentifier>{fee55e57-f658-48c4-a9b6-d9cf793c2572}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Draw\Transport\Drawables">
-      <UniqueIdentifier>{234f542d-0218-469a-b1be-042e092351cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Model">
       <UniqueIdentifier>{7a871ab7-ecfb-4396-bfdf-32f53a589229}</UniqueIdentifier>
     </Filter>
@@ -102,46 +99,7 @@
     <ClCompile Include="..\..\src\RailRoadLine.cpp">
       <Filter>Draw\Railroad</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\LocomotiveDrawableObject.cpp">
-      <Filter>Draw\Transport\Drawables</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TrainDrawableObject.cpp">
-      <Filter>Draw\Transport\Drawables</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TrainDrawableObjectFactory.cpp">
-      <Filter>Draw\Transport\Drawables</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\VehicleDrawableObject.cpp">
-      <Filter>Draw\Transport\Drawables</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\WagonDrawableObject.cpp">
-      <Filter>Draw\Transport\Drawables</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TrainEngine.cpp">
-      <Filter>Draw\Transport</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TrainMovableObject.cpp">
-      <Filter>Draw\Transport</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TrainMovablePart.cpp">
-      <Filter>Draw\Transport</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TrainPartParameters.cpp">
-      <Filter>Draw\Transport</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\VehicleMovableObject.cpp">
-      <Filter>Draw\Transport</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\DrawContext.cpp">
-      <Filter>Draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\DynamicSceneObject.cpp">
-      <Filter>Draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\DynamicSceneObjectFactory.cpp">
-      <Filter>Draw</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\MovableObject.cpp">
       <Filter>Draw</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ShaderLoader.cpp">
@@ -240,9 +198,6 @@
     <ClCompile Include="..\..\src\Terrain.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Train.cpp">
-      <Filter>Draw\Transport</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\HeightMapLoaderFactory.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
@@ -266,6 +221,36 @@
     </ClCompile>
     <ClCompile Include="..\..\src\FpsCounter.cpp">
       <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ComponentId.cpp">
+      <Filter>Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainVisibleObject.cpp">
+      <Filter>Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Train.cpp">
+      <Filter>Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainMovableObject.cpp">
+      <Filter>Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainPartParameters.cpp">
+      <Filter>Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\LocomotiveDrawableObject.cpp">
+      <Filter>Draw\Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainDrawableObject.cpp">
+      <Filter>Draw\Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TrainDrawableObjectFactory.cpp">
+      <Filter>Draw\Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WagonDrawableObject.cpp">
+      <Filter>Draw\Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="TrainVisibilityHandler.cpp">
+      <Filter>Transport</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -368,64 +353,10 @@
     <ClInclude Include="..\..\src\RailRoadLine.h">
       <Filter>Draw\Railroad</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\LocomotiveDrawableObject.h">
-      <Filter>Draw\Transport\Drawables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TrainDrawableObject.h">
-      <Filter>Draw\Transport\Drawables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TrainDrawableObjectFactory.h">
-      <Filter>Draw\Transport\Drawables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\VehicleDrawableObject.h">
-      <Filter>Draw\Transport\Drawables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\WagonDrawableObject.h">
-      <Filter>Draw\Transport\Drawables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TrainDynamicSceneObject.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TrainEngine.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TrainMovableObject.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TrainMovablePart.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TrainMoveParameters.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TrainPart.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TrainPartParameters.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TrainTypes.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\VehicleData.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\VehicleMovableObject.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\DrawableObject.h">
       <Filter>Draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\DrawContext.h">
-      <Filter>Draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\DynamicSceneObject.h">
-      <Filter>Draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\DynamicSceneObjectFactory.h">
-      <Filter>Draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\MovableObject.h">
       <Filter>Draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ShaderLoader.h">
@@ -548,9 +479,6 @@
     <ClInclude Include="..\..\src\Terrain.h">
       <Filter>Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Train.h">
-      <Filter>Draw\Transport</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\BmpHandler.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -571,6 +499,48 @@
     </ClInclude>
     <ClInclude Include="..\..\src\FpsCounter.h">
       <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ComponentId.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ComponentHolder.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainVisibleObject.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Train.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainMovableObject.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainMoveParameters.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainPart.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainPartParameters.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainTypes.h">
+      <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\LocomotiveDrawableObject.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainDrawableObject.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainDrawableObjectFactory.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WagonDrawableObject.h">
+      <Filter>Draw\Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TrainVisibilityHandler.h">
+      <Filter>Transport</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

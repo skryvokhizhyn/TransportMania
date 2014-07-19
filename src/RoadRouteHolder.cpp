@@ -1,4 +1,5 @@
 #include "RoadRouteHolder.h"
+#include "RoadPoint.h"
 
 using namespace trm;
 
@@ -25,4 +26,37 @@ RoadRouteHolder::Next()
 	{
 		rrd_.heading = Heading::Forward;
 	}
+}
+
+/////////////////////////////////////
+
+RoadRouteHolder1::RoadRouteHolder1(RoadRoutePtr rrp, const Heading h)
+	: roadRoutePtr_(std::move(rrp))
+	, heading_(h)
+{
+}
+
+void
+RoadRouteHolder1::Next()
+{
+	if (heading_ == Heading::Forward)
+	{
+		heading_ = Heading::Backward;
+	}
+	else
+	{
+		heading_ = Heading::Forward;
+	}
+}
+
+RoadPoint 
+RoadRouteHolder1::GetStartingPoint()
+{
+	return roadRoutePtr_->GetStartingPoint(heading_);
+}
+
+float 
+RoadRouteHolder1::GetRouteLength()
+{
+	return roadRoutePtr_->Length();
 }

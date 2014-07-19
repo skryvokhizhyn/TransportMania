@@ -2,46 +2,46 @@
 
 #include "Train.h"
 #include "RoadRouteHolder.h"
-#include "DynamicSceneObject.h"
+#include "ComponentId.h"
 #include <boost/noncopyable.hpp>
 
 namespace trm
 {
-
 namespace impl
 {
 	template<typename T> class TrainStateMachine;
 } // namespace impl
 
-	typedef std::vector<DynamicSceneObjectPtr> DynamicSceneObjectPtrs;
+	struct ComponentHolder;
 
 	class TransportManager
-		: boost::noncopyable
 	{
 	public:
-		TransportManager(TrainPtr tPtr, RoadRouteHolder rrH);
+		TransportManager(ComponentHolder * ch, RoadRouteHolder1 rrh);
 
-		bool Update();
+		void Update();
 
 		bool Init();
 		bool Load();
 		bool Move();
 		bool Unload();
 
-		const DynamicSceneObjectPtrs & GetDynamicSceneObjects() const;
+	private:
+		void CalcMoveParams();
 
 	private:
-		typedef impl::TrainStateMachine<TransportManager> StateMachine;
-		typedef std::shared_ptr<StateMachine> ImplPtr;
+		typedef impl::TrainStateMachine<TransportManager>  StateMachine;
+		typedef std::shared_ptr<StateMachine> StateMachinePtr;
 
 	private:
-		TrainPtr trainPtr_;
-		float passed_;
+		StateMachinePtr stateMachinePtr_;
+		ComponentId id_;
+		ComponentHolder * componentHolderPtr_;
 		float distance_;
 		float speed_;
-		RoadRouteHolder rrH_;
-		ImplPtr implPtr_;
-		DynamicSceneObjectPtrs dsoPtrs_;
+		float passed_;
+		RoadRouteHolder1 rrh_;
+		TrainMoveParameters moveParams_;
 	};
 
 } // namespace trm

@@ -1,43 +1,37 @@
 #pragma once
 
-#include "TrainEngine.h"
 #include "RoadRoute.h"
+#include "RoadPoint.h"
 #include "TrainPart.h"
 #include "TrainMoveParameters.h"
 #include <boost/noncopyable.hpp>
+#include <boost/optional.hpp>
 #include <memory>
 
 namespace trm
 {
 	class Train
-		: boost::noncopyable
 	{
 	public:
 		Train(TrainPart head);
 
+		void SetRoadPoint(RoadPoint rp);
+
 		void Append(TrainPart tp);
-		void Clear();
+		void ClearParts();
 
-		const TrainPart Head() const;
+		const TrainPart & Head() const;
 		const TrainParts & Parts() const;
-		const TrainMoveParameters & MoveParameters() const;
-		float Length() const;
 
-		void SetMoveDistance(const float dist);
-		float GetMoveDistance() const;
+		TrainMoveParameters CalcMoveParams();
 
 	private:
-		void ApplyParameters(const TrainPart & tp);
+		using RoadPointType = boost::optional<RoadPoint>;
 
 	private:
-		float moveDistance_;
-		const TrainPart head_;
-		TrainParts trainParts_;
-		TrainMoveParameters moveParams_;
-		float length_;
+		RoadPointType position_;
+		TrainPart head_;
+		TrainParts parts_;
 	};
-
-	typedef std::shared_ptr<Train> TrainPtr;
-	typedef std::weak_ptr<Train> TrainWPtr;
 
 } // namesapce trm

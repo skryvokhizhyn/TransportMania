@@ -22,6 +22,7 @@ namespace
 		Subject()
 			: dir(MoveDirection::Undefined)
 			, stopped(false)
+			, scene1Emulated(false)
 		{}
 
 		void ShiftScene(const float x, const float y)
@@ -37,8 +38,14 @@ namespace
 			stopped = true;
 		}
 
+		void EmulateDynamicScene1()
+		{
+			scene1Emulated = true;
+		}
+
 		MoveDirection dir;
 		bool stopped;
+		bool scene1Emulated;
 	};
 
 	std::ostream & operator << (std::ostream & o, const MoveDirection dir)
@@ -78,4 +85,13 @@ BOOST_AUTO_TEST_CASE(EventStateMachineQuitTest1)
 
 	esm.Emit(QuitFired());
 	BOOST_CHECK_EQUAL(s.stopped, true);
+}
+
+BOOST_AUTO_TEST_CASE(EventStateMachineKeysTest1)
+{
+	Subject s;
+	EventStateMachine<Subject> esm(s);
+
+	esm.Emit(Key1Pressed());
+	BOOST_CHECK_EQUAL(s.scene1Emulated, true);
 }

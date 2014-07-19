@@ -38,6 +38,7 @@ namespace impl
 	struct MoveKeyPressed {};
 
 	struct QuitFired {};
+	struct Key1Pressed {};
 
 	// State machine
 
@@ -69,7 +70,8 @@ namespace impl
 			ACTION_DEFINITION(UpKey);
 			ACTION_DEFINITION(DownKey);
 
-			ACTION_DEFINITION(Quit)
+			ACTION_DEFINITION(Quit);
+			ACTION_DEFINITION(Key1);
 
 			struct transition_table : boost::mpl::vector<
 				//			Start			Event							Next		Action			Guard
@@ -77,7 +79,8 @@ namespace impl
 				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Right>,EmptyState,	ApplyRightKey,	bmf::none >,
 				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Up>,	EmptyState,	ApplyUpKey,		bmf::none >,
 				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Down>,	EmptyState,	ApplyDownKey,	bmf::none >,
-				bmf::Row<	EmptyState,		QuitFired,						EmptyState,	ApplyQuit,		bmf::none >
+				bmf::Row<	EmptyState,		QuitFired,						EmptyState,	ApplyQuit,		bmf::none >,
+				bmf::Row<	EmptyState,		Key1Pressed,					EmptyState,	ApplyKey1,		bmf::none >
 				> {};
 
 			Subject & subj_;
@@ -142,6 +145,11 @@ namespace impl
 	ACTION_IMPLEMENTATION(Quit)
 	{
 		fsm.subj_.Stop();
+	}
+
+	ACTION_IMPLEMENTATION(Key1)
+	{
+		fsm.subj_.EmulateDynamicScene1();
 	}
 
 } // namespace impl

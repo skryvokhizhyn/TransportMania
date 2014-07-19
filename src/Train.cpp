@@ -1,90 +1,61 @@
 #include "Train.h"
 #include "TrainPartParameters.h"
 
+#include <boost/range/algorithm.hpp>
+
 using namespace trm;
 
-Train::Train(TrainPart head/*, RoadRoutePtr rrp, const Heading h*/)
-	/*: roadRoutePtr_(std::move(rrp))
-	, heading_(h)*/
-	: moveDistance_(0.0f)
-	, head_(std::move(head))
-	, length_(0.0f)
-{
-	if (head.type != TrainPartType::Locomotive)
-	{
-		throw std::runtime_error("Train cannot be moved by wagon");
-	}
+Train::Train(TrainPart head)
+	: head_(std::move(head))
+{}
 
-	ApplyParameters(head_);
+void
+Train::SetRoadPoint(RoadPoint rp)
+{
+	position_ = rp;
 }
 
 void
-Train::ApplyParameters(const TrainPart & tp)
-{
-	const auto & data = TrainPartParameters::Get(tp.type);
-
-	moveParams_.maxSpeed = (moveParams_.maxSpeed <= 0.0f) 
-		? data.maxSpeed
-		: std::min(moveParams_.maxSpeed, data.maxSpeed);
-
-	moveParams_.acceleration = std::max(moveParams_.acceleration, data.acceleration);
-	moveParams_.breaking = moveParams_.acceleration * 2.3f;
-	
-	length_ += data.length;
-}
-
-void 
 Train::Append(TrainPart tp)
 {
-	ApplyParameters(tp);
-
-	trainParts_.push_back(std::move(tp));
+	parts_.push_back(std::move(tp));
 }
 
 void
-Train::Clear()
+Train::ClearParts()
 {
-	trainParts_.clear();
+	parts_.clear();
 }
 
-const TrainParts & 
+const TrainPart &
+Train::Head() const
+{
+	return head_;
+}
+
+const TrainParts &
 Train::Parts() const
 {
-	return trainParts_;
+	return parts_;
 }
 
-//const RoadRoute & 
-//Train::Route() const
-//{
-//	return *(roadRoutePtr_.get());
-//}
-//
-//Heading
-//Train::RouteHeading() const
-//{
-//	return heading_;
-//}
-
-void
-Train::SetMoveDistance(const float dist)
+TrainMoveParameters
+Train::CalcMoveParams()
 {
-	moveDistance_ = dist;
-}
+	TrainMoveParameters moveParams_;
 
-float
-Train::GetMoveDistance() const
-{
-	return moveDistance_;
-}
+	boost::for_each(parts_,
+		[&](const TrainPart & tp)
+	{
+		const auto & data = TrainPartParameters::Get(tp.type);
 
-const TrainMoveParameters & 
-Train::MoveParameters() const
-{
+		moveParams_.maxSpeed = (moveParams_.maxSpeed <= 0.0f) 
+			? data.maxSpeed
+			: std::min(moveParams_.maxSpeed, data.maxSpeed);
+
+		moveParams_.acceleration = std::max(moveParams_.acceleration, data.acceleration);
+		moveParams_.breaking = moveParams_.acceleration * 1.3f;
+	});
+
 	return moveParams_;
-}
-
-float
-Train::Length() const
-{
-	return length_;
 }

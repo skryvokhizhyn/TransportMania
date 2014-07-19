@@ -9,8 +9,8 @@ namespace
 	typedef std::map<TrainPartType, TrainPartParameters::Data> TrainPartParametersStorage;
 
 	const TrainPartParametersStorage TRAIN_PART_PARAMETERS_STORAGE = boost::assign::map_list_of
-		(TrainPartType::Locomotive,	TrainPartParameters::Data(0.1f, 1.0f, 10.0f, 0.0f, 2.0f))
-		(TrainPartType::Wagon,		TrainPartParameters::Data(0.0f, 3.0f, 0.0f, 100.0f, 2.0f));
+		(TrainPartType::Locomotive,	TrainPartParameters::Data(0.001f, 0.1f, 10.0f, 0.0f, 2.5f))
+		(TrainPartType::Wagon,		TrainPartParameters::Data(0.0f, 0.3f, 0.0f, 100.0f, 2.0f));
 }
 
 TrainPartParameters::Data::Data(float a, float ms, float p, float v, float l)

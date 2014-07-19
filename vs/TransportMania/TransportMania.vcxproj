@@ -13,9 +13,8 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\Application.cpp" />
     <ClCompile Include="..\..\src\BmpHandler.cpp" />
+    <ClCompile Include="..\..\src\ComponentId.cpp" />
     <ClCompile Include="..\..\src\DrawContext.cpp" />
-    <ClCompile Include="..\..\src\DynamicSceneObject.cpp" />
-    <ClCompile Include="..\..\src\DynamicSceneObjectFactory.cpp" />
     <ClCompile Include="..\..\src\EventHandler.cpp" />
     <ClCompile Include="..\..\src\FpsCounter.cpp" />
     <ClCompile Include="..\..\src\Game.cpp" />
@@ -31,7 +30,6 @@
     <ClCompile Include="..\..\src\MatrixUtils.cpp" />
     <ClCompile Include="..\..\src\ModelDrawer.cpp" />
     <ClCompile Include="..\..\src\ModelDrawerPool.cpp" />
-    <ClCompile Include="..\..\src\MovableObject.cpp" />
     <ClCompile Include="..\..\src\Patch.cpp" />
     <ClCompile Include="..\..\src\PatchGrid.cpp" />
     <ClCompile Include="..\..\src\PatchTriangleMapper.cpp" />
@@ -67,10 +65,9 @@
     <ClCompile Include="..\..\src\Train.cpp" />
     <ClCompile Include="..\..\src\TrainDrawableObject.cpp" />
     <ClCompile Include="..\..\src\TrainDrawableObjectFactory.cpp" />
-    <ClCompile Include="..\..\src\TrainEngine.cpp" />
     <ClCompile Include="..\..\src\TrainMovableObject.cpp" />
-    <ClCompile Include="..\..\src\TrainMovablePart.cpp" />
     <ClCompile Include="..\..\src\TrainPartParameters.cpp" />
+    <ClCompile Include="..\..\src\TrainVisibleObject.cpp" />
     <ClCompile Include="..\..\src\TransportManager.cpp" />
     <ClCompile Include="..\..\src\TransportManiaMain.cpp" />
     <ClCompile Include="..\..\src\TriangleMapper.cpp" />
@@ -78,23 +75,22 @@
     <ClCompile Include="..\..\src\TriangleNodeHandler.cpp" />
     <ClCompile Include="..\..\src\TriangleNodePool.cpp" />
     <ClCompile Include="..\..\src\Variance.cpp" />
-    <ClCompile Include="..\..\src\VehicleDrawableObject.cpp" />
-    <ClCompile Include="..\..\src\VehicleMovableObject.cpp" />
     <ClCompile Include="..\..\src\Vertex.cpp" />
     <ClCompile Include="..\..\src\WagonDrawableObject.cpp" />
     <ClCompile Include="..\..\src\WorldProjection.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="ScreenParameters.cpp" />
+    <ClCompile Include="TrainVisibilityHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Angle.h" />
     <ClInclude Include="..\..\src\Application.h" />
     <ClInclude Include="..\..\src\BmpHandler.h" />
     <ClInclude Include="..\..\src\CommonUtils.h" />
+    <ClInclude Include="..\..\src\ComponentHolder.h" />
+    <ClInclude Include="..\..\src\ComponentId.h" />
     <ClInclude Include="..\..\src\DrawableObject.h" />
     <ClInclude Include="..\..\src\DrawContext.h" />
-    <ClInclude Include="..\..\src\DynamicSceneObject.h" />
-    <ClInclude Include="..\..\src\DynamicSceneObjectFactory.h" />
     <ClInclude Include="..\..\src\EventHandler.h" />
     <ClInclude Include="..\..\src\EventStateMachine.h" />
     <ClInclude Include="..\..\src\FpsCounter.h" />
@@ -117,7 +113,6 @@
     <ClInclude Include="..\..\src\ModelData.h" />
     <ClInclude Include="..\..\src\ModelDrawer.h" />
     <ClInclude Include="..\..\src\ModelDrawerPool.h" />
-    <ClInclude Include="..\..\src\MovableObject.h" />
     <ClInclude Include="..\..\src\Patch.h" />
     <ClInclude Include="..\..\src\PatchGrid.h" />
     <ClInclude Include="..\..\src\PatchTriangleMapper.h" />
@@ -164,15 +159,14 @@
     <ClInclude Include="..\..\src\Train.h" />
     <ClInclude Include="..\..\src\TrainDrawableObject.h" />
     <ClInclude Include="..\..\src\TrainDrawableObjectFactory.h" />
-    <ClInclude Include="..\..\src\TrainDynamicSceneObject.h" />
-    <ClInclude Include="..\..\src\TrainEngine.h" />
     <ClInclude Include="..\..\src\TrainMovableObject.h" />
-    <ClInclude Include="..\..\src\TrainMovablePart.h" />
     <ClInclude Include="..\..\src\TrainMoveParameters.h" />
     <ClInclude Include="..\..\src\TrainPart.h" />
     <ClInclude Include="..\..\src\TrainPartParameters.h" />
     <ClInclude Include="..\..\src\TrainStateMachine.h" />
     <ClInclude Include="..\..\src\TrainTypes.h" />
+    <ClInclude Include="..\..\src\TrainVisibilityHandler.h" />
+    <ClInclude Include="..\..\src\TrainVisibleObject.h" />
     <ClInclude Include="..\..\src\TransportManager.h" />
     <ClInclude Include="..\..\src\Triangle2d.h" />
     <ClInclude Include="..\..\src\Triangle3d.h" />
@@ -182,9 +176,6 @@
     <ClInclude Include="..\..\src\TriangleNodePool.h" />
     <ClInclude Include="..\..\src\Types.h" />
     <ClInclude Include="..\..\src\Variance.h" />
-    <ClInclude Include="..\..\src\VehicleData.h" />
-    <ClInclude Include="..\..\src\VehicleDrawableObject.h" />
-    <ClInclude Include="..\..\src\VehicleMovableObject.h" />
     <ClInclude Include="..\..\src\Vertex.h" />
     <ClInclude Include="..\..\src\WagonDrawableObject.h" />
     <ClInclude Include="..\..\src\WorldProjection.h" />

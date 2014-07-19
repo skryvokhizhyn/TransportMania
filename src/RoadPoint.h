@@ -15,12 +15,11 @@ namespace trm
 		const Point3d & Get() const;
 
 	private:
-		void operator = (const RoadPoint &);
 		bool Shift(const Heading h);
 		void Init(const Heading h);
 
 	private:
-		const Heading heading_;
+		Heading heading_;
 		float chunkLengthPassed_;
 		RoadRoute::RoadChunksIterator firstIt_;
 		RoadRoute::RoadChunksIterator lastIt_;

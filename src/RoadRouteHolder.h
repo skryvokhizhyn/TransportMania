@@ -23,4 +23,19 @@ namespace trm
 		RoadRouteDefinition rrd_;
 	};
 
+	class RoadRouteHolder1
+	{
+	public:
+		RoadRouteHolder1(RoadRoutePtr rrp, const Heading h);
+
+		void Next();
+
+		RoadPoint GetStartingPoint();
+		float GetRouteLength();
+
+	private:
+		RoadRoutePtr roadRoutePtr_;
+		Heading heading_;
+	};
+
 } // namespace trm

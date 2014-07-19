@@ -5,41 +5,42 @@
 #include "TransportManager.h"
 #include "TrainStateMachine.h"
 #include "RoadPoint.h"
-#include "DynamicSceneObjectFactory.h"
 #include <boost/range/algorithm.hpp>
 
 using namespace trm;
 
-TransportManager::TransportManager(TrainPtr tPtr, RoadRouteHolder rrH)
-	: trainPtr_(std::move(tPtr))
-	, passed_(0.0f)
+#include "ComponentHolder.h"
+#include "TrainPartParameters.h"
+#include "TrainMovableObject.h"
+#include <cassert>
+#include <functional>
+
+TransportManager::TransportManager(ComponentHolder * ch, RoadRouteHolder1 rrh)
+	: stateMachinePtr_(std::make_shared<StateMachine>(this))
+	, id_(ComponentIdGenerator::Generate())
+	, componentHolderPtr_(ch)
 	, distance_(0.0f)
 	, speed_(0.0f)
-	, rrH_(std::move(rrH))
-	, implPtr_(std::make_shared<impl::TrainStateMachine<TransportManager>>(this))
+	, passed_(0.0f)
+	, rrh_(std::move(rrh))
 {
+	assert(componentHolderPtr_ != nullptr);
+	componentHolderPtr_->trains.insert(std::make_pair(id_, Train(TrainPartType::Locomotive)));
 }
 
-bool 
+void 
 TransportManager::Update()
 {
-	implPtr_->Update();
-	
-	boost::range::for_each(dsoPtrs_,
-		[](const DynamicSceneObjectPtr & dsoPtr)
-	{
-		dsoPtr->Update();
-	});
-
-	return true;
+	stateMachinePtr_->Update();
 }
 
 bool 
 TransportManager::Init()
 {
+	distance_ = rrh_.GetRouteLength();
+	speed_ = 0.0f;
 	passed_ = 0.0f;
-	rrH_.Next();
-	distance_ = rrH_.GetDefinition().roadRotePtr->Length();
+	moveParams_ = TrainMoveParameters();
 
 	return true;
 }
@@ -47,13 +48,42 @@ TransportManager::Init()
 bool 
 TransportManager::Load()
 {
-	trainPtr_->Append(TrainPart(TrainPartType::Wagon));
-	trainPtr_->Append(TrainPart(TrainPartType::Wagon));
-	trainPtr_->Append(TrainPart(TrainPartType::Wagon));
-	trainPtr_->Append(TrainPart(TrainPartType::Locomotive));
+	Train & train = componentHolderPtr_->trains.at(id_);
 
-	dsoPtrs_ = DynamicSceneObjectFactory::ForTrain(trainPtr_, rrH_.GetDefinition().roadRotePtr->GetStartingPoint(rrH_.GetDefinition().heading));
-	Move();
+	train.Append(TrainPartType::Wagon);
+	train.Append(TrainPartType::Wagon);
+	train.Append(TrainPartType::Wagon);
+	train.Append(TrainPartType::Locomotive);
+	train.Append(TrainPartType::Wagon);
+
+	moveParams_ = train.CalcMoveParams();
+
+	RoadPoint rp = rrh_.GetStartingPoint();
+
+	const auto parts = train.Parts();
+
+	float totalLength = 0.0f;
+
+	std::for_each(parts.crbegin(), parts.crend(),
+		[&](const TrainPart & tp)
+	{
+		componentHolderPtr_->movables.insert(std::make_pair(id_, TrainMovableObject(rp, tp.type)));
+
+		const float partLength = TrainPartParameters::Get(tp.type).length;
+		rp.Move(partLength);
+
+		totalLength += partLength;
+	});
+
+	componentHolderPtr_->movables.insert(std::make_pair(id_, TrainMovableObject(rp, train.Head().type)));
+
+	if (totalLength > distance_)
+	{
+		assert(false);
+		throw std::runtime_error("Too long train for the route");
+	}
+
+	passed_ += totalLength;
 
 	return true;
 }
@@ -61,23 +91,19 @@ TransportManager::Load()
 bool 
 TransportManager::Move()
 {
-	auto && train = *trainPtr_.get();
-
-	passed_ += train.GetMoveDistance();
+	passed_ += speed_;
 
 	if (passed_ >= distance_)
 	{
-		train.SetMoveDistance(0.0f);
+		speed_ = 0.0f;
 
 		return true;
 	}
 	else
 	{
-		const auto & prm = train.MoveParameters();
-
-		if (distance_ - passed_ < speed_ * speed_ / 2.0f / prm.breaking)
+		if (distance_ - passed_ < speed_ * speed_ / 2.0f / moveParams_.breaking)
 		{
-			const float newSpeed = speed_ - prm.breaking;
+			const float newSpeed = speed_ - moveParams_.breaking;
 			if (newSpeed > 0.0f)
 			{
 				speed_ = newSpeed;
@@ -85,15 +111,18 @@ TransportManager::Move()
 		}
 		else
 		{
-			const float newSpeed = speed_ + prm.acceleration;
-			if (newSpeed <= prm.maxSpeed)
+			const float newSpeed = speed_ + moveParams_.acceleration;
+			if (newSpeed <= moveParams_.maxSpeed)
 			{
 				speed_ = newSpeed;
 			}
 		}
-
-		train.SetMoveDistance(speed_);
 	}
+
+	auto movables = componentHolderPtr_->movables.equal_range(id_);
+	std::for_each(movables.first, movables.second, 
+		std::bind(&TrainMovableObject::Move, 		
+			std::bind(&ComponentHolder::Movables::value_type::second, std::placeholders::_1), speed_));
 
 	return false;
 }
@@ -101,16 +130,12 @@ TransportManager::Move()
 bool 
 TransportManager::Unload()
 {
-	trainPtr_->Clear();
-	dsoPtrs_.clear();
+	Train & train = componentHolderPtr_->trains.at(id_);
+	train.ClearParts();
+
+	componentHolderPtr_->movables.erase(id_);
 
 	return true;
-}
-
-const DynamicSceneObjectPtrs & 
-TransportManager::GetDynamicSceneObjects() const
-{
-	return dsoPtrs_;
 }
 
 #pragma warning(pop)
