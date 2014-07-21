@@ -16,7 +16,7 @@ using namespace trm;
 #include <functional>
 
 TransportManager::TransportManager(ComponentHolder * ch, RoadRouteHolder1 rrh)
-	: stateMachinePtr_(std::make_shared<StateMachine>(this))
+	: stateMachinePtr_(std::make_shared<StateMachine>())
 	, id_(ComponentIdGenerator::Generate())
 	, componentHolderPtr_(ch)
 	, distance_(0.0f)
@@ -31,7 +31,7 @@ TransportManager::TransportManager(ComponentHolder * ch, RoadRouteHolder1 rrh)
 void 
 TransportManager::Update()
 {
-	stateMachinePtr_->Update();
+	stateMachinePtr_->Update(this);
 }
 
 bool 

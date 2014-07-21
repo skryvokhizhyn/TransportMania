@@ -67,6 +67,7 @@
     <ClCompile Include="..\..\src\TrainDrawableObjectFactory.cpp" />
     <ClCompile Include="..\..\src\TrainMovableObject.cpp" />
     <ClCompile Include="..\..\src\TrainPartParameters.cpp" />
+    <ClCompile Include="..\..\src\TrainVisibilityHandler.cpp" />
     <ClCompile Include="..\..\src\TrainVisibleObject.cpp" />
     <ClCompile Include="..\..\src\TransportManager.cpp" />
     <ClCompile Include="..\..\src\TransportManiaMain.cpp" />
@@ -74,13 +75,13 @@
     <ClCompile Include="..\..\src\TriangleNode.cpp" />
     <ClCompile Include="..\..\src\TriangleNodeHandler.cpp" />
     <ClCompile Include="..\..\src\TriangleNodePool.cpp" />
+    <ClCompile Include="..\..\src\UpdateRate.cpp" />
     <ClCompile Include="..\..\src\Variance.cpp" />
     <ClCompile Include="..\..\src\Vertex.cpp" />
     <ClCompile Include="..\..\src\WagonDrawableObject.cpp" />
     <ClCompile Include="..\..\src\WorldProjection.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="ScreenParameters.cpp" />
-    <ClCompile Include="TrainVisibilityHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Angle.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="..\..\src\TriangleNodeHandler.h" />
     <ClInclude Include="..\..\src\TriangleNodePool.h" />
     <ClInclude Include="..\..\src\Types.h" />
+    <ClInclude Include="..\..\src\UpdateRate.h" />
     <ClInclude Include="..\..\src\Variance.h" />
     <ClInclude Include="..\..\src\Vertex.h" />
     <ClInclude Include="..\..\src\WagonDrawableObject.h" />

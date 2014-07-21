@@ -249,8 +249,11 @@
     <ClCompile Include="..\..\src\WagonDrawableObject.cpp">
       <Filter>Draw\Transport</Filter>
     </ClCompile>
-    <ClCompile Include="TrainVisibilityHandler.cpp">
+    <ClCompile Include="..\..\src\TrainVisibilityHandler.cpp">
       <Filter>Transport</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UpdateRate.cpp">
+      <Filter>Application</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -541,6 +544,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\TrainVisibilityHandler.h">
       <Filter>Transport</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UpdateRate.h">
+      <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

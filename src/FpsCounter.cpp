@@ -12,11 +12,6 @@ FpsCounter::FpsCounter(const unsigned reportPerSeconds)
 	: reportDuration_(reportPerSeconds)
 	, frames_(0.0f)
 {
-}
-
-void
-FpsCounter::Start()
-{
 	begin_ = steady_clock::now();
 }
 

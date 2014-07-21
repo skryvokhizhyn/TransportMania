@@ -20,18 +20,8 @@ namespace impl
 	class TrainStateMachine
 	{
 	public:
-		TrainStateMachine(TransportManagerType * pTm)
-			: pTm_(pTm)
-		{
-			assert(pTm_ != nullptr);
-			trainStateMachine_.start();
-		}
-
 		// main process loop
-		void Update();
-
-		// external influence
-		//void Init();
+		void Update(TransportManagerType * pTm);
 
 	private:
 		// Events
@@ -120,15 +110,14 @@ namespace impl
 
 	private:
 		TrainSM trainStateMachine_;
-		TransportManagerType * pTm_;
 	};
 
 	template<typename TransportManagerType>
-	void TrainStateMachine<TransportManagerType>::Update()
+	void TrainStateMachine<TransportManagerType>::Update(TransportManagerType * pTm)
 	{
 		const int * currentStateId = trainStateMachine_.current_state();
 		TrainState * pTS = trainStateMachine_.get_state_by_id(*currentStateId);
-		pTS->Process(pTm_);
+		pTS->Process(pTm);
 	}
 
 	template<typename TransportManagerType>

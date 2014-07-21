@@ -3,7 +3,6 @@
 #include "Train.h"
 #include "RoadRouteHolder.h"
 #include "ComponentId.h"
-#include <boost/noncopyable.hpp>
 
 namespace trm
 {

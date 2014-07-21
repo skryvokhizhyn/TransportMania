@@ -49,7 +49,7 @@ namespace trm
 		typedef std::vector<RoadRoutePtr> RoadRoutePtrs;
 		typedef std::vector<TransportManager> TransportManagers1;
 
-	private:
+	public:
 		void Update();
 		void Render();
 		void Draw();

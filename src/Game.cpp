@@ -4,6 +4,7 @@
 #include "Logger.h"
 #include "EventHandler.h"
 #include "FpsCounter.h"
+#include "UpdateRate.h"
 
 #include <boost/format.hpp>
 #include <stdexcept>
@@ -94,29 +95,37 @@ Game::InitGL()
 	}
 }
 
+#include <chrono>
+
 void
 Game::Run()
 {
 	SDL_Event event;
 	EventHandler handler(app_);
-	FpsCounter fpsCounter(2); /*report each 2 seconds*/
 	
-	fpsCounter.Start();
+	FpsCounter fpsCounter(1); /*report each 1 seconds*/
+	UpdateRate updateRate(30); /* 30 updates per sedond*/
 
 	for (;;)
 	{
-		while (SDL_PollEvent(&event))
+		while (updateRate.NeedMore())
 		{
-			handler.Process(event);
-		}
+			while (SDL_PollEvent(&event))
+			{
+				handler.Process(event);
+			}
 	
-		if (app_.IsStopped())
-		{
-			break;
-		}
+			if (app_.IsStopped())
+			{
+				return;
+			}
 
-		app_.RenderScene();
+			app_.Update();
+		}
 	
+		app_.Render();
+		app_.Draw();
+
 		SDL_GL_SwapWindow(windowPtr_.get());
 
 		if (fpsCounter.Tick())
@@ -125,5 +134,7 @@ Game::Run()
 
 			utils::Logger().Debug() << "Frames " << frames;
 		}
+
+		updateRate.Tick();
 	}
 }

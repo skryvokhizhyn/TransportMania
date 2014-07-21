@@ -58,35 +58,35 @@ BOOST_AUTO_TEST_CASE(TrainStateMachineTest1)
 	TSMTest t;
 	
 	{
-		TrainStateMachine<TSMTest> tsm(&t);
+		TrainStateMachine<TSMTest> tsm;
 		
 		BOOST_CHECK_EQUAL(t.state, TSMTestState::Uninit);
 		
-		tsm.Update();
+		tsm.Update(&t);
 		BOOST_CHECK_EQUAL(t.state, TSMTestState::Inited);
 
-		tsm.Update();
+		tsm.Update(&t);
 		BOOST_CHECK_EQUAL(t.state, TSMTestState::Loaded);
 
-		tsm.Update();
+		tsm.Update(&t);
 		BOOST_CHECK_EQUAL(t.state, TSMTestState::Moved);
 		BOOST_CHECK_EQUAL(t.inc, 1);
 
-		tsm.Update();
+		tsm.Update(&t);
 		BOOST_CHECK_EQUAL(t.state, TSMTestState::Moved);
 		BOOST_CHECK_EQUAL(t.inc, 2);
 
-		tsm.Update();
+		tsm.Update(&t);
 		BOOST_CHECK_EQUAL(t.state, TSMTestState::Moved);
 		BOOST_CHECK_EQUAL(t.inc, 3);
 
-		tsm.Update();
+		tsm.Update(&t);
 		BOOST_CHECK_EQUAL(t.state, TSMTestState::Unloaded);
 
-		tsm.Update();
+		tsm.Update(&t);
 		BOOST_CHECK_EQUAL(t.state, TSMTestState::Inited);
 
-		tsm.Update();
+		tsm.Update(&t);
 		BOOST_CHECK_EQUAL(t.state, TSMTestState::Loaded);
 	}
 }

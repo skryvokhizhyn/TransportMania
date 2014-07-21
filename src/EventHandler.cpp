@@ -14,7 +14,7 @@ EventHandler::EventHandler(Application & app)
 void
 EventHandler::Process(const SDL_Event & e)
 {
-	utils::Logger().Debug() << e.type;
+	//utils::Logger().Debug() << "Event type" << e.type;
 
 	switch (e.type)
 	{
@@ -24,6 +24,10 @@ EventHandler::Process(const SDL_Event & e)
 
 	case SDL_KEYDOWN:
 		OnKeyDown(e);
+		break;
+
+	case SDL_FINGERDOWN:
+		eventSMPtr_->Emit(Key1Pressed());
 		break;
 	}
 }

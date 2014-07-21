@@ -12,7 +12,6 @@ namespace trm
 	public:
 		FpsCounter(const unsigned reportPerSeconds);
 
-		void Start();
 		bool Tick();
 		unsigned GetFrames();
 

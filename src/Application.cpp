@@ -110,11 +110,15 @@ Application::Render()
 	{	
 		terrainScenePtr_->Render();
 	}
+
+	SCENE_UPDATED = true;
 }
 
 void 
 Application::Draw()
 {
+	context_.Clear();
+
 	const Matrix & pvm = worldProjection_.GetProjectionViewMatrix();
 
 	context_.Transform(pvm, terrainScenePtr_->GetModelMatrix());
