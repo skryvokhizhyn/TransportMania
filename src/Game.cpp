@@ -95,8 +95,6 @@ Game::InitGL()
 	}
 }
 
-#include <chrono>
-
 void
 Game::Run()
 {
@@ -135,6 +133,10 @@ Game::Run()
 			utils::Logger().Debug() << "Frames " << frames;
 		}
 
-		updateRate.Tick();
+		const unsigned cnt = updateRate.Tick();
+		if (cnt > 1)
+		{
+			utils::Logger().Debug() << "Heavily loaded. Updates " << cnt;
+		}
 	}
 }

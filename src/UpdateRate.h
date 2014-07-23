@@ -12,7 +12,7 @@ namespace trm
 	public:
 		UpdateRate(const unsigned updatesPerSecond);
 
-		void Tick();
+		unsigned Tick();
 
 		bool NeedMore();
 
@@ -20,6 +20,7 @@ namespace trm
 		const std::chrono::milliseconds updateDuration_;
 		std::chrono::steady_clock::time_point start_;
 		std::chrono::steady_clock::time_point end_;
+		unsigned cnt_;
 	};
 
 } // namespace trm

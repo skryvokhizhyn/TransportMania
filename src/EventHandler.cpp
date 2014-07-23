@@ -29,6 +29,18 @@ EventHandler::Process(const SDL_Event & e)
 	case SDL_FINGERDOWN:
 		eventSMPtr_->Emit(Key1Pressed());
 		break;
+
+	case SDL_MOUSEBUTTONDOWN:
+		OnMouseButtonDown(e);
+		break;
+
+	case SDL_MOUSEBUTTONUP:
+		OnMouseButtonUp(e);
+		break;
+
+	case SDL_MOUSEMOTION:
+		OnMouseMove(e);
+		break;
 	}
 }
 		
@@ -67,3 +79,33 @@ EventHandler::OnKeyDown(const SDL_Event & e)
 	}
 }
 
+void 
+EventHandler::OnMouseButtonDown(const SDL_Event & e)
+{
+	switch (e.button.button)
+	{
+	case SDL_BUTTON_LEFT:
+		eventSMPtr_->Emit(LMBPressed());
+		break;
+	}
+}
+
+void 
+EventHandler::OnMouseButtonUp(const SDL_Event & e)
+{
+	switch (e.button.button)
+	{
+	case SDL_BUTTON_LEFT:
+		eventSMPtr_->Emit(LMBReleased());
+		break;
+	}
+}
+
+void
+EventHandler::OnMouseMove(const SDL_Event & e)
+{
+	eventSMPtr_->Emit(
+		MouseMoved(
+			static_cast<float>(-e.motion.xrel), 
+			static_cast<float>(e.motion.yrel)));
+}

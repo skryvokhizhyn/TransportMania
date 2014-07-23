@@ -27,6 +27,9 @@ namespace impl
 	private:
 		// Event parsing methods
 		void OnKeyDown(const SDL_Event & e);
+		void OnMouseButtonDown(const SDL_Event & e);
+		void OnMouseButtonUp(const SDL_Event & e);
+		void OnMouseMove(const SDL_Event & e);
 
 	private:
 		std::shared_ptr<impl::EventStateMachine<Application>> eventSMPtr_;

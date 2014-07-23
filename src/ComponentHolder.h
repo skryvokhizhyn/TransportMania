@@ -7,12 +7,15 @@
 #include <map>
 #include <vector>
 
+//#include <boost/container/flat_map.hpp>
+
 namespace trm
 {
 	struct ComponentHolder
 	{
 		using Trains = std::map<ComponentId, Train>;
 		using Movables = std::multimap<ComponentId, TrainMovableObject>;
+		//using Movables = boost::container::flat_map<ComponentId, TrainMovableObject>;
 		using Visibles = std::vector<TrainVisibleObject>;
 
 		Trains trains;

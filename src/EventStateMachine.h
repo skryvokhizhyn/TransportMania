@@ -1,6 +1,10 @@
 #pragma once
 
+#include "Logger.h"
+
 #include <boost/noncopyable.hpp>
+
+#include <typeinfo>
 
 #pragma warning(push)
 #pragma warning(disable: 4512 4127)
@@ -23,7 +27,10 @@
 	template<typename Subject> \
 	template<class Fsm, class Evt, class SourceState, class TargetState> \
 	void EventStateMachine<Subject>::EventSMImpl::Apply ## name ::operator () \
-		(Evt const & /*evt*/, Fsm & fsm, SourceState &, TargetState &) 
+		(Evt const & evt, Fsm & fsm, SourceState & sourceState, TargetState & targetState) 
+
+#define ACTION_IMPLEMENTATION_UNUSED_GUARD \
+	(evt); (fsm); (sourceState); (targetState);
 
 namespace trm
 {
@@ -39,6 +46,15 @@ namespace impl
 
 	struct QuitFired {};
 	struct Key1Pressed {};
+
+	struct LMBPressed {};
+	struct MouseMoved 
+	{ 
+		float xShift, yShift; 
+
+		MouseMoved(float xS, float yS) : xShift(xS), yShift(yS) {}
+	};
+	struct LMBReleased {};
 
 	// State machine
 
@@ -60,6 +76,9 @@ namespace impl
 
 			struct EmptyState : public bmf::state<>
 			{};
+
+			struct LMBPressedState : public bmf::state<>
+			{};
 		
 			typedef EmptyState initial_state;
 
@@ -73,29 +92,36 @@ namespace impl
 			ACTION_DEFINITION(Quit);
 			ACTION_DEFINITION(Key1);
 
+			ACTION_DEFINITION(MouseMove);
+
+			ACTION_DEFINITION(Dummy);
+
 			struct transition_table : boost::mpl::vector<
-				//			Start			Event							Next		Action			Guard
-				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Left>,	EmptyState,	ApplyLeftKey,	bmf::none >,
-				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Right>,EmptyState,	ApplyRightKey,	bmf::none >,
-				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Up>,	EmptyState,	ApplyUpKey,		bmf::none >,
-				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Down>,	EmptyState,	ApplyDownKey,	bmf::none >,
-				bmf::Row<	EmptyState,		QuitFired,						EmptyState,	ApplyQuit,		bmf::none >,
-				bmf::Row<	EmptyState,		Key1Pressed,					EmptyState,	ApplyKey1,		bmf::none >
+				//			Start			Event							Next			Action			Guard
+				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Left>,	EmptyState,		ApplyLeftKey,	bmf::none >,
+				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Right>,EmptyState,		ApplyRightKey,	bmf::none >,
+				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Up>,	EmptyState,		ApplyUpKey,		bmf::none >,
+				bmf::Row<	EmptyState,		MoveKeyPressed<MoveKeys::Down>,	EmptyState,		ApplyDownKey,	bmf::none >,
+				bmf::Row<	EmptyState,		QuitFired,						EmptyState,		ApplyQuit,		bmf::none >,
+				bmf::Row<	EmptyState,		Key1Pressed,					EmptyState,		ApplyKey1,		bmf::none >,
+				bmf::Row<	EmptyState,		LMBPressed,						LMBPressedState,bmf::none,		bmf::none >,
+				bmf::Row<	LMBPressedState,MouseMoved,						LMBPressedState,ApplyMouseMove, bmf::none >,
+				bmf::Row<	LMBPressedState,LMBReleased,					EmptyState,		bmf::none,		bmf::none >
 				> {};
+
+			// Replaces the default no-transition response.
+			template<class FSM, class Event>
+			void no_transition(const Event &, FSM &, int state)
+			{
+				std::stringstream ss;
+				ss << "no transition from state " << state 
+					<< " on event " << typeid(Event).name();
+
+				utils::Logger().Debug() << ss.str();
+			}
 
 			Subject & subj_;
 		};
-
-		// Replaces the default no-transition response.
-		template<class FSM, class Event>
-		void no_transition(const Event & /*e*/, FSM &, int state)
-		{
-			std::stringstream ss;
-			ss << "no transition from state " << state
-				<< " on event " << typeid(Event).name();
-
-			throw std::runtime_error(ss.str());
-		}
 
 	private:
 		// Pick a back-end
@@ -124,32 +150,63 @@ namespace impl
 
 	ACTION_IMPLEMENTATION(LeftKey)
 	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
 		fsm.subj_.ShiftScene(-1.0f, 0.0f);
 	}
 
 	ACTION_IMPLEMENTATION(RightKey)
 	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
 		fsm.subj_.ShiftScene(1.0f, 0.0f);
 	}
 
 	ACTION_IMPLEMENTATION(UpKey)
 	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
 		fsm.subj_.ShiftScene(0.0f, 1.0f);
 	}
 
 	ACTION_IMPLEMENTATION(DownKey)
 	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
 		fsm.subj_.ShiftScene(0.0f, -1.0f);
 	}
 
 	ACTION_IMPLEMENTATION(Quit)
 	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
 		fsm.subj_.Stop();
 	}
 
 	ACTION_IMPLEMENTATION(Key1)
 	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
 		fsm.subj_.EmulateDynamicScene1();
+	}
+
+	ACTION_IMPLEMENTATION(Dummy)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		std::stringstream ss;
+		ss << "\nEvent " << typeid(Evt).name()
+			<< "\nfrom " << typeid(SourceState).name()
+			<< "\nto " << typeid(TargetState).name();
+
+		utils::Logger().Debug() << "Dummy action fired. Info: " << ss.str();
+	}
+
+	ACTION_IMPLEMENTATION(MouseMove)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		fsm.subj_.ShiftScene(evt.xShift, evt.yShift);
 	}
 
 } // namespace impl
@@ -157,3 +214,4 @@ namespace impl
 
 #undef ACTION_DEFINITION
 #undef ACTION_IMPLEMENTATION
+#undef ACTION_IMPLEMENTATION_UNUSED_GUARD
