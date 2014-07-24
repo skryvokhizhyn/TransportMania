@@ -106,6 +106,8 @@ Game::Run()
 
 	for (;;)
 	{
+		bool hasEvents = false;
+
 		while (updateRate.NeedMore())
 		{
 			while (SDL_PollEvent(&event))
@@ -118,6 +120,14 @@ Game::Run()
 				return;
 			}
 
+			app_.Update();
+			
+			hasEvents = true;
+		}
+
+		if (hasEvents)
+		{
+			handler.Commit();
 			app_.Update();
 		}
 	

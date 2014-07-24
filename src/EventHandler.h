@@ -23,6 +23,7 @@ namespace impl
 		EventHandler(Application & app);
 
 		void Process(const SDL_Event & e);
+		void Commit();
 
 	private:
 		// Event parsing methods
@@ -33,6 +34,7 @@ namespace impl
 
 	private:
 		std::shared_ptr<impl::EventStateMachine<Application>> eventSMPtr_;
+		bool shouldCommit_;
 	};
 
 } // namespace trm

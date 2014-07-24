@@ -14,10 +14,6 @@ namespace
 		const int Right = 0x2;
 		const int Up = 0x4;
 		const int Down = 0x8;
-		/*LeftUp,
-		LeftDown,
-		RightUp,
-		RightDown*/
 	} // namespace MoveDirection
 
 	struct Subject
@@ -116,18 +112,22 @@ BOOST_AUTO_TEST_CASE(EventStateMachineMouseMovedTest2)
 	BOOST_CHECK_EQUAL(s.stopped, false);
 
 	esm.Emit(MouseMoved{1, 1});
+	esm.Emit(Commit{});
 	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Right | MoveDirection::Up);
 	s.dir = MoveDirection::Undefined;
 
 	esm.Emit(MouseMoved{-1, 1});
+	esm.Emit(Commit{});
 	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Left | MoveDirection::Up);
 	s.dir = MoveDirection::Undefined;
 
 	esm.Emit(MouseMoved{-1, -1});
+	esm.Emit(Commit{});
 	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Left | MoveDirection::Down);
 	s.dir = MoveDirection::Undefined;
 
 	esm.Emit(MouseMoved{1, -1});
+	esm.Emit(Commit{});
 	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Right | MoveDirection::Down);
 	s.dir = MoveDirection::Undefined;
 
@@ -135,4 +135,36 @@ BOOST_AUTO_TEST_CASE(EventStateMachineMouseMovedTest2)
 
 	esm.Emit(QuitFired());
 	BOOST_CHECK_EQUAL(s.stopped, true);
+}
+
+BOOST_AUTO_TEST_CASE(EventStateMachineMouseMovedTest3)
+{
+	Subject s;
+	EventStateMachine<Subject> esm(s);
+
+	esm.Emit(MouseMoved{1.0f, 1.0f});
+	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Undefined);
+
+	esm.Emit(LMBPressed{});
+	esm.Emit(MouseMoved{1.0f, 1.0f});
+	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Undefined);
+
+	esm.Emit(MouseMoved{-1.5f, -3.0f});
+	esm.Emit(Commit{});
+	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Down | MoveDirection::Left);
+	s.dir = MoveDirection::Undefined;
+
+	esm.Emit(MouseMoved{5.0f, 5.0f});
+	esm.Emit(LMBReleased{});
+	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Up | MoveDirection::Right);
+}
+
+BOOST_AUTO_TEST_CASE(EventStateMachineMouseMovedTest4)
+{
+	Subject s;
+	EventStateMachine<Subject> esm(s);
+
+	esm.Emit(LMBPressed{});
+	esm.Emit(LMBReleased{});
+	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Undefined);
 }

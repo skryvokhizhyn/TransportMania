@@ -52,9 +52,20 @@ namespace impl
 	{ 
 		float xShift, yShift; 
 
+		MouseMoved() : xShift(0.0f), yShift(0.0f) {}
 		MouseMoved(float xS, float yS) : xShift(xS), yShift(yS) {}
+		
+		MouseMoved & operator += (const MouseMoved & m)
+		{
+			xShift += m.xShift;
+			yShift += m.yShift;
+			
+			return *this;
+		}
 	};
 	struct LMBReleased {};
+
+	struct Commit {};
 
 	// State machine
 
@@ -74,11 +85,12 @@ namespace impl
 		{
 			EventSMImpl(Subject & s);
 
-			struct EmptyState : public bmf::state<>
-			{};
-
-			struct LMBPressedState : public bmf::state<>
-			{};
+			struct EmptyState : public bmf::state<> {};
+			struct LMBPressedState : public bmf::state<> {};
+			struct LMBMovingState : public bmf::state<> 
+			{
+				MouseMoved data;
+			};
 		
 			typedef EmptyState initial_state;
 
@@ -93,6 +105,7 @@ namespace impl
 			ACTION_DEFINITION(Key1);
 
 			ACTION_DEFINITION(MouseMove);
+			ACTION_DEFINITION(MoveCommit);
 
 			ACTION_DEFINITION(Dummy);
 
@@ -105,7 +118,10 @@ namespace impl
 				bmf::Row<	EmptyState,		QuitFired,						EmptyState,		ApplyQuit,		bmf::none >,
 				bmf::Row<	EmptyState,		Key1Pressed,					EmptyState,		ApplyKey1,		bmf::none >,
 				bmf::Row<	EmptyState,		LMBPressed,						LMBPressedState,bmf::none,		bmf::none >,
-				bmf::Row<	LMBPressedState,MouseMoved,						LMBPressedState,ApplyMouseMove, bmf::none >,
+				bmf::Row<	LMBPressedState,MouseMoved,						LMBMovingState,	ApplyMouseMove, bmf::none >,
+				bmf::Row<	LMBMovingState, MouseMoved,						LMBMovingState, ApplyMouseMove,	bmf::none >,
+				bmf::Row<	LMBMovingState,	Commit,							LMBPressedState,ApplyMoveCommit,bmf::none >,
+				bmf::Row<	LMBMovingState,	LMBReleased,					EmptyState,		ApplyMoveCommit,bmf::none >,
 				bmf::Row<	LMBPressedState,LMBReleased,					EmptyState,		bmf::none,		bmf::none >
 				> {};
 
@@ -206,7 +222,15 @@ namespace impl
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
-		fsm.subj_.ShiftScene(evt.xShift, evt.yShift);
+		targetState.data += evt;
+	}
+
+	ACTION_IMPLEMENTATION(MoveCommit)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		fsm.subj_.ShiftScene(sourceState.data.xShift, sourceState.data.yShift);
+		sourceState.data = MouseMoved();
 	}
 
 } // namespace impl

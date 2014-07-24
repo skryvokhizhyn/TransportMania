@@ -9,6 +9,7 @@ using namespace trm::impl;
 
 EventHandler::EventHandler(Application & app)
 	: eventSMPtr_(std::make_shared<impl::EventStateMachine<Application>>(app))
+	, shouldCommit_(false)
 {}
 
 void
@@ -43,7 +44,16 @@ EventHandler::Process(const SDL_Event & e)
 		break;
 	}
 }
-		
+	
+void
+EventHandler::Commit()
+{
+	if (shouldCommit_)
+	{
+		eventSMPtr_->Emit(impl::Commit());
+	}
+}
+
 void 
 EventHandler::OnKeyDown(const SDL_Event & e)
 {
@@ -86,6 +96,7 @@ EventHandler::OnMouseButtonDown(const SDL_Event & e)
 	{
 	case SDL_BUTTON_LEFT:
 		eventSMPtr_->Emit(LMBPressed());
+		shouldCommit_ = true;
 		break;
 	}
 }
@@ -97,6 +108,7 @@ EventHandler::OnMouseButtonUp(const SDL_Event & e)
 	{
 	case SDL_BUTTON_LEFT:
 		eventSMPtr_->Emit(LMBReleased());
+		shouldCommit_ = false;
 		break;
 	}
 }
