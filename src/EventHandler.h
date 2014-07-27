@@ -23,6 +23,7 @@ namespace impl
 		EventHandler(Application & app);
 
 		void Process(const SDL_Event & e);
+		bool ShouldCommit() const;
 		void Commit();
 
 	private:
@@ -31,10 +32,12 @@ namespace impl
 		void OnMouseButtonDown(const SDL_Event & e);
 		void OnMouseButtonUp(const SDL_Event & e);
 		void OnMouseMove(const SDL_Event & e);
+		void OnFingerMove(const SDL_Event & e);
 
 	private:
 		std::shared_ptr<impl::EventStateMachine<Application>> eventSMPtr_;
-		bool shouldCommit_;
+		int width_;
+		int height_;
 	};
 
 } // namespace trm

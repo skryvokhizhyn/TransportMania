@@ -168,3 +168,22 @@ BOOST_AUTO_TEST_CASE(EventStateMachineMouseMovedTest4)
 	esm.Emit(LMBReleased{});
 	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Undefined);
 }
+
+BOOST_AUTO_TEST_CASE(EventStateMachineCommitableTest1)
+{
+	Subject s;
+	EventStateMachine<Subject> esm(s);
+
+	esm.Emit(LMBPressed{});
+	BOOST_CHECK(!esm.Commitable());
+	
+	esm.Emit(LMBReleased{});
+	BOOST_CHECK(!esm.Commitable());
+
+	esm.Emit(LMBPressed{});
+	esm.Emit(MouseMoved{1.0f, 1.0f});
+	BOOST_CHECK(esm.Commitable());
+
+	esm.Emit(Commit{});
+	BOOST_CHECK(!esm.Commitable());
+}

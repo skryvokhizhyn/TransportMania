@@ -55,13 +55,6 @@ TriangleNode::Splitted() const
 void 
 TriangleNode::Split()
 {
-	//utils::Logger().Debug() << "S " << num_;
-
-	/*if (num_ == 22 || num_ == 25)
-	{
-		utils::Logger().Debug() << num_ << " splitted";
-	}*/
-
 	if (Splitted())
 	{
 		return;
@@ -88,24 +81,19 @@ TriangleNode::Split()
 }
 
 bool
-TriangleNode::Merge(const ProcessCause pc, const ProcessBase pb)
+TriangleNode::Merge(const ProcessBase pb)
 {
-	if (pc == ProcessCause::Clear)
-	{
-		causedSplitting_ = false;
-	}
-
 	if (!Splitted())
 	{
 		return true;
 	}
 
-	if (!pLChild_->Merge(pc, ProcessBase::Merge))
+	if (!pLChild_->Merge(ProcessBase::Merge))
 	{
 		return false;
 	}
 	
-	if (!pRChild_->Merge(pc, ProcessBase::Merge))
+	if (!pRChild_->Merge(ProcessBase::Merge))
 	{
 		return false;
 	}
@@ -117,7 +105,7 @@ TriangleNode::Merge(const ProcessCause pc, const ProcessBase pb)
 
 	if (pb == ProcessBase::Merge && pBase_)
 	{
-		if (!pBase_->Merge(ProcessCause::Preserve, ProcessBase::Ignore))
+		if (!pBase_->Merge(ProcessBase::Ignore))
 		{
 			return false;
 		}

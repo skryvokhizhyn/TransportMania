@@ -18,17 +18,17 @@ BOOST_AUTO_TEST_CASE(TriangleMapperTest0)
 
 BOOST_AUTO_TEST_CASE(TriangleMapperTest1)
 {
-	BOOST_CHECK_EQUAL(TM9U.GetTriangleByNumber(1), Triangle2d(Point2d(0, 0), Point2d(0, 4), Point2d(4, 4)));
+	BOOST_CHECK_EQUAL(TM9U.GetTriangleByNumber(1), Triangle2d(Point2d(0, 0), Point2d(0, 8), Point2d(8, 8)));
 }
 
 BOOST_AUTO_TEST_CASE(TriangleMapperTest2)
 {
-	BOOST_CHECK_EQUAL(TM9U.GetTriangleByNumber(2), Triangle2d(Point2d(0, 4), Point2d(2, 2), Point2d(0, 0)));
+	BOOST_CHECK_EQUAL(TM9U.GetTriangleByNumber(2), Triangle2d(Point2d(0, 8), Point2d(4, 4), Point2d(0, 0)));
 }
 
 BOOST_AUTO_TEST_CASE(TriangleMapperTest3)
 {
-	BOOST_CHECK_EQUAL(TM9U.GetTriangleByNumber(3), Triangle2d(Point2d(4, 4), Point2d(2, 2), Point2d(0, 4)));
+	BOOST_CHECK_EQUAL(TM9U.GetTriangleByNumber(3), Triangle2d(Point2d(8, 8), Point2d(4, 4), Point2d(0, 8)));
 }
 
 BOOST_AUTO_TEST_CASE(TriangleMapperTest4)

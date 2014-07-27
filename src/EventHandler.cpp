@@ -1,16 +1,28 @@
 #include "EventHandler.h"
 #include "EventStateMachine.h"
 #include "Application.h"
+#include "Logger.h"
+
+#include <SDL_touch.h>
 
 using namespace trm;
 using namespace trm::impl;
 
-#include "Logger.h"
+namespace trm
+{
+	// exported for each platform
+	void GetScreenParameters(int & width, int & height, uint32_t & flags);
+}
 
 EventHandler::EventHandler(Application & app)
 	: eventSMPtr_(std::make_shared<impl::EventStateMachine<Application>>(app))
-	, shouldCommit_(false)
-{}
+	, width_(0)
+	, height_(0)
+{
+	uint32_t flags = 0;
+
+	GetScreenParameters(width_, height_, flags);
+}
 
 void
 EventHandler::Process(const SDL_Event & e)
@@ -27,20 +39,22 @@ EventHandler::Process(const SDL_Event & e)
 		OnKeyDown(e);
 		break;
 
-	case SDL_FINGERDOWN:
-		eventSMPtr_->Emit(Key1Pressed());
-		break;
-
 	case SDL_MOUSEBUTTONDOWN:
+	case SDL_FINGERDOWN:
 		OnMouseButtonDown(e);
 		break;
 
 	case SDL_MOUSEBUTTONUP:
+	case SDL_FINGERUP:
 		OnMouseButtonUp(e);
 		break;
 
 	case SDL_MOUSEMOTION:
 		OnMouseMove(e);
+		break;
+
+	case SDL_FINGERMOTION:
+		OnFingerMove(e);
 		break;
 	}
 }
@@ -48,10 +62,13 @@ EventHandler::Process(const SDL_Event & e)
 void
 EventHandler::Commit()
 {
-	if (shouldCommit_)
-	{
-		eventSMPtr_->Emit(impl::Commit());
-	}
+	eventSMPtr_->Emit(impl::Commit());
+}
+
+bool
+EventHandler::ShouldCommit() const
+{
+	return eventSMPtr_->Commitable();
 }
 
 void 
@@ -96,7 +113,6 @@ EventHandler::OnMouseButtonDown(const SDL_Event & e)
 	{
 	case SDL_BUTTON_LEFT:
 		eventSMPtr_->Emit(LMBPressed());
-		shouldCommit_ = true;
 		break;
 	}
 }
@@ -108,7 +124,6 @@ EventHandler::OnMouseButtonUp(const SDL_Event & e)
 	{
 	case SDL_BUTTON_LEFT:
 		eventSMPtr_->Emit(LMBReleased());
-		shouldCommit_ = false;
 		break;
 	}
 }
@@ -120,4 +135,15 @@ EventHandler::OnMouseMove(const SDL_Event & e)
 		MouseMoved(
 			static_cast<float>(-e.motion.xrel), 
 			static_cast<float>(e.motion.yrel)));
+}
+
+void
+EventHandler::OnFingerMove(const SDL_Event & e)
+{
+	const SDL_TouchFingerEvent & tfe = e.tfinger;
+
+	const float dx = (tfe.dx * width_);
+	const float dy = (tfe.dy * height_);
+
+	eventSMPtr_->Emit(MouseMoved{-dx, dy});
 }

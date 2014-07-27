@@ -51,9 +51,7 @@ BOOST_AUTO_TEST_CASE(TriangleNodeTest1)
 	BOOST_CHECK_EQUAL(md.points.size(), 6u);
 }
 
-namespace ttl = trm::terrain::lod;
-
-class /*ttl::*/TriangleNodeTester
+class TriangleNodeTester
 {
 	// helper methods
 public:
@@ -100,6 +98,7 @@ public:
 	static void TestMergeCausedSplittingSingle();
 	static void TestMergeCausedSplittingMultiple();
 	static void TestMergeClearCause();
+	static void TestMergeClearCause1();
 	static void TestComplexStackOverflow();
 	static void TestComplexStackOverflow2();
 };
@@ -144,12 +143,14 @@ BOOST_FIXTURE_TEST_CASE(TriangleNodeTestMergeCausedSplittingMultiple, TriangleNo
 {TestMergeCausedSplittingMultiple();}
 BOOST_FIXTURE_TEST_CASE(TriangleNodeTestMergeClearCause, TriangleNodeTester)
 {TestMergeClearCause();}
+BOOST_FIXTURE_TEST_CASE(TriangleNodeTestMergeClearCause1, TriangleNodeTester)
+{TestMergeClearCause1();}
 BOOST_FIXTURE_TEST_CASE(TriangleNodeTestComplexStackOverflow, TriangleNodeTester)
 {TestComplexStackOverflow();}
 BOOST_FIXTURE_TEST_CASE(TriangleNodeTestComplexStackOverflow2, TriangleNodeTester)
 {TestComplexStackOverflow2();}
 
-void /*ttl::*/TriangleNodeTester::TestSplit()
+void TriangleNodeTester::TestSplit()
 {
 	TriangleNode tn;
 	Traverse<Direction::Left>(&tn);
@@ -157,7 +158,7 @@ void /*ttl::*/TriangleNodeTester::TestSplit()
 	BOOST_CHECK(tn.Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestSplitLeft()
+void TriangleNodeTester::TestSplitLeft()
 {
 	TriangleNode tn;
 	TriangleNode * pLeft = Traverse<Direction::Left>(&tn);
@@ -165,7 +166,7 @@ void /*ttl::*/TriangleNodeTester::TestSplitLeft()
 	BOOST_CHECK_EQUAL(tn.GetLChild(), pLeft);
 }
 
-void /*ttl::*/TriangleNodeTester::TestSplitRight()
+void TriangleNodeTester::TestSplitRight()
 {
 	TriangleNode tn;
 	TriangleNode * pRight = Traverse<Direction::Right>(&tn);
@@ -173,7 +174,7 @@ void /*ttl::*/TriangleNodeTester::TestSplitRight()
 	BOOST_CHECK_EQUAL(tn.GetRChild(), pRight);
 }
 
-void /*ttl::*/TriangleNodeTester::TestSplitComplex()
+void TriangleNodeTester::TestSplitComplex()
 {
 	TriangleNode tn;
 	TriangleNode * pChild = Traverse<Direction::Right, Direction::Left, Direction::Right, Direction::Left>(&tn);
@@ -181,7 +182,7 @@ void /*ttl::*/TriangleNodeTester::TestSplitComplex()
 	BOOST_CHECK_EQUAL(tn.GetRChild()->GetLChild()->GetRChild()->GetLChild(), pChild);
 }
 
-void /*ttl::*/TriangleNodeTester::TestSplitIndirect()
+void TriangleNodeTester::TestSplitIndirect()
 {
 	TriangleNode tn;
 	Traverse<Direction::Left, Direction::Left, Direction::Left>(&tn);
@@ -190,7 +191,7 @@ void /*ttl::*/TriangleNodeTester::TestSplitIndirect()
 	BOOST_CHECK(tn.GetRChild()->GetRChild()->Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestSplitBase()
+void TriangleNodeTester::TestSplitBase()
 {
 	TriangleNode tnUp, tnDown;
 	tnUp.SetBase(&tnDown);
@@ -201,7 +202,7 @@ void /*ttl::*/TriangleNodeTester::TestSplitBase()
 	BOOST_CHECK(tnDown.Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestSplitLNeighbor()
+void TriangleNodeTester::TestSplitLNeighbor()
 {
 	TriangleNode tn, tnLNeighbor;
 	tn.SetLNeighbor(&tnLNeighbor);
@@ -214,7 +215,7 @@ void /*ttl::*/TriangleNodeTester::TestSplitLNeighbor()
 	BOOST_CHECK(!tnLNeighbor.GetRChild()->Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestSplitRNeighbor()
+void TriangleNodeTester::TestSplitRNeighbor()
 {
 	TriangleNode tn, tnRNeighbor;
 	tn.SetRNeighbor(&tnRNeighbor);
@@ -227,7 +228,7 @@ void /*ttl::*/TriangleNodeTester::TestSplitRNeighbor()
 	BOOST_CHECK(!tnRNeighbor.GetLChild()->Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestSplitLRNeighbor()
+void TriangleNodeTester::TestSplitLRNeighbor()
 {
 	TriangleNode tn, tnLNeighbor;
 	tn.SetLNeighbor(&tnLNeighbor);
@@ -240,7 +241,7 @@ void /*ttl::*/TriangleNodeTester::TestSplitLRNeighbor()
 	BOOST_CHECK(!tnLNeighbor.GetLChild()->Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestSplitRLNeighbor()
+void TriangleNodeTester::TestSplitRLNeighbor()
 {
 	TriangleNode tn, tnRNeighbor;
 	tn.SetRNeighbor(&tnRNeighbor);
@@ -253,46 +254,46 @@ void /*ttl::*/TriangleNodeTester::TestSplitRLNeighbor()
 	BOOST_CHECK(!tnRNeighbor.GetRChild()->Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestMerge()
+void TriangleNodeTester::TestMerge()
 {
 	TriangleNode tn;
 	
 	Traverse<Direction::Left>(&tn);
-	tn.Merge(TriangleNode::ProcessCause::Clear, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	BOOST_CHECK(!tn.Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestMergeMultiple()
+void TriangleNodeTester::TestMergeMultiple()
 {
 	TriangleNode tn;
 	
 	Traverse<Direction::Left, Direction::Left>(&tn);
-	tn.Merge(TriangleNode::ProcessCause::Clear, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	BOOST_CHECK(!tn.Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestMergeBase()
+void TriangleNodeTester::TestMergeBase()
 {
 	TriangleNode tn, tnBase;
 	tn.SetBase(&tnBase);
 	tnBase.SetBase(&tn);
 	
 	Traverse<Direction::Left>(&tn);
-	tn.Merge(TriangleNode::ProcessCause::Clear, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	BOOST_CHECK(!tnBase.Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestMergeLNeighbor()
+void TriangleNodeTester::TestMergeLNeighbor()
 {
 	TriangleNode tn, tnLNeighbor;
 	tn.SetLNeighbor(&tnLNeighbor);
 	tnLNeighbor.SetLNeighbor(&tn);
 	
 	Traverse<Direction::Left, Direction::Left>(&tn);
-	tn.Merge(TriangleNode::ProcessCause::Clear, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	// we don't merge parent but only direct base
 	// thus neighbor stays splitted but its children - merged
@@ -301,14 +302,14 @@ void /*ttl::*/TriangleNodeTester::TestMergeLNeighbor()
 	BOOST_CHECK(!tnLNeighbor.GetRChild()->Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestMergeRNeighbor()
+void TriangleNodeTester::TestMergeRNeighbor()
 {
 	TriangleNode tn, tnRNeighbor;
 	tn.SetRNeighbor(&tnRNeighbor);
 	tnRNeighbor.SetRNeighbor(&tn);
 	
 	Traverse<Direction::Right, Direction::Right>(&tn);
-	tn.Merge(TriangleNode::ProcessCause::Clear, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	// we don't merge parent but only direct base
 	// thus neighbor stays splitted but its children - merged
@@ -317,14 +318,14 @@ void /*ttl::*/TriangleNodeTester::TestMergeRNeighbor()
 	BOOST_CHECK(!tnRNeighbor.GetRChild()->Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestMergeLRNeighbor()
+void TriangleNodeTester::TestMergeLRNeighbor()
 {
 	TriangleNode tn, tnLNeighbor;
 	tn.SetLNeighbor(&tnLNeighbor);
 	tnLNeighbor.SetRNeighbor(&tn);
 	
 	Traverse<Direction::Left, Direction::Left>(&tn);
-	tn.Merge(TriangleNode::ProcessCause::Clear, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	// we don't merge parent but only direct base
 	// thus neighbor stays splitted but its children - merged
@@ -333,14 +334,14 @@ void /*ttl::*/TriangleNodeTester::TestMergeLRNeighbor()
 	BOOST_CHECK(!tnLNeighbor.GetRChild()->Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestMergeRLNeighbor()
+void TriangleNodeTester::TestMergeRLNeighbor()
 {
 	TriangleNode tn, tnRNeighbor;
 	tn.SetRNeighbor(&tnRNeighbor);
 	tnRNeighbor.SetLNeighbor(&tn);
 	
 	Traverse<Direction::Right, Direction::Right>(&tn);
-	tn.Merge(TriangleNode::ProcessCause::Clear, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	// we don't merge parent but only direct base
 	// thus neighbor stays splitted but its children - merged
@@ -349,7 +350,7 @@ void /*ttl::*/TriangleNodeTester::TestMergeRLNeighbor()
 	BOOST_CHECK(!tnRNeighbor.GetRChild()->Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestMergeCausedSplittingSingle()
+void TriangleNodeTester::TestMergeCausedSplittingSingle()
 {
 	TriangleNode tn;
 
@@ -358,19 +359,19 @@ void /*ttl::*/TriangleNodeTester::TestMergeCausedSplittingSingle()
 
 	pMiddleLeft->SetClearCause(true, false);
 
-	tn.Merge(TriangleNode::ProcessCause::Preserve, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	BOOST_CHECK(pMiddleLeft->Splitted());
 	BOOST_CHECK(tn.Splitted());
 
 	pMiddleLeft->SetClearCause(false, true);
 
-	tn.Merge(TriangleNode::ProcessCause::Preserve, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	BOOST_CHECK(!tn.Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestMergeCausedSplittingMultiple()
+void TriangleNodeTester::TestMergeCausedSplittingMultiple()
 {
 	TriangleNode tn, tnNLeft;
 	tn.SetLNeighbor(&tnNLeft);
@@ -381,7 +382,7 @@ void /*ttl::*/TriangleNodeTester::TestMergeCausedSplittingMultiple()
 
 	pMiddleChild->SetClearCause(true, false);
 
-	tn.Merge(TriangleNode::ProcessCause::Preserve, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	BOOST_CHECK(tn.Splitted());
 	BOOST_CHECK(tn.GetLChild()->Splitted());
@@ -390,7 +391,7 @@ void /*ttl::*/TriangleNodeTester::TestMergeCausedSplittingMultiple()
 
 	pMiddleChild->SetClearCause(false, true);
 
-	tnNLeft.Merge(TriangleNode::ProcessCause::Preserve, TriangleNode::ProcessBase::Merge);
+	tnNLeft.Merge(TriangleNode::ProcessBase::Merge);
 
 	BOOST_CHECK(!tnNLeft.Splitted());
 	
@@ -398,7 +399,7 @@ void /*ttl::*/TriangleNodeTester::TestMergeCausedSplittingMultiple()
 	BOOST_CHECK(tn.Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestMergeClearCause()
+void TriangleNodeTester::TestMergeClearCause()
 {
 	TriangleNode tn, tnBase;
 	tn.SetBase(&tnBase);
@@ -408,24 +409,40 @@ void /*ttl::*/TriangleNodeTester::TestMergeClearCause()
 
 	tn.SetClearCause(true, false);
 
-	tn.Merge(TriangleNode::ProcessCause::Clear, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
+
+	BOOST_CHECK(tn.Splitted());
+	BOOST_CHECK(tnBase.Splitted());
+}
+
+void TriangleNodeTester::TestMergeClearCause1()
+{
+	TriangleNode tn, tnBase;
+	tn.SetBase(&tnBase);
+	tnBase.SetBase(&tn);
+
+	Traverse<Direction::Left>(&tn);
+
+	tn.SetClearCause(false, false);
+
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	BOOST_CHECK(!tn.Splitted());
 	BOOST_CHECK(!tnBase.Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestComplexStackOverflow()
+void TriangleNodeTester::TestComplexStackOverflow()
 {
 	TriangleNode tn;
 
 	Traverse<Direction::Right, Direction::Left, Direction::Left, Direction::Left>(&tn);
 
-	tn.Merge(TriangleNode::ProcessCause::Preserve, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	BOOST_CHECK(!tn.Splitted());
 }
 
-void /*ttl::*/TriangleNodeTester::TestComplexStackOverflow2()
+void TriangleNodeTester::TestComplexStackOverflow2()
 {
 	TriangleNode tn;
 
@@ -440,7 +457,7 @@ void /*ttl::*/TriangleNodeTester::TestComplexStackOverflow2()
 		, Direction::Left
 	>(&tn);
 
-	tn.Merge(TriangleNode::ProcessCause::Preserve, TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge);
 
 	BOOST_CHECK(!tn.Splitted());
 }

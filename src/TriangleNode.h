@@ -24,21 +24,10 @@ namespace lod
 			Ignore
 		};
 
-		enum class ProcessCause : bool
-		{
-			Preserve,
-			Clear
-		};
-
 	public:
 		explicit TriangleNode(const size_t num = 1);
 		~TriangleNode();
 
-		/*void Tasselate(const size_t level, const Variance & var,
-			const HeightMap & hm, const Triangle3d & t, const Point3d & camera);*/
-		/*void Render(const size_t level, const HeightMap & hm, const Triangle3d & t, 
-			PointVector & result, IndexVector & index) const;*/
-		
 		void SetBase(TriangleNode * pBase);
 		void SetLNeighbor(TriangleNode * pLNeighbor);
 		void SetRNeighbor(TriangleNode * pRNeighbor);
@@ -49,7 +38,7 @@ namespace lod
 		
 		bool Splitted() const;
 		void Split();
-		bool Merge(const ProcessCause pc, const ProcessBase pb);
+		bool Merge(const ProcessBase pb);
 
 		TriangleNode * GetLChild() const;
 		TriangleNode * GetRChild() const;
@@ -69,10 +58,6 @@ namespace lod
 		void BindSplitNeighbor(TriangleNode * pNeighbor, TriangleNode * pChild);
 		void BindMerge();
 		void BindMergeNeighbor(TriangleNode * pNeighbor, TriangleNode * pChild);
-		/*bool ShouldContinue(const Variance & var, 
-			const Point3d & camera, const Triangle3d & t) const;*/
-
-		//friend class TriangleNodeTester;
 
 	private:
 		TriangleNode * pLChild_; 

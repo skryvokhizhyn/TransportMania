@@ -6,7 +6,6 @@
 namespace trm
 {
 	struct Triangle3d;
-	//struct Triangle2d;
 	struct Point3d;
 	struct ModelData;
 	class TriangleMapper;
@@ -23,14 +22,14 @@ namespace lod
 	struct TriangleNodeHandler
 	{
 		static void Tasselate(TriangleNode * pTn, const size_t level, const Variance & var,
-			const HeightMap & hm, const TriangleMapper & tm, /*const Triangle3d & t, */const Point3d & camera);
+			const HeightMap & hm, const TriangleMapper & tm, const Point3d & camera);
 
-		static void Render(TriangleNode * pTn, const size_t level, const HeightMap & hm, const TriangleMapper & tm, /*const Triangle3d & t, */
+		static void Render(TriangleNode * pTn, const size_t level, const HeightMap & hm, const TriangleMapper & tm, 
 			ModelData & md, PointNormaleMap & normaleMap);
 
 	private:
 		static bool ShouldContinue(const Variance & var, const size_t num, 
-			const Point3d & camera, /*const Triangle3d & t*/ const Point3d & t);
+			const Point3d & camera, const Point3d & t);
 	};
 
 } // namespace lod

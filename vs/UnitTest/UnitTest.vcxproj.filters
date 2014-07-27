@@ -143,9 +143,6 @@
     <ClCompile Include="..\..\src\TerrainRangeLine.cpp">
       <Filter>obj</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\TriangleMapper.cpp">
-      <Filter>obj</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\TriangleNode.cpp">
       <Filter>obj</Filter>
     </ClCompile>
@@ -175,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="EventStateMachineTest.cpp">
       <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TriangleMapper.cpp">
+      <Filter>obj</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

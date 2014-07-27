@@ -24,15 +24,14 @@ UpdateRate::Tick()
 }
 
 bool
-UpdateRate::NeedMore()
+UpdateRate::NeedMore() const
 {
-	if ((end_ - start_) >= updateDuration_)
-	{
-		++cnt_;
-		start_ += updateDuration_;
+	return (end_ - start_) >= updateDuration_;
+}
 
-		return true;
-	}
-	
-	return false;
+void
+UpdateRate::Done()
+{
+	++cnt_;
+	start_ += updateDuration_;
 }

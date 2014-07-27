@@ -79,6 +79,8 @@ namespace impl
 		template<typename Evt>
 		void Emit(const Evt & e);
 
+		bool Commitable() const;
+
 	private:
 
 		struct EventSMImpl : public boost::msm::front::state_machine_def<EventSMImpl>
@@ -118,7 +120,9 @@ namespace impl
 				bmf::Row<	EmptyState,		QuitFired,						EmptyState,		ApplyQuit,		bmf::none >,
 				bmf::Row<	EmptyState,		Key1Pressed,					EmptyState,		ApplyKey1,		bmf::none >,
 				bmf::Row<	EmptyState,		LMBPressed,						LMBPressedState,bmf::none,		bmf::none >,
+				bmf::Row<	EmptyState,		MouseMoved,						EmptyState,		bmf::none,		bmf::none >,
 				bmf::Row<	LMBPressedState,MouseMoved,						LMBMovingState,	ApplyMouseMove, bmf::none >,
+				bmf::Row<	LMBPressedState,Commit,							LMBPressedState,bmf::none,		bmf::none >,
 				bmf::Row<	LMBMovingState, MouseMoved,						LMBMovingState, ApplyMouseMove,	bmf::none >,
 				bmf::Row<	LMBMovingState,	Commit,							LMBPressedState,ApplyMoveCommit,bmf::none >,
 				bmf::Row<	LMBMovingState,	LMBReleased,					EmptyState,		ApplyMoveCommit,bmf::none >,
@@ -160,6 +164,14 @@ namespace impl
 	void EventStateMachine<Subject>::Emit(const Evt & evt)
 	{
 		eventSM_.process_event(evt);
+	}
+
+	template<typename Subject>
+	bool EventStateMachine<Subject>::Commitable() const
+	{
+		const int commitableStateId = boost::msm::back::get_state_id<EventSM::stt, EventSMImpl::LMBMovingState>::value;
+
+		return eventSM_.current_state()[0] == commitableStateId;
 	}
 
 	// Actions

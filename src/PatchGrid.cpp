@@ -10,6 +10,9 @@
 #include "GlobalDefines.h"
 #include "TerrainRange.h"
 
+#include <boost/range/algorithm/for_each.hpp>
+#include <boost/range/combine.hpp>
+
 using namespace trm;
 using namespace trm::terrain;
 using namespace trm::terrain::lod;
@@ -26,12 +29,6 @@ namespace
 	Size2d GetNearestPatchPosition(const Point2d & camera, const unsigned short pSz)
 	{
 		Point2d pos = camera / pSz;
-
-		//pos.x() = ::floor(camera.x() / PatchGrid::pSz);
-		//pos.y() = ::floor(camera.y() / PatchGrid::pSz);
-
-		//pos.x() = ::floor(pos.x());
-		//pos.y() = ::floor(pos.y());
 		
 		return Size2d::Cast(pos) * pSz;
 	}
@@ -84,27 +81,21 @@ PatchGrid::Init()
 	const unsigned short patchWidth = patchSize_ - 1;
 
 	for (unsigned short x = 0; x < patchCount_; ++x)
-	//for (unsigned short x = 7; x < 8; ++x)
 	{
 		for (unsigned short y = 0; y < patchCount_; ++y)
-		//for (unsigned short y = 3; y < 5; ++y)
 		{
 			const Size2d rp = Size2d(x, y) * patchWidth;
-			NodePtr rn = CreateNode(/*rp * PATCH_SIZE, hml*/patchWidth);
+			NodePtr rn = CreateNode(patchWidth);
 			PutNode(rp, rn);
 			
 			if (y > 0)
-			//if (y > 3)
 			{
-				//auto found = grid_.find(Point2d(x, (float)(y - 1)) * patchWidth);
 				auto found = grid_.find(Size2d(x, (y - 1)) * patchWidth);
 				found->second->get<PatchTag>().Attach(rn->get<PatchTag>(), Direction::Up);
 			}
 
 			if (x > 0)
-			//if (x > 7)
 			{
-				//auto found = grid_.find(Point2d((float)(x - 1), y) * patchWidth);
 				auto found = grid_.find(Size2d((x - 1), y) * patchWidth);
 				found->second->get<PatchTag>().Attach(rn->get<PatchTag>(), Direction::Right);
 			}
@@ -112,13 +103,11 @@ PatchGrid::Init()
 	}
 }
 
-auto PatchGrid::CreateNode(/*const Point2d & pos*/const unsigned short pSz) -> NodePtr
+auto PatchGrid::CreateNode(const unsigned short pSz) -> NodePtr
 {
 	PatchGrid::NodePtr node(new PatchGrid::Node());
-	//node->get<PositionTag>() = pos;
 
 	HeightMap & hm = node->get<HeightMapTag>();
-	/*hml.GetHeightMap(pos, PATCH_SIZE + 1, hm);*/
 
 	const size_t det = utils::GetPowerOf2(pSz);
 	node->get<PatchTag>().Init(hm, det * 2);
@@ -141,7 +130,6 @@ PatchGrid::Update(const WorldProjection & wp)
 {
 	for (auto it = grid_.begin(); it != grid_.end(); ++it)
 	{
-		//const Point2d & pos = it->first;
 		const Size2d & pos = it->first;
 		Patch & patch = it->second->get<PatchTag>();
 		HeightMap & hm = it->second->get<HeightMapTag>();
@@ -153,26 +141,19 @@ PatchGrid::Update(const WorldProjection & wp)
 
 		if (!isValid && isVisible)
 		{
-			//hml_.Get(Point2d::Cast(pos), patchSize_, hm);
 			LoadHeightMap(pos, hm);
 			patch.SetDirty();
 			patch.SetValid();
-
-			//utils::Logger().Debug() << pos << " Updated";
 		}
 		else if (isValid && !isVisible)
 		{
 			hm.Clear();
 			patch.Clear();
-
-			//utils::Logger().Debug() << pos << " Became invisible";
 		}
 	}
 
 	currIt_ = grid_.begin();
 }
-
-#include <boost/range/algorithm/for_each.hpp>
 
 void 
 PatchGrid::Tasselate(const WorldProjection & wp)
@@ -219,9 +200,6 @@ PatchGrid::Render(ModelData & md)
 	return true;
 }
 
-#include <boost/range/combine.hpp>
-#include <boost/range/algorithm/for_each.hpp>
-
 void 
 PatchGrid::GlueNormales(const GridMapType::value_type & node, ModelData & md) const
 {
@@ -259,7 +237,6 @@ PatchGrid::GlueNormales(const GridMapType::value_type & node, ModelData & md) co
 				const PointNormaleMap & normales = patch.GetNormales();
 
 				const Size2d shiftedPoint = sizePoint - s;
-				//const Size2d shiftedPoint = Size2d::Cast(p2d) - s;
 
 				const auto foundNormale = normales.find(shiftedPoint);
 				if (foundNormale != normales.end())
@@ -308,8 +285,6 @@ PatchGrid::GetSize() const
 HeightMap::Type 
 PatchGrid::At(const Point2d & p) const
 {
-	//Size2d pos = GetNearestPatchPosition(p, patchSize_ - 1);
-
 	const Positions pos = GetAdjucentPatches(p);
 
 	if (pos.empty())
@@ -346,8 +321,6 @@ PatchGrid::Set(const Point2d & p, const HeightMap::Type z)
 			{
 				throw std::runtime_error("Point is out of grid");
 			}
-	
-			//found->second->get<HeightMapTag>().Set(p - Point2d::Cast(s), z);
 
 			HeightMap & hm = found->second->get<HeightMapTag>();
 			LoadHeightMap(found->first, hm);

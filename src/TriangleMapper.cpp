@@ -25,7 +25,7 @@ TriangleMapper::GetTriangleByNumber(const size_t num) const
 
 	return triangles_.at(num - 1);
 }
-	
+
 void 
 TriangleMapper::GenerateTriangle(const size_t num, const size_t level, const Triangle2d & t)
 {

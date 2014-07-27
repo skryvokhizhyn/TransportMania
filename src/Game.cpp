@@ -106,8 +106,6 @@ Game::Run()
 
 	for (;;)
 	{
-		bool hasEvents = false;
-
 		while (updateRate.NeedMore())
 		{
 			while (SDL_PollEvent(&event))
@@ -120,14 +118,15 @@ Game::Run()
 				return;
 			}
 
-			app_.Update();
-			
-			hasEvents = true;
-		}
+			// mark update for the current frame as done
+			updateRate.Done();
 
-		if (hasEvents)
-		{
-			handler.Commit();
+			// if it's the last update for this frame and we have something to commit
+			if (!updateRate.NeedMore() && handler.ShouldCommit())
+			{
+				handler.Commit();
+			}
+
 			app_.Update();
 		}
 	

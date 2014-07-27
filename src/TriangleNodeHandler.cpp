@@ -5,8 +5,6 @@
 #include "TriangleNode.h"
 #include "GeometryUtils.h"
 #include "Logger.h"
-#include "Point4d.h"
-#include "MatrixUtils.h"
 #include "ModelData.h"
 #include "GlobalDefines.h"
 #include "TriangleMapper.h"
@@ -18,25 +16,26 @@ using namespace trm::terrain::lod;
 
 void 
 TriangleNodeHandler::Tasselate(TriangleNode * pTn, const size_t level, const Variance & var,
-	const HeightMap & hm, const TriangleMapper & tm, /*const Triangle3d & t,*/ const Point3d & camera)
+	const HeightMap & hm, const TriangleMapper & tm, const Point3d & camera)
 {
 	assert(pTn != nullptr);
 
 	// ignore level 0 nodes
 	if (level == 0)
-	//if (level < 5)
 	{
 		return;
 	}
 
-	//const Triangle3dPair tp = utils::SplitTriangle(t, hm);
 	const Point2d edge = tm.GetTriangleByNumber(pTn->GetNum() * 2).e();
 	Point3d t = Point3d::Cast(edge);
 	t.z() = hm.At(edge);
 
-	if (!ShouldContinue(var, pTn->GetNum(), camera, /*tp.first*/t))
+	if (!ShouldContinue(var, pTn->GetNum(), camera, t))
 	{
-		pTn->Merge(TriangleNode::ProcessCause::Clear, TriangleNode::ProcessBase::Merge);
+		// all children automatically cleared
+		pTn->SetClearCause(false, true);
+
+		pTn->Merge(TriangleNode::ProcessBase::Merge);
 	}
 	else
 	{
@@ -46,8 +45,8 @@ TriangleNodeHandler::Tasselate(TriangleNode * pTn, const size_t level, const Var
 
 		assert(pTn->Splitted());
 
-		Tasselate(pTn->GetLChild(), level - 1, var, hm, tm, /*tp.first, */camera);
-		Tasselate(pTn->GetRChild(), level - 1, var, hm, tm, /*tp.second, */camera);
+		Tasselate(pTn->GetLChild(), level - 1, var, hm, tm, camera);
+		Tasselate(pTn->GetRChild(), level - 1, var, hm, tm, camera);
 	}
 }
 
@@ -88,33 +87,11 @@ namespace
 
 bool 
 TriangleNodeHandler::ShouldContinue(const Variance & var, const size_t num, 
-	const Point3d & camera, /*const Triangle3d & t*/ const Point3d & t)
+	const Point3d & camera, const Point3d & t)
 {
-	//const float distToCenter = utils::GetDistance(camera, t.e()/*sphere center*/);
-	const float distToCenter = utils::GetDistance(camera, t/*sphere center*/);
-	//const float sphereRadii = utils::GetDistance(t.e(), t.l());
+	const float distToCenter = utils::GetDistance(camera, t);
 	const float variance = var.At(num - 1);
 	 
-	//const float weight = 0.001f;
-
-	//const float dist = distToCenter > sphereRadii ? distToCenter - sphereRadii : distToCenter / sphereRadii;
-	//const float ratio = variance / dist;
-	//const float ratio = variance / distToCenter;
-
-	//static float maxHeight = 0;
-	//if (maxHeight < distToCenter)
-	//{
-	//	maxHeight = distToCenter;
-	//	utils::Logger().Debug() << "max " << maxHeight;
-	//}
-	//static float minHeight = 1000;
-	//if (minHeight > distToCenter)
-	//{
-	//	minHeight = distToCenter;
-	//	utils::Logger().Debug() << "min " << minHeight;
-	//}
-
-	//if (ratio < weight)
 	if (variance < GetWeight(distToCenter))
 		return false;
 
@@ -122,24 +99,22 @@ TriangleNodeHandler::ShouldContinue(const Variance & var, const size_t num,
 }
 
 void 
-TriangleNodeHandler::Render(TriangleNode * pTn, const size_t level, const HeightMap & hm, const TriangleMapper & tm, /*const Triangle3d & t, */
+TriangleNodeHandler::Render(TriangleNode * pTn, const size_t level, const HeightMap & hm, const TriangleMapper & tm, 
 	ModelData & md, PointNormaleMap & normaleMap)
 {
 	const bool even = (level % 2 == 0);
 
 	if (pTn->Splitted())
 	{
-		//const Triangle3dPair tp = utils::SplitTriangle(t, hm);
-
 		if (even)
 		{
-			Render(pTn->GetLChild(), level + 1, hm, tm, /*tp.first, */md, normaleMap);
-			Render(pTn->GetRChild(), level + 1, hm, tm, /*tp.second, */md, normaleMap);
+			Render(pTn->GetLChild(), level + 1, hm, tm, md, normaleMap);
+			Render(pTn->GetRChild(), level + 1, hm, tm, md, normaleMap);
 		}
 		else
 		{
-			Render(pTn->GetRChild(), level + 1, hm, tm, /*tp.second, */md, normaleMap);
-			Render(pTn->GetLChild(), level + 1, hm, tm, /*tp.first, */md, normaleMap);
+			Render(pTn->GetRChild(), level + 1, hm, tm, md, normaleMap);
+			Render(pTn->GetLChild(), level + 1, hm, tm, md, normaleMap);
 		}
 	}
 	else
@@ -152,9 +127,6 @@ TriangleNodeHandler::Render(TriangleNode * pTn, const size_t level, const Height
 
 		if (even)
 		{
-			/*md.points.push_back(t.l());
-			md.points.push_back(t.e());*/
-
 			md.points.push_back(t3d.l());
 			md.points.push_back(t3d.e());
 
@@ -168,8 +140,6 @@ TriangleNodeHandler::Render(TriangleNode * pTn, const size_t level, const Height
 		}
 		else
 		{
-			/*md.points.push_back(t.r());
-			md.points.push_back(t.e());*/
 			md.points.push_back(t3d.r());
 			md.points.push_back(t3d.e());
 

@@ -50,10 +50,8 @@ Patch::ComputeVariance()
 void
 Patch::Tasselate(const Point3d & camera)
 {
-	//const Triangle3dPair tp = utils::GetTriangles(*pHeightMap_);
-
-	TriangleNodeHandler::Tasselate(pRootUp_, detalization_, varianceUp_, *pHeightMap_, UPPER_TRIANGLE_MAPPER, /*tp.first, */camera);
-	TriangleNodeHandler::Tasselate(pRootDown_, detalization_, varianceDown_, *pHeightMap_, LOWER_TRIANGLE_MAPPER, /*tp.second, */camera);
+	TriangleNodeHandler::Tasselate(pRootUp_, detalization_, varianceUp_, *pHeightMap_, UPPER_TRIANGLE_MAPPER, camera);
+	TriangleNodeHandler::Tasselate(pRootDown_, detalization_, varianceDown_, *pHeightMap_, LOWER_TRIANGLE_MAPPER, camera);
 	
 	//assert(pRootUp_->IsValid());
 	//assert(pRootDown_->IsValid());
@@ -64,12 +62,10 @@ Patch::Render(ModelData & md)
 {
 	const size_t sz = md.points.size();
 
-	//const Triangle3dPair tp = utils::GetTriangles(*pHeightMap_);
-
 	normaleMap_.clear();
 
-	TriangleNodeHandler::Render(pRootUp_, detalization_, *pHeightMap_, UPPER_TRIANGLE_MAPPER, /*tp.first,*/ md, normaleMap_);
-	TriangleNodeHandler::Render(pRootDown_, detalization_, *pHeightMap_, LOWER_TRIANGLE_MAPPER, /*tp.second,*/ md, normaleMap_);
+	TriangleNodeHandler::Render(pRootUp_, detalization_, *pHeightMap_, UPPER_TRIANGLE_MAPPER, md, normaleMap_);
+	TriangleNodeHandler::Render(pRootDown_, detalization_, *pHeightMap_, LOWER_TRIANGLE_MAPPER, md, normaleMap_);
 
 	assert(pRootUp_->IsValid());
 	assert(pRootDown_->IsValid());

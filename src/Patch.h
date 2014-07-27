@@ -44,7 +44,6 @@ namespace lod
 	private:
 		TriangleNode * pRootUp_;
 		TriangleNode * pRootDown_;
-		//ActiveNodes
 		Variance varianceUp_;
 		Variance varianceDown_;
 		PointNormaleMap normaleMap_;

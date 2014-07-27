@@ -5,27 +5,23 @@
 #include "Patch.h"
 #include "Size2d.h"
 #include "HeightMapLoader.h"
+
 #include <boost/noncopyable.hpp>
 #include <boost/tuple/tuple.hpp>
+
 #include <utility>
 #include <memory>
 #include <map>
 
-//#include "Size.h"
-
 namespace trm
 {
-	//struct ModelDataBase;
 	struct ModelData;
-	//struct Point2d;
-	//struct Size2d;
 	struct Point3d;
 	class WorldProjection;
 	class TerrainRange;
 
 namespace terrain
 {
-	//struct HeightMapLoader;
 	class HeightMap;
 
 namespace lod
@@ -58,15 +54,12 @@ namespace lod
 		Positions GetAdjucentPatches(const Point2d & p) const;
 
 	private:
-		//typedef boost::tuple<Point2d, HeightMap, Patch> Node;
 		typedef boost::tuple<HeightMap, Patch> Node;
 		typedef std::shared_ptr<Node> NodePtr;
-		//typedef std::map<Point2d, NodePtr> GridMapType;
 		typedef std::map<Size2d, NodePtr> GridMapType;
-		//typedef std::map<Size, NodePtr> GridMapType;
 
 	private:
-		static NodePtr CreateNode(/*const Point2d & pos*/const unsigned short pSz);
+		static NodePtr CreateNode(const unsigned short pSz);
 		static void RenderNode(const GridMapType::value_type & node, ModelData & md);
 		
 	private:
@@ -77,7 +70,6 @@ namespace lod
 	private:
 		const unsigned short patchSize_;
 		const unsigned short patchCount_;
-		//terrain::HeightMapLoader & hml_;
 		GridMapType grid_;
 		GridMapType::iterator currIt_;
 		terrain::HeightMapLoaderPtr hmlPtr_;

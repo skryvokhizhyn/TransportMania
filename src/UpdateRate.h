@@ -14,7 +14,8 @@ namespace trm
 
 		unsigned Tick();
 
-		bool NeedMore();
+		bool NeedMore() const;
+		void Done();
 
 	private:
 		const std::chrono::milliseconds updateDuration_;
