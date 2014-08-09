@@ -96,6 +96,7 @@
     <ClCompile Include="..\..\src\RoadPoint.cpp" />
     <ClCompile Include="..\..\src\RoadRoute.cpp" />
     <ClCompile Include="..\..\src\Settings.cpp" />
+    <ClCompile Include="..\..\src\SubjectAction.cpp" />
     <ClCompile Include="..\..\src\Terraformer.cpp" />
     <ClCompile Include="..\..\src\TerraformFunction.cpp" />
     <ClCompile Include="..\..\src\Terrain.cpp" />
@@ -124,6 +125,7 @@
     <ClCompile Include="RoadNetworkTest.cpp" />
     <ClCompile Include="RoadPointTest.cpp" />
     <ClCompile Include="SettingsTest.cpp" />
+    <ClCompile Include="SubjectActionTest.cpp" />
     <ClCompile Include="SymmetricMapTest.cpp" />
     <ClCompile Include="TerraformTest.cpp" />
     <ClCompile Include="TiangleMapperTest.cpp" />

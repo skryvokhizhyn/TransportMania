@@ -40,6 +40,9 @@
     <Filter Include="Application">
       <UniqueIdentifier>{acaf0267-5a1e-464a-a93a-f7148e7d0bd0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Application\EventStateMachine">
+      <UniqueIdentifier>{5d8d19b0-1b26-4f73-b1a8-0ba7b0b4d87a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -254,6 +257,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\TriangleMapper.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SubjectAction.cpp">
+      <Filter>Application\EventStateMachine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -494,9 +500,6 @@
     <ClInclude Include="..\..\src\EventHandler.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\EventStateMachine.h">
-      <Filter>Application</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\FpsCounter.h">
       <Filter>Application</Filter>
     </ClInclude>
@@ -547,6 +550,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\TriangleMapper.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventStateMachineImpl.h">
+      <Filter>Application\EventStateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventStateMachine.h">
+      <Filter>Application\EventStateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventStateMachineDefs.h">
+      <Filter>Application\EventStateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SubjectAction.h">
+      <Filter>Application\EventStateMachine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

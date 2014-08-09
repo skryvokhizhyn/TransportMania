@@ -218,11 +218,11 @@ MatrixFactory::Rotate(const Point3d & vF, const Point3d & vT, const Point3d & vD
 {
 	Matrix result = Identity();
 
-	const short c = utils::CheckCodirectional(vF, vT);
+	const Codirection c = utils::CheckCodirectional(vF, vT);
 
 	Point3d vR;
 
-	if (c != 0)
+	if (c != Codirection::None)
 	{
 		vR = vDefaultRotation;
 	}

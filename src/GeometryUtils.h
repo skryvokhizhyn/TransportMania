@@ -28,7 +28,11 @@ namespace utils
 	trm::Point2d RotateVector(const trm::Point2d & p, const trm::Angle a, const trm::Direction dir);
 	trm::Point2d GetIntersectionPoint(const trm::Line & l1, const trm::Line & l2);
 	trm::Angle GetAngle(const trm::Point3d & a, const trm::Point3d & b);
+	trm::Angle GetAngle(const trm::Point2d & a, const trm::Point2d & b);
+	// returns angle from (-90, 90) based on sin
 	trm::Angle GetSignedAngle(const trm::Point2d & a, const trm::Point2d & b);
+	// returns angle from range [-180, 180) based on cos and rotation.
+	trm::Angle GetSignedAngle180(const trm::Point2d & v1, const trm::Point2d & v2);
 	trm::Triangle3dPair SplitTriangle(const trm::Triangle3d & t, const trm::terrain::HeightMap & hm);
 	trm::Triangle2dPair SplitTriangle(const trm::Triangle2d & t);
 	trm::Triangle3dPair GetTriangles(const trm::terrain::HeightMap & hm);
@@ -45,25 +49,32 @@ namespace utils
 		return (lhs - rhs).GetLength();
 	}
 
+	enum class Codirection
+	{
+		Same,
+		Opposite,
+		None
+	};
+
 	template<typename T, unsigned short N>
-	inline short CheckCodirectional(trm::PointImpl<T, N> l, trm::PointImpl<T, N> r)
+	inline Codirection CheckCodirectional(trm::PointImpl<T, N> l, trm::PointImpl<T, N> r)
 	{
 		typedef trm::PointImpl<T, N> PointType;
 
 		l.Normalize();
 		r.Normalize();
 
-		if (l == r)
+		if (utils::CheckNear(utils::GetDistance(l, r), 0.0f, 0.00001f))
 		{
-			return 1;
+			return Codirection::Same;
 		}
 		else if (l == -1.0f * r)
 		{
-			return -1;
+			return Codirection::Opposite;
 		}
 		else
 		{
-			return 0;
+			return Codirection::None;
 		}
 	}
 

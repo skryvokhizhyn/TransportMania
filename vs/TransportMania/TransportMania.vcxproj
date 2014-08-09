@@ -54,6 +54,7 @@
     <ClCompile Include="..\..\src\ShaderLoader.cpp" />
     <ClCompile Include="..\..\src\StaticSceneObject.cpp" />
     <ClCompile Include="..\..\src\StaticSceneObjectFactory.cpp" />
+    <ClCompile Include="..\..\src\SubjectAction.cpp" />
     <ClCompile Include="..\..\src\Terraformer.cpp" />
     <ClCompile Include="..\..\src\TerraformFunction.cpp" />
     <ClCompile Include="..\..\src\Terrain.cpp" />
@@ -94,6 +95,8 @@
     <ClInclude Include="..\..\src\DrawContext.h" />
     <ClInclude Include="..\..\src\EventHandler.h" />
     <ClInclude Include="..\..\src\EventStateMachine.h" />
+    <ClInclude Include="..\..\src\EventStateMachineDefs.h" />
+    <ClInclude Include="..\..\src\EventStateMachineImpl.h" />
     <ClInclude Include="..\..\src\FpsCounter.h" />
     <ClInclude Include="..\..\src\Game.h" />
     <ClInclude Include="..\..\src\GeometryUtils.h" />
@@ -148,6 +151,7 @@
     <ClInclude Include="..\..\src\Size2d.h" />
     <ClInclude Include="..\..\src\StaticSceneObject.h" />
     <ClInclude Include="..\..\src\StaticSceneObjectFactory.h" />
+    <ClInclude Include="..\..\src\SubjectAction.h" />
     <ClInclude Include="..\..\src\SymmetricMap.h" />
     <ClInclude Include="..\..\src\Terraformer.h" />
     <ClInclude Include="..\..\src\TerraformFunction.h" />
@@ -223,7 +227,7 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
-      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS;_MBCS;MOUSE_MOTION_ENABLED;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

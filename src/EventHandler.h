@@ -33,6 +33,8 @@ namespace impl
 		void OnMouseButtonUp(const SDL_Event & e);
 		void OnMouseMove(const SDL_Event & e);
 		void OnFingerMove(const SDL_Event & e);
+		void OnFingerDown(const SDL_Event & e);
+		void OnFingerUp(const SDL_Event & e);
 
 	private:
 		std::shared_ptr<impl::EventStateMachine<Application>> eventSMPtr_;

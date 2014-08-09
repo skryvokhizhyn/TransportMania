@@ -151,7 +151,7 @@ Application::RenderScene()
 void 
 Application::ShiftScene(const float x, const float y)
 {
-	worldProjection_.Shift(x, y);
+	worldProjection_.Shift(-x, y);
 
 	SCENE_UPDATED = false;
 }
@@ -159,23 +159,23 @@ Application::ShiftScene(const float x, const float y)
 void 
 Application::ZoomScene(const float z)
 {
-	worldProjection_.Zoom(z);
+	worldProjection_.Zoom(-z);
 
 	SCENE_UPDATED = false;
 }
 
 void 
-Application::RotateScene(const float angle)
+Application::RotateScene(const Angle angle)
 {
-	worldProjection_.Rotate(Degrees(angle));
+	worldProjection_.Rotate(angle);
 
 	SCENE_UPDATED = false;
 }
 
 void 
-Application::BendScene(const float dtheta, const float dpsi)
+Application::BendScene(const Angle dtheta, const Angle dpsi)
 {
-	worldProjection_.Bend(Degrees(dtheta), Degrees(dpsi));
+	worldProjection_.Bend(-dtheta, dpsi);
 
 	SCENE_UPDATED = false;
 }

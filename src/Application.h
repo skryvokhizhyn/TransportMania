@@ -31,8 +31,8 @@ namespace trm
 
 		void ShiftScene(const float x, const float y);
 		void ZoomScene(const float z);
-		void RotateScene(const float angle);
-		void BendScene(const float dtheta, const float dpsi);
+		void RotateScene(const Angle angle);
+		void BendScene(const Angle dtheta, const Angle dpsi);
 
 		void Upper(const AxisType x, const AxisType y, const AxisType radii);
 

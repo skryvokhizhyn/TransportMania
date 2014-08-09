@@ -4,6 +4,9 @@
 #include "Line.h"
 #include "HeightMap.h"
 #include "Triangle2d.h"
+
+#include <boost/units/cmath.hpp>
+
 #include <math.h>
 
 using namespace trm;
@@ -87,13 +90,17 @@ utils::GetIntersectionPoint(const Line & l1, const Line & l2)
 	return res;
 }
 
-Angle 
-utils::GetAngle(const Point3d & a, const Point3d & b)
+namespace
 {
-	assert(a != Point3d());
-	assert(b != Point3d());
+template<typename T, unsigned short N>
+Angle
+GetAngleImpl(const PointImpl<T, N> & a, const PointImpl<T, N> & b)
+{
+	assert((a != PointImpl<T, N>()));
+	assert((b != PointImpl<T, N>()));
 
-	float acosVal = (a.x() * b.x() + a.y() * b.y() + a.z() * b.z()) / (a.GetLength() * b.GetLength());
+	float acosVal = std::inner_product(a.Begin(), a.End(), b.Begin(), 0.0f) / (a.GetLength() * b.GetLength());
+
 	if (acosVal > 1.0f)
 	{
 		acosVal = 1.0f;
@@ -106,6 +113,20 @@ utils::GetAngle(const Point3d & a, const Point3d & b)
 	return Radians(acos(acosVal));
 }
 
+} // namespace
+
+Angle 
+utils::GetAngle(const Point3d & a, const Point3d & b)
+{
+	return GetAngleImpl(a, b);
+}
+
+Angle 
+utils::GetAngle(const trm::Point2d & a, const trm::Point2d & b)
+{
+	return GetAngleImpl(a, b);
+}
+
 Angle 
 utils::GetSignedAngle(const trm::Point2d & a, const trm::Point2d & b)
 {
@@ -113,6 +134,19 @@ utils::GetSignedAngle(const trm::Point2d & a, const trm::Point2d & b)
 	assert(b != Point2d());
 
 	return Radians(::asin((a.x() * b.y() - a.y() * b.x()) / (a.GetLength() * b.GetLength())));
+}
+
+Angle 
+utils::GetSignedAngle180(const trm::Point2d & v1, const trm::Point2d & v2)
+{
+	Angle a = GetAngle(v1, v2);
+
+	if (CheckCodirectional(RotateVector(v1, a, Direction::Left), v2) == Codirection::Same)
+	{
+		a *= -1;
+	}
+
+	return a;
 }
 
 Triangle3dPair
@@ -170,8 +204,6 @@ utils::CheckColinear(const Point2d & p1, const Point2d & p2)
 
 	return utils::CheckNear(p1.y(), p2.y() * std::abs(xDiv), 0.000006f);
 }
-
-#include <boost/units/cmath.hpp>
 
 Point2d 
 utils::RotateVector(const Point2d & p, const Angle a, const Direction dir)

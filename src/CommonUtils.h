@@ -34,11 +34,6 @@ namespace priv
 
 } // namespace priv
 
-/////////////////////
-
-	#include <boost/utility/enable_if.hpp>
-#include <boost/mpl/identity.hpp>
-
 	template<typename T>
 	bool CheckEqual(const T v1, const T v2)
 	{

@@ -39,18 +39,28 @@ EventHandler::Process(const SDL_Event & e)
 		OnKeyDown(e);
 		break;
 
+#ifdef MOUSE_MOTION_ENABLED
+
 	case SDL_MOUSEBUTTONDOWN:
-	case SDL_FINGERDOWN:
 		OnMouseButtonDown(e);
 		break;
 
 	case SDL_MOUSEBUTTONUP:
-	case SDL_FINGERUP:
 		OnMouseButtonUp(e);
 		break;
 
 	case SDL_MOUSEMOTION:
 		OnMouseMove(e);
+		break;
+
+#endif // MOUSE_MOTION_ENABLED
+
+	case SDL_FINGERDOWN:
+		OnFingerDown(e);
+		break;
+
+	case SDL_FINGERUP:
+		OnFingerUp(e);
 		break;
 
 	case SDL_FINGERMOTION:
@@ -101,6 +111,7 @@ EventHandler::OnKeyDown(const SDL_Event & e)
 		break;
 
 	case SDLK_SPACE:
+	case SDLK_AC_BACK:
 		eventSMPtr_->Emit(QuitFired());
 		break;
 	}
@@ -109,10 +120,14 @@ EventHandler::OnKeyDown(const SDL_Event & e)
 void 
 EventHandler::OnMouseButtonDown(const SDL_Event & e)
 {
+	//utils::Logger().Debug() << "Button pressed ";
+
 	switch (e.button.button)
 	{
 	case SDL_BUTTON_LEFT:
-		eventSMPtr_->Emit(LMBPressed());
+		eventSMPtr_->Emit(FingerPressed(1, Point2d(
+			static_cast<float>(e.motion.x), 
+			static_cast<float>(e.motion.y))));
 		break;
 	}
 }
@@ -123,7 +138,7 @@ EventHandler::OnMouseButtonUp(const SDL_Event & e)
 	switch (e.button.button)
 	{
 	case SDL_BUTTON_LEFT:
-		eventSMPtr_->Emit(LMBReleased());
+		eventSMPtr_->Emit(FingerReleased{1});
 		break;
 	}
 }
@@ -131,10 +146,29 @@ EventHandler::OnMouseButtonUp(const SDL_Event & e)
 void
 EventHandler::OnMouseMove(const SDL_Event & e)
 {
-	eventSMPtr_->Emit(
-		MouseMoved(
-			static_cast<float>(-e.motion.xrel), 
-			static_cast<float>(e.motion.yrel)));
+	eventSMPtr_->Emit(FingerMoved(1, Point2d(
+		static_cast<float>(e.motion.x - e.motion.xrel), 
+		static_cast<float>(e.motion.y - e.motion.yrel))));
+}
+
+namespace
+{
+	Point2d GetAbsolutePosition(const SDL_TouchFingerEvent & tfe, int h, int w)
+	{
+		return Point2d(tfe.x * w, tfe.y * h);
+	}
+}
+
+void
+EventHandler::OnFingerDown(const SDL_Event & e)
+{
+	//utils::Logger().Debug() << "Finger pressed ";
+
+	const SDL_TouchFingerEvent & tfe = e.tfinger;
+
+	const auto p = GetAbsolutePosition(tfe, width_, height_);
+
+	eventSMPtr_->Emit(FingerPressed{tfe.fingerId, p});
 }
 
 void
@@ -142,8 +176,17 @@ EventHandler::OnFingerMove(const SDL_Event & e)
 {
 	const SDL_TouchFingerEvent & tfe = e.tfinger;
 
-	const float dx = (tfe.dx * width_);
-	const float dy = (tfe.dy * height_);
+	const auto p = GetAbsolutePosition(tfe, width_, height_);
 
-	eventSMPtr_->Emit(MouseMoved{-dx, dy});
+	eventSMPtr_->Emit(FingerMoved{tfe.fingerId, p});
+}
+
+void
+EventHandler::OnFingerUp(const SDL_Event & e)
+{
+	const SDL_TouchFingerEvent & tfe = e.tfinger;
+
+	//utils::Logger().Debug() << "Finger UP " << tfe.fingerId;
+
+	eventSMPtr_->Emit(FingerReleased{tfe.fingerId});
 }

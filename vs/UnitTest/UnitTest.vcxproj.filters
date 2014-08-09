@@ -176,6 +176,12 @@
     <ClCompile Include="..\..\src\TriangleMapper.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="SubjectActionTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SubjectAction.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

@@ -9,6 +9,29 @@
 using namespace utils;
 using namespace trm;
 
+namespace utils
+{
+	std::ostream & operator << (std::ostream & o, const utils::Codirection c)
+	{
+		switch (c)
+		{
+		case Codirection::Same:
+			o << "Same";
+			break;
+
+		case Codirection::Opposite:
+			o << "Opposite";
+			break;
+
+		case Codirection::None:
+			o << "None";
+			break;
+		}
+
+		return o;
+	}
+}
+
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest1)
 {
 	Point2d p1(0.0f, 0.0f);
@@ -168,6 +191,37 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTest9)
 	BOOST_CHECK_NE(a, Degrees(270));
 }
 
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest61)
+{
+	BOOST_CHECK_EQUAL(utils::GetAngle(Point2d(-1, 0), Point2d(0, 1)), Degrees(90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest62)
+{
+	BOOST_CHECK_EQUAL(utils::GetAngle(Point2d(-5, 0), Point2d(0, 1)), Degrees(90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest71)
+{
+	BOOST_CHECK_EQUAL(utils::GetAngle(Point2d(-1, 0), Point2d(1, 0)), Degrees(180));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest81)
+{
+	const Angle a = utils::GetAngle(Point2d(-1, 0), Point2d(0, -1));
+
+	BOOST_CHECK_EQUAL(a, Degrees(90));
+	BOOST_CHECK_NE(a, Degrees(270));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest91)
+{
+	const Angle a = utils::GetAngle(Point2d(0, -1), Point2d(-1, 0));
+
+	BOOST_CHECK_EQUAL(a, Degrees(90));
+	BOOST_CHECK_NE(a, Degrees(270));
+}
+
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest10)
 {
 	const bool r = utils::CheckColinear(Point2d(1, 1), Point2d(2, 2));
@@ -212,23 +266,23 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTest15)
 
 BOOST_AUTO_TEST_CASE(GeometryCheckCodirectionalTest1)
 {
-	const short r = utils::CheckCodirectional(Point2d(1, 0), Point2d(-2, 0));
+	const Codirection r = utils::CheckCodirectional(Point2d(1, 0), Point2d(-2, 0));
 
-	BOOST_CHECK_EQUAL(r, -1);
+	BOOST_CHECK_EQUAL(r, Codirection::Opposite);
 }
 
 BOOST_AUTO_TEST_CASE(GeometryCheckCodirectionalTest2)
 {
-	const short r = utils::CheckCodirectional(Point2d(1, 0), Point2d(2, 0));
+	const Codirection r = utils::CheckCodirectional(Point2d(1, 0), Point2d(2, 0));
 
-	BOOST_CHECK_EQUAL(r, 1);
+	BOOST_CHECK_EQUAL(r, Codirection::Same);
 }
 
 BOOST_AUTO_TEST_CASE(GeometryCheckCodirectionalTest3)
 {
-	const short r = utils::CheckCodirectional(Point2d(1, 2), Point2d(-2, 0));
+	const Codirection r = utils::CheckCodirectional(Point2d(1, 2), Point2d(-2, 0));
 
-	BOOST_CHECK_EQUAL(r, 0);
+	BOOST_CHECK_EQUAL(r, Codirection::None);
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest16)
@@ -280,6 +334,90 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle22)
 	const Angle a = utils::GetSignedAngle(Point2d(-1, 0), Point2d(1, 0));
 
 	BOOST_CHECK_EQUAL(a, Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle1801)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(1, 0), Point2d(1, 0));
+
+	BOOST_CHECK_EQUAL(a, Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle18011)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(5, 0), Point2d(1, 0));
+
+	BOOST_CHECK_EQUAL(a, Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle1802)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(-1, 0), Point2d(0, 1));
+
+	BOOST_CHECK_EQUAL(a, Degrees(-90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle18021)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(-3, 0), Point2d(0, 1));
+
+	BOOST_CHECK_EQUAL(a, Degrees(-90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle18022)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(-1, 0), Point2d(0, 4));
+
+	BOOST_CHECK_EQUAL(a, Degrees(-90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle1803)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(0, 1), Point2d(-1, 0));
+
+	BOOST_CHECK_EQUAL(a, Degrees(90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle18031)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(0, 3), Point2d(-1, 0));
+
+	BOOST_CHECK_EQUAL(a, Degrees(90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle18032)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(0, 1), Point2d(-8, 0));
+
+	BOOST_CHECK_EQUAL(a, Degrees(90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle1804)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(1, 0), Point2d(-1, 0));
+
+	BOOST_CHECK_EQUAL(a, Degrees(-180));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle1805)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(-1, 0), Point2d(1, 0));
+
+	BOOST_CHECK_EQUAL(a, Degrees(-180));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle1806)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(1, 0), Point2d(static_cast<float>(sqrt(2)/2), static_cast<float>(sqrt(2)/2)));
+
+	BOOST_CHECK(a - Degrees(45) < Degrees(0.1f));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle1807)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(0, 1), Point2d(static_cast<float>(sqrt(2)/2), static_cast<float>(sqrt(2)/2)));
+
+	BOOST_CHECK(a - Degrees(-45) < Degrees(0.1f));
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest22)
