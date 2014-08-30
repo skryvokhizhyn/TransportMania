@@ -133,6 +133,8 @@ namespace priv
 	template<>
 	inline size_t GetPowerOf2<false>(const size_t val)
 	{
+		assert(val > 0);
+
 		if (val == 1)
 			return 0;
 

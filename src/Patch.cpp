@@ -14,10 +14,10 @@ using namespace trm::terrain;
 using namespace trm::terrain::lod;
 
 Patch::Patch()
-	: pRootUp_(NULL)
-	, pRootDown_(NULL)
+	: pRootUp_(nullptr)
+	, pRootDown_(nullptr)
 	, detalization_(0)
-	, pHeightMap_(NULL)
+	, pHeightMap_(nullptr)
 	, dirty_(false)
 	, isValid_(false)
 {
@@ -34,6 +34,9 @@ Patch::Reset()
 	pRootDown_ = new TriangleNode();
 	pRootUp_->SetBase(pRootDown_);
 	pRootDown_->SetBase(pRootUp_);
+
+	rootUpCache_.ResetNode(pRootUp_);
+	rootDownCache_.ResetNode(pRootDown_);
 }
 
 void
@@ -47,14 +50,23 @@ Patch::ComputeVariance()
 	dirty_ = false;
 }
 
-void
+bool
 Patch::Tasselate(const Point3d & camera)
 {
-	TriangleNodeHandler::Tasselate(pRootUp_, detalization_, varianceUp_, *pHeightMap_, UPPER_TRIANGLE_MAPPER, camera);
+	/*TriangleNodeHandler::Tasselate(pRootUp_, detalization_, varianceUp_, *pHeightMap_, UPPER_TRIANGLE_MAPPER, camera);
 	TriangleNodeHandler::Tasselate(pRootDown_, detalization_, varianceDown_, *pHeightMap_, LOWER_TRIANGLE_MAPPER, camera);
 	
+	return false;*/
+
 	//assert(pRootUp_->IsValid());
 	//assert(pRootDown_->IsValid());
+
+	const bool upWasUpdated = rootUpCache_.Tasselate(detalization_, varianceUp_, 
+		*pHeightMap_, UPPER_TRIANGLE_MAPPER, camera);
+	const bool downWasUpdate = rootDownCache_.Tasselate(detalization_, varianceDown_, 
+		*pHeightMap_, LOWER_TRIANGLE_MAPPER, camera);
+
+	return upWasUpdated || downWasUpdate;
 }
 
 void
@@ -154,8 +166,8 @@ Patch::Clear()
 	normaleMap_.clear();
 	varianceUp_.Clear();
 	varianceDown_.Clear();
-	pRootUp_->SetClearCause(false, true);
-	pRootDown_->SetClearCause(false, true);
+	pRootUp_->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
+	pRootDown_->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
 }
 
 bool 

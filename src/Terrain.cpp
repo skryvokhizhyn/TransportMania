@@ -36,10 +36,10 @@ Terrain::Update(const WorldProjection & wp)
 	patchGrid_.Update(wp);
 }
 
-void 
+bool 
 Terrain::Tasselate(const WorldProjection & wp)
 {
-	patchGrid_.Tasselate(wp);
+	return patchGrid_.Tasselate(wp);
 }
 
 bool

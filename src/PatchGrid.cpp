@@ -12,6 +12,9 @@
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/combine.hpp>
+#include <boost/numeric/conversion/cast.hpp>
+
+#include <cstdlib>
 
 using namespace trm;
 using namespace trm::terrain;
@@ -21,7 +24,6 @@ namespace
 {
 	enum
 	{
-		//PositionTag = 0,
 		HeightMapTag = 0,
 		PatchTag = 1
 	};
@@ -138,7 +140,7 @@ PatchGrid::Update(const WorldProjection & wp)
 
 		const bool isValid = patch.GetValid();
 		const bool isVisible = IsVisible(wp, t, patchSize_);
-
+		
 		if (!isValid && isVisible)
 		{
 			LoadHeightMap(pos, hm);
@@ -151,13 +153,13 @@ PatchGrid::Update(const WorldProjection & wp)
 			patch.Clear();
 		}
 	}
-
-	currIt_ = grid_.begin();
 }
 
-void 
+bool 
 PatchGrid::Tasselate(const WorldProjection & wp)
 {
+	bool wasUpdated = false;
+
 	const Point3d & camera = wp.GetCameraPosition();
 
 	boost::range::for_each(grid_,
@@ -179,8 +181,13 @@ PatchGrid::Tasselate(const WorldProjection & wp)
 		const Size2d & pos = node.first;
 		Point3d shift = Point3d::Cast(pos);
 
-		p.Tasselate(camera - shift);
+		// if any was updated
+		wasUpdated |= p.Tasselate(camera - shift);
 	});
+
+	currIt_ = grid_.begin();
+
+	return wasUpdated;
 }
 
 bool 
@@ -278,9 +285,6 @@ PatchGrid::GetSize() const
 	// amount of points in patch * amount of patches + 1 as we have 2^n + 1 points
 	return (patchSize_ - 1) * patchCount_ + 1;
 }
-
-#include <cstdlib>
-#include <boost/numeric/conversion/cast.hpp>
 
 HeightMap::Type 
 PatchGrid::At(const Point2d & p) const

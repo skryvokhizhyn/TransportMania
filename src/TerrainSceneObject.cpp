@@ -14,26 +14,42 @@ TerrainSceneObject::TerrainSceneObject(const TerrainPtr & terrainPtr)
 void 
 TerrainSceneObject::Update(const WorldProjection & wp)
 {
-	terrainPtr_->Update(wp);
-	terrainPtr_->Tasselate(wp);
+	if (!updated_)
+	{
+		terrainPtr_->Update(wp);
+		updated_ = true;
+	}
+}
+
+void
+TerrainSceneObject::UpdateRequired()
+{
+	tasselated_ = false;
+	updated_ = false;
 }
 
 void 
-TerrainSceneObject::Render()
+TerrainSceneObject::Render(const WorldProjection & wp)
 {
-	modelDrawerPool_.Release();
-
-	ModelData modelData;
-	while (terrainPtr_->Render(modelData))
+	if (!tasselated_)
 	{
-		if (!modelData.Valid())
+		const bool tasselateMore = terrainPtr_->Tasselate(wp);
+		tasselated_ = !tasselateMore;
+	
+		modelDrawerPool_.Release();
+
+		ModelData modelData;
+		while (terrainPtr_->Render(modelData))
 		{
-			continue;
+			if (!modelData.Valid())
+			{
+				continue;
+			}
+
+			modelDrawerPool_.Push(modelData);
+
+			modelData.Clear();
 		}
-
-		modelDrawerPool_.Push(modelData);
-
-		modelData.Clear();
 	}
 }
 		

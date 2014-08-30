@@ -3,36 +3,33 @@
 
 using namespace trm::terrain::lod;
 
+#include <boost/pool/pool.hpp>
+
 namespace
 {
 	const size_t POOL_BLOCK_SIZE = 10000;
 	const size_t POOL_CHUNKS_TO_ALLOCATE = static_cast<size_t>(POOL_BLOCK_SIZE / 2);
 }
 
-TriangleNodePool &
-TriangleNodePool::Get()
-{
-	static TriangleNodePool instance;
-
-	return instance;
-}
-
-TriangleNodePool::TriangleNodePool()
-	: pool_(sizeof(terrain::lod::TriangleNode), POOL_CHUNKS_TO_ALLOCATE, POOL_BLOCK_SIZE)
-	//, chunks_(0)
+TriangleNodePool::TriangleNodePool(const std::size_t sz, std::string typeName)
+	: utils::PoolUsageCounterImpl(typeName)
+	, pool_(sz, POOL_CHUNKS_TO_ALLOCATE, POOL_BLOCK_SIZE)
 {
 }
+
+#undef malloc
+#undef free
 
 void *
 TriangleNodePool::Malloc()
 {
-	//++chunks_;
+	Inc();
 	return pool_.malloc();
 }
 
 void
 TriangleNodePool::Free(void * p)
 {
-	//--chunks_;
+	Dec();
 	pool_.free(p);
 }

@@ -24,7 +24,7 @@ namespace trm
 		Terrain(Terrain && t);
 
 		void Update(const WorldProjection & wp);
-		void Tasselate(const WorldProjection & wp);
+		bool Tasselate(const WorldProjection & wp);
 		bool Render(ModelData & md);
 		
 		void Apply(Terraformer & t);

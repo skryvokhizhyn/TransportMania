@@ -4,6 +4,7 @@
 #include "TriangleNode.h"
 #include "Variance.h"
 #include "HeightMap.h"
+#include "TriangleNodeCache.h"
 
 namespace trm
 {
@@ -20,7 +21,7 @@ namespace lod
 		~Patch();
 
 		void Init(const HeightMap & hm, const size_t det);
-		void Tasselate(const Point3d & camera);
+		bool Tasselate(const Point3d & camera);
 		void Render(ModelData & md);
 		void ComputeVariance();
 		void Attach(Patch & p, const Direction dir);
@@ -44,6 +45,8 @@ namespace lod
 	private:
 		TriangleNode * pRootUp_;
 		TriangleNode * pRootDown_;
+		TriangleNodeCache rootUpCache_;
+		TriangleNodeCache rootDownCache_;
 		Variance varianceUp_;
 		Variance varianceDown_;
 		PointNormaleMap normaleMap_;

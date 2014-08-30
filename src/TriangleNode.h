@@ -1,21 +1,21 @@
-#ifndef _TRIANGLENODE_H_
-#define _TRIANGLENODE_H_
+#pragma once
 
 #include "Types.h"
 
+#include <boost/noncopyable.hpp>
+
 namespace trm
 {
-	struct Triangle3d;
-
 namespace terrain
 {
-	class HeightMap;
-
 namespace lod
 {
-	class Variance;
+	class TriangleNode;
+
+	using TriangleNodePtr = TriangleNode *;
 
 	class TriangleNode
+		: boost::noncopyable
 	{
 	public:
 		enum class ProcessBase : bool
@@ -24,54 +24,74 @@ namespace lod
 			Ignore
 		};
 
+		enum class RemoveAction : bool
+		{
+			Delete,
+			Mark
+		};
+
+		enum class RecursiveMode : bool
+		{
+			No,
+			Yes
+		};
+
 	public:
 		explicit TriangleNode(const size_t num = 1);
 		~TriangleNode();
-
-		void SetBase(TriangleNode * pBase);
-		void SetLNeighbor(TriangleNode * pLNeighbor);
-		void SetRNeighbor(TriangleNode * pRNeighbor);
+		
+		void SetBase(TriangleNodePtr pBase);
+		void SetLNeighbor(TriangleNodePtr pLNeighbor);
+		void SetRNeighbor(TriangleNodePtr pRNeighbor);
 				
 		bool IsValid() const;
 
-		void SetClearCause(const bool c, const bool recursive);
+		void SetClearCause(const bool c, const RecursiveMode rm);
+		void MarkForDelete(const bool v, const RecursiveMode rm);
 		
 		bool Splitted() const;
 		void Split();
-		bool Merge(const ProcessBase pb);
-
-		TriangleNode * GetLChild() const;
-		TriangleNode * GetRChild() const;
+		bool Merge(const ProcessBase pb, const RemoveAction ra);
+		void RemoveChildren();
+	
+		TriangleNodePtr GetParent() const;
+		TriangleNodePtr GetLChild() const;
+		TriangleNodePtr GetRChild() const;
 		size_t GetNum() const;
+		bool MarkedForDelete() const;
 
 	public:
-		void * operator new (size_t sz);
-		void operator delete (void * p);
+		static void * operator new (size_t sz);
+		static void operator delete (void * p);
+		static void * operator new (unsigned int, int, const char *, int);
+		static void operator delete (void * p, int, const char *, int);
 
 	private:
-		void * operator new (size_t sz, const std::nothrow_t &);
-		void * operator new[] (size_t sz);
-		void operator delete[] (void * p);
+		static void * operator new (size_t sz, const std::nothrow_t &);
+		static void * operator new[] (size_t sz);
+		static void operator delete[] (void * p);
 
 	private:
 		void BindSplit();
-		void BindSplitNeighbor(TriangleNode * pNeighbor, TriangleNode * pChild);
+		void BindSplitNeighbor(TriangleNodePtr pNeighbor, TriangleNodePtr pChild);
 		void BindMerge();
-		void BindMergeNeighbor(TriangleNode * pNeighbor, TriangleNode * pChild);
+		void BindMergeNeighbor(TriangleNodePtr pNeighbor, TriangleNodePtr pChild);
+		void AllocateChildren();
+		bool HasChildren() const;
+		bool ChildrenMarkedForDelete() const;
 
 	private:
-		TriangleNode * pLChild_; 
-		TriangleNode * pRChild_; 
-		TriangleNode * pBase_; 
-		TriangleNode * pLNeighbor_; 
-		TriangleNode * pRNeighbor_;
-		TriangleNode * pParent_;
+		TriangleNodePtr pLChild_; 
+		TriangleNodePtr pRChild_; 
+		TriangleNodePtr pBase_; 
+		TriangleNodePtr pLNeighbor_; 
+		TriangleNodePtr pRNeighbor_;
+		TriangleNodePtr pParent_;
 		size_t num_;
 		bool causedSplitting_;
+		bool markedForDelete_;
 	};
 
 } // namespace lod
 } // namespace terrain
 } // namespace trm
-
-#endif // _TRIANGLENODE_H_

@@ -2,53 +2,15 @@
 #include "Point3d.h"
 #include "Variance.h"
 #include "HeightMap.h"
-#include "TriangleNode.h"
 #include "GeometryUtils.h"
 #include "Logger.h"
 #include "ModelData.h"
 #include "GlobalDefines.h"
 #include "TriangleMapper.h"
-#include "Triangle3d.h"
 
 using namespace trm;
 using namespace trm::terrain;
 using namespace trm::terrain::lod;
-
-void 
-TriangleNodeHandler::Tasselate(TriangleNode * pTn, const size_t level, const Variance & var,
-	const HeightMap & hm, const TriangleMapper & tm, const Point3d & camera)
-{
-	assert(pTn != nullptr);
-
-	// ignore level 0 nodes
-	if (level == 0)
-	{
-		return;
-	}
-
-	const Point2d edge = tm.GetTriangleByNumber(pTn->GetNum() * 2).e();
-	Point3d t = Point3d::Cast(edge);
-	t.z() = hm.At(edge);
-
-	if (!ShouldContinue(var, pTn->GetNum(), camera, t))
-	{
-		// all children automatically cleared
-		pTn->SetClearCause(false, true);
-
-		pTn->Merge(TriangleNode::ProcessBase::Merge);
-	}
-	else
-	{
-		pTn->SetClearCause(true, false);
-
-		pTn->Split();
-
-		assert(pTn->Splitted());
-
-		Tasselate(pTn->GetLChild(), level - 1, var, hm, tm, camera);
-		Tasselate(pTn->GetRChild(), level - 1, var, hm, tm, camera);
-	}
-}
 
 namespace
 {
@@ -85,6 +47,106 @@ namespace
 	}
 }
 
+void 
+TriangleNodeHandler::Tasselate(TriangleNode * pTn, const size_t level, const Variance & var,
+	const HeightMap & hm, const TriangleMapper & tm, const Point3d & camera)
+{
+	assert(pTn);
+
+	if (TasselateImpl(pTn, level, var, hm, tm, camera))
+	{
+		Tasselate(pTn->GetLChild(), level, var, hm, tm, camera);
+		Tasselate(pTn->GetRChild(), level, var, hm, tm, camera);
+	}
+}
+
+bool 
+TriangleNodeHandler::TasselateImpl(TriangleNode * pTn, const size_t det, const Variance & var, const HeightMap & hm,
+	const TriangleMapper & tm, const Point3d & camera)
+{
+	assert(pTn);
+
+	const size_t num = pTn->GetNum();
+
+	if (utils::GetPowerOf2<false>(num) >= det)
+	{
+		return false;
+	}
+
+	const Point2d edge = tm.GetTriangleByNumber(num * 2).e();
+	Point3d t = Point3d::Cast(edge);
+	t.z() = hm.At(edge);
+
+	if (!ShouldContinue(var, num, camera, t))
+	{
+		// all children automatically cleared
+		pTn->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
+
+		pTn->Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Mark);
+
+		return false;
+	}
+	else
+	{
+		pTn->SetClearCause(true, TriangleNode::RecursiveMode::No);
+
+		pTn->Split();
+
+		assert(pTn->Splitted());
+
+		return true;
+	}
+
+	//return false;
+}
+
+void 
+TriangleNodeHandler::TasselateLeaf(TriangleNode * pTn, const size_t det, const Variance & var, const HeightMap & hm,
+	const TriangleMapper & tm, const Point3d & camera)
+{
+	assert(pTn);
+
+	const size_t num = pTn->GetNum();
+
+	if (utils::GetPowerOf2<false>(num) >= det)
+	{
+		return;
+	}
+
+	//const Point2d edge = tm.GetTriangleByNumber(num * 2).e();
+	const Triangle2d & tr = tm.GetTriangleByNumber(num * 2);
+	Point3d t = Point3d::Cast(tr.e());
+	t.z() = hm.At(tr.e());
+
+	if (!ShouldContinue(var, num, camera, t))
+	{
+		TriangleNode * pParent = pTn->GetParent();
+
+		if (pParent)
+		{
+			Point3d p = Point3d::Cast(tr.l());
+			p.z() = hm.At(tr.l());
+
+			if (!ShouldContinue(var, pParent->GetNum(), camera, p))
+			{
+				// all children automatically cleared
+				pParent->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
+
+				pParent->Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Mark);
+
+			}
+		}
+	}
+	else
+	{
+		pTn->SetClearCause(true, TriangleNode::RecursiveMode::No);
+
+		pTn->Split();
+
+		assert(pTn->Splitted());
+	}
+}
+
 bool 
 TriangleNodeHandler::ShouldContinue(const Variance & var, const size_t num, 
 	const Point3d & camera, const Point3d & t)
@@ -102,6 +164,8 @@ void
 TriangleNodeHandler::Render(TriangleNode * pTn, const size_t level, const HeightMap & hm, const TriangleMapper & tm, 
 	ModelData & md, PointNormaleMap & normaleMap)
 {
+	assert(pTn);
+
 	const bool even = (level % 2 == 0);
 
 	if (pTn->Splitted())

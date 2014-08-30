@@ -1,5 +1,7 @@
 #pragma once
 
+#include "PoolUsageCounter.h"
+
 #include <boost/noncopyable.hpp>
 #include <boost/pool/pool.hpp>
 
@@ -12,19 +14,25 @@ namespace lod
 
 	class TriangleNodePool
 		: boost::noncopyable
+		, protected utils::PoolUsageCounterImpl
 	{
 	public:
-		static TriangleNodePool & Get();
+		template<typename T>
+		static TriangleNodePool & Get()
+		{
+			static TriangleNodePool instance(sizeof(T), typeid(T).name());
+			
+			return instance;
+		}
 
 		void * Malloc();
 		void Free(void * p);
 
 	private:
-		TriangleNodePool();
+		TriangleNodePool(const std::size_t sz, std::string typeName);
 
 	private:
 		boost::pool<> pool_;
-		//int chunks_;
 	};
 
 } // namespace lod

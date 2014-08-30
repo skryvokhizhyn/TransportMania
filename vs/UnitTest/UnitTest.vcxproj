@@ -46,7 +46,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SCL_SECURE_NO_WARNINGS;_CRTDBG_MAP_ALLOC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <MinimalRebuild>false</MinimalRebuild>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -84,6 +84,8 @@
     <ClCompile Include="..\..\src\PatchGrid.cpp" />
     <ClCompile Include="..\..\src\PatchTriangleMapper.cpp" />
     <ClCompile Include="..\..\src\PointHash.cpp" />
+    <ClCompile Include="..\..\src\PoolUsageCounter.cpp" />
+    <ClCompile Include="..\..\src\PoolUsageCounterHolder.cpp" />
     <ClCompile Include="..\..\src\RailRoad.cpp" />
     <ClCompile Include="..\..\src\RailRoadArc.cpp" />
     <ClCompile Include="..\..\src\RailRoadFactory.cpp" />
@@ -106,11 +108,13 @@
     <ClCompile Include="..\..\src\TerrainRangeLine.cpp" />
     <ClCompile Include="..\..\src\TriangleMapper.cpp" />
     <ClCompile Include="..\..\src\TriangleNode.cpp" />
+    <ClCompile Include="..\..\src\TriangleNodeCache.cpp" />
     <ClCompile Include="..\..\src\TriangleNodeHandler.cpp" />
     <ClCompile Include="..\..\src\TriangleNodePool.cpp" />
     <ClCompile Include="..\..\src\Variance.cpp" />
     <ClCompile Include="..\..\src\Vertex.cpp" />
     <ClCompile Include="..\..\src\WorldProjection.cpp" />
+    <ClCompile Include="..\TransportMania\LeakDetectorInitializer.cpp" />
     <ClCompile Include="..\TransportMania\Logger.cpp" />
     <ClCompile Include="CommonUtilsTest.cpp" />
     <ClCompile Include="EventStateMachineTest.cpp" />

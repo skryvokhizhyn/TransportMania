@@ -24,6 +24,27 @@ namespace
 		2, 0, 1
 	};
 	const size_t level = 2;
+
+	template<Direction head, Direction... tail>
+	static TriangleNode * Traverse(TriangleNode * tn)
+	{
+		TriangleNode * pChild = Traverse<head>(tn);
+		return Traverse<tail...>(pChild);
+	}
+
+	template<>
+	static TriangleNode * Traverse<Direction::Left>(TriangleNode * tn)
+	{
+		tn->Split();
+		return tn->GetLChild();
+	}
+
+	template<>
+	static TriangleNode * Traverse<Direction::Right>(TriangleNode * tn)
+	{
+		tn->Split();
+		return tn->GetRChild();
+	}
 }
 
 #include <Triangle2d.h>
@@ -53,29 +74,6 @@ BOOST_AUTO_TEST_CASE(TriangleNodeTest1)
 
 class TriangleNodeTester
 {
-	// helper methods
-public:
-	template<Direction head, Direction... tail>
-	static TriangleNode * Traverse(TriangleNode * tn)
-	{
-		TriangleNode * pChild = Traverse<head>(tn);
-		return Traverse<tail...>(pChild);
-	}
-
-	template<>
-	static TriangleNode * Traverse<Direction::Left>(TriangleNode * tn)
-	{
-		tn->Split();
-		return tn->GetLChild();
-	}
-
-	template<>
-	static TriangleNode * Traverse<Direction::Right>(TriangleNode * tn)
-	{
-		tn->Split();
-		return tn->GetRChild();
-	}
-
 	// test scenarios
 public:
 	static void TestSplit();
@@ -259,7 +257,7 @@ void TriangleNodeTester::TestMerge()
 	TriangleNode tn;
 	
 	Traverse<Direction::Left>(&tn);
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(!tn.Splitted());
 }
@@ -269,7 +267,7 @@ void TriangleNodeTester::TestMergeMultiple()
 	TriangleNode tn;
 	
 	Traverse<Direction::Left, Direction::Left>(&tn);
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(!tn.Splitted());
 }
@@ -281,7 +279,7 @@ void TriangleNodeTester::TestMergeBase()
 	tnBase.SetBase(&tn);
 	
 	Traverse<Direction::Left>(&tn);
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(!tnBase.Splitted());
 }
@@ -293,7 +291,7 @@ void TriangleNodeTester::TestMergeLNeighbor()
 	tnLNeighbor.SetLNeighbor(&tn);
 	
 	Traverse<Direction::Left, Direction::Left>(&tn);
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	// we don't merge parent but only direct base
 	// thus neighbor stays splitted but its children - merged
@@ -309,7 +307,7 @@ void TriangleNodeTester::TestMergeRNeighbor()
 	tnRNeighbor.SetRNeighbor(&tn);
 	
 	Traverse<Direction::Right, Direction::Right>(&tn);
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	// we don't merge parent but only direct base
 	// thus neighbor stays splitted but its children - merged
@@ -325,7 +323,7 @@ void TriangleNodeTester::TestMergeLRNeighbor()
 	tnLNeighbor.SetRNeighbor(&tn);
 	
 	Traverse<Direction::Left, Direction::Left>(&tn);
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	// we don't merge parent but only direct base
 	// thus neighbor stays splitted but its children - merged
@@ -341,7 +339,7 @@ void TriangleNodeTester::TestMergeRLNeighbor()
 	tnRNeighbor.SetLNeighbor(&tn);
 	
 	Traverse<Direction::Right, Direction::Right>(&tn);
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	// we don't merge parent but only direct base
 	// thus neighbor stays splitted but its children - merged
@@ -357,16 +355,16 @@ void TriangleNodeTester::TestMergeCausedSplittingSingle()
 	TriangleNode * pMiddleLeft = Traverse<Direction::Left>(&tn);
 	Traverse<Direction::Left>(pMiddleLeft);
 
-	pMiddleLeft->SetClearCause(true, false);
+	pMiddleLeft->SetClearCause(true, TriangleNode::RecursiveMode::No);
 
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(pMiddleLeft->Splitted());
 	BOOST_CHECK(tn.Splitted());
 
-	pMiddleLeft->SetClearCause(false, true);
+	pMiddleLeft->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
 
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(!tn.Splitted());
 }
@@ -380,18 +378,18 @@ void TriangleNodeTester::TestMergeCausedSplittingMultiple()
 	Traverse<Direction::Left, Direction::Left>(&tn);
 	TriangleNode * pMiddleChild = Traverse<Direction::Left>(&tnNLeft);
 
-	pMiddleChild->SetClearCause(true, false);
+	pMiddleChild->SetClearCause(true, TriangleNode::RecursiveMode::No);
 
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(tn.Splitted());
 	BOOST_CHECK(tn.GetLChild()->Splitted());
 	BOOST_CHECK(tnNLeft.Splitted());
 	BOOST_CHECK(tnNLeft.GetLChild()->Splitted());
 
-	pMiddleChild->SetClearCause(false, true);
+	pMiddleChild->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
 
-	tnNLeft.Merge(TriangleNode::ProcessBase::Merge);
+	tnNLeft.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(!tnNLeft.Splitted());
 	
@@ -407,9 +405,9 @@ void TriangleNodeTester::TestMergeClearCause()
 
 	Traverse<Direction::Left>(&tn);
 
-	tn.SetClearCause(true, false);
+	tn.SetClearCause(true, TriangleNode::RecursiveMode::No);
 
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(tn.Splitted());
 	BOOST_CHECK(tnBase.Splitted());
@@ -423,9 +421,9 @@ void TriangleNodeTester::TestMergeClearCause1()
 
 	Traverse<Direction::Left>(&tn);
 
-	tn.SetClearCause(false, false);
+	tn.SetClearCause(false, TriangleNode::RecursiveMode::No);
 
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(!tn.Splitted());
 	BOOST_CHECK(!tnBase.Splitted());
@@ -437,7 +435,7 @@ void TriangleNodeTester::TestComplexStackOverflow()
 
 	Traverse<Direction::Right, Direction::Left, Direction::Left, Direction::Left>(&tn);
 
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(!tn.Splitted());
 }
@@ -457,7 +455,156 @@ void TriangleNodeTester::TestComplexStackOverflow2()
 		, Direction::Left
 	>(&tn);
 
-	tn.Merge(TriangleNode::ProcessBase::Merge);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Delete);
 
 	BOOST_CHECK(!tn.Splitted());
+}
+
+#include <TriangleNodeCache.h>
+ 
+BOOST_AUTO_TEST_CASE(TriangleNodeCacheTest1)
+{
+	TriangleNodeCache::TriangleNodes nodes;
+	TriangleNode tn;
+
+	nodes.push_back(&tn);
+
+	TriangleNodeCache::Update(nodes);
+
+	BOOST_CHECK_EQUAL(nodes.size(), 1u);
+}
+
+BOOST_AUTO_TEST_CASE(TriangleNodeCacheTest2)
+{
+	TriangleNodeCache::TriangleNodes nodes;
+	TriangleNode tn;
+
+	nodes.push_back(&tn);
+
+	Traverse<Direction::Left>(&tn);
+
+	TriangleNodeCache::Update(nodes);
+
+	BOOST_CHECK(tn.Splitted());
+	BOOST_CHECK_EQUAL(nodes.size(), 2u);
+	auto it = nodes.begin();
+	BOOST_CHECK_EQUAL(*it++, tn.GetLChild());
+	BOOST_CHECK_EQUAL(*it, tn.GetRChild());
+}
+
+BOOST_AUTO_TEST_CASE(TriangleNodeCacheTest3)
+{
+	TriangleNodeCache::TriangleNodes nodes;
+	TriangleNode tn;
+
+	nodes.push_back(&tn);
+
+	Traverse<Direction::Left>(&tn);
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Mark);
+
+	TriangleNodeCache::Update(nodes);
+
+	BOOST_CHECK_EQUAL(nodes.size(), 1u);
+	auto it = nodes.begin();
+	BOOST_CHECK_EQUAL(*it, &tn);
+}
+
+BOOST_AUTO_TEST_CASE(TriangleNodeCacheTest4)
+{
+	TriangleNodeCache::TriangleNodes nodes;
+	TriangleNode tn;
+
+	nodes.push_back(&tn);
+
+	{
+		auto ll = Traverse<Direction::Left, Direction::Left>(&tn);
+
+		TriangleNodeCache::Update(nodes);
+
+		BOOST_CHECK_EQUAL(nodes.size(), 3u);
+		auto it = nodes.begin();
+		BOOST_CHECK_EQUAL(*it++, ll);
+		BOOST_CHECK_EQUAL(*it++, ll->GetParent()->GetRChild());
+		BOOST_CHECK_EQUAL(*it++, tn.GetRChild());
+	}
+
+	tn.Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Mark);
+
+	TriangleNodeCache::Update(nodes); 
+
+	BOOST_CHECK_EQUAL(nodes.size(), 1u);
+	BOOST_CHECK_EQUAL(nodes.front(), &tn);
+
+	nodes.clear();
+}
+
+BOOST_AUTO_TEST_CASE(TriangleNodeCacheTest5)
+{
+	TriangleNodeCache::TriangleNodes nodes;
+	TriangleNode tn;
+
+	nodes.push_back(&tn);
+
+	auto llll = Traverse<Direction::Left, Direction::Left, Direction::Left, Direction::Left>(&tn);
+
+	TriangleNodeCache::Update(nodes);
+
+	BOOST_CHECK_EQUAL(nodes.size(), 9u);
+	auto it = nodes.begin();
+	TriangleNode * lll = llll->GetParent();
+	BOOST_CHECK_EQUAL(*it++, lll->GetLChild());
+	BOOST_CHECK_EQUAL(*it++, lll->GetRChild());
+	TriangleNode * llr = lll->GetParent()->GetRChild();
+	BOOST_CHECK_EQUAL(*it++, llr);
+	TriangleNode * lr = lll->GetParent()->GetParent()->GetRChild();
+	BOOST_CHECK_EQUAL(*it++, lr->GetLChild());
+	TriangleNode * lrr = lr->GetRChild();
+	BOOST_CHECK_EQUAL(*it++, lrr->GetLChild());
+	BOOST_CHECK_EQUAL(*it++, lrr->GetRChild());
+	TriangleNode * r = tn.GetRChild();
+	BOOST_CHECK_EQUAL(*it++, r->GetLChild());
+	TriangleNode * rr = r->GetRChild();
+	BOOST_CHECK_EQUAL(*it++, rr->GetLChild());
+	BOOST_CHECK_EQUAL(*it++, rr->GetRChild());
+}
+
+BOOST_AUTO_TEST_CASE(TriangleNodeCacheTest6)
+{
+	TriangleNodeCache::TriangleNodes nodes;
+	TriangleNode tn;
+
+	nodes.push_back(&tn);
+
+	auto llll = Traverse<Direction::Left, Direction::Left, Direction::Left, Direction::Left>(&tn);
+
+	TriangleNodeCache::Update(nodes);
+	BOOST_CHECK_EQUAL(nodes.size(), 9u);
+
+	TriangleNode * ll = tn.GetLChild()->GetLChild();
+	ll->Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Mark);
+
+	TriangleNodeCache::Update(nodes);
+	BOOST_CHECK_EQUAL(nodes.size(), 5u);
+
+	auto it = nodes.begin();
+	TriangleNode * l = tn.GetLChild();
+	BOOST_CHECK_EQUAL(*it++, l->GetLChild());
+	TriangleNode * lr = l->GetRChild();
+	BOOST_CHECK_EQUAL(*it++, lr->GetLChild());
+	BOOST_CHECK_EQUAL(*it++, lr->GetRChild());
+	TriangleNode * r = tn.GetRChild();
+	BOOST_CHECK_EQUAL(*it++, r->GetLChild());
+	BOOST_CHECK_EQUAL(*it++, r->GetRChild());
+}
+
+BOOST_AUTO_TEST_CASE(TriangleNodeChildrenAllocationTest1)
+{
+	TriangleNode tn;
+
+	Traverse<Direction::Left, Direction::Left, Direction::Left, Direction::Left>(&tn);
+
+	TriangleNode * ll = tn.GetLChild()->GetLChild();
+	ll->Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Mark);
+
+	Traverse<Direction::Left, Direction::Left, Direction::Left>(ll);
 }

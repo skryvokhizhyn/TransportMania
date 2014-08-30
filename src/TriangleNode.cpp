@@ -14,23 +14,23 @@ using namespace trm::terrain;
 using namespace trm::terrain::lod;
 
 TriangleNode::TriangleNode(const size_t num /*= 1*/)
-	: pLChild_(NULL), pRChild_(NULL), pBase_(NULL), pLNeighbor_(NULL), pRNeighbor_(NULL)
-	, causedSplitting_(false)
+	: pLChild_(nullptr), pRChild_(nullptr)
+	, pBase_(nullptr), pLNeighbor_(nullptr), pRNeighbor_(nullptr), pParent_(nullptr)
 	, num_(num)
-	, pParent_(NULL)
+	, causedSplitting_(false)
+	, markedForDelete_(false)
 {
 }
 
 TriangleNode::~TriangleNode()
 {
-	delete pLChild_;
-	delete pRChild_;
+	RemoveChildren();
 }
 
 void *
 TriangleNode::operator new (size_t /*sz*/)
 {
-	void * p = TriangleNodePool::Get().Malloc();
+	void * p = TriangleNodePool::Get<TriangleNode>().Malloc();
 	
 	if (p == nullptr)
 	{
@@ -40,16 +40,60 @@ TriangleNode::operator new (size_t /*sz*/)
 	return p;
 }
 
+void * 
+TriangleNode::operator new (unsigned int sz, int, const char *, int)
+{
+	return TriangleNode::operator new (sz);
+}
+
 void
 TriangleNode::operator delete (void * p)
 {
-	TriangleNodePool::Get().Free(p);
+	TriangleNodePool::Get<TriangleNode>().Free(p);
+}
+
+void
+TriangleNode::operator delete (void * p, int, const char *, int)
+{
+	TriangleNode::operator delete(p);
+}
+
+bool
+TriangleNode::HasChildren() const
+{
+	const bool hasChildren = (pLChild_ != nullptr && pRChild_ != nullptr);
+	// assert that both children are nullptr
+	assert(!hasChildren ? (pLChild_ == nullptr && pRChild_ == nullptr) : true);
+
+	return hasChildren;
+}
+
+bool
+TriangleNode::ChildrenMarkedForDelete() const
+{
+	assert(pLChild_);
+	assert(pRChild_);
+
+	const bool childrenMarkedForDelete = pLChild_->markedForDelete_ && pRChild_->markedForDelete_;
+	// assert that both children not marked for delete
+	assert(!childrenMarkedForDelete ? !(pLChild_->markedForDelete_ || pRChild_->markedForDelete_) : true);
+
+	return childrenMarkedForDelete;
 }
 
 bool 
 TriangleNode::Splitted() const
 {
-	return (pLChild_ != NULL && pRChild_ != NULL);
+	const bool splitted = HasChildren();
+
+	bool childrenMarkedForDelete = false;
+
+	if (splitted)
+	{
+		childrenMarkedForDelete = ChildrenMarkedForDelete();
+	}
+
+	return splitted && !childrenMarkedForDelete;
 }
 
 void 
@@ -60,11 +104,7 @@ TriangleNode::Split()
 		return;
 	}
 
-	pLChild_ = new TriangleNode(num_ * 2);
-	pRChild_ = new TriangleNode(num_ * 2 + 1);
-
-	pLChild_->pParent_ = this;
-	pRChild_->pParent_ = this;
+	AllocateChildren();
 
 	if (pBase_ && !pBase_->Splitted())
 	{
@@ -81,19 +121,19 @@ TriangleNode::Split()
 }
 
 bool
-TriangleNode::Merge(const ProcessBase pb)
+TriangleNode::Merge(const ProcessBase pb, const RemoveAction ra)
 {
 	if (!Splitted())
 	{
 		return true;
 	}
 
-	if (!pLChild_->Merge(ProcessBase::Merge))
+	if (!pLChild_->Merge(ProcessBase::Merge, ra))
 	{
 		return false;
 	}
 	
-	if (!pRChild_->Merge(ProcessBase::Merge))
+	if (!pRChild_->Merge(ProcessBase::Merge, ra))
 	{
 		return false;
 	}
@@ -105,7 +145,7 @@ TriangleNode::Merge(const ProcessBase pb)
 
 	if (pb == ProcessBase::Merge && pBase_)
 	{
-		if (!pBase_->Merge(ProcessBase::Ignore))
+		if (!pBase_->Merge(ProcessBase::Ignore, ra))
 		{
 			return false;
 		}
@@ -122,11 +162,15 @@ TriangleNode::Merge(const ProcessBase pb)
 
 	BindMerge();
 
-	delete pLChild_;
-	delete pRChild_;
-
-	pLChild_ = NULL;
-	pRChild_ = NULL;
+	if (ra == RemoveAction::Delete)
+	{
+		RemoveChildren();
+	}
+	else
+	{
+		pLChild_->MarkForDelete(true, RecursiveMode::Yes);
+		pRChild_->MarkForDelete(true, RecursiveMode::Yes);
+	}
 
 	return true;
 }
@@ -158,7 +202,7 @@ TriangleNode::BindSplit()
 }
 
 void
-TriangleNode::BindSplitNeighbor(TriangleNode * pNeighbor, TriangleNode * pChild)
+TriangleNode::BindSplitNeighbor(TriangleNodePtr pNeighbor, TriangleNodePtr pChild)
 {
 	if (pNeighbor->pBase_ == this)
 	{
@@ -200,13 +244,13 @@ TriangleNode::BindMerge()
 }
 
 void 
-TriangleNode::BindMergeNeighbor(TriangleNode * pNeighbor, TriangleNode * pChild)
+TriangleNode::BindMergeNeighbor(TriangleNodePtr pNeighbor, TriangleNodePtr pChild)
 {
 	if (pNeighbor->pBase_ == pChild)
 	{
 		pNeighbor->pBase_ = this;
 
-		TriangleNode * pNParent = pNeighbor->pParent_;
+		TriangleNodePtr pNParent = pNeighbor->pParent_;
 		
 		if(pNParent->pLNeighbor_ == pChild)
 		{
@@ -230,19 +274,19 @@ TriangleNode::BindMergeNeighbor(TriangleNode * pNeighbor, TriangleNode * pChild)
 }
 
 void
-TriangleNode::SetBase(TriangleNode * pBase)
+TriangleNode::SetBase(TriangleNodePtr pBase)
 {
 	pBase_ = pBase;
 }
 
 void 
-TriangleNode::SetLNeighbor(TriangleNode * pLNeighbor)
+TriangleNode::SetLNeighbor(TriangleNodePtr pLNeighbor)
 {
 	pLNeighbor_ = pLNeighbor;
 }
 
 void 
-TriangleNode::SetRNeighbor(TriangleNode * pRNeighbor)
+TriangleNode::SetRNeighbor(TriangleNodePtr pRNeighbor)
 {
 	pRNeighbor_ = pRNeighbor;
 }
@@ -286,24 +330,42 @@ TriangleNode::IsValid() const
 }
 
 void
-TriangleNode::SetClearCause(const bool c, const bool recursive)
+TriangleNode::SetClearCause(const bool c, const RecursiveMode rm)
 {
 	causedSplitting_ = c;
 
-	if (recursive && Splitted())
+	if (rm == RecursiveMode::Yes && HasChildren())
 	{
-		pLChild_->SetClearCause(c, recursive);
-		pRChild_->SetClearCause(c, recursive);
+		pLChild_->SetClearCause(c, rm);
+		pRChild_->SetClearCause(c, rm);
 	}
 }
 
-TriangleNode *
+void
+TriangleNode::MarkForDelete(const bool v, const RecursiveMode rm)
+{
+	markedForDelete_ = v;
+
+	if (rm == RecursiveMode::Yes && Splitted())
+	{
+		pLChild_->MarkForDelete(v, rm);
+		pRChild_->MarkForDelete(v, rm);
+	}
+}
+
+TriangleNodePtr
+TriangleNode::GetParent() const
+{
+	return pParent_;
+}
+
+TriangleNodePtr
 TriangleNode::GetLChild() const
 {
 	return pLChild_;
 }
 
-TriangleNode *
+TriangleNodePtr
 TriangleNode::GetRChild() const
 {
 	return pRChild_;
@@ -313,4 +375,45 @@ size_t
 TriangleNode::GetNum() const
 {
 	return num_;
+}
+
+bool 
+TriangleNode::MarkedForDelete() const
+{
+	return markedForDelete_;
+}
+
+void 
+TriangleNode::RemoveChildren()
+{
+	delete pLChild_;
+	delete pRChild_;
+
+	pLChild_ = nullptr;
+	pRChild_ = nullptr;
+}
+
+void
+TriangleNode::AllocateChildren()
+{
+	if (HasChildren())
+	{
+		if (ChildrenMarkedForDelete())
+		{
+			pLChild_->MarkForDelete(false, RecursiveMode::No);
+			pRChild_->MarkForDelete(false, RecursiveMode::No);
+		}
+		else
+		{
+			// do nothing, although shouldn't happen
+		}
+	}
+	else
+	{
+		pLChild_ = new TriangleNode(num_ * 2);
+		pRChild_ = new TriangleNode(num_ * 2 + 1);
+
+		pLChild_->pParent_ = this;
+		pRChild_->pParent_ = this;
+	}
 }

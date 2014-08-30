@@ -34,6 +34,8 @@
     <ClCompile Include="..\..\src\PatchGrid.cpp" />
     <ClCompile Include="..\..\src\PatchTriangleMapper.cpp" />
     <ClCompile Include="..\..\src\PointHash.cpp" />
+    <ClCompile Include="..\..\src\PoolUsageCounter.cpp" />
+    <ClCompile Include="..\..\src\PoolUsageCounterHolder.cpp" />
     <ClCompile Include="..\..\src\RailRoad.cpp" />
     <ClCompile Include="..\..\src\RailRoadArc.cpp" />
     <ClCompile Include="..\..\src\RailRoadDrawableObject.cpp" />
@@ -74,6 +76,7 @@
     <ClCompile Include="..\..\src\TransportManiaMain.cpp" />
     <ClCompile Include="..\..\src\TriangleMapper.cpp" />
     <ClCompile Include="..\..\src\TriangleNode.cpp" />
+    <ClCompile Include="..\..\src\TriangleNodeCache.cpp" />
     <ClCompile Include="..\..\src\TriangleNodeHandler.cpp" />
     <ClCompile Include="..\..\src\TriangleNodePool.cpp" />
     <ClCompile Include="..\..\src\UpdateRate.cpp" />
@@ -81,6 +84,7 @@
     <ClCompile Include="..\..\src\Vertex.cpp" />
     <ClCompile Include="..\..\src\WagonDrawableObject.cpp" />
     <ClCompile Include="..\..\src\WorldProjection.cpp" />
+    <ClCompile Include="LeakDetectorInitializer.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="ScreenParameters.cpp" />
   </ItemGroup>
@@ -91,6 +95,7 @@
     <ClInclude Include="..\..\src\CommonUtils.h" />
     <ClInclude Include="..\..\src\ComponentHolder.h" />
     <ClInclude Include="..\..\src\ComponentId.h" />
+    <ClInclude Include="..\..\src\LeakDetectorInitializer.h" />
     <ClInclude Include="..\..\src\DrawableObject.h" />
     <ClInclude Include="..\..\src\DrawContext.h" />
     <ClInclude Include="..\..\src\EventHandler.h" />
@@ -126,6 +131,8 @@
     <ClInclude Include="..\..\src\PointHash.h" />
     <ClInclude Include="..\..\src\PointImpl.h" />
     <ClInclude Include="..\..\src\PointProxy.h" />
+    <ClInclude Include="..\..\src\PoolUsageCounter.h" />
+    <ClInclude Include="..\..\src\PoolUsageCounterHolder.h" />
     <ClInclude Include="..\..\src\RailRoad.h" />
     <ClInclude Include="..\..\src\RailRoadArc.h" />
     <ClInclude Include="..\..\src\RailRoadDrawableObject.h" />
@@ -173,11 +180,14 @@
     <ClInclude Include="..\..\src\TrainVisibilityHandler.h" />
     <ClInclude Include="..\..\src\TrainVisibleObject.h" />
     <ClInclude Include="..\..\src\TransportManager.h" />
+    <ClInclude Include="..\..\src\TriangleNodeAllocator.h" />
     <ClInclude Include="..\..\src\Triangle2d.h" />
     <ClInclude Include="..\..\src\Triangle3d.h" />
     <ClInclude Include="..\..\src\TriangleMapper.h" />
     <ClInclude Include="..\..\src\TriangleNode.h" />
+    <ClInclude Include="..\..\src\TriangleNodeCache.h" />
     <ClInclude Include="..\..\src\TriangleNodeHandler.h" />
+    <ClInclude Include="..\..\src\TriangleNodeMakeShared.h" />
     <ClInclude Include="..\..\src\TriangleNodePool.h" />
     <ClInclude Include="..\..\src\Types.h" />
     <ClInclude Include="..\..\src\UpdateRate.h" />

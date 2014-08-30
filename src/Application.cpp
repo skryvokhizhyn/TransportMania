@@ -20,8 +20,6 @@
 using namespace trm;
 using namespace trm::terrain;
 
-bool SCENE_UPDATED = false;
-
 bool 
 Application::InitApplication(const size_t width, const size_t height)
 {
@@ -86,10 +84,7 @@ Application::Stop()
 void 
 Application::Update()
 {
-	if (!SCENE_UPDATED)
-	{
-		terrainScenePtr_->Update(worldProjection_);
-	}
+	terrainScenePtr_->Update(worldProjection_);
 
 	boost::for_each(managers1_, std::bind(&TransportManager::Update, std::placeholders::_1));
 
@@ -106,12 +101,7 @@ Application::Update()
 void 
 Application::Render()
 {
-	if (!SCENE_UPDATED)
-	{	
-		terrainScenePtr_->Render();
-	}
-
-	SCENE_UPDATED = true;
+	terrainScenePtr_->Render(worldProjection_);
 }
 
 void 
@@ -137,23 +127,11 @@ Application::Draw()
 }
 
 void 
-Application::RenderScene()
-{
-	context_.Clear();
-
-	Update();
-	Render();
-	Draw();	
-
-	SCENE_UPDATED = true;
-}
-
-void 
 Application::ShiftScene(const float x, const float y)
 {
 	worldProjection_.Shift(-x, y);
 
-	SCENE_UPDATED = false;
+	terrainScenePtr_->UpdateRequired();
 }
 
 void 
@@ -161,7 +139,7 @@ Application::ZoomScene(const float z)
 {
 	worldProjection_.Zoom(-z);
 
-	SCENE_UPDATED = false;
+	terrainScenePtr_->UpdateRequired();
 }
 
 void 
@@ -169,7 +147,7 @@ Application::RotateScene(const Angle angle)
 {
 	worldProjection_.Rotate(angle);
 
-	SCENE_UPDATED = false;
+	terrainScenePtr_->UpdateRequired();
 }
 
 void 
@@ -177,7 +155,7 @@ Application::BendScene(const Angle dtheta, const Angle dpsi)
 {
 	worldProjection_.Bend(-dtheta, dpsi);
 
-	SCENE_UPDATED = false;
+	terrainScenePtr_->UpdateRequired();
 }
 
 void 
@@ -193,7 +171,7 @@ Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*
 	Terraformer t(range, TerraformFunctionFactory::GetConstant(0.0f));
 	terrainPtr_->Apply(t);
 
-	SCENE_UPDATED = false;
+	terrainScenePtr_->UpdateRequired();
 }
 
 void 

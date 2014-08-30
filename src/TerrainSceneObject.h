@@ -19,8 +19,10 @@ namespace trm
 		TerrainSceneObject(const TerrainPtr & terrain);
 
 		void Update(const WorldProjection & wp);
-		void Render();
+		void Render(const WorldProjection & wp);
 		void Draw() const;
+
+		void UpdateRequired();
 
 		const Matrix & GetModelMatrix() const;
 
@@ -28,6 +30,8 @@ namespace trm
 		ModelDrawerPool modelDrawerPool_;
 		TerrainPtr terrainPtr_;
 		Matrix modelMatrix_;
+		bool tasselated_ = false;
+		bool updated_ = false;
 	};
 
 	typedef std::shared_ptr<TerrainSceneObject> TerrainSceneObjectPtr;

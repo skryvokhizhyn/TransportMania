@@ -38,7 +38,7 @@ namespace lod
 		void Init();
 
 		void Update(const WorldProjection & wp);
-		void Tasselate(const WorldProjection & wp);
+		bool Tasselate(const WorldProjection & wp);
 		bool Render(ModelData & md);
 		void Flush();
 

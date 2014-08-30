@@ -182,6 +182,18 @@
     <ClCompile Include="..\..\src\SubjectAction.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\TriangleNodeCache.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PoolUsageCounter.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PoolUsageCounterHolder.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\TransportMania\LeakDetectorInitializer.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

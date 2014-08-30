@@ -43,6 +43,9 @@
     <Filter Include="Application\EventStateMachine">
       <UniqueIdentifier>{5d8d19b0-1b26-4f73-b1a8-0ba7b0b4d87a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Terrain\HeightMap">
+      <UniqueIdentifier>{d93c1f6f-be8f-441e-a989-4640db0b7ccb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -156,15 +159,6 @@
     <ClCompile Include="..\..\src\Variance.cpp">
       <Filter>Terrain\LOD</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\HeightMap.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\HeightMapExtended.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\HeightMapLoaderTest.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Terraformer.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
@@ -183,9 +177,6 @@
     <ClCompile Include="..\..\src\TerrainRangeLine.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\HeightMapLoaderFile.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\TransportManager.cpp">
       <Filter>Transport</Filter>
     </ClCompile>
@@ -196,9 +187,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Terrain.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\HeightMapLoaderFactory.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\BmpHandler.cpp">
@@ -260,6 +248,33 @@
     </ClCompile>
     <ClCompile Include="..\..\src\SubjectAction.cpp">
       <Filter>Application\EventStateMachine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMap.cpp">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapExtended.cpp">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapLoaderFactory.cpp">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapLoaderFile.cpp">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapLoaderTest.cpp">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TriangleNodeCache.cpp">
+      <Filter>Terrain\LOD</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PoolUsageCounter.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PoolUsageCounterHolder.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="LeakDetectorInitializer.cpp">
+      <Filter>Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -425,24 +440,6 @@
     <ClInclude Include="..\..\src\Variance.h">
       <Filter>Terrain\LOD</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\HeightMap.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\HeightMapBase.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\HeightMapExtended.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\HeightMapLoader.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\HeightMapLoaderFactory.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\HeightMapLoaderTest.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Terraformer.h">
       <Filter>Terrain</Filter>
     </ClInclude>
@@ -459,9 +456,6 @@
       <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\TerrainRangeLine.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\HeightMapLoaderFile.h">
       <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\TrainStateMachine.h">
@@ -562,6 +556,45 @@
     </ClInclude>
     <ClInclude Include="..\..\src\SubjectAction.h">
       <Filter>Application\EventStateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TriangleNodeAllocator.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TriangleNodeMakeShared.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMap.h">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapBase.h">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapExtended.h">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapLoader.h">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapLoaderFactory.h">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapLoaderFile.h">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapLoaderTest.h">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TriangleNodeCache.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\PoolUsageCounter.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\PoolUsageCounterHolder.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\LeakDetectorInitializer.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

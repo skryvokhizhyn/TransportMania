@@ -6,29 +6,33 @@ using namespace utils;
 
 namespace
 {
+	void PutDebug(const std::stringstream & str)
+	{
+		OutputDebugString(str.str().c_str());
+	}
+
 	void PutInfo(const std::stringstream & str)
 	{
 		std::cout << str.str();
+		PutDebug(str);
 	}
 
 	void PutWarning(const std::stringstream & str)
 	{
 		std::cout << str.str();
+		PutDebug(str);
 	}
 
 	void PutError(const std::stringstream & str)
 	{
 		std::cerr << str.str();
+		PutDebug(str);
 	}
 
 	void PutTrace(const std::stringstream & str)
 	{
 		std::cout << str.str();
-	}
-
-	void PutDebug(const std::stringstream & str)
-	{
-		OutputDebugString(str.str().c_str());
+		PutDebug(str);
 	}
 }
 
