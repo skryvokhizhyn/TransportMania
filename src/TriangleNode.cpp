@@ -13,6 +13,14 @@ using namespace trm;
 using namespace trm::terrain;
 using namespace trm::terrain::lod;
 
+namespace
+{
+	bool Asking_For_Member_Check(bool markedForDete, TriangleNodePtr /*dummy*/) 
+	{
+		return !markedForDete;
+	}
+}
+
 TriangleNode::TriangleNode(const size_t num /*= 1*/)
 	: pLChild_(nullptr), pRChild_(nullptr)
 	, pBase_(nullptr), pLNeighbor_(nullptr), pRNeighbor_(nullptr), pParent_(nullptr)
@@ -362,13 +370,36 @@ TriangleNode::GetParent() const
 TriangleNodePtr
 TriangleNode::GetLChild() const
 {
+	assert(Asking_For_Member_Check(markedForDelete_, pLChild_));
 	return pLChild_;
 }
 
 TriangleNodePtr
 TriangleNode::GetRChild() const
 {
+	assert(Asking_For_Member_Check(markedForDelete_, pRChild_));
 	return pRChild_;
+}
+
+TriangleNodePtr 
+TriangleNode::GetLNeighbor() const
+{
+	assert(Asking_For_Member_Check(markedForDelete_, pLNeighbor_));
+	return pLNeighbor_;
+}
+
+TriangleNodePtr 
+TriangleNode::GetRNeighbor() const
+{
+	assert(Asking_For_Member_Check(markedForDelete_, pRNeighbor_));
+	return pRNeighbor_;
+}
+		
+TriangleNodePtr 
+TriangleNode::GetBase() const
+{
+	assert(Asking_For_Member_Check(markedForDelete_, pBase_));
+	return pBase_;
 }
 
 size_t

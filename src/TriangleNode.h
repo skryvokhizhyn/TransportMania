@@ -80,6 +80,10 @@ namespace lod
 		bool HasChildren() const;
 		bool ChildrenMarkedForDelete() const;
 
+		TriangleNodePtr GetLNeighbor() const;
+		TriangleNodePtr GetRNeighbor() const;
+		TriangleNodePtr GetBase() const;
+
 	private:
 		TriangleNodePtr pLChild_; 
 		TriangleNodePtr pRChild_; 

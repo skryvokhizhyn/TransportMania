@@ -141,6 +141,11 @@ PatchGrid::Update(const WorldProjection & wp)
 		const bool isValid = patch.GetValid();
 		const bool isVisible = IsVisible(wp, t, patchSize_);
 		
+		/*bool isVisible = false;
+		if (pos == Size2d(32, 0))
+			isVisible = true;
+		(wp);*/
+
 		if (!isValid && isVisible)
 		{
 			LoadHeightMap(pos, hm);

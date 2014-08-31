@@ -108,17 +108,19 @@ TriangleNodeHandler::TasselateLeaf(TriangleNode * pTn, const size_t det, const V
 
 	const size_t num = pTn->GetNum();
 
-	if (utils::GetPowerOf2<false>(num) >= det)
+	const Triangle2d & tr = tm.GetTriangleByNumber(num * 2);
+
+	// merge when we are at the deepest level
+	bool shouldMerge = (utils::GetPowerOf2<false>(num) == det);
+	// if not at the deepest then check variance
+	if (!shouldMerge)
 	{
-		return;
+		Point3d t = Point3d::Cast(tr.e());
+		t.z() = hm.At(tr.e());
+		shouldMerge = !ShouldContinue(var, num, camera, t);
 	}
 
-	//const Point2d edge = tm.GetTriangleByNumber(num * 2).e();
-	const Triangle2d & tr = tm.GetTriangleByNumber(num * 2);
-	Point3d t = Point3d::Cast(tr.e());
-	t.z() = hm.At(tr.e());
-
-	if (!ShouldContinue(var, num, camera, t))
+	if (shouldMerge)
 	{
 		TriangleNode * pParent = pTn->GetParent();
 
@@ -130,10 +132,9 @@ TriangleNodeHandler::TasselateLeaf(TriangleNode * pTn, const size_t det, const V
 			if (!ShouldContinue(var, pParent->GetNum(), camera, p))
 			{
 				// all children automatically cleared
-				pParent->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
+				pParent->SetClearCause(false, TriangleNode::RecursiveMode::No);
 
 				pParent->Merge(TriangleNode::ProcessBase::Merge, TriangleNode::RemoveAction::Mark);
-
 			}
 		}
 	}

@@ -23,7 +23,7 @@ TriangleNodeCache::Tasselate(const size_t det, const Variance & var, const Heigh
 	boost::for_each(nodes_,
 		[&](TriangleNodePtr ptr)
 	{
-		if (!ptr->MarkedForDelete())
+ 		if (!ptr->MarkedForDelete())
 		{
 			TriangleNodeHandler::TasselateLeaf(ptr, det, var, hm, tm, camera);
 		}

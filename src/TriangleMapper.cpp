@@ -9,7 +9,7 @@ TriangleMapper::TriangleMapper(const Triangle2d & t)
 	const size_t size = boost::numeric_cast<size_t>(length);
 
 	const size_t det = utils::GetPowerOf2(size);
-	const size_t level = 2 * det + 1; // + 1 means that we need the smallest triangles included
+	const size_t level = 2 * det + 2; // + 2 means that we need 1 level smaller than the smallest triangle
 	triangles_.resize((1 << level) - 1);
 
 	GenerateTriangle(1, level, t);
