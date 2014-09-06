@@ -1,18 +1,14 @@
 #include "PatchGrid.h"
 #include "ModelData.h"
-#include "HeightMapLoader.h"
 #include "Point3d.h"
 #include "Point2d.h"
-#include "Size2d.h"
 #include "WorldProjection.h"
 #include "GeometryUtils.h"
 #include "Logger.h"
 #include "GlobalDefines.h"
-#include "TerrainRange.h"
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/combine.hpp>
-#include <boost/numeric/conversion/cast.hpp>
 
 #include <cstdlib>
 
@@ -22,12 +18,6 @@ using namespace trm::terrain::lod;
 
 namespace
 {
-	enum
-	{
-		HeightMapTag = 0,
-		PatchTag = 1
-	};
-
 	Size2d GetNearestPatchPosition(const Point2d & camera, const unsigned short pSz)
 	{
 		Point2d pos = camera / pSz;
@@ -81,42 +71,33 @@ void
 PatchGrid::Init()
 {
 	const unsigned short patchWidth = patchSize_ - 1;
+	const size_t det = utils::GetPowerOf2(patchWidth);
 
 	for (unsigned short x = 0; x < patchCount_; ++x)
 	{
 		for (unsigned short y = 0; y < patchCount_; ++y)
 		{
-			const Size2d rp = Size2d(x, y) * patchWidth;
-			NodePtr rn = CreateNode(patchWidth);
-			PutNode(rp, rn);
+			const Size2d pos = Size2d(x, y) * patchWidth;
+			auto it = grid_.Init(pos);
+			HeightMap & hm = it->data.heightMap;
+			Patch & p = it->data.patch;
+			
+			p.Init(hm, det * 2);
 			
 			if (y > 0)
 			{
-				auto found = grid_.find(Size2d(x, (y - 1)) * patchWidth);
-				found->second->get<PatchTag>().Attach(rn->get<PatchTag>(), Direction::Up);
+				auto found = grid_.Find(Size2d(x, (y - 1)) * patchWidth);
+				found->data.patch.Attach(p, Direction::Up);
 			}
 
 			if (x > 0)
 			{
-				auto found = grid_.find(Size2d((x - 1), y) * patchWidth);
-				found->second->get<PatchTag>().Attach(rn->get<PatchTag>(), Direction::Right);
+				auto found = grid_.Find(Size2d((x - 1), y) * patchWidth);
+				found->data.patch.Attach(p, Direction::Right);
 			}
 		}
 	}
 }
-
-auto PatchGrid::CreateNode(const unsigned short pSz) -> NodePtr
-{
-	PatchGrid::NodePtr node(new PatchGrid::Node());
-
-	HeightMap & hm = node->get<HeightMapTag>();
-
-	const size_t det = utils::GetPowerOf2(pSz);
-	node->get<PatchTag>().Init(hm, det * 2);
-
-	return node;
-}
-
 
 void 
 PatchGrid::LoadHeightMap(const Size2d & pos, HeightMap & hm) const
@@ -130,32 +111,55 @@ PatchGrid::LoadHeightMap(const Size2d & pos, HeightMap & hm) const
 void
 PatchGrid::Update(const WorldProjection & wp)
 {
-	for (auto it = grid_.begin(); it != grid_.end(); ++it)
+	auto it = grid_.Begin();
+	auto end = grid_.End();
+
+	while (it != end)
 	{
-		const Size2d & pos = it->first;
-		Patch & patch = it->second->get<PatchTag>();
-		HeightMap & hm = it->second->get<HeightMapTag>();
+		const Size2d & pos = it->pos;
+		HeightMap & hm = it->data.heightMap;
 
 		const Point3d t = Point3d::Cast(pos);
 
-		const bool isValid = patch.GetValid();
+		auto & data = it->data;
+		const bool isValid = data.valid;
 		const bool isVisible = IsVisible(wp, t, patchSize_);
-		
 		/*bool isVisible = false;
 		if (pos == Size2d(32, 0))
 			isVisible = true;
 		(wp);*/
 
+		// visible means that should be valid
+		// if visible and not valid or visa-versa then...
+		if (data.valid != isVisible)
+		{
+			auto itCurrent = it++;
+
+			if (isVisible)
+			{
+				grid_.MoveToBegin(itCurrent);
+			}
+			else
+			{
+				grid_.MoveToEnd(itCurrent);
+			}
+		}
+		else
+		{
+			++it;
+		}
+
 		if (!isValid && isVisible)
 		{
 			LoadHeightMap(pos, hm);
-			patch.SetDirty();
-			patch.SetValid();
+			data.dirty = true;
+			data.valid = true;
 		}
 		else if (isValid && !isVisible)
 		{
 			hm.Clear();
-			patch.Clear();
+			data.patch.Clear();
+			data.valid = false;
 		}
 	}
 }
@@ -167,30 +171,33 @@ PatchGrid::Tasselate(const WorldProjection & wp)
 
 	const Point3d & camera = wp.GetCameraPosition();
 
-	boost::range::for_each(grid_,
-		[&](const GridMapType::value_type & node)
+	std::find_if(grid_.Begin(), grid_.End(),
+		[&](const PatchGridNode & node)
 	{
-		Patch & p = node.second->get<PatchTag>();
-		
-		if (!p.GetValid())
+		if (!node.data.valid)
 		{
-			return;
+			return true;
 		}
+
+		Patch & p = node.data.patch;
 
 		// Before tasselation and other stuff
-		if (p.GetDirty())
+		if (node.data.dirty)
 		{
 			p.ComputeVariance();
+			node.data.dirty = false;
 		}
 
-		const Size2d & pos = node.first;
+		const Size2d & pos = node.pos;
 		Point3d shift = Point3d::Cast(pos);
 
 		// if any was updated
 		wasUpdated |= p.Tasselate(camera - shift);
+
+		return false;
 	});
 
-	currIt_ = grid_.begin();
+	currIt_ = grid_.Begin();
 
 	return wasUpdated;
 }
@@ -198,7 +205,7 @@ PatchGrid::Tasselate(const WorldProjection & wp)
 bool 
 PatchGrid::Render(ModelData & md)
 {
-	if (currIt_ == grid_.end())
+	if (currIt_ == grid_.End() || !currIt_->data.valid)
 		return false;
 
 	RenderNode(*currIt_, md);
@@ -213,9 +220,9 @@ PatchGrid::Render(ModelData & md)
 }
 
 void 
-PatchGrid::GlueNormales(const GridMapType::value_type & node, ModelData & md) const
+PatchGrid::GlueNormales(const PatchGridNode & node, ModelData & md) const
 {
-	const Size2d & patchPos = node.first;
+	const Size2d & patchPos = node.pos;
 
 	const auto r = boost::combine(md.points, md.normales);
 
@@ -239,13 +246,9 @@ PatchGrid::GlueNormales(const GridMapType::value_type & node, ModelData & md) co
 			{
 				Point3d & n = rr.get<1>();
 
-				const auto found = grid_.find(s);
-				if (found == grid_.end())
-				{
-					throw std::runtime_error("Patch for normales is missing");
-				}
-
-				const Patch & patch = found->second->get<PatchTag>();
+				const auto found = grid_.Find(s);
+				
+				const Patch & patch = found->data.patch;
 				const PointNormaleMap & normales = patch.GetNormales();
 
 				const Size2d shiftedPoint = sizePoint - s;
@@ -261,19 +264,19 @@ PatchGrid::GlueNormales(const GridMapType::value_type & node, ModelData & md) co
 }
 
 void 
-PatchGrid::RenderNode(const GridMapType::value_type & node, ModelData & md)
+PatchGrid::RenderNode(const PatchGridNode & node, ModelData & md)
 {
-	Patch & p = node.second->get<PatchTag>();
-		
-	if (!p.GetValid())
+	if (!node.data.valid)
 	{
 		return;
 	}
 
-	const Size2d & pos = node.first;
+	const Size2d & pos = node.pos;
 	Point3d shift = Point3d::Cast(pos);
 
 	const size_t sz = md.points.size();
+
+	Patch & p = node.data.patch;
 
 	p.Render(md);
 	p.ZipNormales();
@@ -305,14 +308,10 @@ PatchGrid::At(const Point2d & p) const
 
 	const Size2d & patchPos = pos.front();
 
-	const auto found = grid_.find(patchPos);
-	if (found == grid_.end())
-	{
-		throw std::runtime_error("Point is out of grid");
-	}
-
-	HeightMap & hm = found->second->get<HeightMapTag>();
-	LoadHeightMap(found->first, hm);
+	const auto found = grid_.Find(patchPos);
+	
+	HeightMap & hm = found->data.heightMap;
+	LoadHeightMap(found->pos, hm);
 
 	return hm.At(p - Point2d::Cast(patchPos));
 }
@@ -325,37 +324,28 @@ PatchGrid::Set(const Point2d & p, const HeightMap::Type z)
 	for_each(pos.begin(), pos.end(),
 		[&](const Size2d & s)
 		{
-			const auto found = grid_.find(s);
-			if (found == grid_.end())
-			{
-				throw std::runtime_error("Point is out of grid");
-			}
-
-			HeightMap & hm = found->second->get<HeightMapTag>();
-			LoadHeightMap(found->first, hm);
+			const auto found = grid_.Find(s);
+			
+			HeightMap & hm = found->data.heightMap;
+			LoadHeightMap(found->pos, hm);
 
 			hm.Set(p - Point2d::Cast(s), z);
 
-			found->second->get<PatchTag>().SetDirty();
+			found->data.dirty = true;
 		});
-}
-
-void 
-PatchGrid::PutNode(const Size2d & pos, NodePtr nodePtr)
-{
-	grid_.insert(std::make_pair(pos, nodePtr));
 }
 
 void 
 PatchGrid::Flush()
 {
-	for(const GridMapType::value_type & val : grid_)
+	std::for_each(grid_.Begin(), grid_.End(),
+	[&](const PatchGridNode & node)
 	{
-		if (val.second->get<PatchTag>().GetDirty())
+		if (node.data.dirty)
 		{
-			hmlPtr_->Set(Point2d::Cast(val.first), val.second->get<HeightMapTag>());
+			hmlPtr_->Set(Point2d::Cast(node.pos), node.data.heightMap);
 		}
-	}
+	});
 }
 
 auto PatchGrid::GetAdjucentPatches(const Point2d & p) const -> Positions

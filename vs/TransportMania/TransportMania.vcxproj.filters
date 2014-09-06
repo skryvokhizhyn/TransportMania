@@ -596,5 +596,8 @@
     <ClInclude Include="..\..\src\LeakDetectorInitializer.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\PatchGridMap.h">
+      <Filter>Terrain\LOD</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

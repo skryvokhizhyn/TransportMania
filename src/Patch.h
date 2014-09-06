@@ -1,7 +1,6 @@
 #ifndef _PATCH_H_
 #define _PATCH_H_
 
-#include "TriangleNode.h"
 #include "Variance.h"
 #include "HeightMap.h"
 #include "TriangleNodeCache.h"
@@ -14,6 +13,8 @@ namespace terrain
 {
 namespace lod
 {
+	class TriangleNode;
+
 	class Patch
 	{
 	public:
@@ -26,11 +27,6 @@ namespace lod
 		void ComputeVariance();
 		void Attach(Patch & p, const Direction dir);
 
-		bool GetDirty() const;
-		void SetDirty();
-
-		bool GetValid() const;
-		void SetValid();
 		void Clear();
 		void ZipNormales();
 
@@ -52,8 +48,6 @@ namespace lod
 		PointNormaleMap normaleMap_;
 		size_t detalization_;
 		const HeightMap * pHeightMap_;
-		bool dirty_;
-		bool isValid_;
 	};
 
 } // namespace lod

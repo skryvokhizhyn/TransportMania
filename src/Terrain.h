@@ -30,8 +30,7 @@ namespace trm
 		void Apply(Terraformer & t);
 
 	private:
-		//terrain::HeightMapLoaderPtr hmlPtr_;
-		terrain::lod::PatchGrid patchGrid_;		
+		terrain::lod::PatchGrid patchGrid_;
 	};
 
 	typedef std::shared_ptr<Terrain> TerrainPtr;

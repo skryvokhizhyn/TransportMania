@@ -1,24 +1,14 @@
-#ifndef _PATCHGRID_H_
-#define _PATCHGRID_H_
+#pragma once
 
-#include "HeightMap.h"
-#include "Patch.h"
-#include "Size2d.h"
 #include "HeightMapLoader.h"
+#include "PatchGridMap.h"
 
 #include <boost/noncopyable.hpp>
-#include <boost/tuple/tuple.hpp>
-
-#include <utility>
-#include <memory>
-#include <map>
 
 namespace trm
 {
 	struct ModelData;
-	struct Point3d;
 	class WorldProjection;
-	class TerrainRange;
 
 namespace terrain
 {
@@ -54,29 +44,20 @@ namespace lod
 		Positions GetAdjucentPatches(const Point2d & p) const;
 
 	private:
-		typedef boost::tuple<HeightMap, Patch> Node;
-		typedef std::shared_ptr<Node> NodePtr;
-		typedef std::map<Size2d, NodePtr> GridMapType;
+		static void RenderNode(const PatchGridNode & node, ModelData & md);
 
 	private:
-		static NodePtr CreateNode(const unsigned short pSz);
-		static void RenderNode(const GridMapType::value_type & node, ModelData & md);
-		
-	private:
-		void PutNode(const Size2d & pos, NodePtr nodePtr);
 		void LoadHeightMap(const Size2d & pos, HeightMap & hm) const;
-		void GlueNormales(const GridMapType::value_type & node, ModelData & md) const;
+		void GlueNormales(const PatchGridNode & node, ModelData & md) const;
 
 	private:
 		const unsigned short patchSize_;
 		const unsigned short patchCount_;
-		GridMapType grid_;
-		GridMapType::iterator currIt_;
+		PatchGridMap grid_;
+		PatchGridMap::SequentialIt currIt_;
 		terrain::HeightMapLoaderPtr hmlPtr_;
 	};
 
 } // namespace lod
 } // namespace terrain
 } // namespace trm
-
-#endif // _PATCHGRID_H_

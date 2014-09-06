@@ -1,6 +1,7 @@
 #include "Patch.h"
 #include "Triangle3d.h"
 #include "HeightMap.h"
+#include "TriangleNode.h"
 #include "TriangleNodeHandler.h"
 #include "GeometryUtils.h"
 #include "ModelData.h"
@@ -18,8 +19,6 @@ Patch::Patch()
 	, pRootDown_(nullptr)
 	, detalization_(0)
 	, pHeightMap_(nullptr)
-	, dirty_(false)
-	, isValid_(false)
 {
 	Reset();
 }
@@ -46,8 +45,6 @@ Patch::ComputeVariance()
 
 	varianceUp_.Generate(detalization_, *pHeightMap_, tp.first);
 	varianceDown_.Generate(detalization_, *pHeightMap_, tp.second);
-
-	dirty_ = false;
 }
 
 bool
@@ -146,40 +143,14 @@ Patch::Attach(Patch & p, const Direction dir)
 	};
 }
 
-bool
-Patch::GetDirty() const
-{
-	return dirty_;
-}
-
-void
-Patch::SetDirty()
-{
-	dirty_ = true;
-}
-
 void 
 Patch::Clear()
 {
-	isValid_ = false;
-
 	normaleMap_.clear();
 	varianceUp_.Clear();
 	varianceDown_.Clear();
 	pRootUp_->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
 	pRootDown_->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
-}
-
-bool 
-Patch::GetValid() const
-{
-	return isValid_;
-}
-
-void
-Patch::SetValid()
-{
-	isValid_ = true;
 }
 
 const PointNormaleMap & 

@@ -124,6 +124,7 @@
     <ClInclude Include="..\..\src\ModelDrawerPool.h" />
     <ClInclude Include="..\..\src\Patch.h" />
     <ClInclude Include="..\..\src\PatchGrid.h" />
+    <ClInclude Include="..\..\src\PatchGridMap.h" />
     <ClInclude Include="..\..\src\PatchTriangleMapper.h" />
     <ClInclude Include="..\..\src\Point2d.h" />
     <ClInclude Include="..\..\src\Point3d.h" />
