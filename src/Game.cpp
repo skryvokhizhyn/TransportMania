@@ -139,7 +139,8 @@ Game::Run()
 		{
 			const unsigned frames = fpsCounter.GetFrames();
 
-			utils::Logger().Debug() << "Frames " << frames;
+			//utils::Logger().Debug() << "Frames " << frames;
+			app_.PutFrameRate(frames);
 		}
 
 		const unsigned cnt = updateRate.Tick();

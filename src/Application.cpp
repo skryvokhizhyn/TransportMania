@@ -12,6 +12,9 @@
 #include "Settings.h"
 #include "Angle.h"
 #include "TrainVisibilityHandler.h"
+//#include "FontReader.h"
+//#include "FontData.h"
+
 #include <boost/range/algorithm.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/range/adaptor/map.hpp>
@@ -34,6 +37,8 @@ Application::InitApplication(const size_t width, const size_t height)
 	worldProjection_.SetAngles(Degrees(61), Degrees(0), Degrees(-6)); //9
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
+	//FontData fd = FontReader::Read(trm::GetRelativePath({"Fonts", "arial_ttf_cyr_lat.fnt"}));
+
 	return true;
 }
 
@@ -42,12 +47,14 @@ Application::InitView()
 {
 	context_.Init();
 
-	HeightMapLoaderPtr hmlPtr = terrain::HeightMapLoaderFactory::GetFileLoader(
-		(boost::filesystem::path(trm::GetDataFolderPath()) / "hf_513.bmp").string());
+	HeightMapLoaderPtr hmlPtr = 
+		terrain::HeightMapLoaderFactory::GetFileLoader(trm::GetRelativePath({"hf_513.bmp"}));
 	
 	terrainPtr_.reset(new Terrain(hmlPtr));
 
 	terrainScenePtr_ = std::make_shared<TerrainSceneObject>(terrainPtr_);
+
+	//textManagers_.emplace_back(L"?1234567890");
 
 	return true;
 }
@@ -86,7 +93,7 @@ Application::Update()
 {
 	terrainScenePtr_->Update(worldProjection_);
 
-	boost::for_each(managers1_, std::bind(&TransportManager::Update, std::placeholders::_1));
+	boost::for_each(managers_, std::bind(&TransportManager::Update, std::placeholders::_1));
 
 	TrainVisibilityHandler visibilityHandler(worldProjection_, componentHolder_);
 	boost::for_each(componentHolder_.movables | boost::adaptors::map_values,
@@ -108,6 +115,15 @@ void
 Application::Draw()
 {
 	context_.Clear();
+	
+	const Matrix & ovm = worldProjection_.GetOrthoViewMatrix();
+
+	boost::for_each(textManagers_, 
+	[&](const TextManager & tm)
+	{
+		context_.Transform(ovm, tm.GetModelMatrix());
+		tm.Draw();
+	});
 
 	const Matrix & pvm = worldProjection_.GetProjectionViewMatrix();
 
@@ -156,6 +172,13 @@ Application::BendScene(const Angle dtheta, const Angle dpsi)
 	worldProjection_.Bend(-dtheta, dpsi);
 
 	terrainScenePtr_->UpdateRequired();
+}
+
+void 
+Application::PutFrameRate(const unsigned rate)
+{
+	textManagers_.clear();
+	textManagers_.emplace_back(boost::lexical_cast<std::wstring>(rate));
 }
 
 void 
@@ -244,7 +267,7 @@ Application::EmulateDynamicScene1()
 
 	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p1, p2);
 
-	managers1_.emplace_back(&componentHolder_, RoadRouteHolder1(rrPtr, Heading::Forward));
+	managers_.emplace_back(&componentHolder_, RoadRouteHolder1(rrPtr, Heading::Forward));
 }
 
 void 

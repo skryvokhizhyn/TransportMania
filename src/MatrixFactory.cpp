@@ -179,6 +179,15 @@ MatrixFactory::Projection(const Angle angle, const float ratio, const float near
 	return m;
 }
 
+Matrix
+MatrixFactory::Ortho(const float ratio)
+{
+	Matrix m = Identity();
+	m.at_element(0, 0) = 1 / ratio;
+	
+	return m;
+}
+
 //Point4d MatrixFactory::RotateTest(Point4d p, const Angle xAngle, const Angle yAngle, const Angle zAngle)
 //{
 //	Quaternion q = CreateQuaternion(xAngle, yAngle, zAngle);

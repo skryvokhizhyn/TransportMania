@@ -46,6 +46,12 @@
     <Filter Include="Terrain\HeightMap">
       <UniqueIdentifier>{d93c1f6f-be8f-441e-a989-4640db0b7ccb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Font">
+      <UniqueIdentifier>{cca61d8a-b0a5-43c2-8b64-4a1f2355c1e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text">
+      <UniqueIdentifier>{fe10cd4e-4b86-4e64-ad4d-d95e73aa46d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -275,6 +281,15 @@
     </ClCompile>
     <ClCompile Include="LeakDetectorInitializer.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\FontReader.cpp">
+      <Filter>Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TextRenderer.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TextManager.cpp">
+      <Filter>Text</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -598,6 +613,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\PatchGridMap.h">
       <Filter>Terrain\LOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\FontData.h">
+      <Filter>Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\FontReader.h">
+      <Filter>Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextManager.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextRenderer.h">
+      <Filter>Text</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

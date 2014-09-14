@@ -7,6 +7,7 @@ using namespace trm;
 namespace
 {
 	const float FRUSTUM_NEAR_VALUE = 0.001f;
+	const float ORTHO_NEAR_VALUE = 0.0001f; // must be smaller than FRUSTUM_NEAR_VALUE
 	const float FRUSTUM_FAR_VALUE = 1000.0f;
 	const Angle PROJECTION_HORIZONTAL_ANGLE = Degrees(45.0f);
 	const float SHIFT_DEFAULT_VALUE = 0.2f;
@@ -30,6 +31,7 @@ void
 WorldProjection::SetRatio(const float ratio)
 {
 	projectionMatrix_ = MatrixFactory::Projection(PROJECTION_HORIZONTAL_ANGLE, ratio, FRUSTUM_NEAR_VALUE, FRUSTUM_FAR_VALUE);
+	orthoViewMatrix_ = MatrixFactory::Ortho(ratio) * MatrixFactory::Move(Point3d(0.0f, 0.0f, 1.0f - ORTHO_NEAR_VALUE));
 }
 
 void 
@@ -168,6 +170,12 @@ const Matrix &
 WorldProjection::GetProjectionViewMatrix() const
 {
 	return projectionViewMatrix_;
+}
+
+const Matrix & 
+WorldProjection::GetOrthoViewMatrix() const
+{
+	return orthoViewMatrix_;
 }
 
 Point3d 

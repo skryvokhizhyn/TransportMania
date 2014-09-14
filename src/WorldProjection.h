@@ -23,6 +23,7 @@ namespace trm
 
 		const Point3d & GetCameraPosition() const;
 		const Matrix & GetProjectionViewMatrix() const;
+		const Matrix & GetOrthoViewMatrix() const;
 		Point3d GetScreenCenter() const;
 		bool IsPointVisible(const Point3d & p) const;
 
@@ -42,6 +43,7 @@ namespace trm
 		// caches
 		Matrix projectionMatrix_;
 		Matrix projectionViewMatrix_;
+		Matrix orthoViewMatrix_;
 		Matrix rotateMatrix_;
 	};
 

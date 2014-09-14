@@ -16,6 +16,9 @@
     <ClCompile Include="..\..\src\ComponentId.cpp" />
     <ClCompile Include="..\..\src\DrawContext.cpp" />
     <ClCompile Include="..\..\src\EventHandler.cpp" />
+    <ClCompile Include="..\..\src\FontReader.cpp" />
+    <ClCompile Include="..\..\src\TextManager.cpp" />
+    <ClCompile Include="..\..\src\TextRenderer.cpp" />
     <ClCompile Include="..\..\src\FpsCounter.cpp" />
     <ClCompile Include="..\..\src\Game.cpp" />
     <ClCompile Include="..\..\src\GeometryUtils.cpp" />
@@ -95,6 +98,9 @@
     <ClInclude Include="..\..\src\CommonUtils.h" />
     <ClInclude Include="..\..\src\ComponentHolder.h" />
     <ClInclude Include="..\..\src\ComponentId.h" />
+    <ClInclude Include="..\..\src\FontData.h" />
+    <ClInclude Include="..\..\src\FontReader.h" />
+    <ClInclude Include="..\..\src\TextRenderer.h" />
     <ClInclude Include="..\..\src\LeakDetectorInitializer.h" />
     <ClInclude Include="..\..\src\DrawableObject.h" />
     <ClInclude Include="..\..\src\DrawContext.h" />
@@ -169,6 +175,7 @@
     <ClInclude Include="..\..\src\TerrainRangeCircle.h" />
     <ClInclude Include="..\..\src\TerrainRangeLine.h" />
     <ClInclude Include="..\..\src\TerrainSceneObject.h" />
+    <ClInclude Include="..\..\src\TextManager.h" />
     <ClInclude Include="..\..\src\Train.h" />
     <ClInclude Include="..\..\src\TrainDrawableObject.h" />
     <ClInclude Include="..\..\src\TrainDrawableObjectFactory.h" />
@@ -224,6 +231,8 @@
     <Import Project="..\props\OpenGL.props" />
     <Import Project="..\props\CommonSources.props" />
     <Import Project="..\props\boost.props" />
+    <Import Project="..\props\libpngd.props" />
+    <Import Project="..\props\zlibd.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />

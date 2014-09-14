@@ -11,6 +11,7 @@
 #include "Train.h"
 #include "TransportManager.h"
 #include "ComponentHolder.h"
+#include "TextManager.h"
 
 namespace trm
 {
@@ -33,6 +34,8 @@ namespace trm
 		void RotateScene(const Angle angle);
 		void BendScene(const Angle dtheta, const Angle dpsi);
 
+		void PutFrameRate(const unsigned rate);
+
 		void Upper(const AxisType x, const AxisType y, const AxisType radii);
 
 		void PutRailRoadLine();
@@ -46,7 +49,8 @@ namespace trm
 	private:
 		typedef std::vector<StaticSceneObjectPtr> StaticSceneObjects;
 		typedef std::vector<RoadRoutePtr> RoadRoutePtrs;
-		typedef std::vector<TransportManager> TransportManagers1;
+		typedef std::vector<TransportManager> TransportManagers;
+		typedef std::vector<TextManager> TextManagers;
 
 	public:
 		void Update();
@@ -62,7 +66,8 @@ namespace trm
 		StaticSceneObjects staticSceneObjects_;
 		RoadNetwork roadNetwork_;
 		RoadRoutePtrs roadRoutePtrs_;
-		TransportManagers1 managers1_;
+		TransportManagers managers_;
+		TextManagers textManagers_;
 		ComponentHolder componentHolder_;
 	};
 
