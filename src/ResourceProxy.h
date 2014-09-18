@@ -76,8 +76,8 @@ namespace utils
 			: HoldingStrategy<T>(std::forward<Args>(args)...)
 		{}
 
-		T * operator -> () { return Get(); }
-		const T * operator -> () const { return Get(); }
+		T * operator -> () { return HoldingStrategy<T>::Get(); }
+		const T * operator -> () const { return HoldingStrategy<T>::Get(); }
 	};
 
 } // namespace utils
