@@ -194,6 +194,9 @@
     <ClCompile Include="..\TransportMania\LeakDetectorInitializer.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceProxyTest.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

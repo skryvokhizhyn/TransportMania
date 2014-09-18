@@ -52,5 +52,5 @@ void
 Terrain::Apply(Terraformer & t)
 {
 	t.Apply(patchGrid_);
-	patchGrid_.Flush();
+	//patchGrid_.Flush();
 }

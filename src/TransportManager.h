@@ -11,12 +11,10 @@ namespace impl
 	template<typename T> class TrainStateMachine;
 } // namespace impl
 
-	struct ComponentHolder;
-
 	class TransportManager
 	{
 	public:
-		TransportManager(ComponentHolder * ch, RoadRouteHolder1 rrh);
+		TransportManager(RoadRouteHolder rrh);
 
 		void Update();
 
@@ -35,11 +33,11 @@ namespace impl
 	private:
 		StateMachinePtr stateMachinePtr_;
 		ComponentId id_;
-		ComponentHolder * componentHolderPtr_;
+		TrainPartType head_;
 		float distance_;
 		float speed_;
 		float passed_;
-		RoadRouteHolder1 rrh_;
+		RoadRouteHolder rrh_;
 		TrainMoveParameters moveParams_;
 	};
 

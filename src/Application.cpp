@@ -11,7 +11,8 @@
 #include "Train.h"
 #include "Settings.h"
 #include "Angle.h"
-#include "TrainVisibilityHandler.h"
+#include "TextManagerHubProxy.h"
+#include "ComponentHolderProxy.h"
 //#include "FontReader.h"
 //#include "FontData.h"
 
@@ -39,6 +40,9 @@ Application::InitApplication(const size_t width, const size_t height)
 	
 	//FontData fd = FontReader::Read(trm::GetRelativePath({"Fonts", "arial_ttf_cyr_lat.fnt"}));
 
+	TextManagerHubProxy::Init(textManagerHub_);
+	ComponentHolderProxy::Init(componentHolder_);
+
 	return true;
 }
 
@@ -53,9 +57,7 @@ Application::InitView()
 	terrainPtr_.reset(new Terrain(hmlPtr));
 
 	terrainScenePtr_ = std::make_shared<TerrainSceneObject>(terrainPtr_);
-
-	//textManagers_.emplace_back(L"?1234567890");
-
+	
 	return true;
 }
 
@@ -73,6 +75,9 @@ Application::ReleaseView()
 bool 
 Application::QuitApplication()
 {
+	ComponentHolderProxy::Term();
+	TextManagerHubProxy::Term();
+	
 	return true;
 }
 
@@ -95,14 +100,7 @@ Application::Update()
 
 	boost::for_each(managers_, std::bind(&TransportManager::Update, std::placeholders::_1));
 
-	TrainVisibilityHandler visibilityHandler(worldProjection_, componentHolder_);
-	boost::for_each(componentHolder_.movables | boost::adaptors::map_values,
-		std::ref(visibilityHandler));
-	
-	auto it = boost::remove_if(componentHolder_.visibles,
-		!boost::bind(&TrainVisibleObject::Update, boost::lambda::_1));
-
-	componentHolder_.visibles.erase(it, componentHolder_.visibles.end());
+	componentHolder_.Update(worldProjection_);
 }
 
 void 
@@ -117,13 +115,8 @@ Application::Draw()
 	context_.Clear();
 	
 	const Matrix & ovm = worldProjection_.GetOrthoViewMatrix();
-
-	boost::for_each(textManagers_, 
-	[&](const TextManager & tm)
-	{
-		context_.Transform(ovm, tm.GetModelMatrix());
-		tm.Draw();
-	});
+	
+	textManagerHub_.Draw(context_, ovm);
 
 	const Matrix & pvm = worldProjection_.GetProjectionViewMatrix();
 
@@ -134,12 +127,7 @@ Application::Draw()
 	std::for_each(staticSceneObjects_.cbegin(), staticSceneObjects_.cend(), 
 		[](const StaticSceneObjectPtr & ssoPtr){ssoPtr->Draw();});
 
-	boost::for_each(componentHolder_.visibles,
-		[&](const TrainVisibleObject & tvo)
-	{
-		context_.Transform(pvm, tvo.GetMatrix());
-		tvo.Draw();
-	});
+	componentHolder_.Draw(context_, pvm);
 }
 
 void 
@@ -172,13 +160,6 @@ Application::BendScene(const Angle dtheta, const Angle dpsi)
 	worldProjection_.Bend(-dtheta, dpsi);
 
 	terrainScenePtr_->UpdateRequired();
-}
-
-void 
-Application::PutFrameRate(const unsigned rate)
-{
-	textManagers_.clear();
-	textManagers_.emplace_back(boost::lexical_cast<std::wstring>(rate));
 }
 
 void 
@@ -267,7 +248,7 @@ Application::EmulateDynamicScene1()
 
 	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p1, p2);
 
-	managers_.emplace_back(&componentHolder_, RoadRouteHolder1(rrPtr, Heading::Forward));
+	managers_.emplace_back(RoadRouteHolder(rrPtr, Heading::Forward));
 }
 
 void 

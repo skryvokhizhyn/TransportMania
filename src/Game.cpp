@@ -5,6 +5,7 @@
 #include "EventHandler.h"
 #include "FpsCounter.h"
 #include "UpdateRate.h"
+#include "TextManagerHubProxy.h"
 
 #include <boost/format.hpp>
 #include <stdexcept>
@@ -140,7 +141,7 @@ Game::Run()
 			const unsigned frames = fpsCounter.GetFrames();
 
 			//utils::Logger().Debug() << "Frames " << frames;
-			app_.PutFrameRate(frames);
+			TextManagerHubProxy()->PutFrameRate(frames);
 		}
 
 		const unsigned cnt = updateRate.Tick();

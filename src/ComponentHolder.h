@@ -7,20 +7,32 @@
 #include <map>
 #include <vector>
 
-//#include <boost/container/flat_map.hpp>
-
 namespace trm
 {
-	struct ComponentHolder
+	class WorldProjection;
+	class RoadPoint;
+	class DrawContext;
+
+	class ComponentHolder
 	{
+	public:
+		void Update(const WorldProjection & wp);
+		void PutTrain(ComponentId id, Train && train, RoadPoint rp);
+		void Move(ComponentId id, float dist);
+		void Remove(ComponentId id);
+		void Draw(const DrawContext & c, const Matrix & projectionViewMatrix) const;
+
+	private:
+		void UpdateVisible(const WorldProjection & wp, TrainMovableObject & to);
+
+	private:
 		using Trains = std::map<ComponentId, Train>;
 		using Movables = std::multimap<ComponentId, TrainMovableObject>;
-		//using Movables = boost::container::flat_map<ComponentId, TrainMovableObject>;
 		using Visibles = std::vector<TrainVisibleObject>;
 
-		Trains trains;
-		Movables movables;
-		Visibles visibles;
+		Trains trains_;
+		Movables movables_;
+		Visibles visibles_;
 	};
 
 } // namespace trm

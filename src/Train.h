@@ -13,14 +13,15 @@ namespace trm
 	class Train
 	{
 	public:
-		Train(TrainPart head);
+		Train();
+		Train(Train && t);
 
 		void SetRoadPoint(RoadPoint rp);
 
 		void Append(TrainPart tp);
 		void ClearParts();
 
-		const TrainPart & Head() const;
+		//const TrainPart & Head() const;
 		const TrainParts & Parts() const;
 
 		TrainMoveParameters CalcMoveParams();
@@ -30,7 +31,7 @@ namespace trm
 
 	private:
 		RoadPointType position_;
-		TrainPart head_;
+		//TrainPart head_;
 		TrainParts parts_;
 	};
 

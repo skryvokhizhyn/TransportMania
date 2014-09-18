@@ -126,6 +126,7 @@
     <ClCompile Include="PointTest.cpp" />
     <ClCompile Include="RailRoadVisitorsTest.cpp" />
     <ClCompile Include="RangeTest.cpp" />
+    <ClCompile Include="ResourceProxyTest.cpp" />
     <ClCompile Include="RoadNetworkTest.cpp" />
     <ClCompile Include="RoadPointTest.cpp" />
     <ClCompile Include="SettingsTest.cpp" />

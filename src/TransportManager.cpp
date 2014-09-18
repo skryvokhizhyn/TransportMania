@@ -5,27 +5,21 @@
 #include "TransportManager.h"
 #include "TrainStateMachine.h"
 #include "RoadPoint.h"
-#include <boost/range/algorithm.hpp>
+#include "ComponentHolderProxy.h"
+#include "TrainPartParameters.h"
+#include "TrainMovableObject.h"
 
 using namespace trm;
 
-#include "ComponentHolder.h"
-#include "TrainPartParameters.h"
-#include "TrainMovableObject.h"
-#include <cassert>
-#include <functional>
-
-TransportManager::TransportManager(ComponentHolder * ch, RoadRouteHolder1 rrh)
+TransportManager::TransportManager(RoadRouteHolder rrh)
 	: stateMachinePtr_(std::make_shared<StateMachine>())
 	, id_(ComponentIdGenerator::Generate())
-	, componentHolderPtr_(ch)
 	, distance_(0.0f)
 	, speed_(0.0f)
 	, passed_(0.0f)
 	, rrh_(std::move(rrh))
 {
-	assert(componentHolderPtr_ != nullptr);
-	componentHolderPtr_->trains.insert(std::make_pair(id_, Train(TrainPartType::Locomotive)));
+	head_ = TrainPartType::Locomotive;
 }
 
 void 
@@ -48,8 +42,8 @@ TransportManager::Init()
 bool 
 TransportManager::Load()
 {
-	Train & train = componentHolderPtr_->trains.at(id_);
-
+	Train train;
+	train.Append(head_);
 	train.Append(TrainPartType::Wagon);
 	train.Append(TrainPartType::Wagon);
 	train.Append(TrainPartType::Wagon);
@@ -58,32 +52,15 @@ TransportManager::Load()
 
 	moveParams_ = train.CalcMoveParams();
 
-	RoadPoint rp = rrh_.GetStartingPoint();
+	ComponentHolderProxy()->PutTrain(id_, std::move(train), rrh_.GetStartingPoint());
 
-	const auto parts = train.Parts();
+	passed_ += moveParams_.length;
 
-	float totalLength = 0.0f;
-
-	std::for_each(parts.crbegin(), parts.crend(),
-		[&](const TrainPart & tp)
-	{
-		componentHolderPtr_->movables.insert(std::make_pair(id_, TrainMovableObject(rp, tp.type)));
-
-		const float partLength = TrainPartParameters::Get(tp.type).length;
-		rp.Move(partLength);
-
-		totalLength += partLength;
-	});
-
-	componentHolderPtr_->movables.insert(std::make_pair(id_, TrainMovableObject(rp, train.Head().type)));
-
-	if (totalLength > distance_)
+	if (passed_ > distance_)
 	{
 		assert(false);
 		throw std::runtime_error("Too long train for the route");
 	}
-
-	passed_ += totalLength;
 
 	return true;
 }
@@ -119,10 +96,7 @@ TransportManager::Move()
 		}
 	}
 
-	auto movables = componentHolderPtr_->movables.equal_range(id_);
-	std::for_each(movables.first, movables.second, 
-		std::bind(&TrainMovableObject::Move, 		
-			std::bind(&ComponentHolder::Movables::value_type::second, std::placeholders::_1), speed_));
+	ComponentHolderProxy()->Move(id_, speed_);
 
 	return false;
 }
@@ -130,10 +104,7 @@ TransportManager::Move()
 bool 
 TransportManager::Unload()
 {
-	Train & train = componentHolderPtr_->trains.at(id_);
-	train.ClearParts();
-
-	componentHolderPtr_->movables.erase(id_);
+	ComponentHolderProxy()->Remove(id_);
 
 	return true;
 }

@@ -13,11 +13,13 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\Application.cpp" />
     <ClCompile Include="..\..\src\BmpHandler.cpp" />
+    <ClCompile Include="..\..\src\ComponentHolder.cpp" />
     <ClCompile Include="..\..\src\ComponentId.cpp" />
     <ClCompile Include="..\..\src\DrawContext.cpp" />
     <ClCompile Include="..\..\src\EventHandler.cpp" />
     <ClCompile Include="..\..\src\FontReader.cpp" />
     <ClCompile Include="..\..\src\TextManager.cpp" />
+    <ClCompile Include="..\..\src\TextManagerHub.cpp" />
     <ClCompile Include="..\..\src\TextRenderer.cpp" />
     <ClCompile Include="..\..\src\FpsCounter.cpp" />
     <ClCompile Include="..\..\src\Game.cpp" />
@@ -73,7 +75,6 @@
     <ClCompile Include="..\..\src\TrainDrawableObjectFactory.cpp" />
     <ClCompile Include="..\..\src\TrainMovableObject.cpp" />
     <ClCompile Include="..\..\src\TrainPartParameters.cpp" />
-    <ClCompile Include="..\..\src\TrainVisibilityHandler.cpp" />
     <ClCompile Include="..\..\src\TrainVisibleObject.cpp" />
     <ClCompile Include="..\..\src\TransportManager.cpp" />
     <ClCompile Include="..\..\src\TransportManiaMain.cpp" />
@@ -97,9 +98,13 @@
     <ClInclude Include="..\..\src\BmpHandler.h" />
     <ClInclude Include="..\..\src\CommonUtils.h" />
     <ClInclude Include="..\..\src\ComponentHolder.h" />
+    <ClInclude Include="..\..\src\ComponentHolderProxy.h" />
     <ClInclude Include="..\..\src\ComponentId.h" />
     <ClInclude Include="..\..\src\FontData.h" />
     <ClInclude Include="..\..\src\FontReader.h" />
+    <ClInclude Include="..\..\src\ResourceProxy.h" />
+    <ClInclude Include="..\..\src\TextManagerHub.h" />
+    <ClInclude Include="..\..\src\TextManagerHubProxy.h" />
     <ClInclude Include="..\..\src\TextRenderer.h" />
     <ClInclude Include="..\..\src\LeakDetectorInitializer.h" />
     <ClInclude Include="..\..\src\DrawableObject.h" />
@@ -185,7 +190,6 @@
     <ClInclude Include="..\..\src\TrainPartParameters.h" />
     <ClInclude Include="..\..\src\TrainStateMachine.h" />
     <ClInclude Include="..\..\src\TrainTypes.h" />
-    <ClInclude Include="..\..\src\TrainVisibilityHandler.h" />
     <ClInclude Include="..\..\src\TrainVisibleObject.h" />
     <ClInclude Include="..\..\src\TransportManager.h" />
     <ClInclude Include="..\..\src\TriangleNodeAllocator.h" />

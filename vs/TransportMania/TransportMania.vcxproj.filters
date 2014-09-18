@@ -243,9 +243,6 @@
     <ClCompile Include="..\..\src\WagonDrawableObject.cpp">
       <Filter>Draw\Transport</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\TrainVisibilityHandler.cpp">
-      <Filter>Transport</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\UpdateRate.cpp">
       <Filter>Application</Filter>
     </ClCompile>
@@ -290,6 +287,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\TextManager.cpp">
       <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TextManagerHub.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ComponentHolder.cpp">
+      <Filter>Transport</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -551,9 +554,6 @@
     <ClInclude Include="..\..\src\WagonDrawableObject.h">
       <Filter>Draw\Transport</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TrainVisibilityHandler.h">
-      <Filter>Transport</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\UpdateRate.h">
       <Filter>Application</Filter>
     </ClInclude>
@@ -625,6 +625,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\TextRenderer.h">
       <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ResourceProxy.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextManagerHub.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextManagerHubProxy.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ComponentHolderProxy.h">
+      <Filter>Transport</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
