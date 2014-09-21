@@ -211,7 +211,7 @@ PatchGrid::Render(ModelData & md)
 	RenderNode(*currIt_, md);
 
 #ifdef DRAWING_MODE_FULL
-	GlueNormales(*currIt_, md);
+	//GlueNormales(*currIt_, md);
 #endif // DRAWING_MODE_FULL
 
 	++currIt_;
@@ -253,11 +253,13 @@ PatchGrid::GlueNormales(const PatchGridNode & node, ModelData & md) const
 
 				const Size2d shiftedPoint = sizePoint - s;
 
-				const auto foundNormale = normales.find(shiftedPoint);
+				n += normales.At(shiftedPoint);
+
+				/*const auto foundNormale = normales.find(shiftedPoint);
 				if (foundNormale != normales.end())
 				{
 					n += foundNormale->second;
-				}
+				}*/
 			}
 		});
 	}

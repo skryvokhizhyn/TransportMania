@@ -9,6 +9,7 @@ namespace trm
 	struct Point3d;
 	struct ModelData;
 	class TriangleMapper;
+	class PointNormaleMap;
 
 namespace terrain
 {

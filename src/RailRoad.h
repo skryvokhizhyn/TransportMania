@@ -20,6 +20,7 @@ namespace trm
 		static const AxisType RAIL_ROAD_WIDTH;
 		static const AxisType RAIL_ROAD_BORDER;
 		static const AxisType RAIL_ROAD_STEP;
+		static const AxisType RAIL_ROAD_Z_SHIFT;
 
 		static AxisType GetTotalWidth();
 	};

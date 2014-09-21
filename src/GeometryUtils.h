@@ -40,7 +40,9 @@ namespace utils
 	trm::Point3d GetCrossProduct(const trm::Point3d & a, const trm::Point3d & b);
 	//trm::Point3d GetCrossProductLeft(const trm::Point3d & a, const trm::Point3d & b);
 	trm::Point3d GetNormaleForTriangleNonNormalized(const trm::Triangle3d & t);
+	trm::Point3d GetNormaleForTriangleNonNormalized(const trm::Point3d & l, const trm::Point3d & e, const trm::Point3d & r);
 	bool CheckTriangleValid(const trm::Triangle3d & t);
+	bool CheckTriangleValid(const trm::Point3d & l, const trm::Point3d & e, const trm::Point3d & r);
 	trm::Triangle3d GetTriangle3dFrom2d(const trm::Triangle2d & t2d, const trm::terrain::HeightMap & hm);
 
 	template<typename T, unsigned short N>

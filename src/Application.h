@@ -36,9 +36,7 @@ namespace trm
 
 		void Upper(const AxisType x, const AxisType y, const AxisType radii);
 
-		void PutRailRoadLine();
 		void PutRailRoadLine(const Point3d & from, const Point3d & to);
-		void PutRailRoadArc();
 		void PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a, const Direction d);
 
 		void EmulateDynamicScene1();

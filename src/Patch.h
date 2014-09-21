@@ -4,6 +4,7 @@
 #include "Variance.h"
 #include "HeightMap.h"
 #include "TriangleNodeCache.h"
+#include "PointNormaleMap.h"
 
 namespace trm
 {

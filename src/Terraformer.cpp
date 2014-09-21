@@ -78,13 +78,7 @@ Terraformer::Apply(HeightMapBase & hm)
 	{
 		if (!Normalized(size, r))
 			continue;
-
-		if (r.y == 29)
-		{
-			int i = 0;
-			++i;
-		}
-
+		
 		while (r.xBegin <= r.xEnd)
 		{
 			const Point2d at(static_cast<float>(r.xBegin), static_cast<float>(r.y));

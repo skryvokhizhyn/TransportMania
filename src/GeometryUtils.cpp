@@ -303,7 +303,6 @@ utils::GetDirectionVector(const trm::Point2d & a, const trm::Point2d & b)
 Point3d 
 utils::GetCrossProduct(const trm::Point3d & a, const trm::Point3d & b)
 {
-	//return Point3d(a.z() * b.y() - a.y() * b.z(), a.x() * b.z() - a.z() * b.x(), a.y() * b.x() - a.x() * b.y());
 	return Point3d(a.y() * b.z() - a.z() * b.y(), a.z() * b.x() - a.x() * b.z(), a.x() * b.y() - a.y() * b.x());
 }
 
@@ -324,10 +323,27 @@ utils::GetNormaleForTriangleNonNormalized(const trm::Triangle3d & t)
 	return GetCrossProduct(t.l() - t.e(), t.r() - t.e());
 }
 
+Point3d
+utils::GetNormaleForTriangleNonNormalized(const Point3d & l, const Point3d & e, const Point3d & r)
+{
+	if (!CheckTriangleValid(l, e, r))
+	{
+		throw std::runtime_error("Invalid triangle given for normale calculation");
+	}
+
+	return GetCrossProduct(l - e, r - e);
+}
+
 bool
 utils::CheckTriangleValid(const trm::Triangle3d & t)
 {
-	return (t.e() != t.l() && t.e() != t.r() && t.l() != t.r());
+	return CheckTriangleValid(t.l(), t.e(), t.r());
+}
+
+bool 
+utils::CheckTriangleValid(const Point3d & l, const Point3d & e, const Point3d & r)
+{
+	return e != l && e != r && l != r;
 }
 
 trm::Triangle3d 

@@ -15,6 +15,7 @@ namespace trm
 		Line base, ab, bc, cd, da;
 	};
 
+	// returns clockwise a, b, c, d
 	RangeRectangle GetRangeRectangle(const Point2d & start, const Point2d & end, const AxisType width);
 	
 } // namespace trm

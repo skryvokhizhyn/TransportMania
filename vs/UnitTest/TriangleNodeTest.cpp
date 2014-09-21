@@ -9,6 +9,7 @@
 #include <GeometryUtils.h>
 #include <Logger.h>
 #include <ModelData.h>
+#include <PointNormaleMap.h>
 #include <boost/test/unit_test.hpp>
 
 using namespace trm::terrain;

@@ -84,6 +84,7 @@
     <ClCompile Include="..\..\src\PatchGrid.cpp" />
     <ClCompile Include="..\..\src\PatchTriangleMapper.cpp" />
     <ClCompile Include="..\..\src\PointHash.cpp" />
+    <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
     <ClCompile Include="..\..\src\PoolUsageCounter.cpp" />
     <ClCompile Include="..\..\src\PoolUsageCounterHolder.cpp" />
     <ClCompile Include="..\..\src\RailRoad.cpp" />

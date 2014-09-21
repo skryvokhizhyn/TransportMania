@@ -7,6 +7,7 @@
 #include "ModelData.h"
 #include "GlobalDefines.h"
 #include "TriangleMapper.h"
+#include "PointNormaleMap.h"
 
 using namespace trm;
 using namespace trm::terrain;
@@ -22,28 +23,13 @@ namespace
 		return val * val;
 	}
 
-	void PutPointNormale(const Point3d & p, const Point3d & normale, PointNormaleMap & normaleMap)
-	{
-		const Size2d s = Size2d::Cast(p);
-
-		const auto found = normaleMap.lower_bound(s);
-		if (found != normaleMap.end() && !PointNormaleMap::key_compare()(s, found->first))
-		{
-			found->second += normale;
-		}
-		else
-		{
-			normaleMap.insert(found, std::make_pair(s, normale));
-		}
-	}
-
 	void PutNormales(const Triangle3d & t, PointNormaleMap & normaleMap)
 	{
 		const Point3d normale = utils::GetNormaleForTriangleNonNormalized(t);
 
-		PutPointNormale(t.l(), normale, normaleMap);
-		PutPointNormale(t.e(), normale, normaleMap);
-		PutPointNormale(t.r(), normale, normaleMap);
+		normaleMap.Put(Size2d::Cast(t.l()), normale);
+		normaleMap.Put(Size2d::Cast(t.e()), normale);
+		normaleMap.Put(Size2d::Cast(t.r()), normale);
 	}
 }
 

@@ -1,3 +1,3 @@
 #pragma once
 
-//#define DRAWING_MODE_FULL
+#define DRAWING_MODE_FULL

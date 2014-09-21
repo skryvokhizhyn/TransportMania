@@ -12,7 +12,6 @@ namespace trm
 	typedef float AxisType;
 	typedef std::pair<AxisType, AxisType> AxisPairType;
 	typedef unsigned IndexType;
-	typedef std::map<Size2d, Point3d> PointNormaleMap;
 	typedef unsigned GLuintType;
 
 	enum class Direction

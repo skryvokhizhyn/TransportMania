@@ -71,7 +71,7 @@ Patch::Render(ModelData & md)
 {
 	const size_t sz = md.points.size();
 
-	normaleMap_.clear();
+	normaleMap_.Clear();
 
 	TriangleNodeHandler::Render(pRootUp_, detalization_, *pHeightMap_, UPPER_TRIANGLE_MAPPER, md, normaleMap_);
 	TriangleNodeHandler::Render(pRootDown_, detalization_, *pHeightMap_, LOWER_TRIANGLE_MAPPER, md, normaleMap_);
@@ -85,21 +85,13 @@ Patch::Render(ModelData & md)
 
 	md.normales.reserve(md.points.size());
 
-	const auto normaleMapEnd = normaleMap_.end();
-
 #ifdef DRAWING_MODE_FULL
 	boost::range::for_each(md.points,
 		[&](const Point3d & p)
 	{
 		const Size2d s = Size2d::Cast(p);
-		PointNormaleMap::const_iterator found = normaleMap_.find(s);
-
-		if (found == normaleMapEnd)
-		{
-			throw std::runtime_error("Unknown point found in normales map");
-		}
-
-		md.normales.push_back(found->second);
+		
+		md.normales.push_back(normaleMap_.At(s));
 	});
 #endif // DRAWING_MODE_FULL
 }
@@ -146,7 +138,7 @@ Patch::Attach(Patch & p, const Direction dir)
 void 
 Patch::Clear()
 {
-	normaleMap_.clear();
+	normaleMap_.Clear();
 	varianceUp_.Clear();
 	varianceDown_.Clear();
 	pRootUp_->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
@@ -162,22 +154,9 @@ Patch::GetNormales() const
 void
 Patch::ZipNormales()
 {
-	const size_t sz = pHeightMap_->GetSize();
+	const size_t sz = pHeightMap_->GetSize() - 1;
 
-	auto it = normaleMap_.begin();
-	auto end = normaleMap_.end();
-
-	while (it != end)
-	{
-		const Size2d & s = it->first;
-
-		if ((s.x() % (sz - 1) == 0) || (s.y() % (sz - 1) == 0))
-		{
-			++it;
-		}
-		else
-		{
-			normaleMap_.erase(it++);
-		}
-	}
+	normaleMap_.RemoveIf(
+		[=](const Size2d & s)
+	{ return !((s.x() % sz == 0) || (s.y() % sz == 0)); });
 }
