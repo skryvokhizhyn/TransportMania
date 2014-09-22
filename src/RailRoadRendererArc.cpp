@@ -20,6 +20,8 @@ namespace
 
 void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 {
+	md.type = ModelData::Mode::Line;
+
 	const Point3d & start = rrl.GetStart();
 	const Angle angle = rrl.GetAngle();
 	const Point2d & center = rrl.GetCenter();

@@ -212,10 +212,15 @@ TriangleNodeHandler::Render(TriangleNode * pTn, const size_t level, const Height
 		md.indexes.push_back(sz - 2);
 		md.indexes.push_back(sz);
 #endif // DRAWING_MODE_FULL
-
+		
 #ifdef DRAWING_MODE_FULL
-		//PutNormales(t, normaleMap);
 		PutNormales(t3d, normaleMap);
+		
+		assert(md.type == ModelData::Mode::Undefined || md.type == ModelData::Mode::Triangle);
+		md.type = ModelData::Mode::Triangle;
+#else
+		assert(md.type == ModelData::Mode::Undefined || md.type == ModelData::Mode::Line);
+		md.type = ModelData::Mode::Line;
 #endif // DRAWING_MODE_FULL
 	}
 

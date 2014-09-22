@@ -122,8 +122,12 @@ LocomotiveDrawableObject::Render(ModelData & md)
 
 #ifdef DRAWING_MODE_FULL
 	RenderTriangles(md);
+
+	md.type = ModelData::Mode::Triangle;
 #else
 	RenderLines(md);
+
+	md.type = ModelData::Mode::Line;
 #endif // DRAWING_MODE_FULL
 
 	std::transform(md.points.cbegin(), md.points.cend(), md.points.begin(),

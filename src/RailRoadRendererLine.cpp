@@ -90,7 +90,9 @@ void RailRoadRendererLine::Do(const RailRoadLine & rrl, ModelData & md)
 
 	#ifdef DRAWING_MODE_FULL
 		RenderTriangles(start, end, md);
+		md.type = ModelData::Mode::Triangle;
 	#else
 		RenderLines(start, end, md);
+		md.type = ModelData::Mode::Line;
 	#endif // DRAWING_MODE_FULL
 }

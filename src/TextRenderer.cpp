@@ -204,6 +204,7 @@ TextRenderer::Render(const std::wstring & str)
 	ModelData md;
 
 	boost::for_each(str, CharMapper(md));
+	md.type = ModelData::Mode::Line;
 
 	return md;
 }

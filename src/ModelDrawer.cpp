@@ -7,6 +7,7 @@
 #include "Types.h"
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+#include <limits>
 
 using namespace trm;
 
@@ -31,24 +32,43 @@ namespace
 		glBindBuffer(buffType, 0);
 	}
 
+	GLuintType ConvertDrawMode(const ModelData::Mode type)
+	{
+		switch(type)
+		{
+		case ModelData::Mode::Point:
+			return GL_POINTS;
+		case ModelData::Mode::Line:
+			return GL_LINES;
+		case ModelData::Mode::Triangle:
+			return GL_TRIANGLES;
+		default:
+			assert(false);
+			throw std::runtime_error("Undefined Draw Mode given");
+		}
+	}
 }
 
 namespace trm
 {
 namespace impl
 {
+	const GLuintType UNDEFINED_DRAW_MODE = std::numeric_limits<GLuintType>::max();
+
 	struct State
 		: boost::noncopyable
 	{
 		GLuintType buffVert;
 		GLuintType buffIndx;
 		GLuintType buffNorm;
+		GLuintType drawMode;
 		size_t indxCnt;
 
 		State()
 			: buffVert(InitBuffer())
 			, buffIndx(InitBuffer())
 			, buffNorm(InitBuffer())
+			, drawMode(UNDEFINED_DRAW_MODE)
 			, indxCnt(0)
 		{}
 
@@ -71,6 +91,7 @@ ModelDrawer::ModelDrawer()
 void 
 ModelDrawer::Load(const ModelData & md)
 {
+	statePtr_->drawMode = ConvertDrawMode(md.type);
 	statePtr_->indxCnt = md.indexes.size();
 
 	if (md.points.empty())
@@ -97,13 +118,7 @@ ModelDrawer::Draw() const
 #endif // DRAWING_MODE_FULL
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, statePtr_->buffIndx);
-	glDrawElements(
-#ifdef DRAWING_MODE_FULL
-		/*GL_POINTS*/GL_TRIANGLES, 
-#else
-		GL_LINES,
-#endif // DRAWING_MODE_FULL
-		statePtr_->indxCnt, GL_UNSIGNED_INT, 0);
+	glDrawElements(statePtr_->drawMode, statePtr_->indxCnt, GL_UNSIGNED_INT, 0);
 
 	glDisableVertexAttribArray(DrawContext::VertexArray);
 	glDisableVertexAttribArray(DrawContext::NormalArray);

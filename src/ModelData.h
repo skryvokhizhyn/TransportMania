@@ -14,11 +14,23 @@ namespace trm
 
 	struct ModelData
 	{
+		enum class Mode
+		{
+			Undefined,
+			Point,
+			Triangle,
+			TriangleStrip,
+			Line,
+			LineLoop
+		};
+
+		Mode type;
 		PointVector points;
 		IndexVector indexes;
 		NormaleVector normales;
 
 		ModelData() 
+			: type(Mode::Undefined)
 		{}
 
 		ModelData(ModelData && md)
