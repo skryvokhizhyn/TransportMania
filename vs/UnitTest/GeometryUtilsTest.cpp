@@ -422,35 +422,35 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle1807)
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest22)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(90), Direction::Left);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(90), Rotation::Clockwise);
 
 	BOOST_CHECK_EQUAL(p, Point2d(-1, 0));
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest23)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(90), Direction::Right);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(90), Rotation::AntiClockwise);
 
 	BOOST_CHECK_EQUAL(p, Point2d(1, 0));
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest24)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(180), Direction::Left);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(180), Rotation::Clockwise);
 
 	BOOST_CHECK_EQUAL(p, Point2d(0, 1));
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest25)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(180), Direction::Right);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(180), Rotation::AntiClockwise);
 
 	BOOST_CHECK_EQUAL(p, Point2d(0, 1));
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest26)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(135), Direction::Left);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(135), Rotation::Clockwise);
 
 	BOOST_CHECK_CLOSE(p.x(), -0.707107f, 0.0001f);
 	BOOST_CHECK_CLOSE(p.y(), 0.707107f, 0.0001f);
@@ -458,7 +458,7 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTest26)
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest27)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(135), Direction::Right);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(135), Rotation::AntiClockwise);
 
 	BOOST_CHECK_CLOSE(p.x(), 0.707107f, 0.0001f);
 	BOOST_CHECK_CLOSE(p.y(), 0.707107f, 0.0001f);
@@ -770,3 +770,68 @@ BOOST_AUTO_TEST_CASE(GeometryGetNormaleForTriangleNonNormalizedTest2)
 
 	BOOST_CHECK_EQUAL(p, Point3d(0, 0, 1));
 }
+
+BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test1)
+{
+	Angle a = utils::GetRotationAngle360(Point2d(-1, 0), Point2d(0, 1), Rotation::Clockwise);
+
+	BOOST_CHECK_EQUAL(a, Degrees(90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test2)
+{
+	Angle a = utils::GetRotationAngle360(Point2d(-1, 0), Point2d(1, 0), Rotation::Clockwise);
+
+	BOOST_CHECK_EQUAL(a, Degrees(180));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test3)
+{
+	Angle a = utils::GetRotationAngle360(Point2d(-1, 0), Point2d(0, -1), Rotation::Clockwise);
+
+	BOOST_CHECK_EQUAL(a, Degrees(270));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test4)
+{
+	Angle a = utils::GetRotationAngle360(Point2d(-1, 0), Point2d(-1, 0), Rotation::Clockwise);
+
+	BOOST_CHECK_EQUAL(a, Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test5)
+{
+	Angle a = utils::GetRotationAngle360(Point2d(-1, 0), Point2d(-1, 0), Rotation::AntiClockwise);
+
+	BOOST_CHECK_EQUAL(a, Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test6)
+{
+	Angle a = utils::GetRotationAngle360(Point2d(-1, 0), Point2d(0, 1), Rotation::AntiClockwise);
+
+	BOOST_CHECK_EQUAL(a, Degrees(270));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test7)
+{
+	Angle a = utils::GetRotationAngle360(Point2d(-1, 0), Point2d(1, 0), Rotation::AntiClockwise);
+
+	BOOST_CHECK_EQUAL(a, Degrees(180));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test8)
+{
+	Angle a = utils::GetRotationAngle360(Point2d(-1, 0), Point2d(0, -1), Rotation::AntiClockwise);
+
+	BOOST_CHECK_EQUAL(a, Degrees(90));
+}
+
+// check for a case when the func could return 360 degrees. Now it's explicitly checked.
+BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test9)
+{
+	Angle a = utils::GetRotationAngle360(Point2d(2, -1.74845553e-007f), Point2d(2, 0), Rotation::Clockwise);
+
+	BOOST_CHECK_EQUAL(a, Degrees(0));
+}
+

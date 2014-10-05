@@ -2,6 +2,12 @@
 #include "RailRoadArc.h"
 #include "ModelData.h"
 #include "GeometryUtils.h"
+#include "GlobalDefines.h"
+
+#include <boost/range/algorithm/transform.hpp>
+#include <boost/lambda/lambda.hpp>
+
+#include <algorithm>
 
 using namespace trm;
 using namespace trm::visitor_impl;
@@ -20,12 +26,10 @@ namespace
 
 void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 {
-	md.type = ModelData::Mode::Line;
-
 	const Point3d & start = rrl.GetStart();
 	const Angle angle = rrl.GetAngle();
 	const Point2d & center = rrl.GetCenter();
-	const Direction dir = rrl.GetDirection();
+	const Rotation rot = rrl.GetRotation();
 
 	const AxisType h = start.z();
 	const Point2d s = Point2d::Cast(start);
@@ -43,12 +47,27 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 
 	for (Angle a = rotationStep; a < angle; a += rotationStep)
 	{
-		const Point2d far = utils::RotateVector(farStart, a, dir);
-		const Point2d near = utils::RotateVector(nearStart, a, dir);
-
-		PushPoint(far, center, h, md);
+		const Point2d far = utils::RotateVector(farStart, a, rot);
+		const Point2d near = utils::RotateVector(nearStart, a, rot);
+		
 		PushPoint(near, center, h, md);
+		PushPoint(far, center, h, md);
 
 		a += rotationStep;
 	}
+
+#ifdef DRAWING_MODE_FULL
+	md.type = ModelData::Mode::TriangleStrip;
+
+	using namespace boost::lambda;
+		placeholder1_type Arg1;
+
+	boost::transform(md.points, md.points.begin(), 
+			ret<Point3d>(Arg1 + Point3d(0.0f, 0.0f, RailRoad::RAIL_ROAD_Z_SHIFT)));
+
+	md.normales.reserve(md.points.size());
+	std::fill_n(std::back_inserter(md.normales), md.points.size(), Point3d(0.0f, 1.0f, 1.0f));
+#else
+	md.type = ModelData::Mode::Line;
+#endif //DRAWING_MODE_FULL
 }

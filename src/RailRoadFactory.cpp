@@ -12,7 +12,7 @@ RailRoadFactory::Line(const Point3d & s, const Point3d & e)
 }
 
 RailRoadPtr 
-RailRoadFactory::Arc(const Point3d & s, const Angle a, const Point2d & c, const Direction d)
+RailRoadFactory::Arc(const Point3d & s, const Angle a, const Point2d & c, const Rotation r)
 {
-	return std::make_shared<RailRoadArc>(s, a, c, d);
+	return std::make_shared<RailRoadArc>(s, a, c, r);
 }

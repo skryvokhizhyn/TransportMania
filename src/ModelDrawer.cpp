@@ -42,6 +42,12 @@ namespace
 			return GL_LINES;
 		case ModelData::Mode::Triangle:
 			return GL_TRIANGLES;
+		case ModelData::Mode::LineLoop:
+			return GL_LINE_LOOP;
+		case ModelData::Mode::TriangleStrip:
+			return GL_TRIANGLE_STRIP;
+		case ModelData::Mode::TriangleFan:
+			return GL_TRIANGLE_FAN;
 		default:
 			assert(false);
 			throw std::runtime_error("Undefined Draw Mode given");

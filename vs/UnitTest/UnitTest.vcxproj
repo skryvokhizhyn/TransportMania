@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Angle.cpp" />
     <ClCompile Include="..\..\src\GeometryUtils.cpp" />
     <ClCompile Include="..\..\src\HeightMap.cpp" />
     <ClCompile Include="..\..\src\HeightMapExtended.cpp" />

@@ -20,6 +20,7 @@ namespace trm
 			Point,
 			Triangle,
 			TriangleStrip,
+			TriangleFan,
 			Line,
 			LineLoop
 		};

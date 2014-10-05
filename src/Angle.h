@@ -32,6 +32,8 @@ namespace trm
 		return RadianBasedAngle(a).value();
 	}
 
+	extern const Angle MINIMAL_MEANINGFUL_ANGLE;
+
 } // namespace trm
 
 #endif // _MYANGLE_H_

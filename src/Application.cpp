@@ -166,7 +166,7 @@ void
 Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*radii*/)
 {
 	//TerrainRangeLine range(trm::Point2d(x, y), trm::Point2d(x + 10.0f, y), radii);
-	TerrainRangeArc range(TerrainRangeArc::Data(Point2d(5, 15), Degrees(150), Point2d(15, 15), Direction::Right), 1);
+	TerrainRangeArc range(TerrainRangeArc::Data(Point2d(5, 15), Degrees(150), Point2d(15, 15), Rotation::AntiClockwise), 1);
 	//TerrainRangeCircle range(trm::Point2d(x, y), radii);
 
 	//TerrainRangeLine range(trm::Point2d(10, 10), trm::Point2d(50, 10), 10);
@@ -199,14 +199,14 @@ Application::PutRailRoadLine(const Point3d & from, const Point3d & to)
 }
 
 void 
-Application::PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a, const Direction d)
+Application::PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a, const Rotation r)
 {
-	TerrainRangeArc range(TerrainRangeArc::Data(Point2d::Cast(from), a, c, d), RailRoad::GetTotalWidth());
+	TerrainRangeArc range(TerrainRangeArc::Data(Point2d::Cast(from), a, c, r), RailRoad::GetTotalWidth());
 
 	Terraformer t(range, TerraformFunctionFactory::GetConstant(from.z()));
 	terrainPtr_->Apply(t);
 
-	const RailRoadPtr rrp = RailRoadFactory::Arc(from, a, c, d);
+	const RailRoadPtr rrp = RailRoadFactory::Arc(from, a, c, r);
 	
 	if (!roadNetwork_.Insert(rrp))
 	{
@@ -221,16 +221,18 @@ Application::PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle
 void 
 Application::EmulateDynamicScene1()
 {
-	const Point3d p1(10, 10, 5);
-	const Point3d p2(50, 10, 5);
+	const Point3d p1(30, 10, 6);
+	const Point3d p2(50, 10, 6);
+	const Point3d p3(10, 30, 6);
 	
 	//const RailRoadPtr rrp = RailRoadFactory::Line(p1, p2);
 	
 	//roadNetwork_.Insert(rrp);
 
 	PutRailRoadLine(p1, p2);
+	PutRailRoadArc(p3, Point2d(30, 30), Degrees(90), Rotation::AntiClockwise);
 
-	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p1, p2);
+	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p3, p1);
 
 	managers_.emplace_back(RoadRouteHolder(rrPtr, Heading::Forward));
 }
@@ -249,9 +251,9 @@ Application::EmulateDynamicScene2()
 	const Point3d p6(40, 50, 3);
 
 	PutRailRoadLine(p1, p2);
-	PutRailRoadArc(p2, c1, a, Direction::Right);
+	PutRailRoadArc(p2, c1, a, Rotation::AntiClockwise);
 	PutRailRoadLine(p3, p4);
-	PutRailRoadArc(p4, c2, a, Direction::Left);
+	PutRailRoadArc(p4, c2, a, Rotation::Clockwise);
 	PutRailRoadLine(p5, p6);
 	 
 	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p1, p6);

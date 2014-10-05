@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest9)
 	RoadNetwork rn;
 	rn.Insert(RailRoadFactory::Line(Point3d(), Point3d(1, 0, 0)));
 	rn.Insert(RailRoadFactory::Line(Point3d(2, 0, 0), Point3d(1, 0, 0)));
-	rn.Insert(RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2), Direction::Right));
+	rn.Insert(RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2), Rotation::AntiClockwise));
 	rn.Insert(RailRoadFactory::Line(Point3d(4, 2, 0), Point3d(4, 4, 0)));
 
 	RoadRoutePtr rrp = rn.GetRoute(Point3d(), Point3d(4, 4, 0));
@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest10)
 	const Point3d p3(20, 30, 3);
 	const Point3d p4(10, 30, 3);
 
-	const auto arcPtr = RailRoadFactory::Arc(p2, a, c1, Direction::Right);
+	const auto arcPtr = RailRoadFactory::Arc(p2, a, c1, Rotation::AntiClockwise);
 	RailRoadSizer rrs;
 	arcPtr->Accept(rrs);
 	const float arcLen = rrs.GetLenght();

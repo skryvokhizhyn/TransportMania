@@ -8,42 +8,11 @@ using namespace trm;
 
 namespace
 {
-	AxisType GetShift(const int y, const AxisType radii)
+	AxisType GetXShift(const int y, const int radii)
 	{
-		const float x = sqrt(radii * radii - y * y);
+		const double x = sqrt(radii * radii - y * y);
 
-		return x;
-	}
-
-	Angle GetIntersectionAngle(const Point2d & vecFrom, const Point2d & vecTo, const Direction dir)
-	{
-		const Line l1 = utils::GetLine(Point2d(), vecFrom);
-		const Line l2 = utils::GetLine(Point2d(), vecTo);
-
-		if (utils::CheckParallel(l1, l2))
-		{
-			if (utils::CheckColinear(vecFrom, vecTo))
-			{
-				return Degrees(0);
-			}
-			else
-			{
-				return Degrees(180);
-			}
-		}
-		else
-		{
-			const Angle aUnsigned = utils::GetAngle(Point3d::Cast(vecFrom), Point3d::Cast(vecTo));
-			const Angle aSigned = utils::GetSignedAngle(vecFrom, vecTo);
-			
-			if ((aSigned > Degrees(0) && dir == Direction::Left)
-				|| (aSigned < Degrees(0) && dir == Direction::Right))
-			{
-				return Degrees(360) - aUnsigned;
-			}
-
-			return aUnsigned;
-		}
+		return boost::numeric_cast<float>(x);
 	}
 
 	Point2d GetIntersectionWithVector(const Line & l, const Point2d & vec)
@@ -54,26 +23,19 @@ namespace
 	}
 }
 
-TerrainRangeArc::Data::Data(const Point2d & s, const Angle a, const Point2d & c, const Direction d)
-: start(s), angle(a), center(c), dir(d)
+TerrainRangeArc::Data::Data(const Point2d & s, const Angle a, const Point2d & c, const Rotation r)
+: start(s), angle(a), center(c), rotation(r)
 {
-	if (dir != Direction::Left && dir != Direction::Right)
-	{
-		throw std::runtime_error("Incorrect direction value. Only Left or Right is supported");
-	}
 }
 
 void 
-TerrainRangeArc::ProcessRange(const Point2d & vec, const Angle a, const Direction dir, const int y, const AxisPairType & pt, const Point2d & c)
+TerrainRangeArc::ProcessRange(const Point2d & vec, const Angle a, const Rotation rotation, const int y, const AxisPairType & pt, const Point2d & c)
 {
-	const IntersectionType & r = GetIntersection(vec, a, dir, y, pt);
+	const IntersectionType & r = GetIntersection(vec, a, rotation, y, pt);
 
 	for (const AxisPairType & apt : r)
 	{
 		const TerrainRange::Range range(
-			/*utils::FloatToNearInt(y + c.y(), &floor),
-			utils::FloatToNearInt(apt.first + c.x(), &floor), 
-			utils::FloatToNearInt(apt.second + c.x(), &ceil)*/
 			utils::FloatFloorToInt(y + c.y()),
 			utils::FloatFloorToInt(apt.first + c.x()), 
 			utils::FloatCeilToInt(apt.second + c.x())
@@ -85,69 +47,58 @@ TerrainRangeArc::ProcessRange(const Point2d & vec, const Angle a, const Directio
 
 TerrainRangeArc::TerrainRangeArc(const Data & data, AxisType width)
 {
-	width += 2.0;
+	const Point2d vec = data.start - data.center;
 
-	const Point2d vec1 = data.start - data.center;
-
-	const AxisType radii = vec1.GetLength();
+	const AxisType radii = vec.GetLength();
 	const AxisType radiiMax = radii + width / 2;
 	const AxisType radiiMin = (width / 2 < radii) ? radii - width / 2 : 0;
 
-	ProcessRange(vec1, data.angle, data.dir,
-			//utils::FloatToNearInt(-radiiMax, &floor),
-			utils::FloatFloorToInt(-radiiMax),
-			AxisPairType(0.0f, 0.0f), data.center);
-
-	/*const int iMin = utils::FloatToNearInt(-radiiMax, &ceil);
-	const int iMax = utils::FloatToNearInt(radiiMax, &floor);
-	const int iRadiiMin = utils::FloatToNearInt(radiiMin, &floor);*/
-	const int iMin = utils::FloatCeilToInt(-radiiMax);
-	const int iMax = utils::FloatFloorToInt(radiiMax);
+	const int iMin = utils::FloatFloorToInt(-radiiMax);
+	const int iMax = utils::FloatCeilToInt(radiiMax);
 	const int iRadiiMin = utils::FloatFloorToInt(radiiMin);
 
 	for (int i = iMin; i <= iMax; ++i)
 	{
-		const AxisType yMax = GetShift(i, radiiMax);
+		const AxisType xMax = GetXShift(i, iMax);
 
 		if (std::abs(i) >= iRadiiMin)
 		{
-			ProcessRange(vec1, data.angle, data.dir, i, AxisPairType(-yMax, yMax), data.center);
+			ProcessRange(vec, data.angle, data.rotation, i, AxisPairType(-xMax, xMax), data.center);
 		}
 		else
 		{
-			const AxisType yMin = GetShift(i, radiiMin);
+			const AxisType xMin = GetXShift(i, iRadiiMin);
 
-			/*const int lyMin = utils::FloatToNearInt(-yMin, &ceil);
-			const int ryMin = utils::FloatToNearInt(yMin, &floor);*/
-			const int lyMin = utils::FloatCeilToInt(-yMin);
-			const int ryMin = utils::FloatFloorToInt(yMin);
+			const int lxMin = utils::FloatCeilToInt(-xMin);
+			const int rxMin = utils::FloatFloorToInt(xMin);
 
-			if (lyMin == ryMin)
+			if (lxMin == rxMin)
 			{
-				ProcessRange(vec1, data.angle, data.dir, i, AxisPairType(-yMax, yMax), data.center);
+				ProcessRange(vec, data.angle, data.rotation, i, AxisPairType(-xMax, xMax), data.center);
 			}
 			else
 			{
-				ProcessRange(vec1, data.angle, data.dir, i, AxisPairType(-yMax, (float)lyMin), data.center);
-				ProcessRange(vec1, data.angle, data.dir, i, AxisPairType((float)ryMin, yMax), data.center);
+				ProcessRange(vec, data.angle, data.rotation, i, AxisPairType(-xMax, (float)lxMin), data.center);
+				ProcessRange(vec, data.angle, data.rotation, i, AxisPairType((float)rxMin, xMax), data.center);
 			}
 		}
 	}
-
-	// top
-	ProcessRange(vec1, data.angle, data.dir, 
-		//utils::FloatToNearInt(radiiMax, &ceil), 
-		utils::FloatCeilToInt(radiiMax), 
-		AxisPairType(0.0f, 0.0f), data.center);
 }
 
 auto
-TerrainRangeArc::GetIntersection(Point2d vec, const Angle a, Direction d, const int y, const AxisPairType & p) -> IntersectionType
+TerrainRangeArc::GetIntersection(Point2d vec, Angle a, Rotation rot, const int y, const AxisPairType & p) -> IntersectionType
 {
-	if ((y >= 0 && d == Direction::Right) || (y < 0 && d == Direction::Left))
+	// revert negative angles
+	if (a < Degrees(0))
 	{
-		vec = utils::RotateVector(vec, a, d);
-		d = (d == Direction::Right) ? Direction::Left : Direction::Right;
+		a *= -1;
+		rot = (rot == Rotation::Clockwise ? Rotation::AntiClockwise : Rotation::Clockwise);
+	}
+
+	if ((y >= 0 && rot == Rotation::AntiClockwise) || (y < 0 && rot == Rotation::Clockwise))
+	{
+		vec = utils::RotateVector(vec, a, rot);
+		rot = (rot == Rotation::AntiClockwise) ? Rotation::Clockwise : Rotation::AntiClockwise;
 	}
 
 	IntersectionType r;
@@ -156,24 +107,31 @@ TerrainRangeArc::GetIntersection(Point2d vec, const Angle a, Direction d, const 
 	const Point2d pf(p.first, yf);
 	const Point2d pt(p.second, yf);
 
-	Angle aFrom = GetIntersectionAngle(vec, pf, d);
-	Angle aTo = GetIntersectionAngle(vec, pt, d);
+	Angle aFrom = utils::GetRotationAngle360(vec, pf, rot);
+	Angle aTo = utils::GetRotationAngle360(vec, pt, rot);
 
 	const Line l = (pf != pt) ? utils::GetLine(pf, pt) : utils::GetLine(pf, pt + Point2d(1.0f, 0.0f));
 
-	if ((aFrom == Degrees(0) || aFrom == Degrees(180))
-		&& (aTo == Degrees(0) || aTo == Degrees(180)))
+	if (y == 0) 
 	{
-		r.push_back(p);
+		if ((a >= aFrom - MINIMAL_MEANINGFUL_ANGLE) && p.first <= 0.0f)
+		{
+			r.emplace_back(p.first, std::min(0.0f, p.second));
+		}
+
+		if ((a >= aTo - MINIMAL_MEANINGFUL_ANGLE) && 0.0f <= p.second)
+		{
+			r.emplace_back(std::max(0.0f, p.first), p.second);
+		}
 	}
-	else
+	else 
 	{
 		if (aFrom > aTo)
 		{
 			if (a > aFrom)
 			{
 				const Point2d lpF = GetIntersectionWithVector(l, vec);
-				const Point2d vecTo = utils::RotateVector(vec, a, d);
+				const Point2d vecTo = utils::RotateVector(vec, a, rot);
 				const Point2d lpT = GetIntersectionWithVector(l, vecTo);
 
 				r.push_back(AxisPairType(p.first, lpT.x()));
@@ -185,7 +143,7 @@ TerrainRangeArc::GetIntersection(Point2d vec, const Angle a, Direction d, const 
 
 				if (a < aTo)
 				{
-					const Point2d vecTo = utils::RotateVector(vec, a, d);
+					const Point2d vecTo = utils::RotateVector(vec, a, rot);
 					const Point2d lpT = GetIntersectionWithVector(l, vecTo);
 
 					r.push_back(AxisPairType(lpF.x(), lpT.x()));
@@ -197,14 +155,14 @@ TerrainRangeArc::GetIntersection(Point2d vec, const Angle a, Direction d, const 
 			}
 		}
 		else
-		if (a > aTo)
+		if (a >= aTo)
 		{
 			r.push_back(p);
 		}
 		else
 		if (a > aFrom)
 		{
-			const Point2d vecTo = utils::RotateVector(vec, a, d);
+			const Point2d vecTo = utils::RotateVector(vec, a, rot);
 			const Point2d lp = GetIntersectionWithVector(l, vecTo);
 
 			r.push_back(AxisPairType(p.first, lp.x()));

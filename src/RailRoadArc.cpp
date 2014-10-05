@@ -4,8 +4,8 @@
 
 using namespace trm;
 
-RailRoadArc::RailRoadArc(const Point3d & s, const Angle a, const Point2d & c, const Direction d)
-	: start_(s), angle_(a), center_(c), dir_(d)
+RailRoadArc::RailRoadArc(const Point3d & s, const Angle a, const Point2d & c, const Rotation rot)
+	: start_(s), angle_(a), center_(c), rotation_(rot)
 {
 	const AxisType radii = utils::GetDistance(Point2d::Cast(s), c);
 	
@@ -38,8 +38,8 @@ RailRoadArc::GetCenter() const
 	return center_;
 }
 
-Direction 
-RailRoadArc::GetDirection() const
+Rotation 
+RailRoadArc::GetRotation() const
 {
-	return dir_;
+	return rotation_;
 }

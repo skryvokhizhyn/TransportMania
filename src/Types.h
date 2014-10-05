@@ -22,6 +22,12 @@ namespace trm
 		Right
 	};
 
+	enum class Rotation
+	{
+		Clockwise,
+		AntiClockwise
+	};
+
 	enum class Heading
 	{
 		Forward,

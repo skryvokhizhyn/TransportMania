@@ -11,18 +11,18 @@ namespace trm
 		: public RailRoadVisitorTmpl<RailRoadArc>
 	{
 	public:
-		RailRoadArc(const Point3d & s, const Angle a, const Point2d & c, const Direction d);
+		RailRoadArc(const Point3d & s, const Angle a, const Point2d & c, const Rotation r);
 
 		const Point3d & GetStart() const;
 		Angle GetAngle() const;
 		const Point2d & GetCenter() const;
-		Direction GetDirection() const;
+		Rotation GetRotation() const;
 
 	private:
 		const Point3d start_;
 		const Angle angle_;
 		const Point2d center_;
-		const Direction dir_;
+		const Rotation rotation_;
 	};
 
 } // namespace trm
