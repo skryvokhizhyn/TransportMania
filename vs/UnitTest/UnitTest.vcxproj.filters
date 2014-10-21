@@ -203,6 +203,12 @@
     <ClCompile Include="..\..\src\Angle.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="PolygonVisibilityCheckerTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

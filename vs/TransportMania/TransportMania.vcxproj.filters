@@ -300,6 +300,12 @@
     <ClCompile Include="..\..\src\Angle.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapLoaderCache.cpp">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -646,6 +652,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\GlobalDefines.h">
       <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\PolygonVisibilityChecker.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapLoaderCache.h">
+      <Filter>Terrain\HeightMap</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

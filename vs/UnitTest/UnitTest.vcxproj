@@ -86,6 +86,7 @@
     <ClCompile Include="..\..\src\PatchTriangleMapper.cpp" />
     <ClCompile Include="..\..\src\PointHash.cpp" />
     <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
+    <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
     <ClCompile Include="..\..\src\PoolUsageCounter.cpp" />
     <ClCompile Include="..\..\src\PoolUsageCounterHolder.cpp" />
     <ClCompile Include="..\..\src\RailRoad.cpp" />
@@ -126,6 +127,7 @@
     <ClCompile Include="PatchGridTest.cpp" />
     <ClCompile Include="PointImplTest.cpp" />
     <ClCompile Include="PointTest.cpp" />
+    <ClCompile Include="PolygonVisibilityCheckerTest.cpp" />
     <ClCompile Include="RailRoadVisitorsTest.cpp" />
     <ClCompile Include="RangeTest.cpp" />
     <ClCompile Include="ResourceProxyTest.cpp" />
