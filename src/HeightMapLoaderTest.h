@@ -15,8 +15,8 @@ namespace terrain
 	public:
 		HeightMapLoaderTest(const size_t sz);
 
-		virtual size_t getSize() const override;
-		virtual void Get(const Point2d & pos, const size_t sz, HeightMap & hm) override;
+		virtual size_t Size() const override;
+		virtual void Get(const Point2d & pos, const size_t sz, HeightMap & hm) const override;
 		virtual void Set(const Point2d & pos, const HeightMap & hm) override;
 
 	private:

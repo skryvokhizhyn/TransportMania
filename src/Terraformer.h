@@ -23,7 +23,6 @@ namespace terrain
 		Terraformer(const TerrainRange & range, TerraformFunction func);
 
 		void Apply(terrain::HeightMapBase & hm);
-		//const TerrainRange & GetRange() const;
 
 	public:
 		static bool Normalized(const Size2d & sz, TerrainRange::Range & r);

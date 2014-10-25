@@ -6,6 +6,7 @@
 #include "GeometryUtils.h"
 #include "Logger.h"
 #include "GlobalDefines.h"
+#include "PolygonVisibilityChecker.h"
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/combine.hpp>
@@ -47,6 +48,40 @@ namespace
 		{
 			return true;
 		}
+	}
+
+	Point3d GetCornerPoint(const terrain::HeightMapLoader & hml, const Point2d & cornerPoint)
+	{
+		const Point2d defaultGetterPoint(0, 0);
+		HeightMap hm;
+
+		hml.Get(cornerPoint, 1, hm);
+
+		Point3d p = Point3d::Cast(cornerPoint);
+		p.z() = hm.At(defaultGetterPoint);
+
+		return p;
+	}
+
+	bool CheckPatchVisible(const terrain::HeightMapLoader & hml, const Size2d & s, 
+		const WorldProjection & wp, size_t patchSize)
+	{
+		--patchSize;
+		const float psf = boost::numeric_cast<float>(patchSize);
+		const Point2d s2d = Point2d::Cast(s);
+		
+		// left bottom
+		const Point3d lb = GetCornerPoint(hml, s2d);
+		// left up
+		const Point3d lu = GetCornerPoint(hml, s2d + Point2d(0, psf));
+		// right bottom
+		const Point3d rb = GetCornerPoint(hml, s2d + Point2d(psf, 0));
+		// right up
+		const Point3d ru = GetCornerPoint(hml, s2d + Point2d(psf, psf));
+
+		const Matrix & pv = wp.GetProjectionViewMatrix();
+
+		return CheckPolygonIsVisible(pv, {lb, lu, ru, rb});
 	}
 }
 
@@ -123,7 +158,10 @@ PatchGrid::Update(const WorldProjection & wp)
 
 		auto & data = it->data;
 		const bool isValid = data.valid;
-		const bool isVisible = IsVisible(wp, t, patchSize_);
+		//const bool isVisible = IsVisible(wp, t, patchSize_);
+
+		const bool isVisible = CheckPatchVisible(*hmlPtr_, pos, wp, patchSize_);
+
 		/*bool isVisible = false;
 		if (pos == Size2d(32, 0))
 			isVisible = true;

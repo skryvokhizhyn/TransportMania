@@ -31,13 +31,13 @@ HeightMapLoaderTest::HeightMapLoaderTest(const size_t sz)
 {}
 
 size_t 
-HeightMapLoaderTest::getSize() const
+HeightMapLoaderTest::Size() const
 {
 	return sz_;
 }
 
 void
-HeightMapLoaderTest::Get(const Point2d & /*pos*/, const size_t sz, HeightMap & hm)
+HeightMapLoaderTest::Get(const Point2d & /*pos*/, const size_t sz, HeightMap & hm) const
 {
 	std::vector<HeightMap::Type> terrainHeight(sz * sz, 0.0f);
 

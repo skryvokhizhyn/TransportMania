@@ -1,21 +1,22 @@
-#ifndef _HEIGHTMAPLOADERFILE_H_
-#define _HEIGHTMAPLOADERFILE_H_
+#pragma once
 
 #include "HeightMapLoader.h"
-#include "BmpHandler.h"
+
 #include <boost/noncopyable.hpp>
-#include <string>
+#include <map>
 
 namespace trm
 {
+	struct Size2d;
+
 namespace terrain
 {
-	class HeightMapLoaderFile
+	class HeightMapLoaderCache
 		: public HeightMapLoader
-		, private boost::noncopyable
+		, boost::noncopyable
 	{
 	public:
-		HeightMapLoaderFile(const std::string & path);
+		HeightMapLoaderCache(const size_t partSize, HeightMapLoaderPtr base);
 
 		// HeightMapLoader
 		virtual size_t Size() const override;
@@ -23,10 +24,13 @@ namespace terrain
 		virtual void Set(const Point2d & pos, const HeightMap & hm) override;
 
 	private:
-		utils::BmpHandler hmFile_;
+		using HeightMapCache = std::map<Size2d, HeightMap>;
+
+	private:
+		const size_t partSize_;
+		mutable HeightMapCache cache_;
+		HeightMapLoaderPtr basePtr_;
 	};
 
 } // namespace terrain
 } // namespace trm
-
-#endif // _HEIGHTMAPLOADERFILE_H_

@@ -31,7 +31,7 @@ namespace
 		return Point2dPair(Point2d(invertedMin.y(), invertedMin.x()), Point2d(invertedMax.y(), invertedMax.x()));
 	}
 
-	Point2d::Type GetIntersectionPoint(const Point2d::Type level, const Line & line, const bool isInfNegative)
+	Point2d::Type GetIntersectionPoint(const Point2d::Type & level, const Line & line, const bool isInfNegative)
 	{
 		const Line l = utils::GetLine(Point2d(0.0f, level), Point2d(1.0f, level));
 

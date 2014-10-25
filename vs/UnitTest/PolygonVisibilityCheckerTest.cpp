@@ -63,3 +63,10 @@ BOOST_AUTO_TEST_CASE(PolygonVisibilityCheckerTest9)
 		Point3d(-12.0f, -0.1f, 10.0f), Point3d(-10.0f, -2.1f, 10.0f), 
 		Point3d(-10.0f, 2.0f, 10.0f), Point3d(-12.0f, -2.0f, 10.0f)}));
 }
+
+BOOST_AUTO_TEST_CASE(PolygonVisibilityCheckerTest10)
+{
+	BOOST_CHECK(CheckPolygonIsVisible(MatrixFactory::Identity(), {
+		Point3d(-0.5f, -0.1f, 0.0f), Point3d(0.0f, -0.1f, 0.0f), 
+		Point3d(-0.0f, 0.5f, 0.0f), Point3d(-0.5f, -0.7f, 0.0f)}));
+}

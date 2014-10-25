@@ -12,12 +12,13 @@
 #include "MatrixUtils.h"
 
 #include <boost/range/algorithm/transform.hpp>
+
 #include <boost/geometry/io/wkt/read.hpp>
-#include <boost/geometry/geometries/ring.hpp>
-#include <boost/geometry/geometries/polygon.hpp>
+
 #include <boost/geometry/geometries/linestring.hpp>
 #include <boost/geometry/geometries/box.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
+
 #include <boost/geometry/algorithms/make.hpp>
 #include <boost/geometry/algorithms/intersects.hpp>
 #include <boost/geometry/algorithms/correct.hpp>
@@ -32,16 +33,17 @@ namespace
 
 	typedef bg::model::d2::point_xy<double> BGPoint2d;
 	typedef bg::model::linestring<BGPoint2d> LineString2d;
+	typedef bg::model::box<BGPoint2d> Box2d;
 
-	LineString2d GetEthalonVisibleScreen()
+	Box2d GetEthalonVisibleScreen()
 	{
-		LineString2d ethalon;
-		bg::read_wkt("linestring(-1.0 -1.0, 1.0 -1.0, 1.0 1.0, -1.0 1.0, -1.0 -1.0)", ethalon);
+		Box2d ethalon;
+		bg::read_wkt("box(-1.0 -1.0, 1.0 1.0)", ethalon);
 
 		return ethalon;
 	}
 
-	const LineString2d ETHALON_VISIBLE_SCREEN = GetEthalonVisibleScreen();
+	const Box2d ETHALON_VISIBLE_SCREEN = GetEthalonVisibleScreen();
 
 	Polygon3d GetConvertedPolygon(const trm::Matrix & pv, const trm::Polygon3d & points)
 	{

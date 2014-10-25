@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(RailRoadParametersTakerTest1)
 
 	BOOST_CHECK_EQUAL(rrpt.GetStart(), Point3d(0, 0, 0));
 
-	const Point3d p = rrpt.GetEnd();
+	const Point3d & p = rrpt.GetEnd();
 
 	BOOST_CHECK_PREDICATE(std::less_equal<float>(), (p.x())(0.00001f));
 	BOOST_CHECK(utils::CheckEqual(p.y(), 20.0f));
@@ -64,7 +64,7 @@ BOOST_AUTO_TEST_CASE(RailRoadParametersTakerTest2)
 
 	BOOST_CHECK_EQUAL(rrpt.GetStart(), Point3d(0, 0, 0));
 
-	const Point3d p = rrpt.GetEnd();
+	const Point3d & p = rrpt.GetEnd();
 
 	BOOST_CHECK_PREDICATE(std::less_equal<float>(), (p.x())(0.00001f));
 	BOOST_CHECK(utils::CheckEqual(p.y(), 20.0f));

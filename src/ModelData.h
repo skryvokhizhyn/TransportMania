@@ -35,20 +35,28 @@ namespace trm
 		{}
 
 		ModelData(ModelData && md)
-			: points(std::move(md.points))
+			: type(md.type)
+			, points(std::move(md.points))
 			, indexes(std::move(md.indexes))
 			, normales(std::move(md.normales))
-		{}
-
-		void operator = (ModelData && md)
 		{
+			md.type = Mode::Undefined;
+		}
+
+		ModelData & operator = (ModelData && md)
+		{
+			type = md.type;
 			points = std::move(md.points);
 			indexes = std::move(md.indexes);
 			normales = std::move(md.normales);
+			md.type = Mode::Undefined;
+
+			return *this;
 		}
 
 		void Clear()
 		{
+			type = Mode::Undefined;
 			points.clear();
 			indexes.clear();
 			normales.clear();
@@ -56,7 +64,7 @@ namespace trm
 
 		bool Valid() const
 		{
-			return !points.empty();
+			return type != Mode::Undefined;
 		}
 	};
 
