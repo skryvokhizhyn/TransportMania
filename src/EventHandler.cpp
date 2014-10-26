@@ -114,6 +114,30 @@ EventHandler::OnKeyDown(const SDL_Event & e)
 	case SDLK_AC_BACK:
 		eventSMPtr_->Emit(QuitFired());
 		break;
+
+	case SDLK_q:
+		eventSMPtr_->Emit(KeyQPressed());
+		break;
+
+	case SDLK_z:
+		eventSMPtr_->Emit(KeyZPressed());
+		break;
+
+	case SDLK_e:
+		eventSMPtr_->Emit(KeyEPressed());
+		break;
+
+	case SDLK_c:
+		eventSMPtr_->Emit(KeyCPressed());
+		break;
+
+	case SDLK_r:
+		eventSMPtr_->Emit(KeyRPressed());
+		break;
+
+	case SDLK_v:
+		eventSMPtr_->Emit(KeyVPressed());
+		break;
 	}
 }
 
@@ -162,8 +186,6 @@ namespace
 void
 EventHandler::OnFingerDown(const SDL_Event & e)
 {
-	//utils::Logger().Debug() << "Finger pressed ";
-
 	const SDL_TouchFingerEvent & tfe = e.tfinger;
 
 	const auto p = GetAbsolutePosition(tfe, width_, height_);

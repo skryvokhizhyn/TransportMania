@@ -34,8 +34,8 @@ Application::InitApplication(const size_t width, const size_t height)
 
 	worldProjection_.SetRatio(static_cast<float>(width) / height);
 	//worldProjection_.SetAngles(Degrees(69), Degrees(0), Degrees(-32));
-	//worldProjection_.SetAngles(Degrees(10), Degrees(0), Degrees(0));
-	worldProjection_.SetAngles(Degrees(61), Degrees(0), Degrees(-6)); //9
+	worldProjection_.SetAngles(Degrees(0), Degrees(0), Degrees(0));
+	//worldProjection_.SetAngles(Degrees(-61), Degrees(0), Degrees(-6));
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
 	//FontData fd = FontReader::Read(trm::GetRelativePath({"Fonts", "arial_ttf_cyr_lat.fnt"}));

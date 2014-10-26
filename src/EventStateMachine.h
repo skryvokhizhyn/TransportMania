@@ -71,6 +71,13 @@ namespace impl
 			ACTION_DEFINITION(Quit);
 			ACTION_DEFINITION(Key1);
 
+			ACTION_DEFINITION(KeyQ);
+			ACTION_DEFINITION(KeyE);
+			ACTION_DEFINITION(KeyZ);
+			ACTION_DEFINITION(KeyC);
+			ACTION_DEFINITION(KeyR);
+			ACTION_DEFINITION(KeyV);
+
 			ACTION_DEFINITION(Dummy);
 
 			struct MultipleFingersGuard 
@@ -97,6 +104,14 @@ namespace impl
 				bmf::Row<	EmptyState,			MoveKeyD,		EmptyState,			ApplyDownKey,			bmf::none >,
 				bmf::Row<	EmptyState,			QuitFired,		EmptyState,			ApplyQuit,				bmf::none >,
 				bmf::Row<	EmptyState,			Key1Pressed,	EmptyState,			ApplyKey1,				bmf::none >,
+
+				bmf::Row<	EmptyState,			KeyQPressed,	EmptyState,			ApplyKeyQ,				bmf::none >,
+				bmf::Row<	EmptyState,			KeyEPressed,	EmptyState,			ApplyKeyE,				bmf::none >,
+				bmf::Row<	EmptyState,			KeyZPressed,	EmptyState,			ApplyKeyZ,				bmf::none >,
+				bmf::Row<	EmptyState,			KeyCPressed,	EmptyState,			ApplyKeyC,				bmf::none >,
+				bmf::Row<	EmptyState,			KeyRPressed,	EmptyState,			ApplyKeyR,				bmf::none >,
+				bmf::Row<	EmptyState,			KeyVPressed,	EmptyState,			ApplyKeyV,				bmf::none >,
+
 				bmf::Row<	EmptyState,			FingerPressed,	FingerPressedState,	ApplyRegisterFinger,	bmf::none >,
 				bmf::Row<	EmptyState,			FingerMoved,	EmptyState,			bmf::none,				bmf::none >,
 				bmf::Row<	FingerPressedState, FingerPressed,	FingerPressedState, ApplyRegisterFinger,	bmf::none >,

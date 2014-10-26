@@ -99,6 +99,45 @@ namespace impl
 		fsm.subj_.EmulateDynamicScene1();
 	}
 
+	///////////////////////////////////////
+	ACTION_IMPLEMENTATION(KeyQ)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		fsm.subj_.RotateScene(Degrees(5));
+	}
+	ACTION_IMPLEMENTATION(KeyZ)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		fsm.subj_.RotateScene(Degrees(-5));
+	}
+	ACTION_IMPLEMENTATION(KeyE)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		fsm.subj_.BendScene(Degrees(5), Degrees(0));
+	}
+	ACTION_IMPLEMENTATION(KeyC)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		fsm.subj_.BendScene(Degrees(-5), Degrees(0));
+	}
+	ACTION_IMPLEMENTATION(KeyR)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		fsm.subj_.BendScene(Degrees(0), Degrees(5));
+	}
+	ACTION_IMPLEMENTATION(KeyV)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		fsm.subj_.BendScene(Degrees(0), Degrees(-5));
+	}
+	///////////////////////////////////////
+
 	ACTION_IMPLEMENTATION(Dummy)
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD

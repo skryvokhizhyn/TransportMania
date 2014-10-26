@@ -17,27 +17,6 @@ namespace
 
 	typedef Point4d Quaternion;
 
-	Quaternion CreateQuaternion(Angle angle, Point3d axis)
-	{
-		angle /= 2;
-
-		const float sin_a = boost::units::sin(angle);
-		const float cos_a = boost::units::cos(angle);
-
-		axis.Normalize();
-
-		Quaternion q;
-
-		q.x() = axis.x() * sin_a;
-		q.y() = axis.y() * sin_a;
-		q.z() = axis.z() * sin_a;
-		q.w() = cos_a;
-
-		q.Normalize();
-
-		return q;
-	}
-
 	Quaternion CreateQuaternion(Angle xAngle, Angle yAngle, Angle zAngle)
 	{
 		xAngle /= 2;
@@ -58,6 +37,17 @@ namespace
 		q.y() = sY * cZ * cX + cY * sZ * sX;
 		q.z() = cY * sZ * cX - sY * cZ * sX;
 
+		q.Normalize();
+
+		return q;
+	}
+
+	Quaternion CreateQuaternion(const Point3d & v, const Angle a)
+	{
+		const float ca = boost::units::cos(a / 2.0f);
+		const float sa = boost::units::sin(a / 2.0f);
+
+		Quaternion q(sa * v.x(), sa * v.y(), sa * v.z(), ca);
 		q.Normalize();
 
 		return q;
@@ -84,7 +74,6 @@ namespace
 
 		Matrix m = MatrixFactory::Zero();
 		
-		// transponated to what written here:
 		// http://www.cs.princeton.edu/~gewang/projects/darth/stuff/quat_faq.html
 
 		m.at_element(0, 0) = 1 - 2 * ( yy + zz );
@@ -169,12 +158,9 @@ MatrixFactory::Projection(const Angle angle, const float ratio, const float near
 
 	m.at_element(2, 2) = -(far + near) / (far - near);
 
-	// changed
 	m.at_element(3, 2) = -1;
-	//m.at_element(2, 3) = -1;
 
 	m.at_element(2, 3) = -2 * far * near / (far - near);
-	//m.at_element(3, 2) = -2 * far * near / (far - near);
 
 	return m;
 }
@@ -182,6 +168,9 @@ MatrixFactory::Projection(const Angle angle, const float ratio, const float near
 Matrix
 MatrixFactory::Ortho(const float ratio)
 {
+	// proper implementation is here: 
+	// http://www.songho.ca/opengl/gl_projectionmatrix.html
+
 	Matrix m = Identity();
 	m.at_element(0, 0) = 1 / ratio;
 	
@@ -207,20 +196,6 @@ MatrixFactory::Ortho(const float ratio)
 //
 //	return r2;
 //}
-
-namespace
-{
-	Quaternion CreateQuaternion(const Point3d & v, const Angle a)
-	{
-		const float ca = boost::units::cos(a / 2.0f);
-		const float sa = boost::units::sin(a / 2.0f);
-
-		Quaternion q(sa * v.x(), sa * v.y(), sa * v.z(), ca);
-		q.Normalize();
-
-		return q;
-	}
-}
 
 Matrix 
 MatrixFactory::Rotate(const Point3d & vF, const Point3d & vT, const Point3d & vDefaultRotation /* = Point3d()*/)

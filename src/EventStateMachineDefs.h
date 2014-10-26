@@ -19,6 +19,13 @@ namespace impl
 	struct QuitFired {};
 	struct Key1Pressed {};
 
+	struct KeyQPressed {};
+	struct KeyEPressed {};
+	struct KeyZPressed {};
+	struct KeyCPressed {};
+	struct KeyRPressed {};
+	struct KeyVPressed {};
+
 	struct Commit {};
 
 	struct PointMove

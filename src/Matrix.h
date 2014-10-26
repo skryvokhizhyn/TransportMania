@@ -6,6 +6,7 @@
 
 namespace trm
 {
+	// matrix with row_major order. m.at_element(0, 1) is zero row, first column
 	typedef boost::numeric::ublas::c_matrix<AxisType, 4, 4> Matrix;
 } // namespace trm
 

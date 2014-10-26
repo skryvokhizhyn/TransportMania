@@ -82,18 +82,13 @@ namespace
 	}
 }
 
+// it translates 3d point from world coordinates to pseudo 3d point
+// where x and y are in [-1, 1] but z is close to 1 (depends on near frustrum value)
+// so z coordinate doesn't take part in visibility check
 bool
 trm::CheckPolygonIsVisible(const trm::Matrix & pv, const trm::Polygon3d & points)
 {
 	const Polygon3d converted = GetConvertedPolygon(pv, points);
-
-	const LineString2d xzProjection = GetProjection(converted, &Point3d::x, &Point3d::z);
-
-	const bool xzIntersects = bg::intersects(ETHALON_VISIBLE_SCREEN, xzProjection);
-
-	if (!xzIntersects)
-		return false;
-
 	const LineString2d xyProjection = GetProjection(converted, &Point3d::x, &Point3d::y);
 
 	return bg::intersects(ETHALON_VISIBLE_SCREEN, xyProjection);

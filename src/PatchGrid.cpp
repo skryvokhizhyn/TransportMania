@@ -66,6 +66,12 @@ namespace
 	bool CheckPatchVisible(const terrain::HeightMapLoader & hml, const Size2d & s, 
 		const WorldProjection & wp, size_t patchSize)
 	{
+		/*if (s.x() > 100 || s.y() > 100)
+			return false;
+
+		(hml); (s); (wp); (patchSize);
+		return true;*/
+
 		--patchSize;
 		const float psf = boost::numeric_cast<float>(patchSize);
 		const Point2d s2d = Point2d::Cast(s);
@@ -158,8 +164,8 @@ PatchGrid::Update(const WorldProjection & wp)
 
 		auto & data = it->data;
 		const bool isValid = data.valid;
+		
 		//const bool isVisible = IsVisible(wp, t, patchSize_);
-
 		const bool isVisible = CheckPatchVisible(*hmlPtr_, pos, wp, patchSize_);
 
 		/*bool isVisible = false;
