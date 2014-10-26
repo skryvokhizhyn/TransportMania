@@ -165,8 +165,8 @@ PatchGrid::Update(const WorldProjection & wp)
 		auto & data = it->data;
 		const bool isValid = data.valid;
 		
-		//const bool isVisible = IsVisible(wp, t, patchSize_);
-		const bool isVisible = CheckPatchVisible(*hmlPtr_, pos, wp, patchSize_);
+		const bool isVisible = IsVisible(wp, t, patchSize_);
+		//const bool isVisible = CheckPatchVisible(*hmlPtr_, pos, wp, patchSize_);
 
 		/*bool isVisible = false;
 		if (pos == Size2d(32, 0))

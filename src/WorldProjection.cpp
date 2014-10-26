@@ -84,10 +84,9 @@ WorldProjection::UpdateProjectionViewMatrix()
 	heightShift.z() = -shiftPosition_.z();
 
 	// transponated matrix is must. it inverts axis to rotate z (updated) and x (locked)
-	//const Matrix v = MatrixFactory::Move(heightShift) *
-	//	(trm::Transponate(rotateMatrix_) * MatrixFactory::Move(horizontalShift * -1));
 	const Matrix v = MatrixFactory::Move(heightShift) *
-		rotateMatrix_ * MatrixFactory::Move(horizontalShift * -1);
+		(trm::Transponate(rotateMatrix_) * MatrixFactory::Move(horizontalShift * -1));
+
 	projectionViewMatrix_ = projectionMatrix_ * v;
 }
 
