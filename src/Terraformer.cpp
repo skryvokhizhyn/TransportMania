@@ -83,8 +83,8 @@ Terraformer::Apply(HeightMapBase & hm)
 		{
 			const Point2d at(static_cast<float>(r.xBegin), static_cast<float>(r.y));
 
-			const HeightMap::Type zOld = hm.At(at);
-			HeightMap::Type zNew = func_(at, zOld);
+			const HeightMap::Value zOld = hm.At(at);
+			HeightMap::Value zNew = func_(at, zOld);
 
 			if (zNew > Terrain::MAX_HEIGHT)
 			{

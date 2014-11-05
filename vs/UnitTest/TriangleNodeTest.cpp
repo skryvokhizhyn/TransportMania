@@ -18,14 +18,6 @@ using namespace trm;
 
 namespace
 {
-	const HeightMap::Type v3x3[] = 
-	{
-		0, 0, 0,
-		0, 0, 0,
-		2, 0, 1
-	};
-	const size_t level = 2;
-
 	template<Direction head, Direction... tail>
 	static TriangleNode * Traverse(TriangleNode * tn)
 	{
@@ -54,7 +46,17 @@ namespace
 BOOST_AUTO_TEST_CASE(TriangleNodeTest1)
 {
 	HeightMap hm;
-	hm.Load(v3x3);
+
+	auto vec = std::vector<float>(
+	{
+		0, 0, 0,
+		0, 0, 0,
+		2, 0, 1
+	});
+
+	HeightMap::Container hmt = PrepareDataFromVectorReversed(&vec[0], vec.size());
+	hm.Swap(hmt);
+	const size_t level = 2;
 	Variance v;
 	v.Generate(level, hm, utils::GetTriangles(hm).first);
 

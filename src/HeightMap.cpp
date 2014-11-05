@@ -8,16 +8,30 @@ using namespace trm;
 using namespace trm::terrain;
 
 HeightMap::HeightMap()
-: sz_(0)
+	: sz_(0)
 {}
+
+//HeightMap::HeightMap(const HeightMap & h)
+//	: sz_(h.sz_)
+//	, height_(height_)
+//{
+//}
+		
+HeightMap::HeightMap(HeightMap && h)
+	: sz_(sz_)
+	, height_(std::move(h.height_))
+{
+	h.sz_ = 0;
+}
 
 HeightMap::~HeightMap()
 {}
 
-HeightMap::Type 
+HeightMap::Value 
 HeightMap::At(const Point2d & pos) const
 {
-	return height_.at(boost::numeric_cast<size_t>(pos.y() * sz_ + pos.x()));
+	//return height_.at(boost::numeric_cast<size_t>(pos.y() * sz_ + pos.x()));
+	return GetValueAt(pos, height_, sz_);
 }
 
 size_t
@@ -38,6 +52,12 @@ HeightMap::GetSideSize(const size_t len)
 	return sz;
 }
 
+HeightMap::Value 
+HeightMap::GetValueAt(const Point2d & p, const Container & c, const size_t s)
+{
+	return c.at(boost::numeric_cast<size_t>(p.y() * s + p.x()));
+}
+
 void 
 HeightMap::Set(const Point2d & pos, const Type z)
 {
@@ -47,17 +67,17 @@ HeightMap::Set(const Point2d & pos, const Type z)
 void 
 HeightMap::Clear()
 {
-	HeightMapType().swap(height_);
+	Container().swap(height_);
 }
 
 void
-HeightMap::Swap(HeightMapType & hm)
+HeightMap::Swap(Container & hm)
 {
+	sz_ = GetSideSize(hm.size());
 	height_.swap(hm);
-	sz_ = GetSideSize(height_.size());
 }
 
-auto HeightMap::GetData() const -> const HeightMapType & 
+auto HeightMap::GetData() const -> const Container & 
 {
 	return height_;
 }
@@ -66,4 +86,28 @@ bool
 HeightMap::IsLoaded() const
 {
 	return !height_.empty();
+}
+
+HeightMap::Container 
+trm::terrain::PrepareDataFromVectorReversed(const HeightMap::Value * arr, const size_t n)
+{
+	const size_t sz = HeightMap::GetSideSize(n);
+
+	HeightMap::Container height(n);
+
+	size_t i = 0;
+	size_t j = sz;
+
+	while (j > 0)
+	{
+		height[(j - 1) * sz + i] = arr[(sz - j) * sz + i];
+
+		if (++i == sz)
+		{
+			--j;
+			i = 0;
+		}
+	}
+
+	return height;
 }

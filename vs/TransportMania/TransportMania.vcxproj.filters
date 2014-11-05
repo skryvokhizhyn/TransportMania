@@ -306,6 +306,9 @@
     <ClCompile Include="..\..\src\HeightMapLoaderCache.cpp">
       <Filter>Terrain\HeightMap</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\HeightMapLoaderConstant.cpp">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -657,6 +660,9 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\HeightMapLoaderCache.h">
+      <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\HeightMapLoaderConstant.h">
       <Filter>Terrain\HeightMap</Filter>
     </ClInclude>
   </ItemGroup>

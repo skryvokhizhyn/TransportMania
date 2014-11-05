@@ -20,6 +20,7 @@
     <ClCompile Include="..\..\src\EventHandler.cpp" />
     <ClCompile Include="..\..\src\FontReader.cpp" />
     <ClCompile Include="..\..\src\HeightMapLoaderCache.cpp" />
+    <ClCompile Include="..\..\src\HeightMapLoaderConstant.cpp" />
     <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
     <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
     <ClCompile Include="..\..\src\TextManager.cpp" />
@@ -107,6 +108,7 @@
     <ClInclude Include="..\..\src\FontData.h" />
     <ClInclude Include="..\..\src\FontReader.h" />
     <ClInclude Include="..\..\src\HeightMapLoaderCache.h" />
+    <ClInclude Include="..\..\src\HeightMapLoaderConstant.h" />
     <ClInclude Include="..\..\src\PolygonVisibilityChecker.h" />
     <ClInclude Include="..\..\src\PointNormaleMap.h" />
     <ClInclude Include="..\..\src\ResourceProxy.h" />

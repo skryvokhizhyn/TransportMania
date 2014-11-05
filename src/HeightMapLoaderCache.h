@@ -1,6 +1,7 @@
 #pragma once
 
 #include "HeightMapLoader.h"
+#include "HeightMap.h"
 
 #include <boost/noncopyable.hpp>
 #include <map>
@@ -24,12 +25,13 @@ namespace terrain
 		virtual void Set(const Point2d & pos, const HeightMap & hm) override;
 
 	private:
-		using HeightMapCache = std::map<Size2d, HeightMap>;
+		using HeightMapCache = std::map<Size2d, HeightMap::Container>;
 
 	private:
 		const size_t partSize_;
-		mutable HeightMapCache cache_;
+		mutable HeightMapCache heightMapCache_;
 		HeightMapLoaderPtr basePtr_;
+		const size_t wholeSize_;
 	};
 
 } // namespace terrain

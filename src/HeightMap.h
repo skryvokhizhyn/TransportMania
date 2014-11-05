@@ -18,23 +18,20 @@ namespace terrain
 		, public HeightMapBase
 	{
 	public:
-		typedef float Type;
-		typedef std::vector<Type> HeightMapType;
+		typedef float Value;
+		typedef std::vector<Type> Container;
 
 	public:
 		HeightMap();
+		//HeightMap(const HeightMap & h);
+		HeightMap(HeightMap && h);
 		virtual ~HeightMap();
 
-		void Swap(HeightMapType & c);
-
-		template<typename T, size_t N>
-		void Load(T (&arr)[N]);
-		template<typename T>
-		void Load(T * arr, const size_t n);
+		void Swap(Container & c);
 
 		bool IsLoaded() const;
 
-		const HeightMapType & GetData() const;
+		const Container & GetData() const;
 
 		void Clear();
 
@@ -45,39 +42,16 @@ namespace terrain
 
 	public:
 		static size_t GetSideSize(const size_t); // throws if it's not square-like
+		static Value GetValueAt(const Point2d & p, const Container & c, const size_t s);
 
 	private:
-		HeightMapType height_;
+		Container height_;
 		size_t sz_;
 	};
 
-	template<typename T, size_t N>
-	void HeightMap::Load(T (&arr)[N])
-	{
-		Load(arr, N);
-	}
-
-	template<typename T>
-	void HeightMap::Load(T * arr, const size_t n)
-	{
-		sz_ = GetSideSize(n);
-
-		height_.resize(n);
-
-		size_t i = 0;
-		size_t j = sz_;
-
-		while (j > 0)
-		{
-			height_[(j - 1) * sz_ + i] = arr[(sz_ - j) * sz_ + i];
-
-			if (++i == sz_)
-			{
-				--j;
-				i = 0;
-			}
-		}
-	}
+	// makes reversed initialization of height map
+	HeightMap::Container PrepareDataFromVectorReversed(const HeightMap::Value * arr, const size_t n);
+	
 } // terrain
 } // trm
 

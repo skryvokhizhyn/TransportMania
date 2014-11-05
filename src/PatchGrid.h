@@ -34,7 +34,7 @@ namespace lod
 
 		// HeightMapBase
 		virtual size_t GetSize() const;
-		virtual Type At(const Point2d & p) const;
+		virtual HeightMap::Value At(const Point2d & p) const;
 		virtual void Set(const Point2d & p, const Type z);
 
 	public:

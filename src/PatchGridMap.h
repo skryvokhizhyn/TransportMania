@@ -18,6 +18,18 @@ namespace terrain
 
 namespace lod
 {
+
+namespace PatchCorner
+{
+	// values of this enume are indexes in vector
+	const int LeftBottom = 0;
+	const int LeftUp = 1;
+	const int RightUp = 2;
+	const int RightBottom = 3;
+};
+
+	using CornerValues = std::vector<float>;
+
 	struct PatchGridNode
 	{
 		Size2d pos;
@@ -26,6 +38,7 @@ namespace lod
 		{
 			HeightMap heightMap;
 			Patch patch;
+			CornerValues heights;
 			bool dirty;
 			bool valid;
 

@@ -7,7 +7,7 @@ using namespace trm::terrain;
 
 namespace
 {
-	HeightMap::Type Interpolate(const HeightMap::Type f0, const HeightMap::Type f1,
+	HeightMap::Value Interpolate(const HeightMap::Value f0, const HeightMap::Value f1,
 		const float x0, const float x1, const float x)
 	{
 		if (utils::CheckEqual(x0, x1))
@@ -35,7 +35,7 @@ HeightMapExtended::HeightMapExtended(const size_t sz)
 {
 }
 
-HeightMap::Type
+HeightMap::Value
 HeightMapExtended::At(const Point2d & p) const
 {
 	if (p.x() >= extendedSz_ || p.y() >= extendedSz_)
@@ -59,17 +59,17 @@ HeightMapExtended::At(const Point2d & p) const
 	const float yUp = ::ceil(yScaled);
 	const float yDown = ::floor(yScaled);
 
-	const HeightMap::Type v1U = HeightMap::At(Point2d(xUp, yDown));
-	const HeightMap::Type v2U = HeightMap::At(Point2d(xUp, yUp));
+	const Value v1U = HeightMap::At(Point2d(xUp, yDown));
+	const Value v2U = HeightMap::At(Point2d(xUp, yUp));
 
-	const HeightMap::Type v1 = Interpolate(v1U, v2U, yDown, yUp, yScaled);
+	const Value v1 = Interpolate(v1U, v2U, yDown, yUp, yScaled);
 
-	const HeightMap::Type v1D = HeightMap::At(Point2d(xDown, yDown));
-	const HeightMap::Type v2D = HeightMap::At(Point2d(xDown, yUp));
+	const Value v1D = HeightMap::At(Point2d(xDown, yDown));
+	const Value v2D = HeightMap::At(Point2d(xDown, yUp));
 
-	const HeightMap::Type v2 = Interpolate(v1D, v2D, yDown, yUp, yScaled);
+	const Value v2 = Interpolate(v1D, v2D, yDown, yUp, yScaled);
 
-	const HeightMap::Type v = Interpolate(v1, v2, xDown, xUp, xScaled);
+	const Value v = Interpolate(v1, v2, xDown, xUp, xScaled);
 
 	return v;
 }

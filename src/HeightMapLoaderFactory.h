@@ -13,6 +13,7 @@ namespace terrain
 	{
 		static HeightMapLoaderPtr GetTestLoader(const size_t width);
 		static HeightMapLoaderPtr GetFileLoader(const std::string & path);
+		static HeightMapLoaderPtr GetCachedLoader(const size_t patchSize, const HeightMapLoaderPtr & baseLoader);
 	};
 
 } // namespace terrain

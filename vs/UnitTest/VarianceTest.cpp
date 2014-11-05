@@ -12,7 +12,7 @@ using namespace trm;
 
 namespace
 {
-	const HeightMap::Type v5x5[] = 
+	const HeightMap::Container v5x5 = 
 	{
 		0, 0, 0, 0, 0,
 		0, 0, 0, 0, 0,
@@ -21,12 +21,17 @@ namespace
 		0, 0, 0, 0, 0
 	};
 	const size_t Level5x5 = utils::GetPowerOf2(4) * 2;
+
+	struct Test5x5HeightMap
+	{
+		HeightMap::Container sample5x5 = v5x5;
+	};
 }
 
-BOOST_AUTO_TEST_CASE(VarianceTest1)
+BOOST_FIXTURE_TEST_CASE(VarianceTest1, Test5x5HeightMap)
 {
 	HeightMap hm;
-	hm.Load(v5x5);
+	hm.Swap(sample5x5);
 	Variance v;
 	v.Generate(Level5x5, hm, utils::GetTriangles(hm).first);
 
@@ -42,7 +47,7 @@ BOOST_AUTO_TEST_CASE(VarianceTest2)
 	std::vector<float> vec(sz * sz, 0);
 
 	HeightMap hm;
-	hm.Load(&vec[0], vec.size());
+	hm.Swap(vec);
 	Variance v;
 	v.Generate(utils::GetPowerOf2(sz - 1) * 2, hm, utils::GetTriangles(hm).first);
 

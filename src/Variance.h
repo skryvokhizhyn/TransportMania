@@ -16,7 +16,7 @@ namespace lod
 		: boost::noncopyable
 	{
 	public:
-		typedef HeightMap::Type Type;
+		typedef HeightMap::Value Type;
 
 	public:
 		void Generate(const size_t level, const HeightMap & hm, const Triangle3d & t);
@@ -27,7 +27,7 @@ namespace lod
 
 	private:
 		bool ShouldContinue(const size_t level);
-		HeightMap::Type Generate(const size_t num, const size_t level,
+		HeightMap::Value Generate(const size_t num, const size_t level,
 			const HeightMap & hm, const Triangle3d & t);
 
 	private:

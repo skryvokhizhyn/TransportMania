@@ -78,6 +78,8 @@
     <ClCompile Include="..\..\src\GeometryUtils.cpp" />
     <ClCompile Include="..\..\src\HeightMap.cpp" />
     <ClCompile Include="..\..\src\HeightMapExtended.cpp" />
+    <ClCompile Include="..\..\src\HeightMapLoaderCache.cpp" />
+    <ClCompile Include="..\..\src\HeightMapLoaderConstant.cpp" />
     <ClCompile Include="..\..\src\Line.cpp" />
     <ClCompile Include="..\..\src\MatrixFactory.cpp" />
     <ClCompile Include="..\..\src\MatrixUtils.cpp" />

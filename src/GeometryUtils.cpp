@@ -212,7 +212,7 @@ utils::GetTriangles(const HeightMap & hm)
 {
 	const float szF = boost::numeric_cast<float>(hm.GetSize()) - 1;
 
-	const HeightMap::Type 
+	const HeightMap::Value 
 		z00 = hm.At(Point2d(0, 0)),
 		zSzSz = hm.At(Point2d(szF, szF)),
 		z0Sz = hm.At(Point2d(0, szF)),

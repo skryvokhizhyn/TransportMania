@@ -44,7 +44,7 @@ void HeightMapLoaderFile::Get(const Point2d & pos, const size_t sz, HeightMap & 
 		hmFile_.Get(x, j, &buff[(j - y) * sz], sz);
 	}
 
-	HeightMap::HeightMapType hmBuff(cnt, 0);
+	HeightMap::Container hmBuff(cnt, 0);
 
 	const float heightVariance = Terrain::MAX_HEIGHT - Terrain::MIN_HEIGHT + 1;
 	const float conversionRatio = heightVariance / MAX_BMP_VARIANCE;
@@ -57,7 +57,7 @@ void HeightMapLoaderFile::Get(const Point2d & pos, const size_t sz, HeightMap & 
 
 void HeightMapLoaderFile::Set(const Point2d & pos, const HeightMap & hm) 
 {
-	const HeightMap::HeightMapType & data = hm.GetData();
+	const HeightMap::Container & data = hm.GetData();
 
 	size_t x = boost::numeric_cast<size_t>(pos.x());
 	size_t y = boost::numeric_cast<size_t>(pos.y());
@@ -71,7 +71,7 @@ void HeightMapLoaderFile::Set(const Point2d & pos, const HeightMap & hm)
 	const float conversionRatio = heightVariance / MAX_BMP_VARIANCE;
 
 	std::transform(data.begin(), data.end(), buff.begin(),
-			[&](const HeightMap::Type val) {return (val - Terrain::MIN_HEIGHT) / conversionRatio;});
+			[&](const HeightMap::Value val) {return (val - Terrain::MIN_HEIGHT) / conversionRatio;});
 
 	for (size_t j = 0; j < cnt; ++j) {
 		hmFile_.Put(x, y + j, &buff[j * cnt], cnt);

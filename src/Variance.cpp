@@ -32,7 +32,7 @@ Variance::ShouldContinue(const size_t level)
 	return true;
 }
 
-HeightMap::Type  
+HeightMap::Value  
 Variance::Generate(const size_t num, const size_t level,
 	const HeightMap & hm, const Triangle3d & t)
 {
@@ -43,14 +43,14 @@ Variance::Generate(const size_t num, const size_t level,
 
 	const Point3d & pc = tp.first.e();
 
-	const HeightMap::Type h = (t.l().z() + t.r().z()) / 2;
-	const HeightMap::Type v = std::abs(pc.z() - h);
+	const HeightMap::Value h = (t.l().z() + t.r().z()) / 2;
+	const HeightMap::Value v = std::abs(pc.z() - h);
 
-	const HeightMap::Type vLeft = Generate(num * 2, level - 1, hm, tp.first);
-	const HeightMap::Type vRight = Generate(num * 2 + 1, level - 1, hm, tp.second);
+	const HeightMap::Value vLeft = Generate(num * 2, level - 1, hm, tp.first);
+	const HeightMap::Value vRight = Generate(num * 2 + 1, level - 1, hm, tp.second);
 
-	const HeightMap::Type maxChildVar = std::max(vLeft, vRight);
-	const HeightMap::Type accumulatedVariance = std::max(v, maxChildVar);
+	const HeightMap::Value maxChildVar = std::max(vLeft, vRight);
+	const HeightMap::Value accumulatedVariance = std::max(v, maxChildVar);
 
 	variance_[num - 1] = accumulatedVariance;
 

@@ -50,20 +50,25 @@ namespace
 		}
 	}
 
-	Point3d GetCornerPoint(const terrain::HeightMapLoader & hml, const Point2d & cornerPoint)
+	float GetCornerHeight(const terrain::HeightMapLoader & hml, const Point2d & cornerPoint)
 	{
 		const Point2d defaultGetterPoint(0, 0);
 		HeightMap hm;
 
 		hml.Get(cornerPoint, 1, hm);
 
-		Point3d p = Point3d::Cast(cornerPoint);
-		p.z() = hm.At(defaultGetterPoint);
+		return hm.At(defaultGetterPoint);
+	}
+
+	Point3d GetCornerPoint(const CornerValues & heights, const Point2d & point, const int id)
+	{
+		Point3d p = Point3d::Cast(point);
+		p.z() = heights.at(id);
 
 		return p;
 	}
 
-	bool CheckPatchVisible(const terrain::HeightMapLoader & hml, const Size2d & s, 
+	bool CheckPatchVisible(const CornerValues & heights, const Size2d & s, 
 		const WorldProjection & wp, size_t patchSize)
 	{
 		/*if (s.x() > 100 || s.y() > 100)
@@ -77,17 +82,37 @@ namespace
 		const Point2d s2d = Point2d::Cast(s);
 		
 		// left bottom
-		const Point3d lb = GetCornerPoint(hml, s2d);
+		const Point3d lb = GetCornerPoint(heights, s2d, PatchCorner::LeftBottom);
 		// left up
-		const Point3d lu = GetCornerPoint(hml, s2d + Point2d(0, psf));
-		// right bottom
-		const Point3d rb = GetCornerPoint(hml, s2d + Point2d(psf, 0));
+		const Point3d lu = GetCornerPoint(heights, s2d + Point2d(0, psf), PatchCorner::LeftUp);
 		// right up
-		const Point3d ru = GetCornerPoint(hml, s2d + Point2d(psf, psf));
+		const Point3d ru = GetCornerPoint(heights, s2d + Point2d(psf, psf), PatchCorner::RightUp);
+		// right bottom
+		const Point3d rb = GetCornerPoint(heights, s2d + Point2d(psf, 0), PatchCorner::RightBottom);
 
 		const Matrix & pv = wp.GetProjectionViewMatrix();
 
 		return CheckPolygonIsVisible(pv, {lb, lu, ru, rb});
+	}
+
+	CornerValues GetPatchCornerHeights(const terrain::HeightMapLoader & hml, const Size2d & s, size_t patchSize)
+	{
+		CornerValues vals(4, 0.0f);
+
+		--patchSize;
+		const float psf = boost::numeric_cast<float>(patchSize);
+		const Point2d s2d = Point2d::Cast(s);
+		
+		// left bottom
+		vals[PatchCorner::LeftBottom] = GetCornerHeight(hml, s2d);
+		// left up
+		vals[PatchCorner::LeftUp] = GetCornerHeight(hml, s2d + Point2d(0, psf));
+		// right up
+		vals[PatchCorner::RightUp] = GetCornerHeight(hml, s2d + Point2d(psf, psf));
+		// right bottom
+		vals[PatchCorner::RightBottom] = GetCornerHeight(hml, s2d + Point2d(psf, 0));
+
+		return vals;
 	}
 }
 
@@ -158,15 +183,21 @@ PatchGrid::Update(const WorldProjection & wp)
 	while (it != end)
 	{
 		const Size2d & pos = it->pos;
-		HeightMap & hm = it->data.heightMap;
+		auto & data = it->data;
 
+		HeightMap & hm = data.heightMap;
+		const bool isValid = data.valid;
+		CornerValues & cornerValues = data.heights;
+		
 		const Point3d t = Point3d::Cast(pos);
 
-		auto & data = it->data;
-		const bool isValid = data.valid;
-		
-		const bool isVisible = IsVisible(wp, t, patchSize_);
-		//const bool isVisible = CheckPatchVisible(*hmlPtr_, pos, wp, patchSize_);
+		//const bool isVisible = IsVisible(wp, t, patchSize_);
+
+		if (cornerValues.empty())
+		{
+			cornerValues = GetPatchCornerHeights(*hmlPtr_, pos, patchSize_);
+		}
+		const bool isVisible = CheckPatchVisible(cornerValues, pos, wp, patchSize_);
 
 		/*bool isVisible = false;
 		if (pos == Size2d(32, 0))
@@ -340,7 +371,7 @@ PatchGrid::GetSize() const
 	return (patchSize_ - 1) * patchCount_ + 1;
 }
 
-HeightMap::Type 
+HeightMap::Value 
 PatchGrid::At(const Point2d & p) const
 {
 	const Positions pos = GetAdjucentPatches(p);
@@ -363,7 +394,7 @@ PatchGrid::At(const Point2d & p) const
 }
 
 void 
-PatchGrid::Set(const Point2d & p, const HeightMap::Type z)
+PatchGrid::Set(const Point2d & p, const HeightMap::Value z)
 {
 	const Positions pos = GetAdjucentPatches(p);
 
@@ -378,6 +409,9 @@ PatchGrid::Set(const Point2d & p, const HeightMap::Type z)
 			hm.Set(p - Point2d::Cast(s), z);
 
 			found->data.dirty = true;
+
+			// remove cached values so they are re-taken from the height map
+			found->data.heights.clear();
 		});
 }
 

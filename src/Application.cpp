@@ -34,7 +34,7 @@ Application::InitApplication(const size_t width, const size_t height)
 
 	worldProjection_.SetRatio(static_cast<float>(width) / height);
 	//worldProjection_.SetAngles(Degrees(69), Degrees(0), Degrees(-32));
-	worldProjection_.SetAngles(Degrees(0), Degrees(0), Degrees(0));
+	worldProjection_.SetAngles(Degrees(55), Degrees(0), Degrees(10));
 	//worldProjection_.SetAngles(Degrees(-61), Degrees(0), Degrees(-6));
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
@@ -53,8 +53,10 @@ Application::InitView()
 
 	HeightMapLoaderPtr hmlPtr = 
 		terrain::HeightMapLoaderFactory::GetFileLoader(trm::GetRelativePath({"hf_513.bmp"}));
+	HeightMapLoaderPtr hmlCachedPtr =
+		terrain::HeightMapLoaderFactory::GetCachedLoader(Terrain::PATCH_SIZE, hmlPtr);
 	
-	terrainPtr_.reset(new Terrain(hmlPtr));
+	terrainPtr_.reset(new Terrain(hmlCachedPtr));
 
 	terrainScenePtr_ = std::make_shared<TerrainSceneObject>(terrainPtr_);
 	
