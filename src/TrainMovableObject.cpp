@@ -5,7 +5,7 @@ using namespace trm;
 TrainMovableObject::TrainMovableObject(RoadPoint rp, TrainPartType type)
 	: roadPoint_(std::move(rp))
 	, type_(type)
-	, sharedPosition_(std::make_shared<Point3d>())
+	, sharedPosition_()
 	, visible_(false)
 {}
 
@@ -54,7 +54,7 @@ TrainMovableObject::SetVisible(bool v)
 
 	if (visible_)
 	{
-		*sharedPosition_ = Position();
+		sharedPosition_ = std::make_shared<Point3d>(Position());
 	}
 	else
 	{
