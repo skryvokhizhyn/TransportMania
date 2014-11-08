@@ -2,7 +2,7 @@
 
 #include "Train.h"
 #include "RoadRouteHolder.h"
-#include "ComponentId.h"
+#include "ComponentHolder.h"
 
 namespace trm
 {
@@ -32,7 +32,7 @@ namespace impl
 
 	private:
 		StateMachinePtr stateMachinePtr_;
-		ComponentId id_;
+		ComponentHolder::TrainIt trainIt_;
 		TrainPartType head_;
 		float distance_;
 		float speed_;

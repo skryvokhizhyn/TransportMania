@@ -234,7 +234,7 @@ Application::EmulateDynamicScene1()
 	PutRailRoadLine(p1, p2);
 	PutRailRoadArc(p3, Point2d(30, 30), Degrees(90), Rotation::AntiClockwise);
 
-	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p3, p1);
+	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p3, p2);
 
 	managers_.emplace_back(RoadRouteHolder(rrPtr, Heading::Forward));
 }

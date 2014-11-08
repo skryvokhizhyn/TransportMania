@@ -13,7 +13,6 @@ using namespace trm;
 
 TransportManager::TransportManager(RoadRouteHolder rrh)
 	: stateMachinePtr_(std::make_shared<StateMachine>())
-	, id_(ComponentIdGenerator::Generate())
 	, distance_(0.0f)
 	, speed_(0.0f)
 	, passed_(0.0f)
@@ -52,7 +51,7 @@ TransportManager::Load()
 
 	moveParams_ = train.CalcMoveParams();
 
-	ComponentHolderProxy()->PutTrain(id_, std::move(train), rrh_.GetStartingPoint());
+	trainIt_ = ComponentHolderProxy()->PutTrain(std::move(train), rrh_.GetStartingPoint());
 
 	passed_ += moveParams_.length;
 
@@ -96,7 +95,7 @@ TransportManager::Move()
 		}
 	}
 
-	ComponentHolderProxy()->Move(id_, speed_);
+	ComponentHolderProxy()->Move(trainIt_, speed_);
 
 	return false;
 }
@@ -104,7 +103,7 @@ TransportManager::Move()
 bool 
 TransportManager::Unload()
 {
-	ComponentHolderProxy()->Remove(id_);
+	ComponentHolderProxy()->Remove(trainIt_);
 
 	return true;
 }
