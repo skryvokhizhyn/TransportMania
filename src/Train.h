@@ -16,6 +16,8 @@ namespace trm
 		Train();
 		Train(Train && t);
 
+		Train & operator = (Train && t);
+
 		void SetRoadPoint(RoadPoint rp);
 
 		void Append(TrainPart tp);

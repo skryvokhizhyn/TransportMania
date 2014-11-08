@@ -61,28 +61,28 @@ namespace impl
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
-		fsm.subj_.ShiftScene(-1.0f, 0.0f);
+		fsm.subj_.ShiftScene(-100.0f, 0.0f);
 	}
 
 	ACTION_IMPLEMENTATION(RightKey)
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
-		fsm.subj_.ShiftScene(1.0f, 0.0f);
+		fsm.subj_.ShiftScene(100.0f, 0.0f);
 	}
 
 	ACTION_IMPLEMENTATION(UpKey)
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
-		fsm.subj_.ShiftScene(0.0f, 1.0f);
+		fsm.subj_.ShiftScene(0.0f, 100.0f);
 	}
 
 	ACTION_IMPLEMENTATION(DownKey)
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
-		fsm.subj_.ShiftScene(0.0f, -1.0f);
+		fsm.subj_.ShiftScene(0.0f, -100.0f);
 	}
 
 	ACTION_IMPLEMENTATION(Quit)

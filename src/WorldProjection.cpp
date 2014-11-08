@@ -10,12 +10,11 @@ namespace
 	const float ORTHO_NEAR_VALUE = 0.0001f; // must be smaller than FRUSTUM_NEAR_VALUE
 	const float FRUSTUM_FAR_VALUE = 1000.0f;
 	const Angle PROJECTION_HORIZONTAL_ANGLE = Degrees(45.0f);
-	const float SHIFT_DEFAULT_VALUE = 0.2f;
-	const float ZOOM_DEFAULT_VALUE = 1.0f;
 	const Point3d SHIFT_DEFAULT_POSITION(0, 0, 100.0f);
 	const float CAMERA_MIN_HEIGHT = 20.0f;
 	const float CAMERA_MAX_HEIGHT = 500.0f;
 	const float DEFAULT_BEND_VALUE = 0.1f;
+	const float SHIFT_SLOWDOWN_COEF = 0.0005f;
 }
 
 WorldProjection::WorldProjection()
@@ -93,13 +92,10 @@ WorldProjection::UpdateProjectionViewMatrix()
 void 
 WorldProjection::Shift(const float x, const float y)
 {
-	//const float shift = SHIFT_DEFAULT_VALUE * shiftPosition_.GetLength() / CAMERA_DEFAULT_HEIGHT;
+	const float shift = shiftPosition_.GetLength() * SHIFT_SLOWDOWN_COEF;
 
-	//cameraPosition_.x() += x * shift;
-	//cameraPosition_.y() += y * shift;
-
-	shiftPosition_.x() += x;
-	shiftPosition_.y() += y;
+	shiftPosition_.x() += x * shift;
+	shiftPosition_.y() += y * shift;
 
 	UpdateProjectionViewMatrix();
 	UpdateCameraPosition();
@@ -109,14 +105,11 @@ void
 WorldProjection::Zoom(const float z)
 {
 	float currentHeight = shiftPosition_.z();
-	//const float newHeight = currentHeight + currentHeight / cameraPosition_.GetLength() * z * ZOOM_DEFAULT_VALUE;
 	currentHeight += z;
 
-	//if (newHeight >= CAMERA_MAX_HEIGHT || newHeight <= CAMERA_MIN_HEIGHT)
 	if (currentHeight >= CAMERA_MAX_HEIGHT || currentHeight <= CAMERA_MIN_HEIGHT)
 		return;
 
-	//shiftPosition_.z() = newHeight;
 	shiftPosition_.z() = currentHeight;
 
 	UpdateProjectionViewMatrix();

@@ -14,6 +14,13 @@ Train::Train(Train && t)
 {
 }
 
+Train & 
+Train::operator = (Train && t)
+{
+	position_ = std::move(t.position_);
+	parts_ = std::move(t.parts_);
+}
+
 void
 Train::SetRoadPoint(RoadPoint rp)
 {
