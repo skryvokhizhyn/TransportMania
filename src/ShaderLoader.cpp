@@ -11,7 +11,8 @@ namespace
 		const std::string VERTEX_SHADER = "\
 		attribute vec3 a_vertex;\
 		attribute vec3 a_normal;\
-		uniform mediump mat4 u_myPMVMatrix;\
+		uniform mediump mat4 u_myPVMatrix;\
+		uniform mediump mat4 u_myMvMatrix;\
 		varying vec3 v_vertex;\
 		varying vec3 v_normal;\
 		void main(void)\
@@ -19,7 +20,7 @@ namespace
 			v_vertex = a_vertex;\
 			vec3 n_normal = normalize(a_normal);\
 			v_normal = n_normal;\
-			gl_Position = vec4(a_vertex, 1.0) * u_myPMVMatrix;\
+			gl_Position = vec4(a_vertex, 1.0) * (u_myMvMatrix * u_myPVMatrix);\
 			gl_PointSize = 2.0;\
 		}";
 
@@ -39,10 +40,11 @@ namespace
 #else
 	const std::string VERTEX_SHADER = "\
 		attribute vec3	a_vertex;\
-		uniform mediump mat4	u_myPMVMatrix;\
+		uniform mediump mat4 u_myPVMatrix;\
+		uniform mediump mat4 u_myMvMatrix;\
 		void main(void)\
 		{\
-			gl_Position = vec4(a_vertex, 1.0) * u_myPMVMatrix;\
+			gl_Position = vec4(a_vertex, 1.0) * (u_myMvMatrix * u_myPVMatrix);\
 			gl_PointSize = 2.0;\
 		}";
 

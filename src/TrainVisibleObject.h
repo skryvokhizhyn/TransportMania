@@ -14,18 +14,15 @@ namespace trm
 
 		bool Update();
 
-		const Matrix & GetMatrix() const;
+		Matrix GetMatrix() const;
 
 		void Draw() const;
 
 	private:
-		void CalculateMatrixes(const Point3d & from, const Point3d & to);
-
-	private:
-		ModelDrawer drawer_;
-		Matrix matrix_;
 		PositionWPtr sourcePosition_;
-		Point3d position_;
+		Point3d positionFrom_;
+		Point3d positionTo_;
+		ModelDrawer drawer_;
 	};
 
 } // namespace trm

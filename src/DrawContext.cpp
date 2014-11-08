@@ -10,7 +10,8 @@ using namespace trm;
 
 namespace
 {
-	const char * PVM_MATRIX_SHADER_VARIABLE = "u_myPMVMatrix";
+	const char * PV_MATRIX_SHADER_VARIABLE = "u_myPVMatrix";
+	const char * Mv_MATRIX_SHADER_VARIABLE = "u_myMvMatrix";
 }
 
 void DrawContext::Init()
@@ -66,15 +67,16 @@ void DrawContext::Term()
 
 void DrawContext::Transform(const Matrix & pv, const Matrix & m) const
 {
-	const Matrix pvm = pv * m;
-
 	// First gets the location of that variable in the shader using its name
-	const int varLocation = glGetUniformLocation(m_uiProgramObject, PVM_MATRIX_SHADER_VARIABLE);
+	int varLocation = glGetUniformLocation(m_uiProgramObject, PV_MATRIX_SHADER_VARIABLE);
 
 	// Then passes the matrix to that variable
 	// data of matrix is transponated because OGL expects it in column_major way but we have row_major
 	// thus in shaders we do vec * matrix instead of matrix * vec
-	glUniformMatrix4fv(varLocation, 1, GL_FALSE, pvm.data());
+	glUniformMatrix4fv(varLocation, 1, GL_FALSE, pv.data());
+
+	varLocation = glGetUniformLocation(m_uiProgramObject, Mv_MATRIX_SHADER_VARIABLE);
+	glUniformMatrix4fv(varLocation, 1, GL_FALSE, m.data());
 }
 
 void DrawContext::Clear() const
