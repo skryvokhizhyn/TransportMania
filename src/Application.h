@@ -33,6 +33,13 @@ namespace trm
 		void ZoomScene(const float z);
 		void RotateScene(const Angle angle);
 		void BendScene(const Angle dtheta, const Angle dpsi);
+		
+		// invalidetes terrain so it starts tasselation
+		void UpdateTerrain();
+		// pauses updates of terrain
+		void StopTerrainUpdate();
+		// resumes updates of terrain
+		void ResumeTerrainUpdate();
 
 		void Upper(const AxisType x, const AxisType y, const AxisType radii);
 
@@ -53,7 +60,7 @@ namespace trm
 		void Draw();
 
 	private:
-		bool stopped_;
+		bool stopped_ = false;
 		DrawContext context_;
 		WorldProjection worldProjection_;
 		TerrainPtr terrainPtr_;
@@ -64,6 +71,7 @@ namespace trm
 		TransportManagers managers_;
 		TextManagerHub textManagerHub_;
 		ComponentHolder componentHolder_;
+		bool processTerrainUpdate_ = true;
 	};
 
 } // namespace trm

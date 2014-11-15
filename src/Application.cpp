@@ -98,7 +98,8 @@ Application::Stop()
 void 
 Application::Update()
 {
-	terrainScenePtr_->Update(worldProjection_);
+	if (processTerrainUpdate_)
+		terrainScenePtr_->Update(worldProjection_);
 
 	boost::for_each(managers_, std::bind(&TransportManager::Update, std::placeholders::_1));
 
@@ -108,7 +109,8 @@ Application::Update()
 void 
 Application::Render()
 {
-	terrainScenePtr_->Render(worldProjection_);
+	if (processTerrainUpdate_)
+		terrainScenePtr_->Render(worldProjection_);
 }
 
 void 
@@ -136,32 +138,42 @@ void
 Application::ShiftScene(const float x, const float y)
 {
 	worldProjection_.Shift(-x, y);
-
-	terrainScenePtr_->UpdateRequired();
 }
 
 void 
 Application::ZoomScene(const float z)
 {
 	worldProjection_.Zoom(-z);
-
-	terrainScenePtr_->UpdateRequired();
 }
 
 void 
 Application::RotateScene(const Angle angle)
 {
 	worldProjection_.Rotate(angle);
-
-	terrainScenePtr_->UpdateRequired();
 }
 
 void 
 Application::BendScene(const Angle dtheta, const Angle dpsi)
 {
 	worldProjection_.Bend(-dtheta, dpsi);
+}
 
+void 
+Application::UpdateTerrain()
+{
 	terrainScenePtr_->UpdateRequired();
+}
+
+void 
+Application::StopTerrainUpdate()
+{
+	processTerrainUpdate_ = false;
+}
+		
+void 
+Application::ResumeTerrainUpdate()
+{
+	processTerrainUpdate_ = true;
 }
 
 void 

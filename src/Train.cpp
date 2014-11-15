@@ -19,6 +19,8 @@ Train::operator = (Train && t)
 {
 	position_ = std::move(t.position_);
 	parts_ = std::move(t.parts_);
+
+	return *this;
 }
 
 void

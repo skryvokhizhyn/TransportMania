@@ -62,6 +62,7 @@ namespace impl
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
 		fsm.subj_.ShiftScene(-100.0f, 0.0f);
+		fsm.subj_.UpdateTerrain();
 	}
 
 	ACTION_IMPLEMENTATION(RightKey)
@@ -69,6 +70,7 @@ namespace impl
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
 		fsm.subj_.ShiftScene(100.0f, 0.0f);
+		fsm.subj_.UpdateTerrain();
 	}
 
 	ACTION_IMPLEMENTATION(UpKey)
@@ -76,6 +78,7 @@ namespace impl
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
 		fsm.subj_.ShiftScene(0.0f, 100.0f);
+		fsm.subj_.UpdateTerrain();
 	}
 
 	ACTION_IMPLEMENTATION(DownKey)
@@ -83,6 +86,7 @@ namespace impl
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
 		fsm.subj_.ShiftScene(0.0f, -100.0f);
+		fsm.subj_.UpdateTerrain();
 	}
 
 	ACTION_IMPLEMENTATION(Quit)
@@ -170,16 +174,18 @@ namespace impl
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
-		//utils::Logger().Debug() << evt.fingerId << " " << targetState.fingers.count(evt.fingerId) << " " << targetState.fingers.size();
+		// when at least one finger is pressed we stop terrain updates
+		if (targetState.fingers.empty())
+			fsm.subj_.StopTerrainUpdate();
 
 		assert(targetState.fingers.count(evt.fingerId) == 0LL);
-
-		// commit first
-		FingerCommitImpl(fsm.subj_, targetState.fingers);
 
 		// process 2 fingers only
 		if (targetState.fingers.size() >= 2)
 			return;
+
+		// commit first
+		FingerCommitImpl(fsm.subj_, targetState.fingers, true);
 
 		auto & fingerStruct = targetState.fingers[evt.fingerId];
 		fingerStruct = PointMove(evt.pos);
@@ -193,13 +199,15 @@ namespace impl
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
-		//utils::Logger().Debug() << "ReleaseFinger " << evt.fingerId;
-
 		// commit first
-		FingerCommitImpl(fsm.subj_, sourceState.fingers);
+		FingerCommitImpl(fsm.subj_, sourceState.fingers, true);
 
 		const int erazed = sourceState.fingers.erase(evt.fingerId);
 		
+		// when we release the last finger we can proceed with terrain updates
+		if (sourceState.fingers.empty())
+			fsm.subj_.ResumeTerrainUpdate();
+
 		// if we try to release non existing finger - it's ok
 		if (!erazed)
 			return;
@@ -244,8 +252,6 @@ namespace impl
 		case ActionType::Rotate:
 		{
 			const Angle a = GetRotateAngle(p1, p2);
-			utils::Logger().Debug() << "Rotated " << a;
-
 			subj.RotateScene(a);
 		}
 			break;
@@ -263,11 +269,9 @@ namespace impl
 	}
 
 	template<typename Subject, typename FingersType>
-	void FingerCommitImpl(Subject & subj, FingersType & fingers)
+	void FingerCommitImpl(Subject & subj, FingersType & fingers, bool isFinal)
 	{
 		const int fingerCount = fingers.size();
-
-		//utils::Logger().Debug() << "Committed";
 
 		if (fingerCount == 0)
 			return;
@@ -292,13 +296,16 @@ namespace impl
 		{
 			v.from = v.to;
 		});
+
+		if (isFinal)
+			subj.UpdateTerrain();
 	}
 
 	ACTION_IMPLEMENTATION(FingerCommit)
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
-		FingerCommitImpl(fsm.subj_, sourceState.fingers);
+		FingerCommitImpl(fsm.subj_, sourceState.fingers, false);
 	}
 
 } // namespace impl

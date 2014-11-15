@@ -27,6 +27,7 @@ namespace
 			, scene1Emulated(false)
 			, fingerAffected(-1)
 			, fingersRegistered(0)
+			, updates(0)
 		{}
 
 		void ShiftScene(const float x, const float y)
@@ -69,6 +70,32 @@ namespace
 			to = t;
 		}
 
+		void UpdateTerrain()
+		{
+			updates = 2;
+		}
+
+		void Update()
+		{
+			if (canUpdate)
+				--updates;
+		}
+
+		bool Updated() const
+		{
+			return updates == 0;
+		}
+
+		void StopTerrainUpdate()
+		{
+			canUpdate = false;
+		}
+		
+		void ResumeTerrainUpdate()
+		{
+			canUpdate = true;
+		}
+
 		int dir;
 		bool stopped;
 		bool scene1Emulated;
@@ -76,6 +103,8 @@ namespace
 		int fingersRegistered;
 		Point2d from;
 		Point2d to;
+		int updates;
+		bool canUpdate = false;
 	};
 }
 
@@ -456,4 +485,61 @@ BOOST_AUTO_TEST_CASE(EventStateMachineFingerMoveTest4)
 	esm.Emit(FingerReleased{1});
 	BOOST_CHECK_EQUAL(s.fingerAffected, 1);
 	BOOST_CHECK_EQUAL(s.fingersRegistered, 0);
+}
+
+BOOST_AUTO_TEST_CASE(EventStateMachineUpdatesTest1)
+{
+	Subject s;
+	EventStateMachine<Subject> esm(s);
+
+	BOOST_CHECK(s.Updated());
+	
+	esm.Emit(FingerPressed{1, Point2d(1.0f, 1.0f)});
+	
+	// no updates after first finger
+	BOOST_CHECK_EQUAL(s.updates, 0);
+
+	BOOST_CHECK(!s.canUpdate);
+
+	s.Update();
+	s.Update();
+
+	BOOST_CHECK_EQUAL(s.updates, 0);
+
+	esm.Emit(FingerReleased{1});
+
+	BOOST_CHECK_EQUAL(s.updates, 2);
+
+	s.Update();
+	s.Update();
+
+	BOOST_CHECK(s.Updated());
+}
+
+BOOST_AUTO_TEST_CASE(EventStateMachineUpdatesTest2)
+{
+	Subject s;
+	EventStateMachine<Subject> esm(s);
+
+	esm.Emit(FingerPressed{1, Point2d(1.0f, 1.0f)});
+	
+	esm.Emit(FingerReleased{1});
+
+	BOOST_CHECK_EQUAL(s.updates, 2);
+
+	s.Update();
+	BOOST_CHECK_EQUAL(s.updates, 1);
+
+	esm.Emit(FingerPressed{1, Point2d(1.0f, 1.0f)});
+
+	s.Update();
+	BOOST_CHECK_EQUAL(s.updates, 1);
+
+	esm.Emit(FingerReleased{1});
+
+	s.Update();
+	s.Update();
+	BOOST_CHECK_EQUAL(s.updates, 0);
+
+	BOOST_CHECK(s.Updated());
 }
