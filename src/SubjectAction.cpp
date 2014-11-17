@@ -21,7 +21,7 @@ namespace impl
 ActionType 
 trm::impl::GetSubjectAction(const PointMove & p1, const PointMove & p2, const Angle limitAngle)
 {
-	if (!(p1.Valid() && p2.Valid()))
+	if (!p1.Valid() || !p2.Valid())
 		return ActionType::Undefined;
 
 	const Point3d v1 = Point3d::Cast(p1.to - p1.from);
@@ -73,9 +73,6 @@ trm::impl::GetZoomValue(const PointMove & p1, const PointMove & p2)
 Angle 
 trm::impl::GetRotateAngle(const PointMove & p1, const PointMove & p2)
 {
-	const float len1 = (p1.to - p1.from).GetLength();
-	const float len2 = (p2.to - p2.from).GetLength();
-
 	const Line l1 = utils::GetLine(p1.from, p2.from);
 	const Line l2 = utils::GetLine(p1.to, p2.to);
 
@@ -85,19 +82,8 @@ trm::impl::GetRotateAngle(const PointMove & p1, const PointMove & p2)
 	}
 
 	const Point2d mid = utils::GetIntersectionPoint(l1, l2);
-	Point2d v1;
-	Point2d v2;
-
-	if (len1 >= len2)
-	{
-		v1 = p1.from - mid;
-		v2 = p1.to - mid;
-	}
-	else
-	{
-		v1 = p2.from - mid;
-		v2 = p2.to - mid;
-	}
+	const Point2d v1 = p1.from - mid;
+	const Point2d v2 = p1.to - mid;
 
 	return utils::GetSignedAngle180(v1, v2);
 }
@@ -106,7 +92,13 @@ AnglePair
 trm::impl::GetBendAngles(const PointMove & p1, PointMove p2)
 {
 	std::swap(p2.from, p2.to);
-	const Angle a = GetRotateAngle(p1, p2);
+	Angle a = GetRotateAngle(p1, p2);
+
+	if (a < Degrees(0))
+		a *= -1;
+
+	if (p1.from.y() > p1.to.y())
+		a *= -1;
 
 	return AnglePair(a, Angle());
 }

@@ -217,6 +217,19 @@ BOOST_AUTO_TEST_CASE(GetSubjectActionRotateTest8)
 	BOOST_CHECK_GT(GetRotateAngle(p1, p2), Degrees(0));
 }
 
+BOOST_AUTO_TEST_CASE(GetSubjectActionRotateTest9)
+{
+	PointMove p2(Point2d(0, 7), Point2d(0, 3));
+	PointMove p1(Point2d(5, 15), Point2d(5, 17));
+	const ActionType at = GetSubjectAction(p1, p2, Degrees(10));
+
+	BOOST_CHECK_EQUAL(at, ActionType::Rotate);
+	BOOST_CHECK_GT(GetRotateAngle(p1, p2), Degrees(0));
+}
+
+
+
+
 BOOST_AUTO_TEST_CASE(GetSubjectActionBendTest1)
 {
 	PointMove p1(Point2d(0, 0), Point2d(0.0f, 1.0f));

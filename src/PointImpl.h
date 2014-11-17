@@ -33,24 +33,24 @@ namespace trm
 		typedef typename ImplType::const_iterator ConstIterator;
 
 	public:
-		PointImpl(const T a = T()) { std::fill(arr_.begin(), arr_.end(), a); }
+		PointImpl(const T a = T()) { arr_.fill(a); }
 
 		PointImpl(const T a, const T b)
+			: arr_({a, b})
 		{
 			BOOST_STATIC_ASSERT_MSG(N == 2, "Constructor available only for 2 dimentional implementation");
-			Get<0>() = a; Get<1>() = b;
 		}
 
 		PointImpl(const T a, const T b, const T c)
+			: arr_({a, b, c})
 		{
 			BOOST_STATIC_ASSERT_MSG(N == 3, "Constructor available only for 3 dimentional implementation");
-			Get<0>() = a; Get<1>() = b; Get<2>() = c;
 		}
 
 		PointImpl(const T a, const T b, const T c, const T d)
+			: arr_({a, b, c, d})
 		{
 			BOOST_STATIC_ASSERT_MSG(N == 4, "Constructor available only for 4 dimentional implementation");
-			Get<0>() = a; Get<1>() = b; Get<2>() = c; Get<3>() = d;
 		}
 		
 		template<typename U, unsigned short M>

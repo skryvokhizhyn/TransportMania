@@ -1,6 +1,8 @@
 #include "WorldProjection.h"
 #include "MatrixFactory.h"
 #include "MatrixUtils.h"
+#include "Point2d.h"
+#include "GeometryUtils.h"
 
 using namespace trm;
 
@@ -92,10 +94,12 @@ WorldProjection::UpdateProjectionViewMatrix()
 void 
 WorldProjection::Shift(const float x, const float y)
 {
-	const float shift = shiftPosition_.GetLength() * SHIFT_SLOWDOWN_COEF;
+	Point2d xyShift(x, y);
+	xyShift *= shiftPosition_.GetLength() * SHIFT_SLOWDOWN_COEF;
 
-	shiftPosition_.x() += x * shift;
-	shiftPosition_.y() += y * shift;
+	const Point2d rotatedXyShift = utils::RotateVector(xyShift, zAngle_, Rotation::AntiClockwise);
+
+	shiftPosition_ += Point3d::Cast(rotatedXyShift);
 
 	UpdateProjectionViewMatrix();
 	UpdateCameraPosition();
