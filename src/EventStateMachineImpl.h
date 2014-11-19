@@ -221,8 +221,6 @@ namespace impl
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
-		//utils::Logger().Debug() << "FingerMoved " << evt.fingerId;
-
 		// ignored finger has been moved
 		if (sourceState.fingers.count(evt.fingerId) == 0)
 			return;

@@ -13,7 +13,7 @@ namespace trm
 {
 namespace impl
 {
-	const Angle DEFAULT_ACTION_DETECTION_ANGLE = Degrees(10);
+	const Angle DEFAULT_ACTION_DETECTION_ANGLE = Degrees(15);
 
 } // namespace impl
 } // namespace trm

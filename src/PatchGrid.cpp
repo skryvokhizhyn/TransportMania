@@ -90,6 +90,12 @@ namespace
 		// right bottom
 		const Point3d rb = GetCornerPoint(heights, s2d + Point2d(psf, 0), PatchCorner::RightBottom);
 
+		/*const auto & screenCenter = wp.GetCameraPosition();
+		const Point3d patchCenter = (lb + ru) / 2.0f;
+
+		if (utils::GetDistance(screenCenter, patchCenter) > 100.0f)
+			return false;*/
+
 		const Matrix & pv = wp.GetProjectionViewMatrix();
 
 		return CheckPolygonIsVisible(pv, {lb, lu, ru, rb});

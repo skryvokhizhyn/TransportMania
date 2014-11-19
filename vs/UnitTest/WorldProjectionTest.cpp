@@ -196,6 +196,6 @@ BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest6)
 
 	wp.Shift(10.0f, 10.0f);
 
-	BOOST_CHECK_EQUAL(wp.GetCameraPosition().x(), 100.0f);
-	BOOST_CHECK_GT(wp.GetCameraPosition().y(), 100.0f);
+	BOOST_CHECK_GT(wp.GetCameraPosition().x(), 100.0f);
+	BOOST_CHECK_EQUAL(wp.GetCameraPosition().y(), 100.0f);
 }
