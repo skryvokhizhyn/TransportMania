@@ -25,7 +25,8 @@ namespace trm
 
 		void Update(const WorldProjection & wp);
 		bool Tasselate(const WorldProjection & wp);
-		bool Render(ModelData & md);
+		void Render();
+		bool GetNextRenderResult(ModelData & md);
 		
 		void Apply(Terraformer & t);
 

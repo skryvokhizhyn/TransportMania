@@ -18,10 +18,10 @@ ModelDrawerPool::Push(const ModelData & md)
 	}
 	else
 	{
-		ModelDrawerPtr & topPtr = poolItems_.top();
+		ModelDrawerPtr & topPtr = poolItems_.front();
 		topPtr->Load(md);
 		activeItems_.push_back(std::move(topPtr));
-		poolItems_.pop();
+		poolItems_.pop_front();
 	}
 }
 
@@ -36,6 +36,6 @@ ModelDrawerPool::DrawActive() const
 void 
 ModelDrawerPool::Release()
 {
-	std::for_each(activeItems_.begin(), activeItems_.end(), [&](ModelDrawerPtr & mdPtr) {poolItems_.push(std::move(mdPtr));});
+	std::swap(activeItems_, poolItems_);
 	activeItems_.clear();
 }

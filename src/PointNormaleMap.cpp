@@ -37,24 +37,8 @@ PointNormaleMap::Clear()
 	normaleMap_.clear();
 }
 
-void
-PointNormaleMap::RemoveIf(Pred p)
+auto
+PointNormaleMap::Data() const -> const NormaleMap &
 {
-	auto it = normaleMap_.begin();
-	auto end = normaleMap_.end();
-
-	while (it != end)
-	{
-		const Size2d & s = it->first;
-
-		//if ((s.x() % sz == 0) || (s.y() % sz == 0))
-		if (p(s))
-		{
-			normaleMap_.erase(it++);
-		}
-		else
-		{
-			++it;
-		}
-	}
+	return normaleMap_;
 }

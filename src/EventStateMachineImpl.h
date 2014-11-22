@@ -109,36 +109,42 @@ namespace impl
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
 		fsm.subj_.RotateScene(Degrees(5));
+		fsm.subj_.UpdateTerrain();
 	}
 	ACTION_IMPLEMENTATION(KeyZ)
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
 		fsm.subj_.RotateScene(Degrees(-5));
+		fsm.subj_.UpdateTerrain();
 	}
 	ACTION_IMPLEMENTATION(KeyE)
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
 		fsm.subj_.BendScene(Degrees(5), Degrees(0));
+		fsm.subj_.UpdateTerrain();
 	}
 	ACTION_IMPLEMENTATION(KeyC)
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
 		fsm.subj_.BendScene(Degrees(-5), Degrees(0));
+		fsm.subj_.UpdateTerrain();
 	}
 	ACTION_IMPLEMENTATION(KeyR)
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
 		fsm.subj_.BendScene(Degrees(0), Degrees(5));
+		fsm.subj_.UpdateTerrain();
 	}
 	ACTION_IMPLEMENTATION(KeyV)
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD
 
 		fsm.subj_.BendScene(Degrees(0), Degrees(-5));
+		fsm.subj_.UpdateTerrain();
 	}
 	///////////////////////////////////////
 

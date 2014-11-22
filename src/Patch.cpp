@@ -50,31 +50,24 @@ Patch::ComputeVariance()
 bool
 Patch::Tasselate(const Point3d & camera)
 {
-	/*TriangleNodeHandler::Tasselate(pRootUp_, detalization_, varianceUp_, *pHeightMap_, UPPER_TRIANGLE_MAPPER, camera);
-	TriangleNodeHandler::Tasselate(pRootDown_, detalization_, varianceDown_, *pHeightMap_, LOWER_TRIANGLE_MAPPER, camera);
-	
-	return false;*/
-
-	//assert(pRootUp_->IsValid());
-	//assert(pRootDown_->IsValid());
-
 	const bool upWasUpdated = rootUpCache_.Tasselate(detalization_, varianceUp_, 
 		*pHeightMap_, UPPER_TRIANGLE_MAPPER, camera);
 	const bool downWasUpdate = rootDownCache_.Tasselate(detalization_, varianceDown_, 
 		*pHeightMap_, LOWER_TRIANGLE_MAPPER, camera);
 
+	//assert(pRootUp_->IsValid());
+	//assert(pRootDown_->IsValid());
+
 	return upWasUpdated || downWasUpdate;
 }
 
 void
-Patch::Render(ModelData & md)
+Patch::Render(ModelData & md, PointNormaleMap & normales)
 {
 	const size_t sz = md.points.size();
 
-	normaleMap_.Clear();
-
-	TriangleNodeHandler::Render(pRootUp_, detalization_, *pHeightMap_, UPPER_TRIANGLE_MAPPER, md, normaleMap_);
-	TriangleNodeHandler::Render(pRootDown_, detalization_, *pHeightMap_, LOWER_TRIANGLE_MAPPER, md, normaleMap_);
+	TriangleNodeHandler::Render(pRootUp_, detalization_, *pHeightMap_, UPPER_TRIANGLE_MAPPER, md, normales);
+	TriangleNodeHandler::Render(pRootDown_, detalization_, *pHeightMap_, LOWER_TRIANGLE_MAPPER, md, normales);
 
 	assert(pRootUp_->IsValid());
 	assert(pRootDown_->IsValid());
@@ -83,17 +76,6 @@ Patch::Render(ModelData & md)
 	// equal to the first one
 	md.points.push_back(md.points[sz]);
 
-	md.normales.reserve(md.points.size());
-
-#ifdef DRAWING_MODE_FULL
-	boost::range::for_each(md.points,
-		[&](const Point3d & p)
-	{
-		const Size2d s = Size2d::Cast(p);
-		
-		md.normales.push_back(normaleMap_.At(s));
-	});
-#endif // DRAWING_MODE_FULL
 }
 
 Patch::~Patch()
@@ -138,25 +120,8 @@ Patch::Attach(Patch & p, const Direction dir)
 void 
 Patch::Clear()
 {
-	normaleMap_.Clear();
 	varianceUp_.Clear();
 	varianceDown_.Clear();
 	pRootUp_->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
 	pRootDown_->SetClearCause(false, TriangleNode::RecursiveMode::Yes);
-}
-
-const PointNormaleMap & 
-Patch::GetNormales() const
-{
-	return normaleMap_;
-}
-
-void
-Patch::ZipNormales()
-{
-	const size_t sz = pHeightMap_->GetSize() - 1;
-
-	normaleMap_.RemoveIf(
-		[=](const Size2d & s)
-	{ return !((s.x() % sz == 0) || (s.y() % sz == 0)); });
 }

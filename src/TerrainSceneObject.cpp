@@ -35,11 +35,12 @@ TerrainSceneObject::Render(const WorldProjection & wp)
 	{
 		const bool tasselateMore = terrainPtr_->Tasselate(wp);
 		tasselated_ = !tasselateMore;
+		terrainPtr_->Render();
 	
 		modelDrawerPool_.Release();
 
 		ModelData modelData;
-		while (terrainPtr_->Render(modelData))
+		while (terrainPtr_->GetNextRenderResult(modelData))
 		{
 			if (!modelData.Valid())
 			{

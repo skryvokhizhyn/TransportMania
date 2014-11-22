@@ -74,7 +74,7 @@ ComponentHolder::UpdateVisible(const WorldProjection & wp, TrainMovableObject & 
 	if (isVisible)
 	{
 		auto sharedPosition = to.SharedPosition();
-		const Point3d nextPosition = to.MovedPosition(0.1f);
+		const Point3d nextPosition = to.MovedPosition(0.01f);
 
 		visibles_.emplace_back(to.Type(), sharedPosition, nextPosition);
 	}

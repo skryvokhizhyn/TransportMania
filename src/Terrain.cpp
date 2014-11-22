@@ -42,10 +42,16 @@ Terrain::Tasselate(const WorldProjection & wp)
 	return patchGrid_.Tasselate(wp);
 }
 
-bool
-Terrain::Render(ModelData & md)
+void
+Terrain::Render()
 {	
-	return patchGrid_.Render(md);
+	return patchGrid_.Render();
+}
+
+bool
+Terrain::GetNextRenderResult(ModelData & md)
+{	
+	return patchGrid_.GetNextRenderResult(md);
 }
 
 void

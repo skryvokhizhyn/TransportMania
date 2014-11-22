@@ -3,6 +3,7 @@
 #include "Size2d.h"
 #include "HeightMap.h"
 #include "Patch.h"
+#include "ModelData.h"
 
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/ordered_index.hpp>
@@ -39,6 +40,7 @@ namespace PatchCorner
 			HeightMap heightMap;
 			Patch patch;
 			CornerValues heights;
+			ModelData renderCache;
 			bool dirty;
 			bool valid;
 

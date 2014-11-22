@@ -2,18 +2,13 @@
 #define _MODELDRAWERPOOL_H_
 
 #include "ModelDrawer.h"
-#include <vector>
-#include <stack>
+#include <deque>
 #include <memory>
 
 namespace trm
 {
 	class ModelDrawerPool
 	{
-		typedef std::unique_ptr<ModelDrawer> ModelDrawerPtr;
-		typedef std::stack<ModelDrawerPtr> PoolType;
-		typedef std::vector<ModelDrawerPtr> ActiveType;
-
 	public:
 		// activates one item from a pool
 		// if it's empty, adds a new one
@@ -23,8 +18,12 @@ namespace trm
 		void Release();
 
 	private:
+		typedef std::unique_ptr<ModelDrawer> ModelDrawerPtr;
+		typedef std::deque<ModelDrawerPtr> PoolType;
+
+	private:
 		PoolType poolItems_;
-		ActiveType activeItems_;
+		PoolType activeItems_;
 	};
 
 } // namespace trm

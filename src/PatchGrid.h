@@ -2,6 +2,7 @@
 
 #include "HeightMapLoader.h"
 #include "PatchGridMap.h"
+#include "PointNormaleMap.h"
 
 #include <boost/noncopyable.hpp>
 
@@ -29,7 +30,8 @@ namespace lod
 
 		void Update(const WorldProjection & wp);
 		bool Tasselate(const WorldProjection & wp);
-		bool Render(ModelData & md);
+		void Render();
+		bool GetNextRenderResult(ModelData & md);
 		void Flush();
 
 		// HeightMapBase
@@ -44,11 +46,7 @@ namespace lod
 		Positions GetAdjucentPatches(const Point2d & p) const;
 
 	private:
-		static void RenderNode(const PatchGridNode & node, ModelData & md);
-
-	private:
 		void LoadHeightMap(const Size2d & pos, HeightMap & hm) const;
-		void GlueNormales(const PatchGridNode & node, ModelData & md) const;
 
 	private:
 		const unsigned short patchSize_;
@@ -56,6 +54,7 @@ namespace lod
 		PatchGridMap grid_;
 		PatchGridMap::SequentialIt currIt_;
 		terrain::HeightMapLoaderPtr hmlPtr_;
+		PointNormaleMap normaleMap_;
 	};
 
 } // namespace lod

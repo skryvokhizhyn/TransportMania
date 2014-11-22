@@ -9,6 +9,8 @@
 #include "PolygonVisibilityChecker.h"
 
 #include <boost/range/algorithm/for_each.hpp>
+#include <boost/range/algorithm/transform.hpp>
+#include <boost/range/algorithm/find_if.hpp>
 #include <boost/range/combine.hpp>
 
 #include <cstdlib>
@@ -119,6 +121,44 @@ namespace
 		vals[PatchCorner::RightBottom] = GetCornerHeight(hml, s2d + Point2d(psf, 0));
 
 		return vals;
+	}
+
+	template<typename Callback>
+	void DoForAllValid(const PatchGridMap & pgm, const Callback & cb)
+	{
+		std::find_if(pgm.Begin(), pgm.End(),
+			[&](const PatchGridNode & node)
+		{
+			if (!node.data.valid)
+				return true;
+
+			cb(node);
+
+			return false;
+		});
+	}
+
+	void RenderNode(const PatchGridNode & node, PointNormaleMap & globalNormales)
+	{
+		assert(node.data.valid);
+
+		const Size2d & pos = node.pos;
+		Point3d shift = Point3d::Cast(pos);
+
+		Patch & p = node.data.patch;
+		ModelData & md = node.data.renderCache;
+		md.Clear();
+
+		PointNormaleMap localNormales;
+
+		p.Render(md, localNormales);
+
+		boost::transform(md.points, md.points.begin(), boost::bind(std::plus<Point3d>(), shift, _1));
+		boost::for_each(localNormales.Data(), 
+			[&](const PointNormaleMap::NormaleMap::value_type & value)
+		{
+			globalNormales.Put(value.first + pos, value.second);
+		});
 	}
 }
 
@@ -252,14 +292,9 @@ PatchGrid::Tasselate(const WorldProjection & wp)
 
 	const Point3d & camera = wp.GetCameraPosition();
 
-	std::find_if(grid_.Begin(), grid_.End(),
-		[&](const PatchGridNode & node)
+	DoForAllValid(grid_, 
+		[&wasUpdated, &camera](const PatchGridNode & node)
 	{
-		if (!node.data.valid)
-		{
-			return true;
-		}
-
 		Patch & p = node.data.patch;
 
 		// Before tasselation and other stuff
@@ -283,91 +318,42 @@ PatchGrid::Tasselate(const WorldProjection & wp)
 	return wasUpdated;
 }
 
+void 
+PatchGrid::Render()
+{
+	DoForAllValid(grid_, boost::bind(&RenderNode, _1, boost::ref(normaleMap_)));
+	DoForAllValid(grid_, 
+		[this](const PatchGridNode & node)
+	{
+		ModelData & md = node.data.renderCache;
+
+		md.normales.reserve(md.points.size());
+
+#ifdef DRAWING_MODE_FULL
+		boost::range::for_each(md.points,
+			[&](const Point3d & p)
+		{
+			const Size2d s = Size2d::Cast(p);
+			md.normales.push_back(normaleMap_.At(s));
+		});
+#endif // DRAWING_MODE_FULL
+
+	});
+
+	normaleMap_.Clear();
+}
+
 bool 
-PatchGrid::Render(ModelData & md)
+PatchGrid::GetNextRenderResult(ModelData & md)
 {
 	if (currIt_ == grid_.End() || !currIt_->data.valid)
 		return false;
 
-	RenderNode(*currIt_, md);
-
-#ifdef DRAWING_MODE_FULL
-	//GlueNormales(*currIt_, md);
-#endif // DRAWING_MODE_FULL
+	md = std::move(currIt_->data.renderCache);
 
 	++currIt_;
 
 	return true;
-}
-
-void 
-PatchGrid::GlueNormales(const PatchGridNode & node, ModelData & md) const
-{
-	const Size2d & patchPos = node.pos;
-
-	const auto r = boost::combine(md.points, md.normales);
-
-	for (auto rr : r)
-	{
-		const Point3d & p = rr.get<0>();
-
-		const Point2d p2d = Point2d::Cast(p);
-		const Size2d & sizePoint = Size2d::Cast(p2d);
-
-		if (!((sizePoint.x() % (patchSize_ - 1) == 0)
-			&& (sizePoint.y() % (patchSize_ - 1) == 0)))
-			continue;
-
-		const Positions pos = GetAdjucentPatches(p2d);
-
-		boost::range::for_each(pos,
-			[&](const Size2d & s)
-		{
-			if (s != patchPos)
-			{
-				Point3d & n = rr.get<1>();
-
-				const auto found = grid_.Find(s);
-				
-				const Patch & patch = found->data.patch;
-				const PointNormaleMap & normales = patch.GetNormales();
-
-				const Size2d shiftedPoint = sizePoint - s;
-
-				n += normales.At(shiftedPoint);
-
-				/*const auto foundNormale = normales.find(shiftedPoint);
-				if (foundNormale != normales.end())
-				{
-					n += foundNormale->second;
-				}*/
-			}
-		});
-	}
-}
-
-void 
-PatchGrid::RenderNode(const PatchGridNode & node, ModelData & md)
-{
-	if (!node.data.valid)
-	{
-		return;
-	}
-
-	const Size2d & pos = node.pos;
-	Point3d shift = Point3d::Cast(pos);
-
-	const size_t sz = md.points.size();
-
-	Patch & p = node.data.patch;
-
-	p.Render(md);
-	p.ZipNormales();
-
-	PointVector::iterator start = md.points.begin();
-	std::advance(start, sz);
-
-	std::transform(start, md.points.end(), start, boost::bind(std::plus<Point3d>(), shift, _1));
 }
 
 size_t 

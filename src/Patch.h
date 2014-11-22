@@ -4,11 +4,11 @@
 #include "Variance.h"
 #include "HeightMap.h"
 #include "TriangleNodeCache.h"
-#include "PointNormaleMap.h"
 
 namespace trm
 {
 	struct ModelData;
+	class PointNormaleMap;
 
 namespace terrain
 {
@@ -24,14 +24,11 @@ namespace lod
 
 		void Init(const HeightMap & hm, const size_t det);
 		bool Tasselate(const Point3d & camera);
-		void Render(ModelData & md);
+		void Render(ModelData & md, PointNormaleMap & normales);
 		void ComputeVariance();
 		void Attach(Patch & p, const Direction dir);
 
 		void Clear();
-		void ZipNormales();
-
-		const PointNormaleMap & GetNormales() const;
 
 	private:
 		void Reset();
@@ -46,7 +43,6 @@ namespace lod
 		TriangleNodeCache rootDownCache_;
 		Variance varianceUp_;
 		Variance varianceDown_;
-		PointNormaleMap normaleMap_;
 		size_t detalization_;
 		const HeightMap * pHeightMap_;
 	};
