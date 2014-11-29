@@ -232,7 +232,7 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTest10)
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest11)
 {
 	const bool r = utils::CheckColinear(Point2d(0, 1), Point2d(0, -2));
-
+	
 	BOOST_CHECK(!r);
 }
 
@@ -262,6 +262,44 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTest15)
 	const bool r = utils::CheckColinear(Point2d(1, 0), Point2d(-2, 0));
 
 	BOOST_CHECK(!r);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest161)
+{
+	const bool r = utils::CheckColinear(Point2d(0, 1), Point2d(0, 2));
+
+	BOOST_CHECK(r);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest162)
+{
+	const bool r = utils::CheckColinear(Point2d(0, 1), Point2d(1, 2));
+
+	BOOST_CHECK(!r);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest163)
+{
+	const bool r = utils::CheckColinear(Point2d(1, 2), Point2d(0, 1));
+
+	BOOST_CHECK(!r);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest164)
+{
+	const bool r = utils::CheckColinear(Point2d(1, 2), Point2d(1, 0));
+
+	BOOST_CHECK(!r);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest17)
+{
+	BOOST_CHECK_THROW(utils::CheckColinear(Point2d(0, 0), Point2d(0, 2)), std::runtime_error);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTest18)
+{
+	BOOST_CHECK_THROW(utils::CheckColinear(Point2d(0, 1), Point2d(0, 0)), std::runtime_error);
 }
 
 BOOST_AUTO_TEST_CASE(GeometryCheckCodirectionalTest1)

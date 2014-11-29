@@ -232,11 +232,21 @@ utils::GetTriangles(const HeightMap & hm)
 bool 
 utils::CheckColinear(const Point2d & p1, const Point2d & p2)
 {
+	if (p1 == Point2d() || p2 == Point2d())
+	{
+		throw std::runtime_error("Cannot check colinearity for zero vector");
+	}
+
+	if (utils::CheckEqual(p2.x(), 0.0f))
+	{
+		return (utils::CheckEqual(p1.x(), 0.0f) && (p1.y() / p2.y() > 0.0f));
+	}
+
 	const float xDiv = p1.x() / p2.x();
 	
 	if (utils::CheckEqual(p2.y(), 0.0f))
 	{
-		return xDiv > 0.0f;
+		return (utils::CheckEqual(p1.y(), 0.0f) && (xDiv > 0.0f));
 	}
 
 	return utils::CheckNear(p1.y(), p2.y() * std::abs(xDiv), 0.000006f);
