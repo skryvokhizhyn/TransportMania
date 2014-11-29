@@ -47,10 +47,9 @@ namespace
 
 	Polygon3d GetConvertedPolygon(const trm::Matrix & pv, const trm::Polygon3d & points)
 	{
-		Polygon3d converted;
-		converted.reserve(points.size());
+		Polygon3d converted(points.size());
 
-		boost::transform(points, std::back_inserter(converted),
+		boost::transform(points, converted.begin(),
 			[&](const Point3d & p)
 		{
 			Point4d p4d = Point4d::Cast(p);
