@@ -3,6 +3,7 @@
 
 #include "Point2d.h"
 #include "Point3d.h"
+#include "TextureId.h"
 #include <vector>
 
 namespace trm
@@ -29,6 +30,8 @@ namespace trm
 		PointVector points;
 		IndexVector indexes;
 		NormaleVector normales;
+		TextureCoords textures;
+		TextureId textureId;
 
 		ModelData() 
 			: type(Mode::Undefined)
@@ -39,8 +42,11 @@ namespace trm
 			, points(std::move(md.points))
 			, indexes(std::move(md.indexes))
 			, normales(std::move(md.normales))
+			, textures(std::move(md.textures))
+			, textureId(std::move(md.textureId))
 		{
 			md.type = Mode::Undefined;
+			md.textureId = TextureId::Undefined;
 		}
 
 		ModelData & operator = (ModelData && md)
@@ -49,7 +55,10 @@ namespace trm
 			points = std::move(md.points);
 			indexes = std::move(md.indexes);
 			normales = std::move(md.normales);
+			textures = std::move(md.textures);
+			md.textureId = std::move(md.textureId);
 			md.type = Mode::Undefined;
+			md.textureId = TextureId::Undefined;
 
 			return *this;
 		}
@@ -60,6 +69,8 @@ namespace trm
 			points.clear();
 			indexes.clear();
 			normales.clear();
+			textures.clear();
+			textureId = TextureId::Undefined;
 		}
 
 		bool Valid() const

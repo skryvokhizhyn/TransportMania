@@ -2,6 +2,8 @@
 #include "MatrixFactory.h"
 #include "ModelData.h"
 #include "Logger.h"
+#include "Point2d.h"
+#include "Point3d.h"
 
 using namespace trm;
 

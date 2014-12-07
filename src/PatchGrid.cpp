@@ -7,13 +7,11 @@
 #include "Logger.h"
 #include "GlobalDefines.h"
 #include "PolygonVisibilityChecker.h"
+#include "TextureManagerProxy.h"
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/algorithm/transform.hpp>
 #include <boost/range/algorithm/find_if.hpp>
-#include <boost/range/combine.hpp>
-
-#include <cstdlib>
 
 using namespace trm;
 using namespace trm::terrain;
@@ -322,25 +320,58 @@ void
 PatchGrid::Render()
 {
 	DoForAllValid(grid_, boost::bind(&RenderNode, _1, boost::ref(normaleMap_)));
+
+#ifdef DRAWING_MODE_FULL
+
 	DoForAllValid(grid_, 
 		[this](const PatchGridNode & node)
 	{
 		ModelData & md = node.data.renderCache;
-
 		md.normales.reserve(md.points.size());
 
-#ifdef DRAWING_MODE_FULL
 		boost::range::for_each(md.points,
 			[&](const Point3d & p)
 		{
 			const Size2d s = Size2d::Cast(p);
 			md.normales.push_back(normaleMap_.At(s));
 		});
-#endif // DRAWING_MODE_FULL
-
 	});
 
+#endif // DRAWING_MODE_FULL
+
 	normaleMap_.Clear();
+}
+
+namespace
+{
+	void PrepareTerrainTextureData(const Size2d & pos, ModelData & md)
+	{
+		const Point2d & posP = Point2d::Cast(pos);
+
+		md.textureId = TextureId::Ground;
+		md.textures.reserve(md.points.size());
+		boost::transform(md.points, std::back_inserter(md.textures),
+			[&](const Point3d & p) -> Point2d
+		{
+			Point2d t = Point2d::Cast(p) / 16.0f;
+
+			float intPart = 0.0f;
+			t.x() = std::modf(t.x(), &intPart);
+			t.y() = std::modf(t.y(), &intPart);
+
+			if (utils::CheckEqual(t.x(), 0.0f) && !utils::CheckEqual(posP.x(), p.x()))
+			{
+				t.x() = 1.0f;
+			}
+
+			if (utils::CheckEqual(t.y(), 0.0f) && !utils::CheckEqual(posP.y(), p.y()))
+			{
+				t.y() = 1.0f;
+			}
+
+			return t;
+		});
+	}
 }
 
 bool 
@@ -350,6 +381,8 @@ PatchGrid::GetNextRenderResult(ModelData & md)
 		return false;
 
 	md = std::move(currIt_->data.renderCache);
+
+	PrepareTerrainTextureData(currIt_->pos, md);
 
 	++currIt_;
 

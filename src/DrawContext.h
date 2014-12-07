@@ -12,6 +12,7 @@ namespace trm
 		{
 			VertexArray = 0,
 			NormalArray,
+			TextureArray
 		};
 
 	public:

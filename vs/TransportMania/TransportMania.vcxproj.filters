@@ -52,6 +52,9 @@
     <Filter Include="Text">
       <UniqueIdentifier>{fe10cd4e-4b86-4e64-ad4d-d95e73aa46d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Img">
+      <UniqueIdentifier>{5b064d69-fc3c-41fa-abe7-1861cb3d2111}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -195,9 +198,6 @@
     <ClCompile Include="..\..\src\Terrain.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\BmpHandler.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Settings.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -308,6 +308,21 @@
     </ClCompile>
     <ClCompile Include="..\..\src\HeightMapLoaderConstant.cpp">
       <Filter>Terrain\HeightMap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\BmpHandler.cpp">
+      <Filter>Utils\Img</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\PngHandler.cpp">
+      <Filter>Utils\Img</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TextureLoader.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ImgProperties.cpp">
+      <Filter>Utils\Img</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TextureManager.cpp">
+      <Filter>Draw</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -509,9 +524,6 @@
     <ClInclude Include="..\..\src\Terrain.h">
       <Filter>Terrain</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\BmpHandler.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Settings.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -664,6 +676,30 @@
     </ClInclude>
     <ClInclude Include="..\..\src\HeightMapLoaderConstant.h">
       <Filter>Terrain\HeightMap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\BmpHandler.h">
+      <Filter>Utils\Img</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\PngHandler.h">
+      <Filter>Utils\Img</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextureId.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextureLoader.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextureManager.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ImgProperties.h">
+      <Filter>Utils\Img</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextureProperties.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextureManagerProxy.h">
+      <Filter>Draw</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,6 +12,7 @@
 #include "TransportManager.h"
 #include "ComponentHolder.h"
 #include "TextManagerHub.h"
+#include "TextureManager.h"
 
 namespace trm
 {
@@ -71,6 +72,7 @@ namespace trm
 		TransportManagers managers_;
 		TextManagerHub textManagerHub_;
 		ComponentHolder componentHolder_;
+		TextureManager textureManager_;
 		bool processTerrainUpdate_ = true;
 	};
 

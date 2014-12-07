@@ -37,6 +37,7 @@ void DrawContext::Init()
 	// Bind the custom vertex attribute "a_vertex" to location VERTEX_ARRAY
     glBindAttribLocation(m_uiProgramObject, VertexArray, "a_vertex");
 	glBindAttribLocation(m_uiProgramObject, NormalArray, "a_normal");
+	glBindAttribLocation(m_uiProgramObject, TextureArray, "a_texture");
 
 	// Link the program
     glLinkProgram(m_uiProgramObject);

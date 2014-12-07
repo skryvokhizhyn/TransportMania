@@ -21,6 +21,8 @@
     <ClCompile Include="..\..\src\FontReader.cpp" />
     <ClCompile Include="..\..\src\HeightMapLoaderCache.cpp" />
     <ClCompile Include="..\..\src\HeightMapLoaderConstant.cpp" />
+    <ClCompile Include="..\..\src\ImgProperties.cpp" />
+    <ClCompile Include="..\..\src\PngHandler.cpp" />
     <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
     <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
     <ClCompile Include="..\..\src\TextManager.cpp" />
@@ -75,6 +77,8 @@
     <ClCompile Include="..\..\src\TerrainRangeCircle.cpp" />
     <ClCompile Include="..\..\src\TerrainRangeLine.cpp" />
     <ClCompile Include="..\..\src\TerrainSceneObject.cpp" />
+    <ClCompile Include="..\..\src\TextureLoader.cpp" />
+    <ClCompile Include="..\..\src\TextureManager.cpp" />
     <ClCompile Include="..\..\src\Train.cpp" />
     <ClCompile Include="..\..\src\TrainDrawableObject.cpp" />
     <ClCompile Include="..\..\src\TrainDrawableObjectFactory.cpp" />
@@ -109,6 +113,8 @@
     <ClInclude Include="..\..\src\FontReader.h" />
     <ClInclude Include="..\..\src\HeightMapLoaderCache.h" />
     <ClInclude Include="..\..\src\HeightMapLoaderConstant.h" />
+    <ClInclude Include="..\..\src\ImgProperties.h" />
+    <ClInclude Include="..\..\src\PngHandler.h" />
     <ClInclude Include="..\..\src\PolygonVisibilityChecker.h" />
     <ClInclude Include="..\..\src\PointNormaleMap.h" />
     <ClInclude Include="..\..\src\ResourceProxy.h" />
@@ -190,6 +196,11 @@
     <ClInclude Include="..\..\src\TerrainRangeLine.h" />
     <ClInclude Include="..\..\src\TerrainSceneObject.h" />
     <ClInclude Include="..\..\src\TextManager.h" />
+    <ClInclude Include="..\..\src\TextureId.h" />
+    <ClInclude Include="..\..\src\TextureLoader.h" />
+    <ClInclude Include="..\..\src\TextureManager.h" />
+    <ClInclude Include="..\..\src\TextureManagerProxy.h" />
+    <ClInclude Include="..\..\src\TextureProperties.h" />
     <ClInclude Include="..\..\src\Train.h" />
     <ClInclude Include="..\..\src\TrainDrawableObject.h" />
     <ClInclude Include="..\..\src\TrainDrawableObjectFactory.h" />

@@ -195,7 +195,7 @@ namespace
 			boost::transform(iv, std::back_inserter(md.indexes), 
 				ret<int>(Arg1 + (md.indexes.empty() ? 0 : md.indexes.back() + 1)));
 
-			std::fill_n(std::back_inserter(md.normales), md.points.size(), Point3d(0, 0, 1));
+			md.normales.resize(md.points.size(), Point3d(0, 0, 1));
 		}
 	};
 }

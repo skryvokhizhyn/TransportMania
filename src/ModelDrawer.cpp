@@ -5,8 +5,11 @@
 #include "DrawContext.h"
 #include "GlobalDefines.h"
 #include "Types.h"
+#include "TextureManagerProxy.h"
+
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
+
 #include <limits>
 
 using namespace trm;
@@ -14,6 +17,7 @@ using namespace trm;
 // we must preserve the size of Point3d as raw 3 * AxisType
 // buffer creation relies on it!
 static_assert(sizeof(Point3d) == 3 * sizeof(AxisType), "Expecting Point3d to be equal by size to 3 * size of AxisType");
+static_assert(sizeof(Point2d) == 2 * sizeof(AxisType), "Expecting Point2d to be equal by size to 2 * size of AxisType");
 
 namespace
 {
@@ -53,6 +57,12 @@ namespace
 			throw std::runtime_error("Undefined Draw Mode given");
 		}
 	}
+
+	GLuintType GetTextureInternalId(TextureId id)
+	{
+		const auto & props = TextureManagerProxy()->Get(id);
+		return props.id;
+	}
 }
 
 namespace trm
@@ -60,6 +70,7 @@ namespace trm
 namespace impl
 {
 	const GLuintType UNDEFINED_DRAW_MODE = std::numeric_limits<GLuintType>::max();
+	const GLuintType UNDEFINED_TEXTURE_ID = std::numeric_limits<GLuintType>::max();
 
 	struct State
 		: boost::noncopyable
@@ -67,19 +78,24 @@ namespace impl
 		GLuintType buffVert;
 		GLuintType buffIndx;
 		GLuintType buffNorm;
+		GLuintType buffText;
 		GLuintType drawMode;
+		GLuintType textureId;
 		size_t indxCnt;
 
 		State()
 			: buffVert(InitBuffer())
 			, buffIndx(InitBuffer())
 			, buffNorm(InitBuffer())
+			, buffText(InitBuffer())
 			, drawMode(UNDEFINED_DRAW_MODE)
+			, textureId(UNDEFINED_TEXTURE_ID)
 			, indxCnt(0)
 		{}
 
 		~State()
 		{
+			glDeleteBuffers(1, &buffText);
 			glDeleteBuffers(1, &buffNorm);
 			glDeleteBuffers(1, &buffIndx);
 			glDeleteBuffers(1, &buffVert);
@@ -98,6 +114,7 @@ void
 ModelDrawer::Load(const ModelData & md)
 {
 	statePtr_->drawMode = ConvertDrawMode(md.type);
+	statePtr_->textureId = GetTextureInternalId(md.textureId);
 	statePtr_->indxCnt = md.indexes.size();
 
 	if (md.points.empty())
@@ -107,6 +124,7 @@ ModelDrawer::Load(const ModelData & md)
 	LoadBuffer(md.indexes, statePtr_->buffIndx, GL_ELEMENT_ARRAY_BUFFER);
 #ifdef DRAWING_MODE_FULL
 	LoadBuffer(md.normales, statePtr_->buffNorm, GL_ARRAY_BUFFER);
+	LoadBuffer(md.textures, statePtr_->buffText, GL_ARRAY_BUFFER);
 #endif // DRAWING_MODE_FULL
 }
 
@@ -121,6 +139,13 @@ ModelDrawer::Draw() const
 	glBindBuffer(GL_ARRAY_BUFFER, statePtr_->buffNorm);
 	glEnableVertexAttribArray(DrawContext::NormalArray);
 	glVertexAttribPointer(DrawContext::NormalArray, 3, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, statePtr_->textureId);
+
+	glBindBuffer(GL_ARRAY_BUFFER, statePtr_->buffText);
+	glEnableVertexAttribArray(DrawContext::TextureArray);
+	glVertexAttribPointer(DrawContext::TextureArray, 2, GL_FLOAT, GL_FALSE, 0, 0);
 #endif // DRAWING_MODE_FULL
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, statePtr_->buffIndx);
@@ -128,6 +153,7 @@ ModelDrawer::Draw() const
 
 	glDisableVertexAttribArray(DrawContext::VertexArray);
 	glDisableVertexAttribArray(DrawContext::NormalArray);
+	glDisableVertexAttribArray(DrawContext::TextureArray);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

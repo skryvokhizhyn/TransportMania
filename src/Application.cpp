@@ -15,6 +15,8 @@
 #include "ComponentHolderProxy.h"
 //#include "FontReader.h"
 //#include "FontData.h"
+#include "TextureManagerProxy.h"
+#include "Logger.h"
 
 #include <boost/range/algorithm.hpp>
 #include <boost/filesystem/path.hpp>
@@ -38,10 +40,11 @@ Application::InitApplication(const size_t width, const size_t height)
 	//worldProjection_.SetAngles(Degrees(-61), Degrees(0), Degrees(-6));
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
-	//FontData fd = FontReader::Read(trm::GetRelativePath({"Fonts", "arial_ttf_cyr_lat.fnt"}));
+	//FontData fd = FontReader::Read(trm::GetFontPath("arial_ttf_cyr_lat.fnt"));
 
 	TextManagerHubProxy::Init(textManagerHub_);
 	ComponentHolderProxy::Init(componentHolder_);
+	TextureManagerProxy::Init(textureManager_);
 
 	return true;
 }
@@ -77,6 +80,7 @@ Application::ReleaseView()
 bool 
 Application::QuitApplication()
 {
+	TextureManagerProxy::Term();
 	ComponentHolderProxy::Term();
 	TextManagerHubProxy::Term();
 	
@@ -118,9 +122,9 @@ Application::Draw()
 {
 	context_.Clear();
 	
-	const Matrix & ovm = worldProjection_.GetOrthoViewMatrix();
+	//const Matrix & ovm = worldProjection_.GetOrthoViewMatrix();
 	
-	textManagerHub_.Draw(context_, ovm);
+	//textManagerHub_.Draw(context_, ovm);
 
 	const Matrix & pvm = worldProjection_.GetProjectionViewMatrix();
 

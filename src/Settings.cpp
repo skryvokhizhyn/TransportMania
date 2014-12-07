@@ -24,3 +24,15 @@ trm::GetRelativePath(const std::initializer_list<std::string> & il)
 
 	return p.string();
 }
+
+std::string 
+trm::GetFontPath(const std::string & name)
+{
+	return GetRelativePath({"Fonts", name});
+}
+
+std::string 
+trm::GetTexturePath(const std::string & name)
+{
+	return GetRelativePath({"Textures", name});
+}
