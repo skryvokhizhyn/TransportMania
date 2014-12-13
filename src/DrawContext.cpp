@@ -20,8 +20,10 @@ void DrawContext::Init()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_BLEND);
 	glCullFace(GL_BACK);
 	glHint(GL_GENERATE_MIPMAP_HINT, GL_NICEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 #endif // DRAWING_MODE_FULL
 
 	m_uiVertexShader = ShaderLoader::Load(Shader::Point3d);

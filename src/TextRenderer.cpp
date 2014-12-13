@@ -1,5 +1,8 @@
 #include "TextRenderer.h"
 #include "ModelData.h"
+#include "FontData.h"
+
+#pragma warning(disable: 4512)
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/algorithm/transform.hpp>
@@ -207,6 +210,106 @@ TextRenderer::Render(const std::wstring & str)
 
 	boost::for_each(str, CharMapper(md));
 	md.type = ModelData::Mode::Line;
+
+	return md;
+}
+
+#include <TextureManagerProxy.h>
+#include <boost/range/algorithm/lower_bound.hpp>
+#include <boost/assign/std/vector.hpp>
+
+namespace
+{
+	ModelData GenerateCharModelData(const FontData::Char & foundChar, const utils::ImgProperties & imgProps)
+	{
+		using namespace boost::assign;
+
+		ModelData charData;
+		charData.points.reserve(4);
+		charData.textures.reserve(4);
+		charData.indexes.reserve(6);
+
+		charData.points +=
+			Point3d(0, 0, 0),
+			Point3d(0, foundChar.height, 0),
+			Point3d(foundChar.width, foundChar.height, 0),
+			Point3d(foundChar.width, 0, 0);
+
+		charData.indexes += 0, 2, 1, 0, 3, 2;
+
+		charData.textures +=
+			Point2d(0, foundChar.height),
+			Point2d(0, 0),
+			Point2d(foundChar.width, 0),
+			Point2d(foundChar.width, foundChar.height);
+
+		boost::transform(charData.textures, charData.textures.begin(),
+			[&](const Point2d & p)
+		{
+			return p + Point2d(foundChar.x, foundChar.y);
+		});
+
+		boost::transform(charData.textures, charData.textures.begin(),
+			[&](const Point2d & p)
+		{
+			return Point2d(p.x() / imgProps.width, p.y() / imgProps.height);
+		});
+
+		return charData;
+	}
+
+	void AppendCharData(ModelData && charData, const std::uint16_t xShift, ModelData & globalData)
+	{
+		boost::transform(charData.points, charData.points.begin(),
+			[&](const Point3d & p)
+		{
+			return p + Point3d(xShift, 0, 0);
+		});
+
+		boost::transform(charData.indexes, charData.indexes.begin(), 
+			boost::bind(std::plus<IndexVector::value_type>(), _1, globalData.indexes.size() / 6 * 4));
+
+		globalData.points.insert(globalData.points.end(), charData.points.begin(), charData.points.end());
+		globalData.indexes.insert(globalData.indexes.end(), charData.indexes.begin(), charData.indexes.end());
+		globalData.textures.insert(globalData.textures.end(), charData.textures.begin(), charData.textures.end());
+	}
+}
+
+ModelData 
+TextRenderer::Render(const FontData & fd, const std::wstring & str)
+{
+	ModelData md;
+
+	md.type = ModelData::Mode::Triangle;
+	md.textureId = TextureId::Font;
+
+	const size_t stringSize = str.size();
+	md.points.reserve(4 * stringSize);
+	md.textures.reserve(4 * stringSize);
+	md.indexes.reserve(6 * stringSize);
+
+	const utils::ImgProperties & imgProps = TextureManagerProxy()->Get(TextureId::Font).props;
+
+	std::uint16_t xShift = 0;
+
+	for (wchar_t c : str)
+	{
+		FontData::Char ch; ch.id = c;
+		auto found = boost::lower_bound(fd.chars, ch,
+			[](const FontData::Char & l, const FontData::Char & r)
+		{
+			return l.id < r.id;
+		});
+
+		if (found != fd.chars.end() && found->id == ch.id)
+		{
+			ModelData charData = GenerateCharModelData(*found, imgProps);
+			AppendCharData(std::move(charData), xShift, md);
+			xShift += found->xadvance;
+		}
+	}
+
+	md.normales.resize(md.points.size(), Point3d(0, 0, 1));
 
 	return md;
 }

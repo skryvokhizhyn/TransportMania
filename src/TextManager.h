@@ -7,10 +7,12 @@
 
 namespace trm
 {
+	struct FontData;
+
 	class TextManager
 	{
 	public:
-		TextManager(std::wstring str);
+		TextManager(const FontData & fd, std::wstring str);
 
 		void Draw() const;
 

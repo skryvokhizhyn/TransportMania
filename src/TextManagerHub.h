@@ -2,6 +2,7 @@
 
 #include "TextManager.h"
 #include "DrawContext.h"
+#include "FontData.h"
 #include <vector>
 
 namespace trm
@@ -9,6 +10,8 @@ namespace trm
 	class TextManagerHub
 	{
 	public:
+		void Init();
+
 		void PutFrameRate(const unsigned rate);
 
 		void Draw(const DrawContext & c, const Matrix & orthoViewMatrix) const;
@@ -17,6 +20,7 @@ namespace trm
 		using TextManagers = std::vector<TextManager>;
 
 	private:
+		FontData fontData_;
 		TextManagers textManagers_;
 	};
 

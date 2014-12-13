@@ -4,6 +4,7 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/range/algorithm/transform.hpp>
+#include <boost/range/algorithm/sort.hpp>
 #include <boost/range/adaptor/map.hpp>
 #include <boost/range/adaptor/filtered.hpp>
 
@@ -21,6 +22,7 @@ namespace
 		FontData::Char ch;
 
 		ch.id = node.get<decltype(FontData::Char::id)>("<xmlattr>.id");
+		ch.x = node.get<decltype(FontData::Char::x)>("<xmlattr>.x");
 		ch.y = node.get<decltype(FontData::Char::y)>("<xmlattr>.y");
 		ch.width = node.get<decltype(FontData::Char::width)>("<xmlattr>.width");
 		ch.height = node.get<decltype(FontData::Char::height)>("<xmlattr>.height");
@@ -63,12 +65,19 @@ FontReader::Read(const std::string & path)
 	auto & root = tree.get_child("font");
 	fd.name = root.get<std::string>("info.<xmlattr>.face");
 	fd.file = root.get_child("pages").front().second.get<std::string>("<xmlattr>.file");
+	fd.size = root.get<std::uint8_t>("info.<xmlattr>.size");
 	
 	auto & chars = root.get_child("chars");
 	fd.chars.reserve(chars.get<int>("<xmlattr>.count"));
 
 	boost::transform(chars | boost::adaptors::filtered(keyFilter) | boost::adaptors::map_values, 
 		std::back_inserter(fd.chars), boost::bind(&ParseChar, _1));
+
+	boost::sort(fd.chars, 
+		[](const FontData::Char & l, const FontData::Char & r)
+	{
+		return l.id < r.id;
+	});
 
 	auto & kernings = root.get_child("kernings");
 	fd.kernings.reserve(kernings.get<int>("<xmlattr>.count"));

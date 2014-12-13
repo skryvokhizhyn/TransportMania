@@ -5,7 +5,8 @@ namespace trm
 	enum class TextureId
 	{
 		Undefined,
-		Ground
+		Ground, 
+		Font
 	};
 
 } // namespace trm

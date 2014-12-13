@@ -71,10 +71,10 @@ namespace
 	bool CheckPatchVisible(const CornerValues & heights, const Size2d & s, 
 		const WorldProjection & wp, size_t patchSize)
 	{
-		/*if (s.x() > 100 || s.y() > 100)
+		/*if (s.x() > 20 || s.y() > 20)
 			return false;
 
-		(hml); (s); (wp); (patchSize);
+		(s); (wp); (patchSize); (heights);
 		return true;*/
 
 		--patchSize;

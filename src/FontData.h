@@ -13,6 +13,7 @@ namespace trm
 	{
 		std::string name;
 		std::string file;
+		std::uint8_t size;
 
 		struct Char
 		{
@@ -49,14 +50,29 @@ namespace trm
 		Kernings kernings;
 
 		FontData()
+			: size(0)
 		{}
 
 		FontData(FontData && other)
 			: name(std::move(other.name))
 			, file(std::move(other.file))
+			, size(std::move(other.size))
 			, chars(std::move(other.chars))
 			, kernings(std::move(other.kernings))
 		{}
+
+		FontData & operator = (FontData && other)
+		{
+			name = std::move(other.name);
+			file = std::move(other.file);
+			size = std::move(other.size);
+			chars = std::move(other.chars);
+			kernings = std::move(other.kernings);
+
+			other.size = 0;
+
+			return *this;
+		}
 	};
 
 } // namespace trm

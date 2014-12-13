@@ -27,6 +27,7 @@ ImgArea::ImgArea(std::uint16_t a, std::uint16_t b, std::uint16_t w, std::uint16_
 class PngHandler::HandlerImpl
 {
 	using ImageType = bgil::rgba8_image_t;
+	using PixelType = bgil::rgba8_pixel_t;
 
 public:
 	HandlerImpl(const std::string & path)
@@ -51,8 +52,8 @@ public:
 		auto subView = bgil::subimage_view(bgil::const_view(img_), area.x, area.y, area.width, area.height);
 
 		// needs assignment operator in for_each_pixel
-		std::function<void (const bgil::rgba8_pixel_t &)> func =
-			[&](const bgil::rgba8_pixel_t & point)
+		std::function<void (const PixelType &)> func =
+			[&](const PixelType & point)
 		{
 			ret.push_back(bgil::get_color(point, bgil::red_t()));
 			ret.push_back(bgil::get_color(point, bgil::green_t()));

@@ -13,8 +13,6 @@
 #include "Angle.h"
 #include "TextManagerHubProxy.h"
 #include "ComponentHolderProxy.h"
-//#include "FontReader.h"
-//#include "FontData.h"
 #include "TextureManagerProxy.h"
 #include "Logger.h"
 
@@ -40,7 +38,7 @@ Application::InitApplication(const size_t width, const size_t height)
 	//worldProjection_.SetAngles(Degrees(-61), Degrees(0), Degrees(-6));
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
-	//FontData fd = FontReader::Read(trm::GetFontPath("arial_ttf_cyr_lat.fnt"));
+	textManagerHub_.Init();
 
 	TextManagerHubProxy::Init(textManagerHub_);
 	ComponentHolderProxy::Init(componentHolder_);
@@ -121,10 +119,6 @@ void
 Application::Draw()
 {
 	context_.Clear();
-	
-	//const Matrix & ovm = worldProjection_.GetOrthoViewMatrix();
-	
-	//textManagerHub_.Draw(context_, ovm);
 
 	const Matrix & pvm = worldProjection_.GetProjectionViewMatrix();
 
@@ -136,6 +130,9 @@ Application::Draw()
 		[](const StaticSceneObjectPtr & ssoPtr){ssoPtr->Draw();});
 
 	componentHolder_.Draw(context_, pvm);
+
+	const Matrix & ovm = worldProjection_.GetOrthoViewMatrix();
+	textManagerHub_.Draw(context_, ovm);
 }
 
 void 
