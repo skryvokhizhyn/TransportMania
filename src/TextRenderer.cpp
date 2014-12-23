@@ -258,12 +258,12 @@ namespace
 		return charData;
 	}
 
-	void AppendCharData(ModelData && charData, const std::uint16_t xShift, ModelData & globalData)
+	void AppendCharData(ModelData && charData, const std::uint16_t xShift, const std::uint16_t yShift, ModelData & globalData)
 	{
 		boost::transform(charData.points, charData.points.begin(),
 			[&](const Point3d & p)
 		{
-			return p + Point3d(xShift, 0, 0);
+			return p + Point3d(xShift, static_cast<float>(-yShift), 0);
 		});
 
 		boost::transform(charData.indexes, charData.indexes.begin(), 
@@ -273,10 +273,52 @@ namespace
 		globalData.indexes.insert(globalData.indexes.end(), charData.indexes.begin(), charData.indexes.end());
 		globalData.textures.insert(globalData.textures.end(), charData.textures.begin(), charData.textures.end());
 	}
+
+	FontData::Chars::const_iterator FindCharData(wchar_t c, const FontData::Chars & chars)
+	{
+		static const auto comparer = 
+			[](const FontData::Char & l, const FontData::Char & r)
+		{
+			return l.id < r.id;
+		};
+
+		FontData::Char ch; ch.id = c;
+
+		auto found = boost::lower_bound(chars, ch, comparer);
+
+		if (found == chars.end())
+		{
+			return found;
+		}
+
+		if (found->id != c)
+		{
+			return chars.end();
+		}
+
+		return found;
+	}
+
+	const FontData::Char & GetCharData(wchar_t c, const FontData::Chars & chars)
+	{
+		auto found = FindCharData(c, chars);
+
+		if (found == chars.end())
+		{
+			found = FindCharData(L'?', chars);
+
+			if (found == chars.end())
+			{
+				throw std::runtime_error(boost::str(boost::format("Failed to find symbol with code '%d' and backup symbol '?'") % c));
+			}
+		}
+
+		return *found;
+	}
 }
 
-ModelData 
-TextRenderer::Render(const FontData & fd, const std::wstring & str)
+ModelData
+TextRenderer::Render(const FontData & fd, const std::wstring & str, const std::uint16_t maxWidth)
 {
 	ModelData md;
 
@@ -291,22 +333,28 @@ TextRenderer::Render(const FontData & fd, const std::wstring & str)
 	const utils::ImgProperties & imgProps = TextureManagerProxy()->Get(TextureId::Font).props;
 
 	std::uint16_t xShift = 0;
+	std::uint16_t yShift = fd.size;
 
 	for (wchar_t c : str)
 	{
-		FontData::Char ch; ch.id = c;
-		auto found = boost::lower_bound(fd.chars, ch,
-			[](const FontData::Char & l, const FontData::Char & r)
-		{
-			return l.id < r.id;
-		});
+		const FontData::Char & ch = GetCharData(c, fd.chars);
 
-		if (found != fd.chars.end() && found->id == ch.id)
+		if (c == L'\n' || xShift + ch.xadvance >= maxWidth)
 		{
-			ModelData charData = GenerateCharModelData(*found, imgProps);
-			AppendCharData(std::move(charData), xShift, md);
-			xShift += found->xadvance;
+			if (xShift == 0)
+			{
+				throw std::runtime_error("Maximum text width is smaller than one character");
+			}
+
+			xShift = 0;
+			yShift += fd.size;
+
+			continue;
 		}
+
+		ModelData charData = GenerateCharModelData(ch, imgProps);
+		AppendCharData(std::move(charData), xShift, yShift, md);
+		xShift += ch.xadvance;
 	}
 
 	md.normales.resize(md.points.size(), Point3d(0, 0, 1));

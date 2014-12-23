@@ -16,6 +16,9 @@
 #include <boost/msm/front/functor_row.hpp>
 // Not_
 #include <boost/msm/front/euml/operator.hpp>
+// vector30
+#include <boost/mpl/vector/vector30.hpp>
+
 
 #define ACTION_DEFINITION(name) \
 	struct Apply ## name \
@@ -77,6 +80,8 @@ namespace impl
 			ACTION_DEFINITION(KeyC);
 			ACTION_DEFINITION(KeyR);
 			ACTION_DEFINITION(KeyV);
+			ACTION_DEFINITION(KeyT);
+			ACTION_DEFINITION(KeyB);
 
 			ACTION_DEFINITION(Dummy);
 
@@ -96,7 +101,7 @@ namespace impl
 			using MoveKeyR = MoveKeyPressed<MoveKeys::Right>;
 			using MoveKeyD = MoveKeyPressed<MoveKeys::Down>;
 
-			struct transition_table : boost::mpl::vector<
+			struct transition_table : boost::mpl::vector21<
 				//			Start				Event			Next				Action					Guard
 				bmf::Row<	EmptyState,			MoveKeyL,		EmptyState,			ApplyLeftKey,			bmf::none >,
 				bmf::Row<	EmptyState,			MoveKeyR,		EmptyState,			ApplyRightKey,			bmf::none >,
@@ -111,6 +116,8 @@ namespace impl
 				bmf::Row<	EmptyState,			KeyCPressed,	EmptyState,			ApplyKeyC,				bmf::none >,
 				bmf::Row<	EmptyState,			KeyRPressed,	EmptyState,			ApplyKeyR,				bmf::none >,
 				bmf::Row<	EmptyState,			KeyVPressed,	EmptyState,			ApplyKeyV,				bmf::none >,
+				bmf::Row<	EmptyState,			KeyTPressed,	EmptyState,			ApplyKeyT,				bmf::none >,
+				bmf::Row<	EmptyState,			KeyBPressed,	EmptyState,			ApplyKeyB,				bmf::none >,
 
 				bmf::Row<	EmptyState,			FingerPressed,	FingerPressedState,	ApplyRegisterFinger,	bmf::none >,
 				bmf::Row<	EmptyState,			FingerMoved,	EmptyState,			bmf::none,				bmf::none >,

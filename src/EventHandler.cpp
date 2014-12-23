@@ -138,6 +138,14 @@ EventHandler::OnKeyDown(const SDL_Event & e)
 	case SDLK_v:
 		eventSMPtr_->Emit(KeyVPressed());
 		break;
+
+	case SDLK_t:
+		eventSMPtr_->Emit(KeyTPressed());
+		break;
+
+	case SDLK_b:
+		eventSMPtr_->Emit(KeyBPressed());
+		break;
 	}
 }
 

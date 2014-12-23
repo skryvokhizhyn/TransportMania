@@ -9,12 +9,12 @@
 using namespace trm;
 using namespace boost::numeric::ublas;
 
-const Matrix trm::operator * (const Matrix & m1, const Matrix & m2)
+Matrix trm::operator * (const Matrix & m1, const Matrix & m2)
 {
 	return prod(m1, m2);
 }
 
-const Point4d trm::operator * (const Matrix & m, const Point4d & v)
+Point4d trm::operator * (const Matrix & m, const Point4d & v)
 {
 	Point4d res;
 
@@ -42,7 +42,7 @@ const Point4d trm::operator * (const Matrix & m, const Point4d & v)
 //	return res;
 //}
 
-const Matrix trm::Transponate(const Matrix & m)
+Matrix trm::Transponate(const Matrix & m)
 {
 	return trans(m);
 }

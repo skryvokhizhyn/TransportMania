@@ -6,9 +6,9 @@
 
 namespace trm
 {
-	const Matrix operator * (const Matrix & m1, const Matrix & m2);
-	const Point4d operator * (const Matrix & m, const Point4d & v);
-	const Matrix Transponate(const Matrix & m);
+	Matrix operator * (const Matrix & m1, const Matrix & m2);
+	Point4d operator * (const Matrix & m, const Point4d & v);
+	Matrix Transponate(const Matrix & m);
 
 } // namespace trm
 

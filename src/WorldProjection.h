@@ -12,7 +12,7 @@ namespace trm
 	public:
 		WorldProjection();
 
-		void SetRatio(const float ratio);
+		void SetRatio(const size_t width, const size_t height);
 		void SetAngles(const Angle theta, const Angle psi, const Angle rotate);
 		void SetShift(const Point3d & shift);
 		

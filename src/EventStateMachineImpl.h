@@ -146,6 +146,23 @@ namespace impl
 		fsm.subj_.BendScene(Degrees(0), Degrees(-5));
 		fsm.subj_.UpdateTerrain();
 	}
+
+	ACTION_IMPLEMENTATION(KeyT)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		fsm.subj_.ZoomScene(5.0f);
+		fsm.subj_.UpdateTerrain();
+	}
+
+	ACTION_IMPLEMENTATION(KeyB)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD
+
+		fsm.subj_.ZoomScene(-5.0f);
+		fsm.subj_.UpdateTerrain();
+	}
+
 	///////////////////////////////////////
 
 	ACTION_IMPLEMENTATION(Dummy)

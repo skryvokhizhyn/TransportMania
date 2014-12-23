@@ -3,20 +3,27 @@
 #include "MatrixUtils.h"
 #include "Point2d.h"
 #include "GeometryUtils.h"
+#include "Terrain.h"
 
 using namespace trm;
 
 namespace
 {
 	const float FRUSTUM_NEAR_VALUE = 0.001f;
-	const float ORTHO_NEAR_VALUE = 0.0001f; // must be smaller than FRUSTUM_NEAR_VALUE
 	const float FRUSTUM_FAR_VALUE = 1000.0f;
 	const Angle PROJECTION_HORIZONTAL_ANGLE = Degrees(45.0f);
 	const Point3d SHIFT_DEFAULT_POSITION(0, 0, 100.0f);
-	const float CAMERA_MIN_HEIGHT = 20.0f;
 	const float CAMERA_MAX_HEIGHT = 500.0f;
 	const float DEFAULT_BEND_VALUE = 0.1f;
 	const float SHIFT_SLOWDOWN_COEF = 0.0005f;
+
+	bool CheckHeight(const float height)
+	{
+		if (height >= CAMERA_MAX_HEIGHT || height <= Terrain::MAX_HEIGHT)
+			return false;
+
+		return true;
+	}
 }
 
 WorldProjection::WorldProjection()
@@ -29,10 +36,14 @@ WorldProjection::WorldProjection()
 }
 
 void
-WorldProjection::SetRatio(const float ratio)
+WorldProjection::SetRatio(const size_t width, const size_t height)
 {
+	if (height == 0)
+		throw std::runtime_error("Zero screen height specified");
+
+	const float ratio = static_cast<float>(width) / height;
 	projectionMatrix_ = MatrixFactory::Projection(PROJECTION_HORIZONTAL_ANGLE, ratio, FRUSTUM_NEAR_VALUE, FRUSTUM_FAR_VALUE);
-	orthoViewMatrix_ = MatrixFactory::Ortho(ratio) * MatrixFactory::Move(Point3d(0.0f, 0.0f, 1.0f - ORTHO_NEAR_VALUE));
+	orthoViewMatrix_ = MatrixFactory::Ortho(width, height);
 }
 
 void 
@@ -74,6 +85,11 @@ WorldProjection::SetShift(const Point3d & shift)
 
 	UpdateProjectionViewMatrix();
 	UpdateCameraPosition();
+
+	if (!CheckHeight(cameraPosition_.z()))
+	{
+		throw std::runtime_error("Initial position is lower than acceptable level");
+	}
 }
 
 void 
@@ -108,16 +124,18 @@ WorldProjection::Shift(const float x, const float y)
 void 
 WorldProjection::Zoom(const float z)
 {
-	float currentHeight = shiftPosition_.z();
-	currentHeight += z;
+	const Point3d shiftPositionInitial = shiftPosition_;
 
-	if (currentHeight >= CAMERA_MAX_HEIGHT || currentHeight <= CAMERA_MIN_HEIGHT)
-		return;
-
-	shiftPosition_.z() = currentHeight;
-
+	shiftPosition_.z() += z;
+	
 	UpdateProjectionViewMatrix();
 	UpdateCameraPosition();
+
+	// revert if we're too low
+	if (!CheckHeight(cameraPosition_.z()))
+	{
+		Zoom(-z);
+	}
 }
 
 void 
@@ -133,10 +151,19 @@ WorldProjection::Rotate(const Angle angle)
 void 
 WorldProjection::Bend(const Angle dtheta, const Angle dpsi)
 {
+	if ((xAngle_ + dtheta < Degrees(0)) || (yAngle_ + dpsi < Degrees(0)))
+		return;
+
 	xAngle_ += dtheta;
 	yAngle_ += dpsi;
 
 	UpdateRotateMatrix();
+
+	// rollback if we're too low
+	if (!CheckHeight(cameraPosition_.z()))
+	{
+		Bend(-dtheta, -dpsi);
+	}
 }
 
 const Point3d &

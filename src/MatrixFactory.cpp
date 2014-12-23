@@ -166,14 +166,18 @@ MatrixFactory::Projection(const Angle angle, const float ratio, const float near
 }
 
 Matrix
-MatrixFactory::Ortho(const float ratio)
+MatrixFactory::Ortho(const size_t width, const size_t height)
 {
 	// proper implementation is here: 
 	// http://www.songho.ca/opengl/gl_projectionmatrix.html
 
 	Matrix m = Identity();
-	m.at_element(0, 0) = 1 / ratio;
+	m.at_element(0, 0) = 2 /boost::numeric_cast<float>(width);
+	m.at_element(1, 1) = 2 / boost::numeric_cast<float>(height); 
 	
+	m.at_element(0, 3) = -1;
+	m.at_element(1, 3) = -1;
+
 	return m;
 }
 

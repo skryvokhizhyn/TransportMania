@@ -29,16 +29,13 @@ Application::InitApplication(const size_t width, const size_t height)
 {
 	stopped_ = false;
 
-	if (height == 0)
-		throw std::runtime_error("Zero screen height specified");
-
-	worldProjection_.SetRatio(static_cast<float>(width) / height);
+	worldProjection_.SetRatio(width, height);
 	//worldProjection_.SetAngles(Degrees(69), Degrees(0), Degrees(-32));
 	worldProjection_.SetAngles(Degrees(55), Degrees(0), Degrees(10));
 	//worldProjection_.SetAngles(Degrees(-61), Degrees(0), Degrees(-6));
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
-	textManagerHub_.Init();
+	textManagerHub_.Init(width, height);
 
 	TextManagerHubProxy::Init(textManagerHub_);
 	ComponentHolderProxy::Init(componentHolder_);

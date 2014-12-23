@@ -7,7 +7,7 @@ using namespace trm;
 BOOST_AUTO_TEST_CASE(WorldProjectionTestZeroAngles)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(0), Degrees(0));
 	wp.SetShift(Point3d(0, 0, 100));
 
@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionTestZeroAngles)
 BOOST_AUTO_TEST_CASE(WorldProjectionTestXRotation)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(90), Degrees(0), Degrees(0));
 	wp.SetShift(Point3d(0, 0, 100));
 
@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionTestXRotation)
 BOOST_AUTO_TEST_CASE(WorldProjectionTestYRotation)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(90), Degrees(0));
 	wp.SetShift(Point3d(0, 0, 100));
 
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionTestYRotation)
 BOOST_AUTO_TEST_CASE(WorldProjectionTestZRotation1)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(0), Degrees(90));
 	wp.SetShift(Point3d(0, 0, 100));
 
@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionTestZRotation1)
 BOOST_AUTO_TEST_CASE(WorldProjectionTestZRotation2)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(0), Degrees(90));
 	wp.SetShift(Point3d(0, 100, 0));
 
@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionTestZRotation2)
 BOOST_AUTO_TEST_CASE(WorldProjectionTestXZRotation1)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(0), Degrees(180));
 	wp.SetShift(Point3d(0, 0, 100));
 
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionTestXZRotation1)
 BOOST_AUTO_TEST_CASE(WorldProjectionTestXZRotation2)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(90), Degrees(0), Degrees(180));
 	wp.SetShift(Point3d(0, 0, 100));
 
@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionTestXZRotation2)
 BOOST_AUTO_TEST_CASE(WorldProjectionTestXZRotation3)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(90), Degrees(0), Degrees(180));
 	wp.SetShift(Point3d(100, 100, 100));
 	
@@ -112,7 +112,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionTestXZRotation3)
 BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest1)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(0), Degrees(0));
 	wp.SetShift(Point3d(100, 100, 100));
 	
@@ -127,7 +127,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest1)
 BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest2)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(0), Degrees(180));
 	wp.SetShift(Point3d(100, 100, 100));
 	
@@ -142,7 +142,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest2)
 BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest3)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(0), Degrees(90));
 	wp.SetShift(Point3d(100, 100, 100));
 	
@@ -157,7 +157,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest3)
 BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest4)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(0), Degrees(270));
 	wp.SetShift(Point3d(100, 100, 100));
 	
@@ -173,7 +173,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest4)
 BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest5)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(0), Degrees(45));
 	wp.SetShift(Point3d(100, 100, 100));
 	
@@ -188,7 +188,7 @@ BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest5)
 BOOST_AUTO_TEST_CASE(WorldProjectionReversedMoveTest6)
 {
 	WorldProjection wp;
-	wp.SetRatio(4.0f / 3.0f);
+	wp.SetRatio(4, 3);
 	wp.SetAngles(Degrees(0), Degrees(0), Degrees(-45));
 	wp.SetShift(Point3d(100, 100, 100));
 	

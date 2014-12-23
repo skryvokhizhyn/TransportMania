@@ -39,8 +39,9 @@ namespace
 			vec3 n_normal = normalize(v_normal);\
 			vec3 lightVector = normalize(u_lightPosition - v_vertex);\
 			float diffuse = 0.8 * max(dot(n_normal, lightVector), 0.0);\
-			vec4 one = vec4(1.0, 1.0, 0.66, 256.0);\
-			gl_FragColor = (0.2 + diffuse) * one * texture2D(u_texture, v_texture);\
+			vec3 one = vec3(1.0, 1.0, 0.66);\
+			vec4 texture = texture2D(u_texture, v_texture);\
+			gl_FragColor = vec4((0.2 + diffuse) *  one * vec3(texture.r, texture.g, texture.b), texture.a);\
 		}";
 #else
 

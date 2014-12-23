@@ -30,6 +30,8 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE := TransportManiaNative
 
+LOCAL_CFLAGS += -DNDEBUG
+
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../src/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../3rdparty/SDL2/include/
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../3rdparty/zlib-1.2.8/include/

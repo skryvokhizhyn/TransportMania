@@ -12,7 +12,7 @@ namespace trm
 	class TextManager
 	{
 	public:
-		TextManager(const FontData & fd, std::wstring str);
+		TextManager(const ModelData & md, Matrix && m);
 
 		void Draw() const;
 

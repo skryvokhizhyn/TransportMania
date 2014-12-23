@@ -25,6 +25,8 @@ namespace impl
 	struct KeyCPressed {};
 	struct KeyRPressed {};
 	struct KeyVPressed {};
+	struct KeyTPressed {};
+	struct KeyBPressed {};
 
 	struct Commit {};
 

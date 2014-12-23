@@ -17,7 +17,7 @@ namespace trm
 		static Matrix Rotate(const Angle xAngle, const Angle yAngle, const Angle zAngle);
 		static Matrix Rotate(const Point3d & vF, const Point3d & vT, const Point3d & vDefultRotation = Point3d());
 		static Matrix Projection(const Angle angle, const float ratio, const float near, const float far);
-		static Matrix Ortho(const float ratio);
+		static Matrix Ortho(const size_t width, const size_t height);
 
 		//static Point4d RotateTest(Point4d p, const Angle xAngle, const Angle yAngle, const Angle zAngle);
 	};

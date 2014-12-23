@@ -10,7 +10,9 @@ namespace trm
 	class TextManagerHub
 	{
 	public:
-		void Init();
+		TextManagerHub();
+
+		void Init(const size_t width, const size_t height);
 
 		void PutFrameRate(const unsigned rate);
 
@@ -21,6 +23,8 @@ namespace trm
 
 	private:
 		FontData fontData_;
+		size_t width_;
+		size_t height_;
 		TextManagers textManagers_;
 	};
 
