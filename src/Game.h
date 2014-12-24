@@ -19,6 +19,7 @@ namespace trm
 	private:
 		void InitSDL();
 		void InitGL();
+		void InitApp();
 
 	private:
 		using SDLWindowPtr = std::shared_ptr<SDL_Window>;

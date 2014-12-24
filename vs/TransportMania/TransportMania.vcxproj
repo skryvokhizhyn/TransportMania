@@ -25,8 +25,8 @@
     <ClCompile Include="..\..\src\PngHandler.cpp" />
     <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
     <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
+    <ClCompile Include="..\..\src\DrawableItem.cpp" />
     <ClCompile Include="..\..\src\TextManager.cpp" />
-    <ClCompile Include="..\..\src\TextManagerHub.cpp" />
     <ClCompile Include="..\..\src\TextRenderer.cpp" />
     <ClCompile Include="..\..\src\FpsCounter.cpp" />
     <ClCompile Include="..\..\src\Game.cpp" />
@@ -96,6 +96,8 @@
     <ClCompile Include="..\..\src\Variance.cpp" />
     <ClCompile Include="..\..\src\Vertex.cpp" />
     <ClCompile Include="..\..\src\WagonDrawableObject.cpp" />
+    <ClCompile Include="..\..\src\WindowManager.cpp" />
+    <ClCompile Include="..\..\src\WindowRenderer.cpp" />
     <ClCompile Include="..\..\src\WorldProjection.cpp" />
     <ClCompile Include="LeakDetectorInitializer.cpp" />
     <ClCompile Include="Logger.cpp" />
@@ -118,8 +120,8 @@
     <ClInclude Include="..\..\src\PolygonVisibilityChecker.h" />
     <ClInclude Include="..\..\src\PointNormaleMap.h" />
     <ClInclude Include="..\..\src\ResourceProxy.h" />
-    <ClInclude Include="..\..\src\TextManagerHub.h" />
-    <ClInclude Include="..\..\src\TextManagerHubProxy.h" />
+    <ClInclude Include="..\..\src\TextManager.h" />
+    <ClInclude Include="..\..\src\TextManagerProxy.h" />
     <ClInclude Include="..\..\src\TextRenderer.h" />
     <ClInclude Include="..\..\src\LeakDetectorInitializer.h" />
     <ClInclude Include="..\..\src\DrawableObject.h" />
@@ -195,7 +197,7 @@
     <ClInclude Include="..\..\src\TerrainRangeCircle.h" />
     <ClInclude Include="..\..\src\TerrainRangeLine.h" />
     <ClInclude Include="..\..\src\TerrainSceneObject.h" />
-    <ClInclude Include="..\..\src\TextManager.h" />
+    <ClInclude Include="..\..\src\DrawableItem.h" />
     <ClInclude Include="..\..\src\TextureId.h" />
     <ClInclude Include="..\..\src\TextureLoader.h" />
     <ClInclude Include="..\..\src\TextureManager.h" />
@@ -226,6 +228,8 @@
     <ClInclude Include="..\..\src\Variance.h" />
     <ClInclude Include="..\..\src\Vertex.h" />
     <ClInclude Include="..\..\src\WagonDrawableObject.h" />
+    <ClInclude Include="..\..\src\WindowManager.h" />
+    <ClInclude Include="..\..\src\WindowRenderer.h" />
     <ClInclude Include="..\..\src\WorldProjection.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

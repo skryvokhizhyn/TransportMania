@@ -6,7 +6,8 @@ namespace trm
 	{
 		Undefined,
 		Ground, 
-		Font
+		Font,
+		OkButton
 	};
 
 } // namespace trm

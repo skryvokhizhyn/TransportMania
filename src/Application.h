@@ -11,8 +11,9 @@
 #include "Train.h"
 #include "TransportManager.h"
 #include "ComponentHolder.h"
-#include "TextManagerHub.h"
+#include "TextManager.h"
 #include "TextureManager.h"
+#include "WindowManager.h"
 
 namespace trm
 {
@@ -70,9 +71,10 @@ namespace trm
 		RoadNetwork roadNetwork_;
 		RoadRoutePtrs roadRoutePtrs_;
 		TransportManagers managers_;
-		TextManagerHub textManagerHub_;
+		TextManager textManager_;
 		ComponentHolder componentHolder_;
 		TextureManager textureManager_;
+		WindowManager windowManager_;
 		bool processTerrainUpdate_ = true;
 	};
 

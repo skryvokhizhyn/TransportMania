@@ -11,7 +11,7 @@
 #include "Train.h"
 #include "Settings.h"
 #include "Angle.h"
-#include "TextManagerHubProxy.h"
+#include "TextManagerProxy.h"
 #include "ComponentHolderProxy.h"
 #include "TextureManagerProxy.h"
 #include "Logger.h"
@@ -35,11 +35,14 @@ Application::InitApplication(const size_t width, const size_t height)
 	//worldProjection_.SetAngles(Degrees(-61), Degrees(0), Degrees(-6));
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
-	textManagerHub_.Init(width, height);
+	textManager_.Init(width, height);
+	windowManager_.Init(width, height);
 
-	TextManagerHubProxy::Init(textManagerHub_);
+	TextManagerProxy::Init(textManager_);
 	ComponentHolderProxy::Init(componentHolder_);
 	TextureManagerProxy::Init(textureManager_);
+
+	windowManager_.CreateOKWindow();
 
 	return true;
 }
@@ -77,7 +80,7 @@ Application::QuitApplication()
 {
 	TextureManagerProxy::Term();
 	ComponentHolderProxy::Term();
-	TextManagerHubProxy::Term();
+	TextManagerProxy::Term();
 	
 	return true;
 }
@@ -129,7 +132,8 @@ Application::Draw()
 	componentHolder_.Draw(context_, pvm);
 
 	const Matrix & ovm = worldProjection_.GetOrthoViewMatrix();
-	textManagerHub_.Draw(context_, ovm);
+	textManager_.Draw(context_, ovm);
+	windowManager_.Draw(context_, ovm);
 }
 
 void 

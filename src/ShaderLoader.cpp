@@ -24,7 +24,6 @@ namespace
 			v_normal = n_normal;\
 			v_texture = a_texture;\
 			gl_Position = vec4(a_vertex, 1.0) * (u_myMvMatrix * u_myPVMatrix);\
-			gl_PointSize = 2.0;\
 		}";
 
 	const std::string FRAGMENT_SHADER = "\
@@ -41,7 +40,7 @@ namespace
 			float diffuse = 0.8 * max(dot(n_normal, lightVector), 0.0);\
 			vec3 one = vec3(1.0, 1.0, 0.66);\
 			vec4 texture = texture2D(u_texture, v_texture);\
-			gl_FragColor = vec4((0.2 + diffuse) *  one * vec3(texture.r, texture.g, texture.b), texture.a);\
+			gl_FragColor = vec4((0.2 + diffuse) * one * texture.rgb, texture.a);\
 		}";
 #else
 

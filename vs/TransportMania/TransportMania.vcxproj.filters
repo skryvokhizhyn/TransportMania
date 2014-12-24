@@ -55,6 +55,12 @@
     <Filter Include="Utils\Img">
       <UniqueIdentifier>{5b064d69-fc3c-41fa-abe7-1861cb3d2111}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{5743018a-9954-41a3-80d0-4c21b12ebd2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures">
+      <UniqueIdentifier>{4095abb7-7b7e-4588-8a2d-07fbc80455d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -285,12 +291,6 @@
     <ClCompile Include="..\..\src\TextRenderer.cpp">
       <Filter>Text</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\TextManager.cpp">
-      <Filter>Text</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TextManagerHub.cpp">
-      <Filter>Text</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ComponentHolder.cpp">
       <Filter>Transport</Filter>
     </ClCompile>
@@ -315,14 +315,26 @@
     <ClCompile Include="..\..\src\PngHandler.cpp">
       <Filter>Utils\Img</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\TextureLoader.cpp">
-      <Filter>Draw</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ImgProperties.cpp">
       <Filter>Utils\Img</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\TextureManager.cpp">
+    <ClCompile Include="..\..\src\WindowManager.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DrawableItem.cpp">
       <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TextManager.cpp">
+      <Filter>Text</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowRenderer.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TextureLoader.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TextureManager.cpp">
+      <Filter>Textures</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -644,20 +656,11 @@
     <ClInclude Include="..\..\src\FontReader.h">
       <Filter>Font</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TextManager.h">
-      <Filter>Text</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\TextRenderer.h">
       <Filter>Text</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ResourceProxy.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TextManagerHub.h">
-      <Filter>Text</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TextManagerHubProxy.h">
-      <Filter>Text</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ComponentHolderProxy.h">
       <Filter>Transport</Filter>
@@ -683,23 +686,38 @@
     <ClInclude Include="..\..\src\PngHandler.h">
       <Filter>Utils\Img</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TextureId.h">
-      <Filter>Draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TextureLoader.h">
-      <Filter>Draw</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TextureManager.h">
-      <Filter>Draw</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ImgProperties.h">
       <Filter>Utils\Img</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TextureProperties.h">
+    <ClInclude Include="..\..\src\WindowManager.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\DrawableItem.h">
       <Filter>Draw</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\TextManager.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextManagerProxy.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowRenderer.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextureProperties.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextureId.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextureLoader.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextureManager.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\TextureManagerProxy.h">
-      <Filter>Draw</Filter>
+      <Filter>Textures</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

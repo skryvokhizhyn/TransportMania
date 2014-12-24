@@ -152,8 +152,6 @@ EventHandler::OnKeyDown(const SDL_Event & e)
 void 
 EventHandler::OnMouseButtonDown(const SDL_Event & e)
 {
-	//utils::Logger().Debug() << "Button pressed ";
-
 	switch (e.button.button)
 	{
 	case SDL_BUTTON_LEFT:
@@ -215,8 +213,6 @@ void
 EventHandler::OnFingerUp(const SDL_Event & e)
 {
 	const SDL_TouchFingerEvent & tfe = e.tfinger;
-
-	//utils::Logger().Debug() << "Finger UP " << tfe.fingerId;
 
 	eventSMPtr_->Emit(FingerReleased{tfe.fingerId});
 }

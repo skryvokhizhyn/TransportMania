@@ -5,7 +5,7 @@
 #include "EventHandler.h"
 #include "FpsCounter.h"
 #include "UpdateRate.h"
-#include "TextManagerHubProxy.h"
+#include "TextManagerProxy.h"
 
 #include <boost/format.hpp>
 #include <stdexcept>
@@ -35,9 +35,7 @@ Game::Game()
 {
 	InitSDL();
 	InitGL();
-
-	app_.InitApplication(640, 480);
-	app_.InitView();
+	InitApp();
 }
 
 Game::~Game()
@@ -97,6 +95,19 @@ Game::InitGL()
 }
 
 void
+Game::InitApp()
+{
+	int width = 0;
+	int height = 0;
+	uint32_t flags = 0;
+
+	GetScreenParameters(width, height, flags);
+
+	app_.InitApplication(width, height);
+	app_.InitView();
+}
+
+void
 Game::Run()
 {
 	SDL_Event event;
@@ -141,7 +152,7 @@ Game::Run()
 			const unsigned frames = fpsCounter.GetFrames();
 
 			//utils::Logger().Debug() << "Frames " << frames;
-			TextManagerHubProxy()->PutFrameRate(frames);
+			TextManagerProxy()->PutFrameRate(frames);
 		}
 
 		const unsigned cnt = updateRate.Tick();

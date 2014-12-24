@@ -153,13 +153,10 @@ MatrixFactory::Projection(const Angle angle, const float ratio, const float near
 	Matrix m = Zero();
 
 	m.at_element(0, 0) = near / r;
-	
 	m.at_element(1, 1) = near / t;
-
 	m.at_element(2, 2) = -(far + near) / (far - near);
 
 	m.at_element(3, 2) = -1;
-
 	m.at_element(2, 3) = -2 * far * near / (far - near);
 
 	return m;

@@ -1,26 +1,31 @@
 #pragma once
 
-#include "ModelDrawer.h"
-#include "Matrix.h"
-
-#include <string>
+#include "DrawableItem.h"
+#include "DrawContext.h"
+#include "FontData.h"
+#include <vector>
 
 namespace trm
 {
-	struct FontData;
-
 	class TextManager
 	{
 	public:
-		TextManager(const ModelData & md, Matrix && m);
+		TextManager();
 
-		void Draw() const;
+		void Init(const size_t width, const size_t height);
 
-		const Matrix & GetModelMatrix() const;
+		void PutFrameRate(const unsigned rate);
+
+		void Draw(const DrawContext & c, const Matrix & orthoViewMatrix) const;
 
 	private:
-		ModelDrawer drawer_;
-		Matrix modelMatrix_;
+		using TextManagers = std::vector<DrawableItem>;
+
+	private:
+		FontData fontData_;
+		size_t width_;
+		size_t height_;
+		TextManagers drawableItems_;
 	};
 
 } // namespace trm
