@@ -13,6 +13,8 @@ namespace trm
 		virtual void Process(const FingerPressed & e) = 0;
 		virtual void Process(const FingerReleased & e) = 0;
 		virtual void Process(const FingerMoved & e) = 0;
+
+		virtual void Reset() = 0;
 	};
 
 	using EventHandlerPtr = std::shared_ptr<EventHandler>;

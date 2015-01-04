@@ -47,14 +47,6 @@ namespace impl
 		eventSM_.process_event(evt);
 	}
 
-	template<typename Subject>
-	bool EventStateMachine<Subject>::Commitable(const EventSM & fsm)
-	{
-		static const int commitableStateId = boost::msm::back::get_state_id<typename EventSM::stt, typename EventSMImpl::FingerPressedState>::value;
-
-		return fsm.current_state()[0] == commitableStateId;
-	}
-
 	// Actions
 
 	ACTION_IMPLEMENTATION(Dummy)
@@ -218,10 +210,24 @@ namespace impl
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD;
 
-		if (!Commitable(fsm))
-			return;
-
 		FingerCommitImpl(fsm.subj_, sourceState.fingers, false);
+	}
+
+	ACTION_IMPLEMENTATION(FingerReset)
+	{
+		ACTION_IMPLEMENTATION_UNUSED_GUARD;
+
+		// commit first
+		FingerCommitImpl(fsm.subj_, sourceState.fingers, true);
+
+		#ifdef UNIT_TESTING_TURNED_ON
+		fsm.subj_.FingerReset(sourceState.fingers.size());
+		#endif // UNIT_TESTING_TURNED_ON
+
+		// we stop processing everything
+		sourceState.fingers.clear();
+
+		fsm.subj_.ResumeTerrainUpdate();
 	}
 
 } // namespace impl

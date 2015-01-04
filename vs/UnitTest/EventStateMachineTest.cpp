@@ -23,8 +23,6 @@ namespace
 	{
 		Subject()
 			: dir(MoveDirection::Undefined)
-			/*, stopped(false)
-			, scene1Emulated(false)*/
 			, fingerAffected(-1)
 			, fingersRegistered(0)
 			, updates(0)
@@ -47,19 +45,14 @@ namespace
 		void BendScene(const Angle, const Angle)
 		{}
 
-		/*void Stop()
-		{
-			stopped = true;
-		}
-
-		void EmulateDynamicScene1()
-		{
-			scene1Emulated = true;
-		}*/
-
 		void FingerAffected(FingerId id, int cnt)
 		{
 			fingerAffected = id;
+			fingersRegistered = cnt;
+		}
+
+		void FingerReset(int cnt)
+		{
 			fingersRegistered = cnt;
 		}
 
@@ -97,8 +90,6 @@ namespace
 		}
 
 		int dir;
-		//bool stopped;
-		//bool scene1Emulated;
 		FingerId fingerAffected;
 		int fingersRegistered;
 		Point2d from;
@@ -452,4 +443,27 @@ BOOST_AUTO_TEST_CASE(EventStateMachineUpdatesTest2)
 	BOOST_CHECK_EQUAL(s.updates, 0);
 
 	BOOST_CHECK(s.Updated());
+}
+
+BOOST_AUTO_TEST_CASE(EventStateMachineResetTest1)
+{
+	Subject s;
+	EventStateMachine<Subject> esm(s);
+
+	esm.Emit(Reset());
+
+	BOOST_CHECK_EQUAL(s.fingersRegistered, 0);
+
+	esm.Emit(FingerPressed(0, Point2d(0, 0)));
+
+	BOOST_CHECK_EQUAL(s.fingersRegistered, 1);
+
+	esm.Emit(FingerMoved(0, Point2d(1, 1)));
+
+	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Undefined);
+
+	esm.Emit(Reset());
+
+	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Right | MoveDirection::Up);
+	BOOST_CHECK_EQUAL(s.fingersRegistered, 1);
 }

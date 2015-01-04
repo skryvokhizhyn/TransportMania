@@ -73,17 +73,22 @@ namespace impl
 			ACTION_DEFINITION(ReleaseFinger);
 			ACTION_DEFINITION(MoveFinger);
 			ACTION_DEFINITION(FingerCommit);
+			ACTION_DEFINITION(FingerReset);
 
 			struct transition_table : boost::mpl::vector<
 				//			Start				Event			Next				Action					Guard
 				bmf::Row<	EmptyState,			FingerPressed,	FingerPressedState,	ApplyRegisterFinger,	bmf::none >,
 				bmf::Row<	EmptyState,			FingerMoved,	EmptyState,			bmf::none,				bmf::none >,
+				bmf::Row<	EmptyState,			FingerReleased,	EmptyState,			bmf::none,				bmf::none >,
 				bmf::Row<	FingerPressedState, FingerPressed,	FingerPressedState, ApplyRegisterFinger,	bmf::none >,
 				bmf::Row<	FingerPressedState,	FingerReleased,	EmptyState,			ApplyReleaseFinger,		bmf::euml::Not_<MultipleFingersGuard> >,
 				bmf::Row<	FingerPressedState,	FingerReleased,	FingerPressedState,	ApplyReleaseFinger,		MultipleFingersGuard >,
 				bmf::Row<	FingerPressedState,	FingerMoved,	FingerPressedState,	ApplyMoveFinger,		bmf::none >,
 				bmf::Row<	FingerPressedState, Commit,			FingerPressedState, ApplyFingerCommit,		bmf::none >,
-				bmf::Row<	EmptyState,			Commit,			EmptyState,			bmf::none,				bmf::none >
+				bmf::Row<	EmptyState,			Commit,			EmptyState,			bmf::none,				bmf::none >,
+				bmf::Row<	EmptyState,			Reset,			EmptyState,			bmf::none,				bmf::none >,
+				bmf::Row<	FingerPressedState,	Reset,			EmptyState,			ApplyFingerReset,		bmf::none >
+
 				> {};
 
 			// Replaces the default no-transition response.
@@ -96,8 +101,6 @@ namespace impl
 	private:
 		// Pick a back-end
 		typedef boost::msm::back::state_machine<EventSMImpl> EventSM;
-
-		static bool Commitable(const EventSM & fsm);
 
 	private:
 		EventSM eventSM_;

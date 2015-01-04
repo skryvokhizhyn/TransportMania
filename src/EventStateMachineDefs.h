@@ -11,6 +11,7 @@ namespace impl
 	// Events
 
 	struct Commit {};
+	struct Reset {};
 
 	struct PointMove
 	{

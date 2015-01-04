@@ -6,7 +6,7 @@
 
 #include <boost/assign/std/vector.hpp>
 
-#include <boost/range/algorithm/for_each.hpp>
+#include <boost/range/algorithm/sort.hpp>
 
 using namespace trm;
 
@@ -24,8 +24,8 @@ EventHandlerLocator::Remove(const int id)
 	locator_.Remove(id);
 }
 
-EventHandler *  
-EventHandlerLocator::GetHandler(const Point2d & p) const
+EventHandler * 
+EventHandlerLocator::At(const Point2d & p) const
 {
 	using namespace boost::assign;
 
@@ -38,46 +38,15 @@ EventHandlerLocator::GetHandler(const Point2d & p) const
 		p + Point2d(shift, shift),
 		p + Point2d(shift, -shift);
 
-	const ItemLocator::Ids ids = locator_.At(polygon);
+	ItemLocator::Ids ids = locator_.At(polygon);
 	
 	if (ids.empty())
 	{
 		return nullptr;
 	}
 
+	// assumption is that the bigger id is, the closer locator to the view
+	boost::sort(ids);
+
 	return handlers_.at(ids.back()).get();
 }
-
-template<typename Event>
-void 
-EventHandlerLocator::DispatchImpl(const Event & e) const
-{
-	if (EventHandler * pHandler = GetHandler(e.pos))
-	{
-		pHandler->Process(e);
-	}
-	else
-	{
-		utils::Logger().Debug() << "No window handler found in pos=" << e.pos << ". Ignoring event";
-	}
-}
-
-void
-EventHandlerLocator::Dispatch(const FingerPressed & e) const
-{
-	DispatchImpl(e);
-}
-
-void
-EventHandlerLocator::Dispatch(const FingerReleased & e) const
-{
-	DispatchImpl(e);
-}
-
-void
-EventHandlerLocator::Dispatch(const FingerMoved & e) const
-{
-	DispatchImpl(e);
-}
-
-

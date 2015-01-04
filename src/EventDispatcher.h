@@ -26,8 +26,12 @@ namespace trm
 		void OnFingerDown(const SDL_Event & e);
 		void OnFingerUp(const SDL_Event & e);
 
+		template<typename Event>
+		void DispatchImpl(const Event & e);
+
 	private:
 		Application & app_;
+		EventHandler * activeHandler_ = nullptr;
 		int width_ = 0;
 		int height_ = 0;
 	};

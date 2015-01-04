@@ -19,6 +19,7 @@ namespace impl
 	{
 	public:
 		SceneEventHandler(Application & app);
+		~SceneEventHandler();
 
 		void Commit() const ;
 
@@ -26,9 +27,10 @@ namespace impl
 		virtual void Process(const FingerPressed & e) override;
 		virtual void Process(const FingerMoved & e) override;
 		virtual void Process(const FingerReleased & e) override;
+		virtual void Reset() override;
 
 	private:
-		std::shared_ptr<impl::EventStateMachine<Application>> eventSMPtr_;
+		std::unique_ptr<impl::EventStateMachine<Application>> eventSMPtr_;
 	};
 
 	using SceneEventHandlerPtr = std::shared_ptr<SceneEventHandler>;

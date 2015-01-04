@@ -3,6 +3,7 @@
 #include "AppEventHandler.h"
 #include "EventHandlerLocatorProxy.h"
 #include "SdlUserEvent.h"
+#include "Logger.h"
 
 using namespace trm;
 
@@ -62,13 +63,39 @@ EventDispatcher::Process(const SDL_Event & e)
 	}
 }
 
+template<typename Event>
+void 
+EventDispatcher::DispatchImpl(const Event & e)
+{
+	// if handler has changed, reset state of the previous one
+	{
+		EventHandler * pHandler = EventHandlerLocatorProxy()->At(e.pos);
+
+		if (pHandler != activeHandler_ && activeHandler_ != nullptr)
+		{
+			activeHandler_->Reset();
+		}
+
+		activeHandler_ = pHandler;
+	}
+
+	if (activeHandler_)
+	{
+		activeHandler_->Process(e);
+	}
+	else
+	{
+		utils::Logger().Debug() << "No window handler found in pos=" << e.pos << ". Ignoring event";
+	}
+}
+
 void 
 EventDispatcher::OnMouseButtonDown(const SDL_Event & e)
 {
 	switch (e.button.button)
 	{
 	case SDL_BUTTON_LEFT:
-		EventHandlerLocatorProxy()->Dispatch(FingerPressed(1, Point2d(
+		DispatchImpl(FingerPressed(1, Point2d(
 			static_cast<float>(e.motion.x), 
 			static_cast<float>(e.motion.y))));
 		break;
@@ -81,7 +108,7 @@ EventDispatcher::OnMouseButtonUp(const SDL_Event & e)
 	switch (e.button.button)
 	{
 	case SDL_BUTTON_LEFT:
-		EventHandlerLocatorProxy()->Dispatch(FingerReleased(1, Point2d(
+		DispatchImpl(FingerReleased(1, Point2d(
 			static_cast<float>(e.motion.x), 
 			static_cast<float>(e.motion.y))));
 		break;
@@ -91,7 +118,7 @@ EventDispatcher::OnMouseButtonUp(const SDL_Event & e)
 void
 EventDispatcher::OnMouseMove(const SDL_Event & e)
 {
-	EventHandlerLocatorProxy()->Dispatch(FingerMoved(1, Point2d(
+	DispatchImpl(FingerMoved(1, Point2d(
 		static_cast<float>(e.motion.x - e.motion.xrel), 
 		static_cast<float>(e.motion.y - e.motion.yrel))));
 }
@@ -111,7 +138,7 @@ EventDispatcher::OnFingerDown(const SDL_Event & e)
 
 	const auto p = GetAbsolutePosition(tfe, width_, height_);
 
-	EventHandlerLocatorProxy()->Dispatch(FingerPressed{tfe.fingerId, p});
+	DispatchImpl(FingerPressed{tfe.fingerId, p});
 }
 
 void
@@ -121,7 +148,7 @@ EventDispatcher::OnFingerMove(const SDL_Event & e)
 
 	const auto p = GetAbsolutePosition(tfe, width_, height_);
 
-	EventHandlerLocatorProxy()->Dispatch(FingerMoved{tfe.fingerId, p});
+	DispatchImpl(FingerMoved{tfe.fingerId, p});
 }
 
 void
@@ -131,5 +158,5 @@ EventDispatcher::OnFingerUp(const SDL_Event & e)
 
 	const auto p = GetAbsolutePosition(tfe, width_, height_);
 
-	EventHandlerLocatorProxy()->Dispatch(FingerReleased{tfe.fingerId, p});
+	DispatchImpl(FingerReleased{tfe.fingerId, p});
 }

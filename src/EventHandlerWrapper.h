@@ -25,6 +25,7 @@ namespace trm
 		
 		virtual void Process(const FingerReleased & /*e*/) override {}
 		virtual void Process(const FingerMoved & /*e*/) override {}
+		virtual void Reset() override {}
 
 	private:
 		OnEventCallback cb_;
