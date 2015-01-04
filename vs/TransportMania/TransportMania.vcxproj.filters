@@ -61,6 +61,9 @@
     <Filter Include="Textures">
       <UniqueIdentifier>{4095abb7-7b7e-4588-8a2d-07fbc80455d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{e4d51b87-8e73-43bf-bac5-56aaf8b57ca4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -216,9 +219,6 @@
     <ClCompile Include="..\..\src\Game.cpp">
       <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\EventHandler.cpp">
-      <Filter>Application</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\FpsCounter.cpp">
       <Filter>Application</Filter>
     </ClCompile>
@@ -336,6 +336,24 @@
     <ClCompile Include="..\..\src\TextureManager.cpp">
       <Filter>Textures</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ItemLocator.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\AppEventHandler.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SceneEventHandler.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\UniqueId.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\EventDispatcher.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\EventHandlerLocator.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -411,9 +429,6 @@
       <Filter>Draw\Railroad\Visitors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadVisitor.h">
-      <Filter>Draw\Railroad\Visitors</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\RailRoadVisitorTmpl.h">
       <Filter>Draw\Railroad\Visitors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoad.h">
@@ -543,9 +558,6 @@
       <Filter>Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Game.h">
-      <Filter>Application</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\EventHandler.h">
       <Filter>Application</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\FpsCounter.h">
@@ -718,6 +730,60 @@
     </ClInclude>
     <ClInclude Include="..\..\src\TextureManagerProxy.h">
       <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SdlUserEvent.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Polygon3d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ItemLocator.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Polygon2d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\AppEventHandler.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SceneEventHandler.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowManagerProxy.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\VisitorPattern.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadAcceptorTmpl.h">
+      <Filter>Draw\Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\FingerIdType.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowItem.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UniqueId.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventDispatcher.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventHandlerLocator.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\FingerEvent.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventHandler.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventHandlerLocatorProxy.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventHandlerWrapper.h">
+      <Filter>Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

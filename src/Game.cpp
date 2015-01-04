@@ -2,10 +2,11 @@
 
 #include "Game.h"
 #include "Logger.h"
-#include "EventHandler.h"
+#include "EventDispatcher.h"
 #include "FpsCounter.h"
 #include "UpdateRate.h"
 #include "TextManagerProxy.h"
+#include "SdlUserEvent.h"
 
 #include <boost/format.hpp>
 #include <stdexcept>
@@ -111,10 +112,10 @@ void
 Game::Run()
 {
 	SDL_Event event;
-	EventHandler handler(app_);
+	EventDispatcher dispatcher(app_);
 	
-	FpsCounter fpsCounter(1); /*report each 1 seconds*/
-	UpdateRate updateRate(30); /* 30 updates per sedond*/
+	FpsCounter fpsCounter(1); /* report each 1 seconds */
+	UpdateRate updateRate(30); /* 30 updates per sedond */
 
 	for (;;)
 	{
@@ -122,7 +123,7 @@ Game::Run()
 		{
 			while (SDL_PollEvent(&event))
 			{
-				handler.Process(event);
+				dispatcher.Process(event);
 			}
 	
 			if (app_.IsStopped())
@@ -133,10 +134,10 @@ Game::Run()
 			// mark update for the current frame as done
 			updateRate.Done();
 
-			// if it's the last update for this frame and we have something to commit
-			if (!updateRate.NeedMore() && handler.ShouldCommit())
+			// if it's the last update for this frame
+			if (!updateRate.NeedMore())
 			{
-				handler.Commit();
+				app_.Commit();
 			}
 
 			app_.Update();
@@ -149,10 +150,10 @@ Game::Run()
 
 		if (fpsCounter.Tick())
 		{
-			const unsigned frames = fpsCounter.GetFrames();
+			//const unsigned frames = fpsCounter.GetFrames();
 
 			//utils::Logger().Debug() << "Frames " << frames;
-			TextManagerProxy()->PutFrameRate(frames);
+			//TextManagerProxy()->PutFrameRate(frames);
 		}
 
 		const unsigned cnt = updateRate.Tick();

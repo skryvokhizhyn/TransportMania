@@ -12,16 +12,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Angle.cpp" />
+    <ClCompile Include="..\..\src\AppEventHandler.cpp" />
     <ClCompile Include="..\..\src\Application.cpp" />
     <ClCompile Include="..\..\src\BmpHandler.cpp" />
     <ClCompile Include="..\..\src\ComponentHolder.cpp" />
     <ClCompile Include="..\..\src\ComponentId.cpp" />
     <ClCompile Include="..\..\src\DrawContext.cpp" />
-    <ClCompile Include="..\..\src\EventHandler.cpp" />
+    <ClCompile Include="..\..\src\EventDispatcher.cpp" />
+    <ClCompile Include="..\..\src\EventHandlerLocator.cpp" />
+    <ClCompile Include="..\..\src\SceneEventHandler.cpp" />
     <ClCompile Include="..\..\src\FontReader.cpp" />
     <ClCompile Include="..\..\src\HeightMapLoaderCache.cpp" />
     <ClCompile Include="..\..\src\HeightMapLoaderConstant.cpp" />
     <ClCompile Include="..\..\src\ImgProperties.cpp" />
+    <ClCompile Include="..\..\src\ItemLocator.cpp" />
     <ClCompile Include="..\..\src\PngHandler.cpp" />
     <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
     <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
@@ -92,6 +96,7 @@
     <ClCompile Include="..\..\src\TriangleNodeCache.cpp" />
     <ClCompile Include="..\..\src\TriangleNodeHandler.cpp" />
     <ClCompile Include="..\..\src\TriangleNodePool.cpp" />
+    <ClCompile Include="..\..\src\UniqueId.cpp" />
     <ClCompile Include="..\..\src\UpdateRate.cpp" />
     <ClCompile Include="..\..\src\Variance.cpp" />
     <ClCompile Include="..\..\src\Vertex.cpp" />
@@ -105,28 +110,40 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Angle.h" />
+    <ClInclude Include="..\..\src\AppEventHandler.h" />
     <ClInclude Include="..\..\src\Application.h" />
     <ClInclude Include="..\..\src\BmpHandler.h" />
     <ClInclude Include="..\..\src\CommonUtils.h" />
     <ClInclude Include="..\..\src\ComponentHolder.h" />
     <ClInclude Include="..\..\src\ComponentHolderProxy.h" />
     <ClInclude Include="..\..\src\ComponentId.h" />
+    <ClInclude Include="..\..\src\EventDispatcher.h" />
+    <ClInclude Include="..\..\src\EventHandlerLocator.h" />
+    <ClInclude Include="..\..\src\EventHandlerLocatorProxy.h" />
+    <ClInclude Include="..\..\src\EventHandlerWrapper.h" />
+    <ClInclude Include="..\..\src\FingerIdType.h" />
+    <ClInclude Include="..\..\src\UniqueId.h" />
+    <ClInclude Include="..\..\src\WindowItem.h" />
+    <ClInclude Include="..\..\src\FingerEvent.h" />
     <ClInclude Include="..\..\src\FontData.h" />
     <ClInclude Include="..\..\src\FontReader.h" />
     <ClInclude Include="..\..\src\HeightMapLoaderCache.h" />
     <ClInclude Include="..\..\src\HeightMapLoaderConstant.h" />
     <ClInclude Include="..\..\src\ImgProperties.h" />
     <ClInclude Include="..\..\src\PngHandler.h" />
+    <ClInclude Include="..\..\src\Polygon2d.h" />
+    <ClInclude Include="..\..\src\Polygon3d.h" />
     <ClInclude Include="..\..\src\PolygonVisibilityChecker.h" />
     <ClInclude Include="..\..\src\PointNormaleMap.h" />
     <ClInclude Include="..\..\src\ResourceProxy.h" />
+    <ClInclude Include="..\..\src\SdlUserEvent.h" />
     <ClInclude Include="..\..\src\TextManager.h" />
     <ClInclude Include="..\..\src\TextManagerProxy.h" />
     <ClInclude Include="..\..\src\TextRenderer.h" />
     <ClInclude Include="..\..\src\LeakDetectorInitializer.h" />
     <ClInclude Include="..\..\src\DrawableObject.h" />
     <ClInclude Include="..\..\src\DrawContext.h" />
-    <ClInclude Include="..\..\src\EventHandler.h" />
+    <ClInclude Include="..\..\src\SceneEventHandler.h" />
     <ClInclude Include="..\..\src\EventStateMachine.h" />
     <ClInclude Include="..\..\src\EventStateMachineDefs.h" />
     <ClInclude Include="..\..\src\EventStateMachineImpl.h" />
@@ -174,7 +191,7 @@
     <ClInclude Include="..\..\src\RailRoadRendererLine.h" />
     <ClInclude Include="..\..\src\RailRoadSizer.h" />
     <ClInclude Include="..\..\src\RailRoadVisitor.h" />
-    <ClInclude Include="..\..\src\RailRoadVisitorTmpl.h" />
+    <ClInclude Include="..\..\src\RailRoadAcceptorTmpl.h" />
     <ClInclude Include="..\..\src\RangeRectangle.h" />
     <ClInclude Include="..\..\src\RoadNetwork.h" />
     <ClInclude Include="..\..\src\RoadNetworkImpl.h" />
@@ -227,8 +244,12 @@
     <ClInclude Include="..\..\src\UpdateRate.h" />
     <ClInclude Include="..\..\src\Variance.h" />
     <ClInclude Include="..\..\src\Vertex.h" />
+    <ClInclude Include="..\..\src\VisitorPattern.h" />
     <ClInclude Include="..\..\src\WagonDrawableObject.h" />
+    <ClInclude Include="..\..\src\ItemLocator.h" />
+    <ClInclude Include="..\..\src\EventHandler.h" />
     <ClInclude Include="..\..\src\WindowManager.h" />
+    <ClInclude Include="..\..\src\WindowManagerProxy.h" />
     <ClInclude Include="..\..\src\WindowRenderer.h" />
     <ClInclude Include="..\..\src\WorldProjection.h" />
   </ItemGroup>

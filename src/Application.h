@@ -14,6 +14,8 @@
 #include "TextManager.h"
 #include "TextureManager.h"
 #include "WindowManager.h"
+#include "EventHandlerLocator.h"
+#include "SceneEventHandler.h"
 
 namespace trm
 {
@@ -35,8 +37,9 @@ namespace trm
 		void ZoomScene(const float z);
 		void RotateScene(const Angle angle);
 		void BendScene(const Angle dtheta, const Angle dpsi);
+		void Commit();
 		
-		// invalidetes terrain so it starts tasselation
+		// invalidates terrain so it starts tasselation
 		void UpdateTerrain();
 		// pauses updates of terrain
 		void StopTerrainUpdate();
@@ -75,6 +78,8 @@ namespace trm
 		ComponentHolder componentHolder_;
 		TextureManager textureManager_;
 		WindowManager windowManager_;
+		EventHandlerLocator eventHandlerLocator_;
+		SceneEventHandlerPtr sceneHandlerPtr_;
 		bool processTerrainUpdate_ = true;
 	};
 

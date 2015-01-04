@@ -8,12 +8,12 @@ include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libBoostSystem 
-LOCAL_SRC_FILES := $(BOOST_PATH)/lib32-gcc/libboost_system-gcc-mt-s-1_55.a
+LOCAL_SRC_FILES := $(BOOST_PATH)/lib32-gcc/libboost_system-gcc-mt-s-1_57.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE    := libBoostFilesystem 
-LOCAL_SRC_FILES := $(BOOST_PATH)/lib32-gcc/libboost_filesystem-gcc-mt-s-1_55.a
+LOCAL_SRC_FILES := $(BOOST_PATH)/lib32-gcc/libboost_filesystem-gcc-mt-s-1_57.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)

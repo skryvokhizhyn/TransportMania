@@ -11,10 +11,14 @@
 #include "Train.h"
 #include "Settings.h"
 #include "Angle.h"
+#include "Logger.h"
+#include "SceneEventHandler.h"
+
 #include "TextManagerProxy.h"
 #include "ComponentHolderProxy.h"
 #include "TextureManagerProxy.h"
-#include "Logger.h"
+#include "WindowManagerProxy.h"
+#include "EventHandlerLocatorProxy.h"
 
 #include <boost/range/algorithm.hpp>
 #include <boost/filesystem/path.hpp>
@@ -23,6 +27,11 @@
 
 using namespace trm;
 using namespace trm::terrain;
+
+namespace
+{
+	const int SCENE_EVENT_HANDLER_ID = -1;
+}
 
 bool 
 Application::InitApplication(const size_t width, const size_t height)
@@ -36,13 +45,25 @@ Application::InitApplication(const size_t width, const size_t height)
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
 	textManager_.Init(width, height);
+
+	sceneHandlerPtr_ = std::make_shared<SceneEventHandler>(*this);
+	
+	const float w = boost::numeric_cast<float>(width);
+	const float h = boost::numeric_cast<float>(height);
+
+	eventHandlerLocator_.Put(SCENE_EVENT_HANDLER_ID, 
+		{Point2d(0.0f, 0.0f), Point2d(0.0f, h), Point2d(w, h), Point2d(w, 0.0f)}, 
+		sceneHandlerPtr_);
+	
 	windowManager_.Init(width, height);
 
 	TextManagerProxy::Init(textManager_);
 	ComponentHolderProxy::Init(componentHolder_);
 	TextureManagerProxy::Init(textureManager_);
+	//WindowManagerProxy::Init(windowManager_);
+	EventHandlerLocatorProxy::Init(eventHandlerLocator_);
 
-	windowManager_.CreateOKWindow();
+	windowManager_.CreateOKWindow(boost::bind(&TextManager::PutFrameRate, boost::ref(textManager_), 10));
 
 	return true;
 }
@@ -78,6 +99,8 @@ Application::ReleaseView()
 bool 
 Application::QuitApplication()
 {
+	EventHandlerLocatorProxy::Term();
+	//WindowManagerProxy::Term();
 	TextureManagerProxy::Term();
 	ComponentHolderProxy::Term();
 	TextManagerProxy::Term();
@@ -158,6 +181,12 @@ void
 Application::BendScene(const Angle dtheta, const Angle dpsi)
 {
 	worldProjection_.Bend(-dtheta, dpsi);
+}
+
+void
+Application::Commit()
+{
+	sceneHandlerPtr_->Commit();
 }
 
 void 

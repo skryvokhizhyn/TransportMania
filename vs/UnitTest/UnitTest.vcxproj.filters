@@ -215,6 +215,12 @@
     <ClCompile Include="..\..\src\HeightMapLoaderConstant.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="ItemLocatorTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ItemLocator.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

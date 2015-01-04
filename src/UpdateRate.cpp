@@ -2,6 +2,7 @@
 
 using namespace trm;
 
+// update rate is controlled by vsync frequency which is 60 (?)
 UpdateRate::UpdateRate(const unsigned updatesPerSecond)
 	: updateDuration_(std::chrono::milliseconds(1000) / updatesPerSecond)
 	, cnt_(0)

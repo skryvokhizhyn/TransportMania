@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TextureId.h"
+#include "Size2d.h"
 
 namespace trm
 {
@@ -8,7 +9,7 @@ namespace trm
 
 	struct WindowRenderer
 	{
-		static ModelData RenderSquareWindow(const float radii, const TextureId id);
+		static ModelData RenderRectangleWindow(const Size2d & size, const TextureId id);
 	};
 
 } // namespace trm

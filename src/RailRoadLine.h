@@ -1,12 +1,12 @@
 #pragma once
 
-#include "RailRoadVisitorTmpl.h"
+#include "RailRoadAcceptorTmpl.h"
 #include "Point3d.h"
 
 namespace trm
 {
 	class RailRoadLine 
-		: public RailRoadVisitorTmpl<RailRoadLine>
+		: public RailRoadAcceptorTmpl<RailRoadLine>
 	{
 	public:
 		RailRoadLine(const Point3d & start, const Point3d & end);

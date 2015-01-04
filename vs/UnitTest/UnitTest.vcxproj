@@ -86,6 +86,7 @@
     <ClCompile Include="..\..\src\HeightMapExtended.cpp" />
     <ClCompile Include="..\..\src\HeightMapLoaderCache.cpp" />
     <ClCompile Include="..\..\src\HeightMapLoaderConstant.cpp" />
+    <ClCompile Include="..\..\src\ItemLocator.cpp" />
     <ClCompile Include="..\..\src\Line.cpp" />
     <ClCompile Include="..\..\src\MatrixFactory.cpp" />
     <ClCompile Include="..\..\src\MatrixUtils.cpp" />
@@ -131,6 +132,7 @@
     <ClCompile Include="EventStateMachineTest.cpp" />
     <ClCompile Include="GeometryUtilsTest.cpp" />
     <ClCompile Include="HeightMapTest.cpp" />
+    <ClCompile Include="ItemLocatorTest.cpp" />
     <ClCompile Include="MathTest.cpp" />
     <ClCompile Include="PatchGridTest.cpp" />
     <ClCompile Include="PointImplTest.cpp" />

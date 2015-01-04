@@ -2,24 +2,27 @@
 
 #include "Matrix.h"
 #include "DrawableItem.h"
+#include "ItemLocator.h"
+#include "EventHandlerWrapper.h"
 
-#include <vector>
+#include <unordered_map>
 
 namespace trm
 {
 	class DrawContext;
+	class Application;
 
 	class WindowManager
 	{
 	public:
 		void Init(const size_t width, const size_t height);
 
-		void CreateOKWindow();
+		void CreateOKWindow(OnEventCallback cb);
 
 		void Draw(const DrawContext & c, const Matrix & orthoViewMatrix) const;
 
 	private:
-		using Windows = std::vector<DrawableItem>;
+		using Windows = std::unordered_map<int, DrawableItem>;
 
 	private:
 		Windows windows_;

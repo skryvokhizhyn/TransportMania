@@ -1,45 +1,20 @@
-#pragma once
+#pragma once 
 
-#include "SDL_events.h"
-
-#include <boost/noncopyable.hpp>
+#include "FingerEvent.h"
 
 #include <memory>
 
 namespace trm
 {
-namespace impl
-{
-	template<typename Subject> class EventStateMachine;
-
-} // namespace impl
-
-	class Application;
-
-	class EventHandler
-		: boost::noncopyable
+	struct EventHandler
 	{
-	public:
-		EventHandler(Application & app);
+		virtual ~EventHandler() {}
 
-		void Process(const SDL_Event & e);
-		bool ShouldCommit() const;
-		void Commit();
-
-	private:
-		// Event parsing methods
-		void OnKeyDown(const SDL_Event & e);
-		void OnMouseButtonDown(const SDL_Event & e);
-		void OnMouseButtonUp(const SDL_Event & e);
-		void OnMouseMove(const SDL_Event & e);
-		void OnFingerMove(const SDL_Event & e);
-		void OnFingerDown(const SDL_Event & e);
-		void OnFingerUp(const SDL_Event & e);
-
-	private:
-		std::shared_ptr<impl::EventStateMachine<Application>> eventSMPtr_;
-		int width_;
-		int height_;
+		virtual void Process(const FingerPressed & e) = 0;
+		virtual void Process(const FingerReleased & e) = 0;
+		virtual void Process(const FingerMoved & e) = 0;
 	};
+
+	using EventHandlerPtr = std::shared_ptr<EventHandler>;
 
 } // namespace trm

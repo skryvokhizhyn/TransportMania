@@ -13,7 +13,7 @@
 		(Evt const & evt, Fsm & fsm, SourceState & sourceState, TargetState & targetState) 
 
 #define ACTION_IMPLEMENTATION_UNUSED_GUARD \
-	(evt); (fsm); (sourceState); (targetState);
+	(evt); (fsm); (sourceState); (targetState)
 
 namespace trm
 {
@@ -48,126 +48,18 @@ namespace impl
 	}
 
 	template<typename Subject>
-	bool EventStateMachine<Subject>::Commitable() const
+	bool EventStateMachine<Subject>::Commitable(const EventSM & fsm)
 	{
 		static const int commitableStateId = boost::msm::back::get_state_id<typename EventSM::stt, typename EventSMImpl::FingerPressedState>::value;
 
-		return eventSM_.current_state()[0] == commitableStateId;
+		return fsm.current_state()[0] == commitableStateId;
 	}
 
 	// Actions
 
-	ACTION_IMPLEMENTATION(LeftKey)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.ShiftScene(-100.0f, 0.0f);
-		fsm.subj_.UpdateTerrain();
-	}
-
-	ACTION_IMPLEMENTATION(RightKey)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.ShiftScene(100.0f, 0.0f);
-		fsm.subj_.UpdateTerrain();
-	}
-
-	ACTION_IMPLEMENTATION(UpKey)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.ShiftScene(0.0f, 100.0f);
-		fsm.subj_.UpdateTerrain();
-	}
-
-	ACTION_IMPLEMENTATION(DownKey)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.ShiftScene(0.0f, -100.0f);
-		fsm.subj_.UpdateTerrain();
-	}
-
-	ACTION_IMPLEMENTATION(Quit)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.Stop();
-	}
-
-	ACTION_IMPLEMENTATION(Key1)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.EmulateDynamicScene1();
-	}
-
-	///////////////////////////////////////
-	ACTION_IMPLEMENTATION(KeyQ)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.RotateScene(Degrees(5));
-		fsm.subj_.UpdateTerrain();
-	}
-	ACTION_IMPLEMENTATION(KeyZ)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.RotateScene(Degrees(-5));
-		fsm.subj_.UpdateTerrain();
-	}
-	ACTION_IMPLEMENTATION(KeyE)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.BendScene(Degrees(5), Degrees(0));
-		fsm.subj_.UpdateTerrain();
-	}
-	ACTION_IMPLEMENTATION(KeyC)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.BendScene(Degrees(-5), Degrees(0));
-		fsm.subj_.UpdateTerrain();
-	}
-	ACTION_IMPLEMENTATION(KeyR)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.BendScene(Degrees(0), Degrees(5));
-		fsm.subj_.UpdateTerrain();
-	}
-	ACTION_IMPLEMENTATION(KeyV)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.BendScene(Degrees(0), Degrees(-5));
-		fsm.subj_.UpdateTerrain();
-	}
-
-	ACTION_IMPLEMENTATION(KeyT)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.ZoomScene(5.0f);
-		fsm.subj_.UpdateTerrain();
-	}
-
-	ACTION_IMPLEMENTATION(KeyB)
-	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
-
-		fsm.subj_.ZoomScene(-5.0f);
-		fsm.subj_.UpdateTerrain();
-	}
-
-	///////////////////////////////////////
-
 	ACTION_IMPLEMENTATION(Dummy)
 	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
+		ACTION_IMPLEMENTATION_UNUSED_GUARD;
 
 		std::stringstream ss;
 		ss << "\nEvent " << typeid(Evt).name()
@@ -183,7 +75,7 @@ namespace impl
 	EventStateMachine<Subject>::EventSMImpl::MultipleFingersGuard::operator () 
 		(const EVT & evt, FSM & fsm, SourceState & sourceState, TargetState & targetState)
 	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
+		ACTION_IMPLEMENTATION_UNUSED_GUARD;
 
 		if (sourceState.fingers.size() > 1)
 		{
@@ -195,7 +87,7 @@ namespace impl
 
 	ACTION_IMPLEMENTATION(RegisterFinger)
 	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
+		ACTION_IMPLEMENTATION_UNUSED_GUARD;
 
 		// when at least one finger is pressed we stop terrain updates
 		if (targetState.fingers.empty())
@@ -220,7 +112,7 @@ namespace impl
 
 	ACTION_IMPLEMENTATION(ReleaseFinger)
 	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
+		ACTION_IMPLEMENTATION_UNUSED_GUARD;
 
 		// commit first
 		FingerCommitImpl(fsm.subj_, sourceState.fingers, true);
@@ -242,7 +134,7 @@ namespace impl
 
 	ACTION_IMPLEMENTATION(MoveFinger)
 	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
+		ACTION_IMPLEMENTATION_UNUSED_GUARD;
 
 		// ignored finger has been moved
 		if (sourceState.fingers.count(evt.fingerId) == 0)
@@ -324,7 +216,10 @@ namespace impl
 
 	ACTION_IMPLEMENTATION(FingerCommit)
 	{
-		ACTION_IMPLEMENTATION_UNUSED_GUARD
+		ACTION_IMPLEMENTATION_UNUSED_GUARD;
+
+		if (!Commitable(fsm))
+			return;
 
 		FingerCommitImpl(fsm.subj_, sourceState.fingers, false);
 	}

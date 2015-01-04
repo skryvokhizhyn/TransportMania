@@ -86,10 +86,10 @@ WorldProjection::SetShift(const Point3d & shift)
 	UpdateProjectionViewMatrix();
 	UpdateCameraPosition();
 
-	if (!CheckHeight(cameraPosition_.z()))
+	/*if (!CheckHeight(cameraPosition_.z()))
 	{
 		throw std::runtime_error("Initial position is lower than acceptable level");
-	}
+	}*/
 }
 
 void 

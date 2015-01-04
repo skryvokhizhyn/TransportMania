@@ -1,6 +1,6 @@
 #pragma once
 
-#include "RailRoadVisitorTmpl.h"
+#include "RailRoadAcceptorTmpl.h"
 #include "Point3d.h"
 #include "Point2d.h"
 #include "Angle.h"
@@ -8,7 +8,7 @@
 namespace trm
 {
 	class RailRoadArc 
-		: public RailRoadVisitorTmpl<RailRoadArc>
+		: public RailRoadAcceptorTmpl<RailRoadArc>
 	{
 	public:
 		RailRoadArc(const Point3d & s, const Angle a, const Point2d & c, const Rotation r);

@@ -6,7 +6,7 @@
 #include <map>
 
 #pragma warning(push)
-#pragma warning(disable: 4512 4127)
+#pragma warning(disable: 4512 4127 4503)
 
 // back-end
 #include <boost/msm/back/state_machine.hpp>
@@ -16,9 +16,6 @@
 #include <boost/msm/front/functor_row.hpp>
 // Not_
 #include <boost/msm/front/euml/operator.hpp>
-// vector30
-#include <boost/mpl/vector/vector30.hpp>
-
 
 #define ACTION_DEFINITION(name) \
 	struct Apply ## name \
@@ -45,8 +42,6 @@ namespace impl
 		template<typename Evt>
 		void Emit(const Evt & e);
 
-		bool Commitable() const;
-
 	private:
 
 		struct EventSMImpl : public boost::msm::front::state_machine_def<EventSMImpl>
@@ -66,23 +61,6 @@ namespace impl
 
 			// actions
 
-			ACTION_DEFINITION(LeftKey);
-			ACTION_DEFINITION(RightKey);
-			ACTION_DEFINITION(UpKey);
-			ACTION_DEFINITION(DownKey);
-
-			ACTION_DEFINITION(Quit);
-			ACTION_DEFINITION(Key1);
-
-			ACTION_DEFINITION(KeyQ);
-			ACTION_DEFINITION(KeyE);
-			ACTION_DEFINITION(KeyZ);
-			ACTION_DEFINITION(KeyC);
-			ACTION_DEFINITION(KeyR);
-			ACTION_DEFINITION(KeyV);
-			ACTION_DEFINITION(KeyT);
-			ACTION_DEFINITION(KeyB);
-
 			ACTION_DEFINITION(Dummy);
 
 			struct MultipleFingersGuard 
@@ -96,36 +74,16 @@ namespace impl
 			ACTION_DEFINITION(MoveFinger);
 			ACTION_DEFINITION(FingerCommit);
 
-			using MoveKeyU = MoveKeyPressed<MoveKeys::Up>;
-			using MoveKeyL = MoveKeyPressed<MoveKeys::Left>;
-			using MoveKeyR = MoveKeyPressed<MoveKeys::Right>;
-			using MoveKeyD = MoveKeyPressed<MoveKeys::Down>;
-
-			struct transition_table : boost::mpl::vector21<
+			struct transition_table : boost::mpl::vector<
 				//			Start				Event			Next				Action					Guard
-				bmf::Row<	EmptyState,			MoveKeyL,		EmptyState,			ApplyLeftKey,			bmf::none >,
-				bmf::Row<	EmptyState,			MoveKeyR,		EmptyState,			ApplyRightKey,			bmf::none >,
-				bmf::Row<	EmptyState,			MoveKeyU,		EmptyState,			ApplyUpKey,				bmf::none >,
-				bmf::Row<	EmptyState,			MoveKeyD,		EmptyState,			ApplyDownKey,			bmf::none >,
-				bmf::Row<	EmptyState,			QuitFired,		EmptyState,			ApplyQuit,				bmf::none >,
-				bmf::Row<	EmptyState,			Key1Pressed,	EmptyState,			ApplyKey1,				bmf::none >,
-
-				bmf::Row<	EmptyState,			KeyQPressed,	EmptyState,			ApplyKeyQ,				bmf::none >,
-				bmf::Row<	EmptyState,			KeyEPressed,	EmptyState,			ApplyKeyE,				bmf::none >,
-				bmf::Row<	EmptyState,			KeyZPressed,	EmptyState,			ApplyKeyZ,				bmf::none >,
-				bmf::Row<	EmptyState,			KeyCPressed,	EmptyState,			ApplyKeyC,				bmf::none >,
-				bmf::Row<	EmptyState,			KeyRPressed,	EmptyState,			ApplyKeyR,				bmf::none >,
-				bmf::Row<	EmptyState,			KeyVPressed,	EmptyState,			ApplyKeyV,				bmf::none >,
-				bmf::Row<	EmptyState,			KeyTPressed,	EmptyState,			ApplyKeyT,				bmf::none >,
-				bmf::Row<	EmptyState,			KeyBPressed,	EmptyState,			ApplyKeyB,				bmf::none >,
-
 				bmf::Row<	EmptyState,			FingerPressed,	FingerPressedState,	ApplyRegisterFinger,	bmf::none >,
 				bmf::Row<	EmptyState,			FingerMoved,	EmptyState,			bmf::none,				bmf::none >,
 				bmf::Row<	FingerPressedState, FingerPressed,	FingerPressedState, ApplyRegisterFinger,	bmf::none >,
 				bmf::Row<	FingerPressedState,	FingerReleased,	EmptyState,			ApplyReleaseFinger,		bmf::euml::Not_<MultipleFingersGuard> >,
 				bmf::Row<	FingerPressedState,	FingerReleased,	FingerPressedState,	ApplyReleaseFinger,		MultipleFingersGuard >,
 				bmf::Row<	FingerPressedState,	FingerMoved,	FingerPressedState,	ApplyMoveFinger,		bmf::none >,
-				bmf::Row<	FingerPressedState, Commit,			FingerPressedState, ApplyFingerCommit,		bmf::none >
+				bmf::Row<	FingerPressedState, Commit,			FingerPressedState, ApplyFingerCommit,		bmf::none >,
+				bmf::Row<	EmptyState,			Commit,			EmptyState,			bmf::none,				bmf::none >
 				> {};
 
 			// Replaces the default no-transition response.
@@ -138,6 +96,10 @@ namespace impl
 	private:
 		// Pick a back-end
 		typedef boost::msm::back::state_machine<EventSMImpl> EventSM;
+
+		static bool Commitable(const EventSM & fsm);
+
+	private:
 		EventSM eventSM_;
 	};
 
