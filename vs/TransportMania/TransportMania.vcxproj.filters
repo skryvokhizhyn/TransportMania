@@ -354,6 +354,9 @@
     <ClCompile Include="..\..\src\EventHandlerLocator.cpp">
       <Filter>Events</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ShaderProgram.cpp">
+      <Filter>Draw</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -784,6 +787,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\EventHandlerWrapper.h">
       <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ShaderProgram.h">
+      <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ShaderAttribute.h">
+      <Filter>Draw</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

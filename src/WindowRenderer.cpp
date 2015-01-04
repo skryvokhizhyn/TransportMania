@@ -37,7 +37,5 @@ WindowRenderer::RenderRectangleWindow(const Size2d & size, const TextureId id)
 		Point2d(1, 0),
 		Point2d(1, 1);
 
-	md.normales.resize(4, Point3d(0, 0, 1));
-
 	return md;
 }

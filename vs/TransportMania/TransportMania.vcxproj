@@ -30,6 +30,7 @@
     <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
     <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
     <ClCompile Include="..\..\src\DrawableItem.cpp" />
+    <ClCompile Include="..\..\src\ShaderProgram.cpp" />
     <ClCompile Include="..\..\src\TextManager.cpp" />
     <ClCompile Include="..\..\src\TextRenderer.cpp" />
     <ClCompile Include="..\..\src\FpsCounter.cpp" />
@@ -122,6 +123,8 @@
     <ClInclude Include="..\..\src\EventHandlerLocatorProxy.h" />
     <ClInclude Include="..\..\src\EventHandlerWrapper.h" />
     <ClInclude Include="..\..\src\FingerIdType.h" />
+    <ClInclude Include="..\..\src\ShaderAttribute.h" />
+    <ClInclude Include="..\..\src\ShaderProgram.h" />
     <ClInclude Include="..\..\src\UniqueId.h" />
     <ClInclude Include="..\..\src\WindowItem.h" />
     <ClInclude Include="..\..\src\FingerEvent.h" />

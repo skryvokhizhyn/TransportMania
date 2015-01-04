@@ -6,6 +6,7 @@
 #include "GlobalDefines.h"
 #include "Types.h"
 #include "TextureManagerProxy.h"
+#include "ShaderAttribute.h"
 
 #include <GLES2/gl2.h>
 #include <GLES2/gl2ext.h>
@@ -31,6 +32,9 @@ namespace
 	template<typename T>
 	void LoadBuffer(const std::vector<T> & vec, const GLuint buffId, const GLuint buffType)
 	{
+		if (vec.empty())
+			return;
+
 		glBindBuffer(buffType, buffId);
 		glBufferData(buffType, vec.size() * sizeof(T), &vec.at(0), GL_STATIC_DRAW);
 		glBindBuffer(buffType, 0);
@@ -107,8 +111,7 @@ namespace impl
 
 ModelDrawer::ModelDrawer()
 	: statePtr_(std::make_shared<impl::State>())
-{
-}
+{}
 
 void 
 ModelDrawer::Load(const ModelData & md)
@@ -132,28 +135,28 @@ void
 ModelDrawer::Draw() const
 {
 	glBindBuffer(GL_ARRAY_BUFFER, statePtr_->buffVert);
-	glEnableVertexAttribArray(DrawContext::VertexArray);
-	glVertexAttribPointer(DrawContext::VertexArray, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(ShaderAttribute::VertexArray);
+	glVertexAttribPointer(ShaderAttribute::VertexArray, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 #ifdef DRAWING_MODE_FULL
 	glBindBuffer(GL_ARRAY_BUFFER, statePtr_->buffNorm);
-	glEnableVertexAttribArray(DrawContext::NormalArray);
-	glVertexAttribPointer(DrawContext::NormalArray, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(ShaderAttribute::NormalArray);
+	glVertexAttribPointer(ShaderAttribute::NormalArray, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, statePtr_->textureId);
 
 	glBindBuffer(GL_ARRAY_BUFFER, statePtr_->buffText);
-	glEnableVertexAttribArray(DrawContext::TextureArray);
-	glVertexAttribPointer(DrawContext::TextureArray, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(ShaderAttribute::TextureArray);
+	glVertexAttribPointer(ShaderAttribute::TextureArray, 2, GL_FLOAT, GL_FALSE, 0, 0);
 #endif // DRAWING_MODE_FULL
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, statePtr_->buffIndx);
 	glDrawElements(statePtr_->drawMode, statePtr_->indxCnt, GL_UNSIGNED_INT, 0);
 
-	glDisableVertexAttribArray(DrawContext::VertexArray);
-	glDisableVertexAttribArray(DrawContext::NormalArray);
-	glDisableVertexAttribArray(DrawContext::TextureArray);
+	glDisableVertexAttribArray(ShaderAttribute::VertexArray);
+	glDisableVertexAttribArray(ShaderAttribute::NormalArray);
+	glDisableVertexAttribArray(ShaderAttribute::TextureArray);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

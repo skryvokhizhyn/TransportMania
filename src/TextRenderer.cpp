@@ -197,8 +197,6 @@ namespace
 			md.indexes.reserve(md.indexes.size() + pv.size());
 			boost::transform(iv, std::back_inserter(md.indexes), 
 				ret<int>(Arg1 + (md.indexes.empty() ? 0 : md.indexes.back() + 1)));
-
-			md.normales.resize(md.points.size(), Point3d(0, 0, 1));
 		}
 	};
 }
@@ -356,8 +354,6 @@ TextRenderer::Render(const FontData & fd, const std::wstring & str, const std::u
 		AppendCharData(std::move(charData), xShift, yShift, md);
 		xShift += ch.xadvance;
 	}
-
-	md.normales.resize(md.points.size(), Point3d(0, 0, 1));
 
 	return md;
 }

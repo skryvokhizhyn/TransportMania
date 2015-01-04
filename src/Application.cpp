@@ -60,7 +60,6 @@ Application::InitApplication(const size_t width, const size_t height)
 	TextManagerProxy::Init(textManager_);
 	ComponentHolderProxy::Init(componentHolder_);
 	TextureManagerProxy::Init(textureManager_);
-	//WindowManagerProxy::Init(windowManager_);
 	EventHandlerLocatorProxy::Init(eventHandlerLocator_);
 
 	windowManager_.CreateOKWindow(boost::bind(&TextManager::PutFrameRate, boost::ref(textManager_), 10));
@@ -100,7 +99,6 @@ bool
 Application::QuitApplication()
 {
 	EventHandlerLocatorProxy::Term();
-	//WindowManagerProxy::Term();
 	TextureManagerProxy::Term();
 	ComponentHolderProxy::Term();
 	TextManagerProxy::Term();
@@ -143,6 +141,8 @@ Application::Draw()
 {
 	context_.Clear();
 
+	context_.Activate(ShaderProgramType::Terrain);
+
 	const Matrix & pvm = worldProjection_.GetProjectionViewMatrix();
 
 	context_.Transform(pvm, terrainScenePtr_->GetModelMatrix());
@@ -153,6 +153,8 @@ Application::Draw()
 		[](const StaticSceneObjectPtr & ssoPtr){ssoPtr->Draw();});
 
 	componentHolder_.Draw(context_, pvm);
+
+	context_.Activate(ShaderProgramType::Window);
 
 	const Matrix & ovm = worldProjection_.GetOrthoViewMatrix();
 	textManager_.Draw(context_, ovm);

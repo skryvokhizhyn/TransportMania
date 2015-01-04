@@ -1,23 +1,22 @@
 #ifndef _SHADERLOADER_H_
 #define _SHADERLOADER_H_
 
-#include <GLES2/gl2.h>
+#include "Types.h"
 
 namespace trm
 {
-	struct Shader
+	enum class ShaderType
 	{
-		enum Type
-		{
-			Point3d,
-			Fragment
-		};
+		TerrainPoint,
+		TerrainFragment,
+		WindowPoint,
+		WindowFragment
 	};
 
 	struct ShaderLoader
 	{
-		static GLuint Load(Shader::Type t);
-		static void Delete(GLuint id);
+		static GLuintType Load(ShaderType t);
+		static void Delete(GLuintType id);
 	};
 
 } // namespace trm
