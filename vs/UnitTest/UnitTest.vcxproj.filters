@@ -221,6 +221,12 @@
     <ClCompile Include="..\..\src\ItemLocator.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="WindowPositionTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowPosition.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

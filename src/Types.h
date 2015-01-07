@@ -4,8 +4,6 @@
 #include "Point3d.h"
 #include "Size2d.h"
 #include <utility>
-#include <vector>
-#include <map>
 
 namespace trm
 {

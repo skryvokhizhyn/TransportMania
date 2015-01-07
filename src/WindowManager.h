@@ -3,7 +3,9 @@
 #include "Matrix.h"
 #include "DrawableItem.h"
 #include "ItemLocator.h"
-#include "EventHandlerWrapper.h"
+//#include "EventHandlerWrapper.h"
+
+#include "EventAction.h"
 
 #include <unordered_map>
 
@@ -15,9 +17,11 @@ namespace trm
 	class WindowManager
 	{
 	public:
-		void Init(const size_t width, const size_t height);
+		void Init(const Size2d & screenSize);
 
-		void CreateOKWindow(OnEventCallback cb);
+		void CreateOKWindow(EventAction cb);
+
+		void CloseWindow(int id);
 
 		void Draw(const DrawContext & c, const Matrix & orthoViewMatrix) const;
 
@@ -26,8 +30,7 @@ namespace trm
 
 	private:
 		Windows windows_;
-		size_t width_ = 0;
-		size_t height_ = 0;
+		Size2d screenSize_;
 	};
 
 } // namespace trm

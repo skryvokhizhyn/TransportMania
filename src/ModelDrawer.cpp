@@ -33,7 +33,10 @@ namespace
 	void LoadBuffer(const std::vector<T> & vec, const GLuint buffId, const GLuint buffType)
 	{
 		if (vec.empty())
+		{
+			utils::Logger().Debug() << "Empty buffer given for buffId=" << buffId << " buffType=" << buffType;
 			return;
+		}
 
 		glBindBuffer(buffType, buffId);
 		glBufferData(buffType, vec.size() * sizeof(T), &vec.at(0), GL_STATIC_DRAW);

@@ -18,7 +18,7 @@
 #include "ComponentHolderProxy.h"
 #include "TextureManagerProxy.h"
 #include "WindowManagerProxy.h"
-#include "EventHandlerLocatorProxy.h"
+#include "CachedHandlerLocatorProxy.h"
 
 #include <boost/range/algorithm.hpp>
 #include <boost/filesystem/path.hpp>
@@ -44,23 +44,23 @@ Application::InitApplication(const size_t width, const size_t height)
 	//worldProjection_.SetAngles(Degrees(-61), Degrees(0), Degrees(-6));
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
-	textManager_.Init(width, height);
+	textManager_.Init(Size2d(width, height));
 
 	sceneHandlerPtr_ = std::make_shared<SceneEventHandler>(*this);
 	
 	const float w = boost::numeric_cast<float>(width);
 	const float h = boost::numeric_cast<float>(height);
 
-	eventHandlerLocator_.Put(SCENE_EVENT_HANDLER_ID, 
+	cachedHandlerLocator_.Put(SCENE_EVENT_HANDLER_ID, 
 		{Point2d(0.0f, 0.0f), Point2d(0.0f, h), Point2d(w, h), Point2d(w, 0.0f)}, 
 		sceneHandlerPtr_);
 	
-	windowManager_.Init(width, height);
+	windowManager_.Init(Size2d(width, height));
 
 	TextManagerProxy::Init(textManager_);
 	ComponentHolderProxy::Init(componentHolder_);
 	TextureManagerProxy::Init(textureManager_);
-	EventHandlerLocatorProxy::Init(eventHandlerLocator_);
+	CachedHandlerLocatorProxy::Init(cachedHandlerLocator_);
 
 	windowManager_.CreateOKWindow(boost::bind(&TextManager::PutFrameRate, boost::ref(textManager_), 10));
 
@@ -98,7 +98,7 @@ Application::ReleaseView()
 bool 
 Application::QuitApplication()
 {
-	EventHandlerLocatorProxy::Term();
+	CachedHandlerLocatorProxy::Term();
 	TextureManagerProxy::Term();
 	ComponentHolderProxy::Term();
 	TextManagerProxy::Term();
@@ -306,4 +306,10 @@ Application::EmulateDynamicScene2()
 	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p1, p6);
 
 	roadRoutePtrs_.push_back(rrPtr);
+}
+
+void
+Application::CloseWindow(int id)
+{
+	windowManager_.CloseWindow(id);
 }

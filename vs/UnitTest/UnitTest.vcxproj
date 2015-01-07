@@ -125,6 +125,7 @@
     <ClCompile Include="..\..\src\TriangleNodePool.cpp" />
     <ClCompile Include="..\..\src\Variance.cpp" />
     <ClCompile Include="..\..\src\Vertex.cpp" />
+    <ClCompile Include="..\..\src\WindowPosition.cpp" />
     <ClCompile Include="..\..\src\WorldProjection.cpp" />
     <ClCompile Include="..\TransportMania\LeakDetectorInitializer.cpp" />
     <ClCompile Include="..\TransportMania\Logger.cpp" />
@@ -153,6 +154,7 @@
     <ClCompile Include="UnitTest.cpp" />
     <ClCompile Include="VarianceTest.cpp" />
     <ClCompile Include="WeakStoringCacheTest.cpp" />
+    <ClCompile Include="WindowPositionTest.cpp" />
     <ClCompile Include="WorldProjectionTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

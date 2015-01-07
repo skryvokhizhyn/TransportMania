@@ -14,7 +14,7 @@
 #include "TextManager.h"
 #include "TextureManager.h"
 #include "WindowManager.h"
-#include "EventHandlerLocator.h"
+#include "CachedHandlerLocator.h"
 #include "SceneEventHandler.h"
 
 namespace trm
@@ -54,6 +54,8 @@ namespace trm
 		void EmulateDynamicScene1();
 		void EmulateDynamicScene2();
 
+		void CloseWindow(int id);
+
 	private:
 		typedef std::vector<StaticSceneObjectPtr> StaticSceneObjects;
 		typedef std::vector<RoadRoutePtr> RoadRoutePtrs;
@@ -78,7 +80,7 @@ namespace trm
 		ComponentHolder componentHolder_;
 		TextureManager textureManager_;
 		WindowManager windowManager_;
-		EventHandlerLocator eventHandlerLocator_;
+		CachedHandlerLocator cachedHandlerLocator_;
 		SceneEventHandlerPtr sceneHandlerPtr_;
 		bool processTerrainUpdate_ = true;
 	};

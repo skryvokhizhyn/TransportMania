@@ -40,9 +40,6 @@
     <Filter Include="Application">
       <UniqueIdentifier>{acaf0267-5a1e-464a-a93a-f7148e7d0bd0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Application\EventStateMachine">
-      <UniqueIdentifier>{5d8d19b0-1b26-4f73-b1a8-0ba7b0b4d87a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Terrain\HeightMap">
       <UniqueIdentifier>{d93c1f6f-be8f-441e-a989-4640db0b7ccb}</UniqueIdentifier>
     </Filter>
@@ -63,6 +60,12 @@
     </Filter>
     <Filter Include="Events">
       <UniqueIdentifier>{e4d51b87-8e73-43bf-bac5-56aaf8b57ca4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\SceneEventStateMachine">
+      <UniqueIdentifier>{5d8d19b0-1b26-4f73-b1a8-0ba7b0b4d87a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events\SingleEvents">
+      <UniqueIdentifier>{553c4959-4251-4fa3-aae9-7b6c9d8bdde4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -256,7 +259,7 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\SubjectAction.cpp">
-      <Filter>Application\EventStateMachine</Filter>
+      <Filter>Application\SceneEventStateMachine</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\HeightMap.cpp">
       <Filter>Terrain\HeightMap</Filter>
@@ -356,6 +359,24 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ShaderProgram.cpp">
       <Filter>Draw</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowPosition.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\EventContainer.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowCloseEvent.cpp">
+      <Filter>Events\SingleEvents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SdlUserEvent.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\SdlUserEventVisitor.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\CachedHandlerLocator.cpp">
+      <Filter>Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -612,16 +633,16 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\EventStateMachineImpl.h">
-      <Filter>Application\EventStateMachine</Filter>
+      <Filter>Application\SceneEventStateMachine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\EventStateMachine.h">
-      <Filter>Application\EventStateMachine</Filter>
+      <Filter>Application\SceneEventStateMachine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\EventStateMachineDefs.h">
-      <Filter>Application\EventStateMachine</Filter>
+      <Filter>Application\SceneEventStateMachine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\SubjectAction.h">
-      <Filter>Application\EventStateMachine</Filter>
+      <Filter>Application\SceneEventStateMachine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\TriangleNodeAllocator.h">
       <Filter>Terrain\LOD</Filter>
@@ -734,9 +755,6 @@
     <ClInclude Include="..\..\src\TextureManagerProxy.h">
       <Filter>Textures</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SdlUserEvent.h">
-      <Filter>Application</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Polygon3d.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -764,9 +782,6 @@
     <ClInclude Include="..\..\src\FingerIdType.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\WindowItem.h">
-      <Filter>Window</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\UniqueId.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -782,17 +797,38 @@
     <ClInclude Include="..\..\src\EventHandler.h">
       <Filter>Events</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\EventHandlerLocatorProxy.h">
-      <Filter>Events</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\EventHandlerWrapper.h">
-      <Filter>Events</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ShaderProgram.h">
       <Filter>Draw</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\ShaderAttribute.h">
       <Filter>Draw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowPosition.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventContainer.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\EventAction.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowCloseEvent.h">
+      <Filter>Events\SingleEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SdlUserEvent.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\UserEventData.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SdlUserEventVisitor.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\CachedHandlerLocator.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\CachedHandlerLocatorProxy.h">
+      <Filter>Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

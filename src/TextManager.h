@@ -10,9 +10,7 @@ namespace trm
 	class TextManager
 	{
 	public:
-		TextManager();
-
-		void Init(const size_t width, const size_t height);
+		void Init(const Size2d & screenSize);
 
 		void PutFrameRate(const unsigned rate);
 
@@ -23,8 +21,7 @@ namespace trm
 
 	private:
 		FontData fontData_;
-		size_t width_;
-		size_t height_;
+		Size2d screenSize_;
 		TextManagers drawableItems_;
 	};
 

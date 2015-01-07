@@ -18,16 +18,10 @@ namespace
 	static const float FRAME_RATE_X_MARGIN = 2.0f;
 }
 
-TextManager::TextManager()
-	: width_(0)
-	, height_(0)
-{}
-
 void
-TextManager::Init(const size_t width, const size_t height)
+TextManager::Init(const Size2d & sz)
 {
-	width_ = width;
-	height_ = height;
+	screenSize_ = sz;
 
 	fontData_ = FontReader::Read(trm::GetFontPath("arial_ttf_cyr_lat.fnt"));
 }
@@ -41,12 +35,12 @@ TextManager::PutFrameRate(const unsigned rate)
 #ifndef DRAWING_MODE_FULL
 	ModelData data = TextRenderer::Render(text);
 #else
-	ModelData data = TextRenderer::Render(fontData_, text, boost::numeric_cast<std::uint16_t>(width_ / FRAME_RATE_SCALE_FACTOR));
+	ModelData data = TextRenderer::Render(fontData_, text, boost::numeric_cast<std::uint16_t>(screenSize_.x()/ FRAME_RATE_SCALE_FACTOR));
 #endif // DRAWING_MODE_FULL
 	
 	Matrix scale = MatrixFactory::Scale(FRAME_RATE_SCALE_FACTOR);
 	scale.at_element(0, 3) = FRAME_RATE_X_MARGIN;
-	scale.at_element(1, 3) = boost::numeric_cast<float>(height_);
+	scale.at_element(1, 3) = boost::numeric_cast<float>(screenSize_.y());
 
 	drawableItems_.emplace_back(data, std::move(scale));
 }
@@ -54,8 +48,7 @@ TextManager::PutFrameRate(const unsigned rate)
 void
 TextManager::Draw(const DrawContext & c, const Matrix & orthoViewMatrix) const
 {
-	assert(width_);
-	assert(height_);
+	assert(screenSize_ != Size2d());
 
 	boost::for_each(drawableItems_, 
 		[&](const DrawableItem & tm)

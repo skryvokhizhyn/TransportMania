@@ -3,8 +3,11 @@
 #include "WindowRenderer.h"
 #include "ModelData.h"
 #include "MatrixFactory.h"
-#include "EventHandlerLocatorProxy.h"
-#include "EventHandlerWrapper.h"
+#include "CachedHandlerLocatorProxy.h"
+//#include "EventHandlerWrapper.h"
+#include "EventContainer.h"
+#include "WindowPosition.h"
+#include "WindowCloseEvent.h"
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/algorithm/transform.hpp>
@@ -18,26 +21,21 @@ namespace
 }
 
 void
-WindowManager::Init(const size_t width, const size_t height)
+WindowManager::Init(const Size2d & sz)
 {
-	width_ = width;
-	height_ = height;
+	screenSize_ = sz;
 }
 
 void
-WindowManager::CreateOKWindow(OnEventCallback cb)
+WindowManager::CreateOKWindow(EventAction cb)
 {
-	const float okWindowSize = OK_WINDOW_RELATIVE_SIZE * height_;
-	const Size2d windowSize(
-		boost::numeric_cast<size_t>(okWindowSize),
-		boost::numeric_cast<size_t>(okWindowSize));
+	const size_t windowSize = boost::numeric_cast<size_t>(screenSize_.y() * OK_WINDOW_RELATIVE_SIZE);
 
-	ModelData md = WindowRenderer::RenderRectangleWindow(windowSize, TextureId::OkButton);
+	Size2d sz(windowSize, windowSize);
+	ModelData md = WindowRenderer::RenderRectangleWindow(sz, TextureId::OkButton);
 
-	const float xPos = width_ / 2.0f - okWindowSize / 2;
-	const float yPos = height_ / 2.0f - okWindowSize / 2;
-
-	Matrix pos = MatrixFactory::Move(Point3d(xPos, yPos, 0.0f));
+	const Point2d loc = GetWindowPosition(screenSize_, sz, WindowPosition::p50, WindowPosition::p50);
+	Matrix pos = MatrixFactory::Move(Point3d::Cast(loc));
 
 	const int id = windows_.size();
 
@@ -45,11 +43,18 @@ WindowManager::CreateOKWindow(OnEventCallback cb)
 	boost::transform(md.points, std::back_inserter(polygon),
 		[&](const Point3d & p)
 	{
-		return Point2d::Cast(p) + Point2d(xPos, yPos);
+		return Point2d::Cast(p) + loc;
 	});
 
 	windows_.emplace(id, DrawableItem(md, std::move(pos)));
-	EventHandlerLocatorProxy()->Put(id, polygon, std::make_shared<EventHandlerWrapper>(cb));
+	CachedHandlerLocatorProxy()->Put(id, polygon, EventContainer::Create({cb, WindowCloseEvent(id)}, EventActionType::Single));
+}
+
+void 
+WindowManager::CloseWindow(int id)
+{
+	windows_.erase(id);
+	CachedHandlerLocatorProxy()->Remove(id);
 }
 
 void

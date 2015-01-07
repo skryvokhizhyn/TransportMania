@@ -15,9 +15,11 @@
     <ClCompile Include="..\..\src\AppEventHandler.cpp" />
     <ClCompile Include="..\..\src\Application.cpp" />
     <ClCompile Include="..\..\src\BmpHandler.cpp" />
+    <ClCompile Include="..\..\src\CachedHandlerLocator.cpp" />
     <ClCompile Include="..\..\src\ComponentHolder.cpp" />
     <ClCompile Include="..\..\src\ComponentId.cpp" />
     <ClCompile Include="..\..\src\DrawContext.cpp" />
+    <ClCompile Include="..\..\src\EventContainer.cpp" />
     <ClCompile Include="..\..\src\EventDispatcher.cpp" />
     <ClCompile Include="..\..\src\EventHandlerLocator.cpp" />
     <ClCompile Include="..\..\src\SceneEventHandler.cpp" />
@@ -30,6 +32,8 @@
     <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
     <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
     <ClCompile Include="..\..\src\DrawableItem.cpp" />
+    <ClCompile Include="..\..\src\SdlUserEvent.cpp" />
+    <ClCompile Include="..\..\src\SdlUserEventVisitor.cpp" />
     <ClCompile Include="..\..\src\ShaderProgram.cpp" />
     <ClCompile Include="..\..\src\TextManager.cpp" />
     <ClCompile Include="..\..\src\TextRenderer.cpp" />
@@ -102,7 +106,9 @@
     <ClCompile Include="..\..\src\Variance.cpp" />
     <ClCompile Include="..\..\src\Vertex.cpp" />
     <ClCompile Include="..\..\src\WagonDrawableObject.cpp" />
+    <ClCompile Include="..\..\src\WindowCloseEvent.cpp" />
     <ClCompile Include="..\..\src\WindowManager.cpp" />
+    <ClCompile Include="..\..\src\WindowPosition.cpp" />
     <ClCompile Include="..\..\src\WindowRenderer.cpp" />
     <ClCompile Include="..\..\src\WorldProjection.cpp" />
     <ClCompile Include="LeakDetectorInitializer.cpp" />
@@ -114,19 +120,23 @@
     <ClInclude Include="..\..\src\AppEventHandler.h" />
     <ClInclude Include="..\..\src\Application.h" />
     <ClInclude Include="..\..\src\BmpHandler.h" />
+    <ClInclude Include="..\..\src\CachedHandlerLocator.h" />
     <ClInclude Include="..\..\src\CommonUtils.h" />
     <ClInclude Include="..\..\src\ComponentHolder.h" />
     <ClInclude Include="..\..\src\ComponentHolderProxy.h" />
     <ClInclude Include="..\..\src\ComponentId.h" />
+    <ClInclude Include="..\..\src\EventAction.h" />
     <ClInclude Include="..\..\src\EventDispatcher.h" />
     <ClInclude Include="..\..\src\EventHandlerLocator.h" />
-    <ClInclude Include="..\..\src\EventHandlerLocatorProxy.h" />
-    <ClInclude Include="..\..\src\EventHandlerWrapper.h" />
+    <ClInclude Include="..\..\src\CachedHandlerLocatorProxy.h" />
     <ClInclude Include="..\..\src\FingerIdType.h" />
+    <ClInclude Include="..\..\src\SdlUserEventVisitor.h" />
     <ClInclude Include="..\..\src\ShaderAttribute.h" />
     <ClInclude Include="..\..\src\ShaderProgram.h" />
+    <ClInclude Include="..\..\src\EventContainer.h" />
+    <ClInclude Include="..\..\src\UserEventData.h" />
+    <ClInclude Include="..\..\src\WindowCloseEvent.h" />
     <ClInclude Include="..\..\src\UniqueId.h" />
-    <ClInclude Include="..\..\src\WindowItem.h" />
     <ClInclude Include="..\..\src\FingerEvent.h" />
     <ClInclude Include="..\..\src\FontData.h" />
     <ClInclude Include="..\..\src\FontReader.h" />
@@ -253,6 +263,7 @@
     <ClInclude Include="..\..\src\EventHandler.h" />
     <ClInclude Include="..\..\src\WindowManager.h" />
     <ClInclude Include="..\..\src\WindowManagerProxy.h" />
+    <ClInclude Include="..\..\src\WindowPosition.h" />
     <ClInclude Include="..\..\src\WindowRenderer.h" />
     <ClInclude Include="..\..\src\WorldProjection.h" />
   </ItemGroup>
