@@ -7,7 +7,9 @@ namespace trm
 		Undefined,
 		Ground, 
 		Font,
-		OkButton
+		OkButton,
+		TransparentGray,
+		WindowBox
 	};
 
 } // namespace trm

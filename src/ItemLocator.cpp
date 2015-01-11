@@ -41,7 +41,7 @@ namespace priv
 			: cRef_(c)
 		{}
 	
-		ConstRef operator() (int i) const 
+		ConstRef operator() (UniqueId i) const 
 		{
 			return cRef_.get().at(i);
 		}
@@ -73,7 +73,7 @@ namespace
 
 class ItemLocator::ItemLocatorImpl
 {
-	using IdToBoxMap = std::unordered_map<int, Box2d>;
+	using IdToBoxMap = std::unordered_map<UniqueId, Box2d>;
 	using RTreeValue = IdToBoxMap::key_type;
 	using MapIndexableType = priv::MapIndexableGetter<IdToBoxMap>;
 	using CreationAlgo = bg::index::rstar<16, 4>;
@@ -85,7 +85,7 @@ public:
 		, rTree_(CreationAlgo(), indexable_)
 	{}
 
-	void Put(const int id, const Polygon2d & polygon)
+	void Put(UniqueId id, const Polygon2d & polygon)
 	{
 		const Box2d box = ConvertToBox2d(polygon);
 
@@ -97,7 +97,7 @@ public:
 		rTree_.insert(id);
 	}
 
-	void Remove(const int id)
+	void Remove(UniqueId id)
 	{
 		const size_t rTreeRemovedCnt = rTree_.remove(id);
 		const size_t idToBoxMapRemovedCnt = idToBoxMap_.erase(id);
@@ -129,13 +129,13 @@ ItemLocator::ItemLocator()
 {}
 
 void 
-ItemLocator::Put(const int id, const Polygon2d & p)
+ItemLocator::Put(UniqueId id, const Polygon2d & p)
 {
 	implPtr_->Put(id, p);
 }
 
 void 
-ItemLocator::Remove(const int id)
+ItemLocator::Remove(UniqueId id)
 {
 	implPtr_->Remove(id);
 }

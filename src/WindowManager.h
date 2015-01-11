@@ -3,7 +3,8 @@
 #include "Matrix.h"
 #include "DrawableItem.h"
 #include "ItemLocator.h"
-//#include "EventHandlerWrapper.h"
+#include "WindowImpl.h"
+#include "WindowItem.h"
 
 #include "EventAction.h"
 
@@ -20,13 +21,18 @@ namespace trm
 		void Init(const Size2d & screenSize);
 
 		void CreateOKWindow(EventAction cb);
+		void CreateLockScreen();
+		void CreateTextWindow(const std::wstring & text);
 
-		void CloseWindow(int id);
+		void CloseWindow(UniqueId id);
 
 		void Draw(const DrawContext & c, const Matrix & orthoViewMatrix) const;
 
 	private:
-		using Windows = std::unordered_map<int, DrawableItem>;
+		void ProcessWindowData(WindowItemPtr ptr);
+
+	private:
+		using Windows = std::unordered_map<UniqueId, WindowImpl>;
 
 	private:
 		Windows windows_;

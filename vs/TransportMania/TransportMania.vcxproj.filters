@@ -67,6 +67,9 @@
     <Filter Include="Events\SingleEvents">
       <UniqueIdentifier>{553c4959-4251-4fa3-aae9-7b6c9d8bdde4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Window\WindowItems">
+      <UniqueIdentifier>{b05db826-f33d-47a8-a618-c74efcdbc6d0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -377,6 +380,21 @@
     </ClCompile>
     <ClCompile Include="..\..\src\CachedHandlerLocator.cpp">
       <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowImpl.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowItemBox.cpp">
+      <Filter>Window\WindowItems</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowItemRenderer.cpp">
+      <Filter>Window\WindowItems</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowItem.cpp">
+      <Filter>Window\WindowItems</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowItemText.cpp">
+      <Filter>Window\WindowItems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -829,6 +847,33 @@
     </ClInclude>
     <ClInclude Include="..\..\src\CachedHandlerLocatorProxy.h">
       <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TextRendererProxy.h">
+      <Filter>Text</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Size2f.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowItem.h">
+      <Filter>Window\WindowItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowData.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowImpl.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowItemRenderer.h">
+      <Filter>Window\WindowItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowItemBox.h">
+      <Filter>Window\WindowItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Rectangle2f.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\WindowItemText.h">
+      <Filter>Window\WindowItems</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

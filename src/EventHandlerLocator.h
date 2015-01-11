@@ -11,13 +11,13 @@ namespace trm
 	class EventHandlerLocator
 	{
 	public:
-		void Put(const int id, const Polygon2d & area, EventHandlerPtr ehPtr);
-		void Remove(const int id);
+		void Put(UniqueId id, const Polygon2d & area, EventHandlerPtr ehPtr);
+		void Remove(UniqueId id);
 
 		EventHandler * At(const Point2d & p) const;
 
 	private:
-		using Handlers = std::unordered_map<int, EventHandlerPtr>;
+		using Handlers = std::unordered_map<UniqueId, EventHandlerPtr>;
 
 	private:
 		ItemLocator locator_;

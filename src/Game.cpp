@@ -150,10 +150,10 @@ Game::Run()
 
 		if (fpsCounter.Tick())
 		{
-			//const unsigned frames = fpsCounter.GetFrames();
+			const unsigned frames = fpsCounter.GetFrames();
 
 			//utils::Logger().Debug() << "Frames " << frames;
-			//TextManagerProxy()->PutFrameRate(frames);
+			TextManagerProxy()->PutFrameRate(frames);
 		}
 
 		const unsigned cnt = updateRate.Tick();

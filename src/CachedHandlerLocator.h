@@ -11,8 +11,8 @@ namespace trm
 	{
 	public:
 		// mimic EventHandlerLocator
-		void Put(const int id, const Polygon2d & area, EventHandlerPtr ehPtr);
-		void Remove(const int id);
+		void Put(UniqueId id, const Polygon2d & area, EventHandlerPtr ehPtr);
+		void Remove(UniqueId id);
 
 		// mimic EventHandler
 		void Process(const FingerPressed & e);
@@ -25,7 +25,7 @@ namespace trm
 
 	private:
 		using PressedFingers = std::set<FingerId>;
-		using IdToHandlerMap = std::map<int, EventHandlerPtr>;
+		using IdToHandlerMap = std::map<UniqueId, EventHandlerPtr>;
 
 	private:
 		EventHandlerLocator ehLocator_;

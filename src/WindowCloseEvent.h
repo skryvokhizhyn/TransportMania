@@ -1,16 +1,18 @@
 #pragma once
 
+#include "UniqueId.h"
+
 namespace trm
 {
 	class WindowCloseEvent
 	{
 	public:
-		WindowCloseEvent(int id);
+		WindowCloseEvent(UniqueId id);
 
 		void operator () () const;
 
 	private:
-		int id_;
+		UniqueId id_;
 	};
 
 } // namespace trm

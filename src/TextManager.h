@@ -2,7 +2,7 @@
 
 #include "DrawableItem.h"
 #include "DrawContext.h"
-#include "FontData.h"
+
 #include <vector>
 
 namespace trm
@@ -20,7 +20,6 @@ namespace trm
 		using TextManagers = std::vector<DrawableItem>;
 
 	private:
-		FontData fontData_;
 		Size2d screenSize_;
 		TextManagers drawableItems_;
 	};

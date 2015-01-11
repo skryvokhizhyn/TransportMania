@@ -19,11 +19,14 @@
 #include "TextureManagerProxy.h"
 #include "WindowManagerProxy.h"
 #include "CachedHandlerLocatorProxy.h"
+#include "TextRendererProxy.h"
 
 #include <boost/range/algorithm.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/range/adaptor/map.hpp>
 #include <boost/lambda/bind.hpp>
+
+//#include "PngHandler.h"
 
 using namespace trm;
 using namespace trm::terrain;
@@ -38,6 +41,8 @@ Application::InitApplication(const size_t width, const size_t height)
 {
 	stopped_ = false;
 
+	//auto png = utils::PngHandler(GetTexturePath("graybackground.png"));
+
 	worldProjection_.SetRatio(width, height);
 	//worldProjection_.SetAngles(Degrees(69), Degrees(0), Degrees(-32));
 	worldProjection_.SetAngles(Degrees(55), Degrees(0), Degrees(10));
@@ -45,13 +50,14 @@ Application::InitApplication(const size_t width, const size_t height)
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
 	textManager_.Init(Size2d(width, height));
+	textRenderer_.Init();
 
 	sceneHandlerPtr_ = std::make_shared<SceneEventHandler>(*this);
 	
 	const float w = boost::numeric_cast<float>(width);
 	const float h = boost::numeric_cast<float>(height);
 
-	cachedHandlerLocator_.Put(SCENE_EVENT_HANDLER_ID, 
+	cachedHandlerLocator_.Put(/*SCENE_EVENT_HANDLER_ID*/UniqueId(), 
 		{Point2d(0.0f, 0.0f), Point2d(0.0f, h), Point2d(w, h), Point2d(w, 0.0f)}, 
 		sceneHandlerPtr_);
 	
@@ -61,8 +67,10 @@ Application::InitApplication(const size_t width, const size_t height)
 	ComponentHolderProxy::Init(componentHolder_);
 	TextureManagerProxy::Init(textureManager_);
 	CachedHandlerLocatorProxy::Init(cachedHandlerLocator_);
+	TextRendererProxy::Init(textRenderer_);
 
-	windowManager_.CreateOKWindow(boost::bind(&TextManager::PutFrameRate, boost::ref(textManager_), 10));
+	windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateTextWindow, boost::ref(windowManager_), L"My first text window!"));
+	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateLockScreen, boost::ref(windowManager_)));
 
 	return true;
 }
@@ -98,6 +106,7 @@ Application::ReleaseView()
 bool 
 Application::QuitApplication()
 {
+	TextRendererProxy::Term();
 	CachedHandlerLocatorProxy::Term();
 	TextureManagerProxy::Term();
 	ComponentHolderProxy::Term();
@@ -309,7 +318,7 @@ Application::EmulateDynamicScene2()
 }
 
 void
-Application::CloseWindow(int id)
+Application::CloseWindow(UniqueId id)
 {
 	windowManager_.CloseWindow(id);
 }

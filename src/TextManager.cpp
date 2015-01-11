@@ -1,12 +1,10 @@
 #include "TextManager.h"
-#include "FontData.h"
-#include "FontReader.h"
-#include "Settings.h"
-#include "TextRenderer.h"
+#include "TextRendererProxy.h"
 #include "GlobalDefines.h"
 #include "MatrixFactory.h"
 #include "ModelData.h"
 #include "MatrixUtils.h"
+#include "WindowPosition.h"
 
 #include <boost/range/algorithm/for_each.hpp>
 
@@ -14,7 +12,7 @@ using namespace trm;
 
 namespace
 {
-	static const float FRAME_RATE_SCALE_FACTOR = 0.7f;
+	static const float FRAME_RATE_SCALE_FACTOR = 0.05f; // 5% fron screen height
 	static const float FRAME_RATE_X_MARGIN = 2.0f;
 }
 
@@ -22,8 +20,6 @@ void
 TextManager::Init(const Size2d & sz)
 {
 	screenSize_ = sz;
-
-	fontData_ = FontReader::Read(trm::GetFontPath("arial_ttf_cyr_lat.fnt"));
 }
 
 void
@@ -33,16 +29,15 @@ TextManager::PutFrameRate(const unsigned rate)
 	const std::wstring text = boost::str(boost::wformat(L"Frame rate: %d") % rate);
 
 #ifndef DRAWING_MODE_FULL
-	ModelData data = TextRenderer::Render(text);
+	TextData data = TextRendererProxy()->Render(text);
 #else
-	ModelData data = TextRenderer::Render(fontData_, text, boost::numeric_cast<std::uint16_t>(screenSize_.x()/ FRAME_RATE_SCALE_FACTOR));
+	TextData data = TextRendererProxy()->Render(text, screenSize_.y() * FRAME_RATE_SCALE_FACTOR);
 #endif // DRAWING_MODE_FULL
 	
-	Matrix scale = MatrixFactory::Scale(FRAME_RATE_SCALE_FACTOR);
-	scale.at_element(0, 3) = FRAME_RATE_X_MARGIN;
-	scale.at_element(1, 3) = boost::numeric_cast<float>(screenSize_.y());
-
-	drawableItems_.emplace_back(data, std::move(scale));
+	const Point2d pos = GetWindowPosition(screenSize_, Size2d::Cast(data.size), WindowPosition::p0, WindowPosition::p100);
+	Matrix mv = MatrixFactory::Move(Point3d::Cast(pos));
+	
+	drawableItems_.emplace_back(std::move(data.modelData), std::move(mv));
 }
 
 void

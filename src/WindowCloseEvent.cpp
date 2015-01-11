@@ -5,7 +5,7 @@
 using namespace trm;
 using namespace trm::UserEventData;
 
-WindowCloseEvent::WindowCloseEvent(int id)
+WindowCloseEvent::WindowCloseEvent(UniqueId id)
 	: id_(id)
 {}
 

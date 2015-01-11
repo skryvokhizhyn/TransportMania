@@ -25,7 +25,8 @@ namespace
 		ch.x = node.get<decltype(FontData::Char::x)>("<xmlattr>.x");
 		ch.y = node.get<decltype(FontData::Char::y)>("<xmlattr>.y");
 		ch.width = node.get<decltype(FontData::Char::width)>("<xmlattr>.width");
-		ch.height = node.get<decltype(FontData::Char::height)>("<xmlattr>.height");
+		// extend height for 1 pixel as it cuts off it from the glyph
+		ch.height = node.get<decltype(FontData::Char::height)>("<xmlattr>.height") + 1;
 		ch.xoffset = node.get<decltype(FontData::Char::xoffset)>("<xmlattr>.xoffset");
 		ch.yoffset = node.get<decltype(FontData::Char::yoffset)>("<xmlattr>.yoffset");
 		ch.xadvance = node.get<decltype(FontData::Char::xadvance)>("<xmlattr>.xadvance");

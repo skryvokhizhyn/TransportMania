@@ -11,14 +11,14 @@
 using namespace trm;
 
 void
-EventHandlerLocator::Put(const int id, const Polygon2d & area, EventHandlerPtr ehPtr)
+EventHandlerLocator::Put(UniqueId id, const Polygon2d & area, EventHandlerPtr ehPtr)
 {
 	locator_.Put(id, area);
 	handlers_.emplace(id, std::move(ehPtr));
 }
 
 void
-EventHandlerLocator::Remove(const int id)
+EventHandlerLocator::Remove(UniqueId id)
 {
 	handlers_.erase(id);
 	locator_.Remove(id);

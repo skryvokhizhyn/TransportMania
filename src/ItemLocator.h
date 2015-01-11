@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Polygon2d.h"
+#include "UniqueId.h"
 
 #include <memory>
 
@@ -9,13 +10,13 @@ namespace trm
 	class ItemLocator
 	{
 	public:
-		using Ids = std::vector<int>;
+		using Ids = std::vector<UniqueId>;
 
 	public:
 		ItemLocator();
 
-		void Put(const int id, const Polygon2d & p);
-		void Remove(const int id);
+		void Put(UniqueId id, const Polygon2d & p);
+		void Remove(UniqueId id);
 
 		Ids At(const Polygon2d & p) const;
 

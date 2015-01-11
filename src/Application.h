@@ -12,6 +12,7 @@
 #include "TransportManager.h"
 #include "ComponentHolder.h"
 #include "TextManager.h"
+#include "TextRenderer.h"
 #include "TextureManager.h"
 #include "WindowManager.h"
 #include "CachedHandlerLocator.h"
@@ -54,7 +55,7 @@ namespace trm
 		void EmulateDynamicScene1();
 		void EmulateDynamicScene2();
 
-		void CloseWindow(int id);
+		void CloseWindow(UniqueId id);
 
 	private:
 		typedef std::vector<StaticSceneObjectPtr> StaticSceneObjects;
@@ -77,6 +78,7 @@ namespace trm
 		RoadRoutePtrs roadRoutePtrs_;
 		TransportManagers managers_;
 		TextManager textManager_;
+		TextRenderer textRenderer_;
 		ComponentHolder componentHolder_;
 		TextureManager textureManager_;
 		WindowManager windowManager_;

@@ -1,14 +1,16 @@
 #pragma once
 
+#include "UniqueId.h"
+
 namespace trm
 {
 namespace UserEventData
 {
 	struct CloseWindow
 	{
-		int id;
+		UniqueId id;
 
-		CloseWindow(int i) : id(i) {}
+		CloseWindow(UniqueId i) : id(i) {}
 	};
 
 

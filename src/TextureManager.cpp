@@ -11,9 +11,12 @@ namespace
 {
 	using TextureIdToFileMap = std::map<TextureId, std::string>;
 	const TextureIdToFileMap TEXTURE_ID_TO_FILE_MAP = boost::assign::map_list_of
-		(TextureId::Ground,		"grass.png")
-		(TextureId::Font,		"arial_ttf_cyr_lat_0.png")
-		(TextureId::OkButton,	"okbutton.png");
+		(TextureId::Ground,				"grass.png")
+		(TextureId::Font,				"arial_ttf_cyr_lat_0.png")
+		(TextureId::OkButton,			"okbutton.png")
+		(TextureId::TransparentGray,	"graybackground.png")
+		(TextureId::WindowBox,			"windowbox.png")
+		;
 
 	std::string GetTextureLocation(TextureId id)
 	{

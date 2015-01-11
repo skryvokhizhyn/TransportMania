@@ -4,14 +4,14 @@
 using namespace trm;
 
 void
-CachedHandlerLocator::Put(const int id, const Polygon2d & area, EventHandlerPtr ehPtr)
+CachedHandlerLocator::Put(UniqueId id, const Polygon2d & area, EventHandlerPtr ehPtr)
 {
 	ehLocator_.Put(id, area, ehPtr);
 	idToHandlerMap_.emplace(id, ehPtr);
 }
 
 void
-CachedHandlerLocator::Remove(const int id)
+CachedHandlerLocator::Remove(UniqueId id)
 {
 	ehLocator_.Remove(id);
 	EventHandlerPtr ehPtr = idToHandlerMap_.at(id);

@@ -1,6 +1,7 @@
 #include "TextRenderer.h"
-#include "ModelData.h"
 #include "FontData.h"
+#include "FontReader.h"
+#include "Settings.h"
 
 #pragma warning(disable: 4512)
 
@@ -201,15 +202,15 @@ namespace
 	};
 }
 
-ModelData
-TextRenderer::Render(const std::wstring & str)
+TextData
+TextRenderer::Render(const std::wstring & str) const
 {
 	ModelData md;
 
 	boost::for_each(str, CharMapper(md));
 	md.type = ModelData::Mode::Line;
 
-	return md;
+	return TextData(std::move(md), Size2f());
 }
 
 #include <TextureManagerProxy.h>
@@ -315,9 +316,22 @@ namespace
 	}
 }
 
-ModelData
-TextRenderer::Render(const FontData & fd, const std::wstring & str, const std::uint16_t maxWidth)
+void
+TextRenderer::Init()
 {
+	fontData_ = FontReader::Read(trm::GetFontPath("arial_ttf_cyr_lat.fnt"));
+}
+
+TextData::TextData(ModelData && md, const Size2f & s)
+	: modelData(std::move(md))
+	, size(s)
+{}
+
+TextData
+TextRenderer::Render(const std::wstring & str, float fontSize, float maxWidth /*= -1.0f*/, float maxHeight /*= -1.0f*/) const
+{
+	assert(fontSize > 0.0f);
+
 	ModelData md;
 
 	md.type = ModelData::Mode::Triangle;
@@ -331,13 +345,28 @@ TextRenderer::Render(const FontData & fd, const std::wstring & str, const std::u
 	const utils::ImgProperties & imgProps = TextureManagerProxy()->Get(TextureId::Font).props;
 
 	std::uint16_t xShift = 0;
-	std::uint16_t yShift = fd.size;
+	std::uint16_t yShift = 0;
+
+	const float sizeMultiplier = fontSize / fontData_.size;
+
+	maxWidth = (maxWidth < 0.0f) ? maxWidth = std::numeric_limits<float>::max() : maxWidth / sizeMultiplier;
+	maxHeight = (maxHeight < 0.0f) ? maxHeight = std::numeric_limits<float>::max() : maxHeight / sizeMultiplier;
+
+	uint16_t xMax = 0;
 
 	for (wchar_t c : str)
 	{
-		const FontData::Char & ch = GetCharData(c, fd.chars);
+		const FontData::Char & ch = GetCharData(c, fontData_.chars);
 
-		if (c == L'\n' || xShift + ch.xadvance >= maxWidth)
+		if (c == L'\n')
+		{
+			xShift = 0;
+			yShift += fontData_.size;
+
+			continue;
+		}
+
+		if (xShift + ch.xadvance >= maxWidth)
 		{
 			if (xShift == 0)
 			{
@@ -345,15 +374,23 @@ TextRenderer::Render(const FontData & fd, const std::wstring & str, const std::u
 			}
 
 			xShift = 0;
-			yShift += fd.size;
-
-			continue;
+			yShift += fontData_.size;
 		}
 
 		ModelData charData = GenerateCharModelData(ch, imgProps);
 		AppendCharData(std::move(charData), xShift, yShift, md);
 		xShift += ch.xadvance;
+
+		xMax = std::max(xMax, xShift);
 	}
 
-	return md;
+	// convert to expected size and shift
+	namespace bl = boost::lambda;
+	boost::transform(md.points, md.points.begin(), 
+		bl::ret<Point3d>(bl::ret<Point3d>(bl::_1 + Point3d(0, yShift, 0)) * sizeMultiplier));
+
+	// increase to cover first row
+	yShift += fontData_.size;
+
+	return TextData(std::move(md), Size2f(xMax * sizeMultiplier, yShift * sizeMultiplier));
 }

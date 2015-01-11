@@ -106,7 +106,11 @@
     <ClCompile Include="..\..\src\Variance.cpp" />
     <ClCompile Include="..\..\src\Vertex.cpp" />
     <ClCompile Include="..\..\src\WagonDrawableObject.cpp" />
+    <ClCompile Include="..\..\src\WindowItem.cpp" />
+    <ClCompile Include="..\..\src\WindowItemBox.cpp" />
     <ClCompile Include="..\..\src\WindowCloseEvent.cpp" />
+    <ClCompile Include="..\..\src\WindowImpl.cpp" />
+    <ClCompile Include="..\..\src\WindowItemText.cpp" />
     <ClCompile Include="..\..\src\WindowManager.cpp" />
     <ClCompile Include="..\..\src\WindowPosition.cpp" />
     <ClCompile Include="..\..\src\WindowRenderer.cpp" />
@@ -114,6 +118,7 @@
     <ClCompile Include="LeakDetectorInitializer.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="ScreenParameters.cpp" />
+    <ClCompile Include="WindowItemRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Angle.h" />
@@ -130,11 +135,15 @@
     <ClInclude Include="..\..\src\EventHandlerLocator.h" />
     <ClInclude Include="..\..\src\CachedHandlerLocatorProxy.h" />
     <ClInclude Include="..\..\src\FingerIdType.h" />
+    <ClInclude Include="..\..\src\Rectangle2f.h" />
     <ClInclude Include="..\..\src\SdlUserEventVisitor.h" />
     <ClInclude Include="..\..\src\ShaderAttribute.h" />
     <ClInclude Include="..\..\src\ShaderProgram.h" />
     <ClInclude Include="..\..\src\EventContainer.h" />
+    <ClInclude Include="..\..\src\Size2f.h" />
+    <ClInclude Include="..\..\src\TextRendererProxy.h" />
     <ClInclude Include="..\..\src\UserEventData.h" />
+    <ClInclude Include="..\..\src\WindowItemBox.h" />
     <ClInclude Include="..\..\src\WindowCloseEvent.h" />
     <ClInclude Include="..\..\src\UniqueId.h" />
     <ClInclude Include="..\..\src\FingerEvent.h" />
@@ -261,6 +270,11 @@
     <ClInclude Include="..\..\src\WagonDrawableObject.h" />
     <ClInclude Include="..\..\src\ItemLocator.h" />
     <ClInclude Include="..\..\src\EventHandler.h" />
+    <ClInclude Include="..\..\src\WindowData.h" />
+    <ClInclude Include="..\..\src\WindowImpl.h" />
+    <ClInclude Include="..\..\src\WindowItem.h" />
+    <ClInclude Include="..\..\src\WindowItemRenderer.h" />
+    <ClInclude Include="..\..\src\WindowItemText.h" />
     <ClInclude Include="..\..\src\WindowManager.h" />
     <ClInclude Include="..\..\src\WindowManagerProxy.h" />
     <ClInclude Include="..\..\src\WindowPosition.h" />
