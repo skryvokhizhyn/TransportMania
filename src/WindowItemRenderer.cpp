@@ -26,6 +26,10 @@ namespace
 	}
 }
 
+WindowItemRenderer::Data::Data(const UniqueId & i, EventHandlerPtr h, const DrawableItem & d, Polygon2d && p)
+	: id(i), handlerPtr(std::move(h)), drawableItem(d), polygon(std::move(p))
+{}
+
 WindowItemRenderer::WindowItemRenderer(const Rectangle2f & background)
 	: background_(background)
 {}

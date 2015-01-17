@@ -23,6 +23,8 @@ namespace trm
 			EventHandlerPtr handlerPtr;
 			DrawableItem drawableItem;
 			Polygon2d polygon;
+
+			Data(const UniqueId & i, EventHandlerPtr h, const DrawableItem & d, Polygon2d && p);
 		};
 
 		using RenderedData = std::list<Data>;
