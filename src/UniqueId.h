@@ -25,8 +25,12 @@ namespace trm
 
 } // namespace trm
 
-template<>
-struct std::hash<trm::UniqueId>
+namespace std
 {
-	std::size_t operator()(const trm::UniqueId & uid) const;
-};
+	template<>
+	struct hash<trm::UniqueId>
+	{
+		std::size_t operator()(const trm::UniqueId & uid) const;
+	};
+
+}

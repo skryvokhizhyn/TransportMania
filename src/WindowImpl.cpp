@@ -18,11 +18,11 @@ WindowImpl::WindowImpl(const WindowItemRenderer::RenderedData & renderedData)
 		if (d.handlerPtr)
 		{
 			CachedHandlerLocatorProxy()->Put(d.id, d.polygon, d.handlerPtr);
-			return WindowData{d.id, d.drawableItem, true};
+			return WindowData(d.id, d.drawableItem, true);
 		}
 		else
 		{
-			return WindowData{d.id, d.drawableItem, false};
+			return WindowData(d.id, d.drawableItem, false);
 		}
 	});
 }

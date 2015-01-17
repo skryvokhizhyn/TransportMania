@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 
 #include "Rectangle2f.h"
 #include "DrawableItem.h"
@@ -23,8 +23,6 @@ namespace trm
 			EventHandlerPtr handlerPtr;
 			DrawableItem drawableItem;
 			Polygon2d polygon;
-
-			Data() = delete;
 		};
 
 		using RenderedData = std::list<Data>;

@@ -44,9 +44,9 @@ WindowManager::CreateOKWindow(EventAction cb)
 	Size2f sz(windowSize, windowSize);
 	UniqueId windowId;
 
-	auto windowPtr = std::make_unique<WindowItemBox>(windowId, sz, TextureId::OkButton, 
+	WindowItemBoxPtr windowPtr(new WindowItemBox(windowId, sz, TextureId::OkButton,
 		EventContainer::Create({cb, WindowCloseEvent(windowId)}, EventActionType::Single), 
-		WindowPosition::p100, WindowPosition::p50);
+		WindowPosition::p100, WindowPosition::p50));
 
 	ProcessWindowData(std::move(windowPtr));
 }
@@ -56,9 +56,9 @@ WindowManager::CreateLockScreen()
 {
 	Size2f sz = Size2f::Cast(screenSize_);
 
-	auto windowPtr = std::make_unique<WindowItemBox>(UniqueId(), sz, TextureId::TransparentGray, 
+	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId(), sz, TextureId::TransparentGray,
 		EventContainer::Create({}, EventActionType::Repeatable), 
-		WindowPosition::p0, WindowPosition::p0);
+		WindowPosition::p0, WindowPosition::p0));
 
 	ProcessWindowData(std::move(windowPtr));
 }
@@ -72,13 +72,14 @@ WindowManager::CreateTextWindow(const std::wstring & text)
 
 	UniqueId windowId;
 
-	auto windowPtr = std::make_unique<WindowItemBox>(windowId, windowSize, TextureId::WindowBox, 
+	WindowItemBoxPtr windowPtr(new WindowItemBox(windowId, windowSize, TextureId::WindowBox,
 		EventContainer::Create({WindowCloseEvent(windowId)}, EventActionType::Single), 
-		WindowPosition::p50, WindowPosition::p50);
+		WindowPosition::p50, WindowPosition::p50));
 
 	const float FONT_SIZE = 0.05f; // 5% from screen height
 
-	auto textPtr = std::make_unique<WindowItemText>(text, screenSize_.y() * FONT_SIZE, WindowPosition::p50, WindowPosition::p50);
+	WindowItemPtr textPtr(new WindowItemText(text, screenSize_.y() * FONT_SIZE,
+		WindowPosition::p50, WindowPosition::p50));
 
 	windowPtr->Add(std::move(textPtr));
 

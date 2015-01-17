@@ -11,7 +11,9 @@ namespace trm
 		DrawableItem drawableItem;
 		bool hasHandler;
 
-		WindowData() = delete;
+		WindowData(UniqueId i, const DrawableItem & d, bool h)
+			: id(i), drawableItem(d), hasHandler(h)
+		{}
 	};
 
 } // namespace trm
