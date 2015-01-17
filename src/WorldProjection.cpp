@@ -9,7 +9,7 @@ using namespace trm;
 
 namespace
 {
-	const float FRUSTUM_NEAR_VALUE = 0.001f;
+	const float FRUSTUM_NEAR_VALUE = 1.0f;
 	const float FRUSTUM_FAR_VALUE = 1000.0f;
 	const Angle PROJECTION_HORIZONTAL_ANGLE = Degrees(45.0f);
 	const Point3d SHIFT_DEFAULT_POSITION(0, 0, 100.0f);

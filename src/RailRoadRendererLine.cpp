@@ -52,29 +52,38 @@ namespace
 
 	void RenderTriangles(const Point3d & start, const Point3d & end, ModelData & md)
 	{
+		md.type = ModelData::Mode::TriangleStrip;
+
 		const Point2d pS = Point2d::Cast(start);
 		const Point2d pE = Point2d::Cast(end);
-		const Point2d dist = pE - pS;
 
 		const RangeRectangle rr = GetRangeRectangle(pS, pE, RailRoad::RAIL_ROAD_WIDTH); 
 
-		const Point2d a = utils::GetIntersectionPoint(rr.ab, rr.da);
-		const Point2d b = utils::GetIntersectionPoint(rr.ab, rr.bc);
-		const Point2d c = utils::GetIntersectionPoint(rr.bc, rr.cd);
-		const Point2d d = utils::GetIntersectionPoint(rr.cd, rr.da);
+		const Line lS = utils::GetPerpendicularAtPoint(rr.base, pS);
+		const Point2d pS1 = utils::GetIntersectionPoint(lS, rr.bc);
+		const Point2d pS2 = utils::GetIntersectionPoint(lS, rr.da);
 
-		md.points += Point3d::Cast(a), Point3d::Cast(b), Point3d::Cast(c), Point3d::Cast(d);
+		const Point3d pSUp3d(pS1.x(), pS1.y(), start.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
+		const Point3d pSDown3d(pS2.x(), pS2.y(), start.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
 
-		using namespace boost::lambda;
-		placeholder1_type Arg1;
+		const Line lE = utils::GetPerpendicularAtPoint(rr.base, pE);
+		const Point2d pE1 = utils::GetIntersectionPoint(lE, rr.bc);
+		const Point2d pE2 = utils::GetIntersectionPoint(lE, rr.da);
 
-		boost::transform(md.points, md.points.begin(), 
-			ret<Point3d>(Arg1 + Point3d(0.0f, 0.0f, start.z() + RailRoad::RAIL_ROAD_Z_SHIFT)));
+		const Point3d pEUp3d(pE1.x(), pE1.y(), start.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
+		const Point3d pEDown3d(pE2.x(), pE2.y(), start.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
 
-		md.indexes += 0, 2, 1, 2, 0, 3;
+		md.points.reserve(4);
+		md.indexes.reserve(4);
+		md.textures.reserve(4);
 
-		md.normales += 
-			Point3d(0.0f, 1.0f, 1.0f), Point3d(0.0f, 1.0f, 1.0f), Point3d(0.0f, 1.0f, 1.0f), Point3d(0.0f, 1.0f, 1.0f);
+		using namespace boost::assign;
+
+		md.points += pSUp3d, pSDown3d, pEUp3d, pEDown3d;
+		md.indexes += 0, 1, 2, 3;
+		const float len = utils::GetDistance(pE, pS);
+		md.textures += Point2d(0.0f, 0.0f), Point2d(0.0f, 1.0f), Point2d(len, 0.0f), Point2d(len, 1.0f);
+		md.normales.resize(md.points.size(), Point3d(0, 0, 1));
 	}
 }
 
@@ -90,7 +99,7 @@ void RailRoadRendererLine::Do(const RailRoadLine & rrl, ModelData & md)
 
 	#ifdef DRAWING_MODE_FULL
 		RenderTriangles(start, end, md);
-		md.type = ModelData::Mode::Triangle;
+		md.textureId = TextureId::Railway;
 	#else
 		RenderLines(start, end, md);
 		md.type = ModelData::Mode::Line;

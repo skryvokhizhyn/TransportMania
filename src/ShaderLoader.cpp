@@ -12,6 +12,7 @@ namespace
 
 #ifdef DRAWING_MODE_FULL
 		const std::string TERRAIN_VERTEX_SHADER = "\
+		precision mediump float;\
 		attribute vec3 a_vertex;\
 		attribute vec3 a_normal;\
 		attribute vec2 a_texture;\
@@ -47,6 +48,7 @@ namespace
 		}";
 
 	const std::string WINDOW_VERTEX_SHADER = "\
+		precision mediump float;\
 		attribute vec3 a_vertex;\
 		attribute vec2 a_texture;\
 		uniform mediump mat4 u_myPVMatrix;\

@@ -16,6 +16,7 @@ namespace
 		(TextureId::OkButton,			"okbutton.png")
 		(TextureId::TransparentGray,	"graybackground.png")
 		(TextureId::WindowBox,			"windowbox.png")
+		(TextureId::Railway,			"railway.png")
 		;
 
 	std::string GetTextureLocation(TextureId id)

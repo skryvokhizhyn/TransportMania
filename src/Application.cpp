@@ -69,8 +69,9 @@ Application::InitApplication(const size_t width, const size_t height)
 	CachedHandlerLocatorProxy::Init(cachedHandlerLocator_);
 	TextRendererProxy::Init(textRenderer_);
 
-	windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateTextWindow, boost::ref(windowManager_), L"My first text window!"));
+	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateTextWindow, boost::ref(windowManager_), L"My first text window!"));
 	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateLockScreen, boost::ref(windowManager_)));
+	windowManager_.CreateOKWindow(boost::bind(&Application::EmulateDynamicScene1, this));
 
 	return true;
 }
@@ -288,9 +289,9 @@ Application::EmulateDynamicScene1()
 	PutRailRoadLine(p1, p2);
 	PutRailRoadArc(p3, Point2d(30, 30), Degrees(90), Rotation::AntiClockwise);
 
-	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p3, p2);
+	//const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p3, p2);
 
-	managers_.emplace_back(RoadRouteHolder(rrPtr, Heading::Forward));
+	//managers_.emplace_back(RoadRouteHolder(rrPtr, Heading::Forward));
 }
 
 void 

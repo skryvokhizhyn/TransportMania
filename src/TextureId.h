@@ -9,7 +9,8 @@ namespace trm
 		Font,
 		OkButton,
 		TransparentGray,
-		WindowBox
+		WindowBox,
+		Railway
 	};
 
 } // namespace trm

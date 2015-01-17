@@ -44,8 +44,16 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 	const Point2d nearStart = Point2d::Cast(vec1 * radiiMin / radii);
 
 	const Angle rotationStep = Radians(2 * std::asin(RailRoad::RAIL_ROAD_STEP / 2 / radiiMax));
+	
+	const int pointsToProceed = boost::numeric_cast<int>(std::ceil(angle / rotationStep) + 1.0f) * 2; 
+	md.points.reserve(pointsToProceed);
+	md.indexes.reserve(pointsToProceed);
+	md.textures.reserve(pointsToProceed);
 
-	for (Angle a = rotationStep; a < angle; a += rotationStep)
+	Angle a = Degrees(0);
+	float pathPassed = 0.0f;
+
+	while(a <= angle)
 	{
 		const Point2d far = utils::RotateVector(farStart, a, rot);
 		const Point2d near = utils::RotateVector(nearStart, a, rot);
@@ -53,11 +61,24 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 		PushPoint(near, center, h, md);
 		PushPoint(far, center, h, md);
 
-		a += rotationStep;
+		md.textures.push_back(Point2d(pathPassed, 0.0f));
+		md.textures.push_back(Point2d(pathPassed, 1.0f));
+		
+		if (a < angle && (a + rotationStep) > angle)
+		{
+			a = angle;
+		}
+		else
+		{
+			a += rotationStep;
+		}
+
+		pathPassed += 1.0f;
 	}
 
 #ifdef DRAWING_MODE_FULL
 	md.type = ModelData::Mode::TriangleStrip;
+	md.textureId = TextureId::Railway;
 
 	using namespace boost::lambda;
 		placeholder1_type Arg1;
@@ -65,8 +86,7 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 	boost::transform(md.points, md.points.begin(), 
 			ret<Point3d>(Arg1 + Point3d(0.0f, 0.0f, RailRoad::RAIL_ROAD_Z_SHIFT)));
 
-	md.normales.reserve(md.points.size());
-	std::fill_n(std::back_inserter(md.normales), md.points.size(), Point3d(0.0f, 1.0f, 1.0f));
+	md.normales.resize(md.points.size(), Point3d(0.0f, 0.0f, 1.0f));
 #else
 	md.type = ModelData::Mode::Line;
 #endif //DRAWING_MODE_FULL
