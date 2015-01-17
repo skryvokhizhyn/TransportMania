@@ -387,13 +387,13 @@
     <ClCompile Include="..\..\src\WindowItemBox.cpp">
       <Filter>Window\WindowItems</Filter>
     </ClCompile>
-    <ClCompile Include="WindowItemRenderer.cpp">
-      <Filter>Window\WindowItems</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\WindowItem.cpp">
       <Filter>Window\WindowItems</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\WindowItemText.cpp">
+      <Filter>Window\WindowItems</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\WindowItemRenderer.cpp">
       <Filter>Window\WindowItems</Filter>
     </ClCompile>
   </ItemGroup>

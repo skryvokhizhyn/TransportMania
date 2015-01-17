@@ -227,6 +227,9 @@
     <ClCompile Include="..\..\src\WindowPosition.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\UniqueId.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

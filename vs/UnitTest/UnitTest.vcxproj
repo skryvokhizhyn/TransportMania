@@ -123,6 +123,7 @@
     <ClCompile Include="..\..\src\TriangleNodeCache.cpp" />
     <ClCompile Include="..\..\src\TriangleNodeHandler.cpp" />
     <ClCompile Include="..\..\src\TriangleNodePool.cpp" />
+    <ClCompile Include="..\..\src\UniqueId.cpp" />
     <ClCompile Include="..\..\src\Variance.cpp" />
     <ClCompile Include="..\..\src\Vertex.cpp" />
     <ClCompile Include="..\..\src\WindowPosition.cpp" />

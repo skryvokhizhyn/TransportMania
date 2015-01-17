@@ -110,6 +110,7 @@
     <ClCompile Include="..\..\src\WindowItemBox.cpp" />
     <ClCompile Include="..\..\src\WindowCloseEvent.cpp" />
     <ClCompile Include="..\..\src\WindowImpl.cpp" />
+    <ClCompile Include="..\..\src\WindowItemRenderer.cpp" />
     <ClCompile Include="..\..\src\WindowItemText.cpp" />
     <ClCompile Include="..\..\src\WindowManager.cpp" />
     <ClCompile Include="..\..\src\WindowPosition.cpp" />
@@ -118,7 +119,6 @@
     <ClCompile Include="LeakDetectorInitializer.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="ScreenParameters.cpp" />
-    <ClCompile Include="WindowItemRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Angle.h" />
