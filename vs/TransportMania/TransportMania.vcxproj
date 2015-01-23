@@ -22,6 +22,8 @@
     <ClCompile Include="..\..\src\EventContainer.cpp" />
     <ClCompile Include="..\..\src\EventDispatcher.cpp" />
     <ClCompile Include="..\..\src\EventHandlerLocator.cpp" />
+    <ClCompile Include="..\..\src\ModelManager.cpp" />
+    <ClCompile Include="..\..\src\ModelReader.cpp" />
     <ClCompile Include="..\..\src\SceneEventHandler.cpp" />
     <ClCompile Include="..\..\src\FontReader.cpp" />
     <ClCompile Include="..\..\src\HeightMapLoaderCache.cpp" />
@@ -135,6 +137,9 @@
     <ClInclude Include="..\..\src\EventHandlerLocator.h" />
     <ClInclude Include="..\..\src\CachedHandlerLocatorProxy.h" />
     <ClInclude Include="..\..\src\FingerIdType.h" />
+    <ClInclude Include="..\..\src\ModelManager.h" />
+    <ClInclude Include="..\..\src\ModelManagerProxy.h" />
+    <ClInclude Include="..\..\src\ModelReader.h" />
     <ClInclude Include="..\..\src\Rectangle2f.h" />
     <ClInclude Include="..\..\src\SdlUserEventVisitor.h" />
     <ClInclude Include="..\..\src\ShaderAttribute.h" />

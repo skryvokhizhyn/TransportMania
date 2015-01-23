@@ -36,3 +36,9 @@ trm::GetTexturePath(const std::string & name)
 {
 	return GetRelativePath({"Textures", name});
 }
+
+std::string 
+trm::GetModelPath(const std::string & name)
+{
+	return GetRelativePath({"Models", name});
+}

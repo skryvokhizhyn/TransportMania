@@ -20,13 +20,12 @@
 #include "WindowManagerProxy.h"
 #include "CachedHandlerLocatorProxy.h"
 #include "TextRendererProxy.h"
+#include "ModelManagerProxy.h"
 
 #include <boost/range/algorithm.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/range/adaptor/map.hpp>
 #include <boost/lambda/bind.hpp>
-
-//#include "PngHandler.h"
 
 using namespace trm;
 using namespace trm::terrain;
@@ -68,6 +67,7 @@ Application::InitApplication(const size_t width, const size_t height)
 	TextureManagerProxy::Init(textureManager_);
 	CachedHandlerLocatorProxy::Init(cachedHandlerLocator_);
 	TextRendererProxy::Init(textRenderer_);
+	ModelManagerProxy::Init(modelManager_);
 
 	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateTextWindow, boost::ref(windowManager_), L"My first text window!"));
 	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateLockScreen, boost::ref(windowManager_)));
@@ -107,6 +107,7 @@ Application::ReleaseView()
 bool 
 Application::QuitApplication()
 {
+	ModelManagerProxy::Term();
 	TextRendererProxy::Term();
 	CachedHandlerLocatorProxy::Term();
 	TextureManagerProxy::Term();
@@ -289,9 +290,9 @@ Application::EmulateDynamicScene1()
 	PutRailRoadLine(p1, p2);
 	PutRailRoadArc(p3, Point2d(30, 30), Degrees(90), Rotation::AntiClockwise);
 
-	//const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p3, p2);
+	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p3, p2);
 
-	//managers_.emplace_back(RoadRouteHolder(rrPtr, Heading::Forward));
+	managers_.emplace_back(RoadRouteHolder(rrPtr, Heading::Forward));
 }
 
 void 

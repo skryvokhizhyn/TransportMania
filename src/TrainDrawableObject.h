@@ -14,6 +14,7 @@ namespace trm
 
 	protected:
 		void CalculateLength(const ModelData & md);
+		void UpdateData(ModelData & md);
 
 	private:
 		typedef boost::optional<float> OptionalLength;

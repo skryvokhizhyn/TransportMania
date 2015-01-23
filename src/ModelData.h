@@ -56,7 +56,8 @@ namespace trm
 			indexes = std::move(md.indexes);
 			normales = std::move(md.normales);
 			textures = std::move(md.textures);
-			md.textureId = std::move(md.textureId);
+			textureId = std::move(md.textureId);
+
 			md.type = Mode::Undefined;
 			md.textureId = TextureId::Undefined;
 

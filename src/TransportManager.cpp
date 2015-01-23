@@ -44,10 +44,10 @@ TransportManager::Load()
 	Train train;
 	train.Append(head_);
 	train.Append(TrainPartType::Wagon);
-	train.Append(TrainPartType::Wagon);
+	/*train.Append(TrainPartType::Wagon);
 	train.Append(TrainPartType::Wagon);
 	train.Append(TrainPartType::Locomotive);
-	train.Append(TrainPartType::Wagon);
+	train.Append(TrainPartType::Wagon);*/
 
 	moveParams_ = train.CalcMoveParams();
 

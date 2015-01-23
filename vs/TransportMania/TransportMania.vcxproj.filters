@@ -396,6 +396,12 @@
     <ClCompile Include="..\..\src\WindowItemRenderer.cpp">
       <Filter>Window\WindowItems</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\ModelManager.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ModelReader.cpp">
+      <Filter>Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -874,6 +880,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\WindowItemText.h">
       <Filter>Window\WindowItems</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ModelManager.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ModelReader.h">
+      <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ModelManagerProxy.h">
+      <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

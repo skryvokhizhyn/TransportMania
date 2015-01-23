@@ -10,7 +10,9 @@ namespace trm
 		OkButton,
 		TransparentGray,
 		WindowBox,
-		Railway
+		Railway,
+		Wagon,
+		Locomotive
 	};
 
 } // namespace trm

@@ -17,6 +17,7 @@
 #include "WindowManager.h"
 #include "CachedHandlerLocator.h"
 #include "SceneEventHandler.h"
+#include "ModelManager.h"
 
 namespace trm
 {
@@ -84,6 +85,7 @@ namespace trm
 		WindowManager windowManager_;
 		CachedHandlerLocator cachedHandlerLocator_;
 		SceneEventHandlerPtr sceneHandlerPtr_;
+		ModelManager modelManager_;
 		bool processTerrainUpdate_ = true;
 	};
 
