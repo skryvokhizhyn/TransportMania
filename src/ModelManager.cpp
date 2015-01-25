@@ -1,6 +1,7 @@
 #include "ModelManager.h"
 #include "ModelReader.h"
 #include "Settings.h"
+#include "TextureIdHashImpl.h"
 
 #include <unordered_map>
 

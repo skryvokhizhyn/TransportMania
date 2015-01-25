@@ -46,5 +46,6 @@ TrainDrawableObject::UpdateData(ModelData & md)
 {
 	namespace bl = boost::lambda;
 
-	boost::transform(md.points, md.points.begin(), bl::ret<Point3d>(bl::_1 + Point3d(0.0f, 0.0f, Z_TRAIN_SHIFT)));
+	boost::transform(md.points, md.points.begin(), 
+		bl::ret<Point3d>(bl::_1 + Point3d(0.0f, 0.0f, Z_TRAIN_SHIFT)));
 }

@@ -890,5 +890,8 @@
     <ClInclude Include="..\..\src\ModelManagerProxy.h">
       <Filter>Model</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\TextureIdHashImpl.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

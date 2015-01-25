@@ -82,7 +82,7 @@ Application::InitView()
 	context_.Init();
 
 	HeightMapLoaderPtr hmlPtr = 
-		terrain::HeightMapLoaderFactory::GetFileLoader(trm::GetRelativePath({"hf_513.bmp"}));
+		terrain::HeightMapLoaderFactory::GetFileLoader(trm::GetHeightMapPath("hf_513.bmp"));
 	HeightMapLoaderPtr hmlCachedPtr =
 		terrain::HeightMapLoaderFactory::GetCachedLoader(Terrain::PATCH_SIZE, hmlPtr);
 	

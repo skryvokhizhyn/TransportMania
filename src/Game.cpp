@@ -55,8 +55,7 @@ Game::InitSDL()
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-
+    
 	int width = 0;
 	int height = 0;
 	uint32_t flags = 0;
@@ -94,6 +93,16 @@ Game::InitGL()
 		{
 			utils::Logger().Warning() << (boost::format("Warning: Unable to set VSync! SDL Error: %s") % SDL_GetError()).str();
 		}
+	}
+
+	int value = 0;
+    if (SDL_GL_GetAttribute(SDL_GL_MULTISAMPLEBUFFERS, &value) == 0) 
+	{
+		utils::Logger().Debug() << "Multi samples count is " << value;
+    }
+	else
+	{
+		utils::Logger().Debug() << "Failed to get multi samples count. Error: " << SDL_GetError();
 	}
 }
 

@@ -147,6 +147,7 @@
     <ClInclude Include="..\..\src\EventContainer.h" />
     <ClInclude Include="..\..\src\Size2f.h" />
     <ClInclude Include="..\..\src\TextRendererProxy.h" />
+    <ClInclude Include="..\..\src\TextureIdHashImpl.h" />
     <ClInclude Include="..\..\src\UserEventData.h" />
     <ClInclude Include="..\..\src\WindowItemBox.h" />
     <ClInclude Include="..\..\src\WindowCloseEvent.h" />

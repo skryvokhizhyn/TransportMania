@@ -25,6 +25,12 @@ trm::GetRelativePath(const std::initializer_list<std::string> & il)
 	return p.string();
 }
 
+std::string
+trm::GetHeightMapPath(const std::string & name)
+{
+	return GetRelativePath({"HeightMaps", name});
+}
+
 std::string 
 trm::GetFontPath(const std::string & name)
 {
