@@ -12,7 +12,8 @@ namespace trm
 		WindowBox,
 		Railway,
 		Wagon,
-		Locomotive
+		Locomotive,
+		PauseButton
 	};
 
 } // namespace trm

@@ -88,7 +88,6 @@ namespace impl
 				bmf::Row<	EmptyState,			Commit,			EmptyState,			bmf::none,				bmf::none >,
 				bmf::Row<	EmptyState,			Reset,			EmptyState,			bmf::none,				bmf::none >,
 				bmf::Row<	FingerPressedState,	Reset,			EmptyState,			ApplyFingerReset,		bmf::none >
-
 				> {};
 
 			// Replaces the default no-transition response.

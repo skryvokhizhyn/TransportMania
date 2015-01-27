@@ -57,6 +57,7 @@ namespace trm
 		void EmulateDynamicScene2();
 
 		void CloseWindow(UniqueId id);
+		void Pause();
 
 	private:
 		typedef std::vector<StaticSceneObjectPtr> StaticSceneObjects;
@@ -87,6 +88,7 @@ namespace trm
 		SceneEventHandlerPtr sceneHandlerPtr_;
 		ModelManager modelManager_;
 		bool processTerrainUpdate_ = true;
+		bool paused_ = false;
 	};
 
 } // namespace trm

@@ -126,6 +126,7 @@
     <ClInclude Include="..\..\src\Angle.h" />
     <ClInclude Include="..\..\src\AppEventHandler.h" />
     <ClInclude Include="..\..\src\Application.h" />
+    <ClInclude Include="..\..\src\ApplicationPauseEvent.h" />
     <ClInclude Include="..\..\src\BmpHandler.h" />
     <ClInclude Include="..\..\src\CachedHandlerLocator.h" />
     <ClInclude Include="..\..\src\CommonUtils.h" />

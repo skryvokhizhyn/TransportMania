@@ -14,7 +14,8 @@ namespace
 {
 	enum SdlUserEventType
 	{
-		CloseWindowType
+		CloseWindowType,
+		PauseApplicationType
 	};
 
 	struct UserEventType
@@ -25,6 +26,7 @@ namespace
 
 	// specialize for every user event data
 	template<> SdlUserEventType UserEventType::Get<CloseWindow>() { return SdlUserEventType::CloseWindowType; }
+	template<> SdlUserEventType UserEventType::Get<PauseApplication>() { return SdlUserEventType::PauseApplicationType; }
 
 	template<typename Event>
 	class SdlUserEventTmpl
@@ -69,6 +71,7 @@ SdlUserEventCoder::Encode(const Event & e)
 }
 
 template SdlUserEventWrapper SdlUserEventCoder::Encode<CloseWindow>(const CloseWindow &);
+template SdlUserEventWrapper SdlUserEventCoder::Encode<PauseApplication>(const PauseApplication &);
 
 SdlUserEventPtr 
 SdlUserEventCoder::Decode(const SDL_Event & e)
@@ -79,6 +82,9 @@ SdlUserEventCoder::Decode(const SDL_Event & e)
 	{
 	case SdlUserEventType::CloseWindowType:
 		return ConvertAndClear<CloseWindow>(e.user.data1);
+
+	case SdlUserEventType::PauseApplicationType:
+		return ConvertAndClear<PauseApplication>(e.user.data1);
 
 	default:
 		throw std::runtime_error((boost::format("Unknown User Event id=%d given for decoding") % e.user.code).str());

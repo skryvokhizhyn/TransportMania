@@ -1,8 +1,10 @@
 #include "WindowManager.h"
 #include "EventContainer.h"
 #include "WindowPosition.h"
-#include "WindowCloseEvent.h"
 #include "TextRendererProxy.h"
+
+#include "WindowCloseEvent.h"
+#include "ApplicationPauseEvent.h"
 
 #include "WindowItemBox.h"
 #include "WindowItemRenderer.h"
@@ -37,7 +39,7 @@ WindowManager::ProcessWindowData(WindowItemPtr ptr)
 }
 
 void
-WindowManager::CreateOKWindow(EventAction cb)
+WindowManager::CreateOKButton(EventAction cb)
 {
 	const float windowSize = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
 
@@ -47,6 +49,20 @@ WindowManager::CreateOKWindow(EventAction cb)
 	WindowItemBoxPtr windowPtr(new WindowItemBox(windowId, sz, TextureId::OkButton,
 		EventContainer::Create({cb, WindowCloseEvent(windowId)}, EventActionType::Single), 
 		WindowPosition::p100, WindowPosition::p50));
+
+	ProcessWindowData(std::move(windowPtr));
+}
+
+void
+WindowManager::CreatePauseButton()
+{
+	const float windowSize = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
+
+	Size2f sz(windowSize, windowSize);
+
+	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId(), sz, TextureId::PauseButton,
+		EventContainer::Create({ApplicationPauseEvent()}, EventActionType::Repeatable), 
+		WindowPosition::p100, WindowPosition::p100));
 
 	ProcessWindowData(std::move(windowPtr));
 }

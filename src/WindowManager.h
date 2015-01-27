@@ -20,7 +20,8 @@ namespace trm
 	public:
 		void Init(const Size2d & screenSize);
 
-		void CreateOKWindow(EventAction cb);
+		void CreateOKButton(EventAction cb);
+		void CreatePauseButton();
 		void CreateLockScreen();
 		void CreateTextWindow(const std::wstring & text);
 

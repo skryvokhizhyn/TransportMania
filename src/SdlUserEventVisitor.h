@@ -15,6 +15,7 @@ namespace trm
 		SdlUserEventVisitor(Application & app);
 
 		void Visit(UserEventData::CloseWindow & e);
+		void Visit(UserEventData::PauseApplication & e);
 
 	private:
 		Application & app_;

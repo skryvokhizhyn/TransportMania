@@ -71,7 +71,8 @@ Application::InitApplication(const size_t width, const size_t height)
 
 	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateTextWindow, boost::ref(windowManager_), L"My first text window!"));
 	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateLockScreen, boost::ref(windowManager_)));
-	windowManager_.CreateOKWindow(boost::bind(&Application::EmulateDynamicScene1, this));
+	windowManager_.CreateOKButton(boost::bind(&Application::EmulateDynamicScene1, this));
+	windowManager_.CreatePauseButton();
 
 	return true;
 }
@@ -135,7 +136,10 @@ Application::Update()
 	if (processTerrainUpdate_)
 		terrainScenePtr_->Update(worldProjection_);
 
-	boost::for_each(managers_, std::bind(&TransportManager::Update, std::placeholders::_1));
+	if (!paused_)
+	{
+		boost::for_each(managers_, std::bind(&TransportManager::Update, std::placeholders::_1));
+	}
 
 	componentHolder_.Update(worldProjection_);
 }
@@ -175,7 +179,7 @@ Application::Draw()
 void 
 Application::ShiftScene(const float x, const float y)
 {
-	worldProjection_.Shift(-x, y);
+	worldProjection_.Shift(-x, -y);
 }
 
 void 
@@ -187,13 +191,13 @@ Application::ZoomScene(const float z)
 void 
 Application::RotateScene(const Angle angle)
 {
-	worldProjection_.Rotate(angle);
+	worldProjection_.Rotate(-angle);
 }
 
 void 
 Application::BendScene(const Angle dtheta, const Angle dpsi)
 {
-	worldProjection_.Bend(-dtheta, dpsi);
+	worldProjection_.Bend(dtheta, dpsi);
 }
 
 void
@@ -323,4 +327,10 @@ void
 Application::CloseWindow(UniqueId id)
 {
 	windowManager_.CloseWindow(id);
+}
+
+void
+Application::Pause()
+{
+	paused_ = !paused_;
 }

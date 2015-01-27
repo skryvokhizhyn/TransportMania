@@ -13,6 +13,7 @@ namespace UserEventData
 		CloseWindow(UniqueId i) : id(i) {}
 	};
 
+	struct PauseApplication {};
 
 } // namespace UserEventData
 } // namespace trm

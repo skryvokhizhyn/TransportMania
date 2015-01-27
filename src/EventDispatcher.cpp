@@ -80,7 +80,7 @@ EventDispatcher::OnMouseButtonDown(const SDL_Event & e)
 	case SDL_BUTTON_LEFT:
 		CachedHandlerLocatorProxy()->Process(FingerPressed(1, Point2d(
 			static_cast<float>(e.motion.x), 
-			static_cast<float>(e.motion.y))));
+			static_cast<float>(height_ - e.motion.y))));
 		break;
 	}
 }
@@ -93,7 +93,7 @@ EventDispatcher::OnMouseButtonUp(const SDL_Event & e)
 	case SDL_BUTTON_LEFT:
 		CachedHandlerLocatorProxy()->Process(FingerReleased(1, Point2d(
 			static_cast<float>(e.motion.x), 
-			static_cast<float>(e.motion.y))));
+			static_cast<float>(height_ - e.motion.y))));
 		break;
 	}
 }
@@ -103,14 +103,14 @@ EventDispatcher::OnMouseMove(const SDL_Event & e)
 {
 	CachedHandlerLocatorProxy()->Process(FingerMoved(1, Point2d(
 		static_cast<float>(e.motion.x - e.motion.xrel), 
-		static_cast<float>(e.motion.y - e.motion.yrel))));
+		static_cast<float>(height_ - e.motion.y - e.motion.yrel))));
 }
 
 namespace
 {
 	Point2d GetAbsolutePosition(const SDL_TouchFingerEvent & tfe, int w, int h)
 	{
-		return Point2d(tfe.x * w, tfe.y * h);
+		return Point2d(tfe.x * w, h - tfe.y * h);
 	}
 }
 

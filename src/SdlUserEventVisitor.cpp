@@ -13,3 +13,9 @@ SdlUserEventVisitor::Visit(CloseWindow & e)
 {
 	app_.CloseWindow(e.id);
 }
+
+void
+SdlUserEventVisitor::Visit(UserEventData::PauseApplication &)
+{
+	app_.Pause();
+}
