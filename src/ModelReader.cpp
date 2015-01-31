@@ -3,12 +3,21 @@
 #include <boost/algorithm/string.hpp>
 
 #include <fstream>
+#include <map>
 
 using namespace trm;
 
 namespace
 {
 	using SplitResult = std::vector<std::string>;
+	using Ids = std::tuple<int, int, int>;
+	enum IdName
+	{
+		Point = 0,
+		Texture = 1,
+		Normale = 2
+	};
+	using IdsMap = std::map<Ids, int>;
 
 	void RegisterVertex(const SplitResult & res, PointVector & vec)
 	{
@@ -49,8 +58,8 @@ namespace
 	}
 
 	void RegisterGroup(const SplitResult & res, 
-		const PointVector & points, const TextureCoords & textures, const NormaleVector & normales, 
-		ModelData & md)
+		const PointVector & points, const TextureCoords & textures, const NormaleVector & normales,
+		IdsMap & idsMap, ModelData & md)
 	{
 		if (res.size() != 3)
 		{
@@ -62,10 +71,23 @@ namespace
 			throw std::runtime_error("A part of group is missing. All types 'vertex', 'texture', 'normale' are required");
 		}
 
-		md.indexes.push_back(md.points.size());
-		md.points.push_back(points[boost::lexical_cast<int>(res[0]) - 1]);
-		md.textures.push_back(textures[boost::lexical_cast<int>(res[1]) - 1]);
-		md.normales.push_back(normales[boost::lexical_cast<int>(res[2]) - 1]);
+		const Ids ids = std::make_tuple(
+			boost::lexical_cast<int>(res[0]) - 1,
+			boost::lexical_cast<int>(res[1]) - 1,
+			boost::lexical_cast<int>(res[2]) - 1);
+
+		auto found = idsMap.find(ids);
+
+		if (found == idsMap.end())
+		{
+			found = idsMap.emplace(ids, md.points.size()).first;
+
+			md.points.push_back(points[std::get<Point>(ids)]);
+			md.textures.push_back(textures[std::get<Texture>(ids)]);
+			md.normales.push_back(normales[std::get<Normale>(ids)]);
+		}
+
+		md.indexes.push_back(found->second);
 	}
 }
 
@@ -82,6 +104,7 @@ ModelReader::Read(const std::string & path)
 	PointVector points;
 	NormaleVector normales;
 	TextureCoords textures;
+	IdsMap idsMap;
 
 	ModelData md;
 
@@ -119,15 +142,15 @@ ModelReader::Read(const std::string & path)
 			SplitResult groupSplit;
 
 			boost::split(groupSplit, res[1], boost::is_any_of("/"));
-			RegisterGroup(groupSplit, points, textures, normales, md);
+			RegisterGroup(groupSplit, points, textures, normales, idsMap, md);
 			groupSplit.clear();
 
 			boost::split(groupSplit, res[2], boost::is_any_of("/"));
-			RegisterGroup(groupSplit, points, textures, normales, md);
+			RegisterGroup(groupSplit, points, textures, normales, idsMap, md);
 			groupSplit.clear();
 
 			boost::split(groupSplit, res[3], boost::is_any_of("/"));
-			RegisterGroup(groupSplit, points, textures, normales, md);
+			RegisterGroup(groupSplit, points, textures, normales, idsMap, md);
 		}
 	}
 

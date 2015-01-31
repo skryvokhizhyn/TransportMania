@@ -70,8 +70,8 @@ namespace
 		const Point2d pE1 = utils::GetIntersectionPoint(lE, rr.bc);
 		const Point2d pE2 = utils::GetIntersectionPoint(lE, rr.da);
 
-		const Point3d pEUp3d(pE1.x(), pE1.y(), start.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
-		const Point3d pEDown3d(pE2.x(), pE2.y(), start.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
+		const Point3d pEUp3d(pE1.x(), pE1.y(), end.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
+		const Point3d pEDown3d(pE2.x(), pE2.y(), end.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
 
 		md.points.reserve(4);
 		md.indexes.reserve(4);
@@ -92,16 +92,16 @@ void RailRoadRendererLine::Do(const RailRoadLine & rrl, ModelData & md)
 	const Point3d & start = rrl.GetStart();
 	const Point3d & end = rrl.GetEnd();
 
+#ifdef DRAWING_MODE_FULL
+	RenderTriangles(start, end, md);
+	md.textureId = TextureId::Railway;
+#else
 	if (!utils::CheckEqual(start.z(), end.z()))
 	{
 		throw std::runtime_error("RailRoadLine doesn't support height difference");
 	}
 
-	#ifdef DRAWING_MODE_FULL
-		RenderTriangles(start, end, md);
-		md.textureId = TextureId::Railway;
-	#else
-		RenderLines(start, end, md);
-		md.type = ModelData::Mode::Line;
-	#endif // DRAWING_MODE_FULL
+	RenderLines(start, end, md);
+	md.type = ModelData::Mode::Line;
+#endif // DRAWING_MODE_FULL
 }

@@ -4,7 +4,10 @@
 #include "GeometryUtils.h"
 #include "Point2d.h"
 #include "Line.h"
+
 #include <boost/bind.hpp>
+#include <boost/units/cmath.hpp>
+
 #include <stdlib.h>
 #include <time.h>
 
@@ -73,11 +76,11 @@ namespace
 		return t >= height ? height : t;
 	}
 
-	AxisType AngleLinearImpl(const Point2d & p, const AxisType /*h*/, const Line & l, const AxisType height, const AxisType coef)
+	float LinearImpl(const float initialHeight, const Line & perpendicual, const Angle a, const Point2d & p, const AxisType /*oldHeight*/)
 	{
-		const float dist = utils::GetDistance(l, p);
+		const float dist = utils::GetDistance(perpendicual, p);
 
-		return height + dist * coef;
+		return dist * boost::units::tan(a) + initialHeight;;
 	}
 }
 
@@ -110,10 +113,15 @@ TerraformFunctionFactory::GetSphericalRandom(const Point2d & p, const AxisType r
 }
 
 TerraformFunction 
-TerraformFunctionFactory::GetAngleLinear(const Point2d & p1, const Point2d & p2, const AxisType height, const AxisType coef)
+TerraformFunctionFactory::GetLinear(const Point3d & p1, const Point3d & p2)
 {
-	const Line lDir = utils::GetLine(p1, p2);
-	const Line lNorm = utils::GetPerpendicularAtPoint(lDir, p1);
+	const float dist = utils::GetDistance(p1, p2);
+	const Angle a = Radians(std::asin((p2.z() - p1.z()) / dist));
 
-	return boost::bind(&AngleLinearImpl, _1, _2, lNorm, height, coef);
+	const Point2d p12d = Point2d::Cast(p1);
+
+	const Line lDir = utils::GetLine(p12d, Point2d::Cast(p2));
+	const Line lNorm = utils::GetPerpendicularAtPoint(lDir, p12d);
+
+	return boost::bind(&LinearImpl, p1.z(), lNorm, a, _1, _2);
 }

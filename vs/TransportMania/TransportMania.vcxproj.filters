@@ -13,12 +13,6 @@
     <Filter Include="Draw">
       <UniqueIdentifier>{5522abff-6784-4862-916c-e5823e54aa8f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Draw\Railroad">
-      <UniqueIdentifier>{b9e3b191-1fbe-4243-ba1d-dc4b228402f7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Draw\Railroad\Visitors">
-      <UniqueIdentifier>{7970fd1a-511b-4ca8-ad8f-f25b1349671f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Draw\Transport">
       <UniqueIdentifier>{fee55e57-f658-48c4-a9b6-d9cf793c2572}</UniqueIdentifier>
     </Filter>
@@ -70,6 +64,12 @@
     <Filter Include="Window\WindowItems">
       <UniqueIdentifier>{b05db826-f33d-47a8-a618-c74efcdbc6d0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Railroad">
+      <UniqueIdentifier>{b9e3b191-1fbe-4243-ba1d-dc4b228402f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Railroad\Visitors">
+      <UniqueIdentifier>{7970fd1a-511b-4ca8-ad8f-f25b1349671f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -94,37 +94,37 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadMover.cpp">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadParametersTaker.cpp">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadRenderer.cpp">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadRendererArc.cpp">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadRendererLine.cpp">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadSizer.cpp">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoad.cpp">
-      <Filter>Draw\Railroad</Filter>
+      <Filter>Railroad</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadArc.cpp">
-      <Filter>Draw\Railroad</Filter>
+      <Filter>Railroad</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadDrawableObject.cpp">
-      <Filter>Draw\Railroad</Filter>
+      <Filter>Railroad</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadFactory.cpp">
-      <Filter>Draw\Railroad</Filter>
+      <Filter>Railroad</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadLine.cpp">
-      <Filter>Draw\Railroad</Filter>
+      <Filter>Railroad</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\DrawContext.cpp">
       <Filter>Draw</Filter>
@@ -459,40 +459,40 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadMover.h">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadParametersTaker.h">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadRenderer.h">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadRendererArc.h">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadRendererLine.h">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadSizer.h">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadVisitor.h">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoad.h">
-      <Filter>Draw\Railroad</Filter>
+      <Filter>Railroad</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadArc.h">
-      <Filter>Draw\Railroad</Filter>
+      <Filter>Railroad</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadDrawableObject.h">
-      <Filter>Draw\Railroad</Filter>
+      <Filter>Railroad</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadFactory.h">
-      <Filter>Draw\Railroad</Filter>
+      <Filter>Railroad</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadLine.h">
-      <Filter>Draw\Railroad</Filter>
+      <Filter>Railroad</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\DrawableObject.h">
       <Filter>Draw</Filter>
@@ -801,7 +801,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadAcceptorTmpl.h">
-      <Filter>Draw\Railroad\Visitors</Filter>
+      <Filter>Railroad\Visitors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\FingerIdType.h">
       <Filter>Common</Filter>

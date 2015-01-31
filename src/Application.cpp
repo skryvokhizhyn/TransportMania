@@ -233,7 +233,6 @@ Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*
 
 	//TerrainRangeLine range(trm::Point2d(10, 10), trm::Point2d(50, 10), 10);
 
-	//Terraformer t(range, TerraformFunctionFactory::GetAngleLinear(trm::Point2d(10, 10), trm::Point2d(30, 10), 1, 1.2f));
 	Terraformer t(range, TerraformFunctionFactory::GetConstant(0.0f));
 	terrainPtr_->Apply(t);
 
@@ -245,7 +244,7 @@ Application::PutRailRoadLine(const Point3d & from, const Point3d & to)
 {
 	TerrainRangeLine range(Point2d::Cast(from), Point2d::Cast(to), RailRoad::GetTotalWidth());
 
-	Terraformer t(range, TerraformFunctionFactory::GetConstant(from.z()));
+	Terraformer t(range, TerraformFunctionFactory::GetLinear(from, to));
 	terrainPtr_->Apply(t);
 
 	const RailRoadPtr rrp = RailRoadFactory::Line(from, to);
@@ -284,7 +283,7 @@ void
 Application::EmulateDynamicScene1()
 {
 	const Point3d p1(30, 10, 6);
-	const Point3d p2(50, 10, 6);
+	const Point3d p2(50, 10, 13);
 	const Point3d p3(10, 30, 6);
 	
 	//const RailRoadPtr rrp = RailRoadFactory::Line(p1, p2);

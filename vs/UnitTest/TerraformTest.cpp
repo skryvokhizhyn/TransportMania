@@ -52,36 +52,32 @@ BOOST_AUTO_TEST_CASE(TerraformTest2)
 
 BOOST_AUTO_TEST_CASE(TerraformTest3)
 {
-	const float h = 1.0f;
-	const float c = 2.0f;
-
-	TerraformFunction func = TerraformFunctionFactory::GetAngleLinear(Point2d(0, 0), Point2d(2, 0), h, c);
+	TerraformFunction func = TerraformFunctionFactory::GetLinear(Point3d(0, 0, 1), Point3d(2, 0, 2));
 
 	const AxisType z1 = func(Point2d(0, 0), 0);
 	const AxisType z2 = func(Point2d(0, 1), 0);
 	const AxisType z3 = func(Point2d(0, -1), 0);
-	const AxisType z4 = func(Point2d(2, 0), 0);
-	const AxisType z5 = func(Point2d(2, 1), 0);
-	const AxisType z6 = func(Point2d(2, -1), 0);
-	const AxisType z7 = func(Point2d(4, 1), 0);
 
-	BOOST_CHECK_EQUAL(z1, h);
-	BOOST_CHECK_EQUAL(z2, h);
-	BOOST_CHECK_EQUAL(z3, h);
+	const AxisType z4 = func(Point2d(2, 0), 2);
+	const AxisType z5 = func(Point2d(2, 1), 2);
+	const AxisType z6 = func(Point2d(2, -1), 2);
 
-	BOOST_CHECK_EQUAL(z4, 2 * c + h);
-	BOOST_CHECK_EQUAL(z5, 2 * c + h);
-	BOOST_CHECK_EQUAL(z6, 2 * c + h);
+	const AxisType z7 = func(Point2d(4, 1), 3);
 
-	BOOST_CHECK_EQUAL(z7, 4 * c + h);
+	BOOST_CHECK_EQUAL(z1, 1);
+	BOOST_CHECK_EQUAL(z2, 1);
+	BOOST_CHECK_EQUAL(z3, 1);
+
+	BOOST_CHECK_EQUAL(z4, 2);
+	BOOST_CHECK_EQUAL(z5, 2);
+	BOOST_CHECK_EQUAL(z6, 2);
+
+	BOOST_CHECK_EQUAL(z7, 3);
 }
 
 BOOST_AUTO_TEST_CASE(TerraformTest4)
 {
-	const float h = 1.0f;
-	const float c = 2.0f;
-
-	TerraformFunction func = TerraformFunctionFactory::GetAngleLinear(Point2d(0, 0), Point2d(0, 2), h, c);
+	TerraformFunction func = TerraformFunctionFactory::GetLinear(Point3d(0, 0, 1), Point3d(0, 2, 2));
 
 	const AxisType z1 = func(Point2d(0, 0), 0);
 	const AxisType z2 = func(Point2d(1, 0), 0);
@@ -93,15 +89,15 @@ BOOST_AUTO_TEST_CASE(TerraformTest4)
 
 	const AxisType z7 = func(Point2d(1, 4), 0);
 
-	BOOST_CHECK_EQUAL(z1, h);
-	BOOST_CHECK_EQUAL(z2, h);
-	BOOST_CHECK_EQUAL(z3, h);
+	BOOST_CHECK_EQUAL(z1, 1);
+	BOOST_CHECK_EQUAL(z2, 1);
+	BOOST_CHECK_EQUAL(z3, 1);
 
-	BOOST_CHECK_EQUAL(z4, 2 * c + h);
-	BOOST_CHECK_EQUAL(z5, 2 * c + h);
-	BOOST_CHECK_EQUAL(z6, 2 * c + h);
+	BOOST_CHECK_EQUAL(z4, 2);
+	BOOST_CHECK_EQUAL(z5, 2);
+	BOOST_CHECK_EQUAL(z6, 2);
 
-	BOOST_CHECK_EQUAL(z7, 4 * c + h);
+	BOOST_CHECK_EQUAL(z7, 3);
 }
 
 BOOST_AUTO_TEST_CASE(TerraformNormalizeTest1)

@@ -103,7 +103,7 @@ EventDispatcher::OnMouseMove(const SDL_Event & e)
 {
 	CachedHandlerLocatorProxy()->Process(FingerMoved(1, Point2d(
 		static_cast<float>(e.motion.x - e.motion.xrel), 
-		static_cast<float>(height_ - e.motion.y - e.motion.yrel))));
+		static_cast<float>(height_ - (e.motion.y - e.motion.yrel)))));
 }
 
 namespace
