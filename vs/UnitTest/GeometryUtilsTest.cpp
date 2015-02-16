@@ -873,3 +873,37 @@ BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test9)
 	BOOST_CHECK_EQUAL(a, Degrees(0));
 }
 
+BOOST_AUTO_TEST_CASE(GeometryLineAtTest1)
+{
+	const Line l = utils::GetLine(Point2d(-1, -1), Point2d(1, 1));
+
+	BOOST_CHECK_EQUAL(l.AtX(0.0f), 0.0f);
+	BOOST_CHECK_EQUAL(l.AtX(-1.0f), -1.0f);
+	BOOST_CHECK_EQUAL(l.AtX(1.0f), 1.0f);
+
+	BOOST_CHECK_EQUAL(l.AtY(0.0f), 0.0f);
+	BOOST_CHECK_EQUAL(l.AtY(-1.0f), -1.0f);
+	BOOST_CHECK_EQUAL(l.AtY(1.0f), 1.0f);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryLineAtTest2)
+{
+	const Line l = utils::GetLine(Point2d(-1, -1), Point2d(-1, 1));
+
+	BOOST_REQUIRE_THROW(l.AtX(0.0f), std::runtime_error);
+	
+	BOOST_CHECK_EQUAL(l.AtY(0.0f), -1.0f);
+	BOOST_CHECK_EQUAL(l.AtY(-1.0f), -1.0f);
+	BOOST_CHECK_EQUAL(l.AtY(1.0f), -1.0f);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryLineAtTest3)
+{
+	const Line l = utils::GetLine(Point2d(-1, -1), Point2d(1, -1));
+
+	BOOST_CHECK_EQUAL(l.AtX(0.0f), -1.0f);
+	BOOST_CHECK_EQUAL(l.AtX(-1.0f), -1.0f);
+	BOOST_CHECK_EQUAL(l.AtX(1.0f), -1.0f);
+
+	BOOST_REQUIRE_THROW(l.AtY(0.0f), std::runtime_error);
+}

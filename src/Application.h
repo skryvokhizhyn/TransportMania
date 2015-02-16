@@ -18,6 +18,7 @@
 #include "CachedHandlerLocator.h"
 #include "SceneEventHandler.h"
 #include "ModelManager.h"
+#include "ScreenSizeManipulator.h"
 
 namespace trm
 {
@@ -39,6 +40,7 @@ namespace trm
 		void ZoomScene(const float z);
 		void RotateScene(const Angle angle);
 		void BendScene(const Angle dtheta, const Angle dpsi);
+		void PressScene(const float x, const float y);
 		void Commit();
 		
 		// invalidates terrain so it starts tasselation
@@ -87,6 +89,7 @@ namespace trm
 		CachedHandlerLocator cachedHandlerLocator_;
 		SceneEventHandlerPtr sceneHandlerPtr_;
 		ModelManager modelManager_;
+		ScreenSizeManipulator screenConverter_;
 		bool processTerrainUpdate_ = true;
 		bool paused_ = false;
 	};

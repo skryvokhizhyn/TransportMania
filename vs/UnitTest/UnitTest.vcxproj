@@ -109,6 +109,7 @@
     <ClCompile Include="..\..\src\RoadNetwork.cpp" />
     <ClCompile Include="..\..\src\RoadPoint.cpp" />
     <ClCompile Include="..\..\src\RoadRoute.cpp" />
+    <ClCompile Include="..\..\src\ScreenSizeManipulator.cpp" />
     <ClCompile Include="..\..\src\Settings.cpp" />
     <ClCompile Include="..\..\src\SubjectAction.cpp" />
     <ClCompile Include="..\..\src\Terraformer.cpp" />
@@ -136,6 +137,7 @@
     <ClCompile Include="HeightMapTest.cpp" />
     <ClCompile Include="ItemLocatorTest.cpp" />
     <ClCompile Include="MathTest.cpp" />
+    <ClCompile Include="MatrixUtilsTest.cpp" />
     <ClCompile Include="PatchGridTest.cpp" />
     <ClCompile Include="PointImplTest.cpp" />
     <ClCompile Include="PointTest.cpp" />
@@ -145,6 +147,7 @@
     <ClCompile Include="ResourceProxyTest.cpp" />
     <ClCompile Include="RoadNetworkTest.cpp" />
     <ClCompile Include="RoadPointTest.cpp" />
+    <ClCompile Include="ScreenPointToOglCoordinatesTest.cpp" />
     <ClCompile Include="SettingsTest.cpp" />
     <ClCompile Include="SubjectActionTest.cpp" />
     <ClCompile Include="SymmetricMapTest.cpp" />

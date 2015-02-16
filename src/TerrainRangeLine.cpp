@@ -55,43 +55,22 @@ TerrainRangeLine::TerrainRangeLine(const Point2d & start, const Point2d & end, c
 		return;
 	}
 
-	/*const float d = utils::GetDistance(start, end);
-	float dx = width * (end.y() - start.y()) / d / 2.0f;
-	float dy = width * (end.x() - start.x()) / d / 2.0f;*/
-
-	/*const Point2d pBD(start.x() + dx, start.y() - dy);
-	const Point2d pBU(start.x() - dx, start.y() + dy);
-	const Point2d pED(end.x() + dx, end.y() - dy);
-	const Point2d pEU(end.x() - dx, end.y() + dy);*/
-	
-	/*const Line l1 = utils::GetLine(pBU, pBD);
-	const Line l2 = utils::GetLine(pBD, pED);
-	const Line l3 = utils::GetLine(pED, pEU);
-	const Line l4 = utils::GetLine(pEU, pBU);*/
-
-	//const RangeRectangle rr1(l1, l4, l3, l2);
-
 	const RangeRectangle rr = GetRangeRectangle(start, end, width);
 	const Point2d p1/*bu*/ = utils::GetIntersectionPoint(rr.bc, rr.ab);
 	const Point2d p2/*eu*/ = utils::GetIntersectionPoint(rr.bc, rr.cd);
 	const Point2d p3/*ed*/ = utils::GetIntersectionPoint(rr.da, rr.cd);
 	const Point2d p4/*bd*/ = utils::GetIntersectionPoint(rr.da, rr.ab);
 
-	//Point2dPair lowHigh1 = GetLowestHighestPoints(pBD, pBU, pED, pEU);
 	Point2dPair lowHigh = GetLowestHighestPoints(p1, p2, p3, p4);
 	const Point2d & lowestPoint = lowHigh.first;
 	const Point2d & highestPoint = lowHigh.second;
 
-	/*const int xMin = utils::FloatToNearInt(std::min(p1.x(), std::min(p2.x(), std::min(p3.x(), p4.x()))), &floor);
-	const int xMax = utils::FloatToNearInt(std::max(p1.x(), std::max(p2.x(), std::max(p3.x(), p4.x()))), &ceil);*/
 	const int xMin = utils::FloatFloorToInt(std::min(p1.x(), std::min(p2.x(), std::min(p3.x(), p4.x()))));
 	const int xMax = utils::FloatCeilToInt(std::max(p1.x(), std::max(p2.x(), std::max(p3.x(), p4.x()))));
 
 	// Ranges temp;
 	std::deque<Range> temp;
 
-	/*const int iMin = utils::FloatToNearInt(lowestPoint.y(), &floor);
-	const int iMax = utils::FloatToNearInt(highestPoint.y(), &ceil);*/
 	const int iMin = utils::FloatFloorToInt(lowestPoint.y());
 	const int iMax = utils::FloatCeilToInt(highestPoint.y());
 
@@ -99,8 +78,6 @@ TerrainRangeLine::TerrainRangeLine(const Point2d & start, const Point2d & end, c
 
 	// bottom line
 	temp.push_back(Range(iMin, 
-		/*utils::FloatToNearInt(lowestPoint.x(), &floor), 
-		utils::FloatToNearInt(lowestPoint.x(), &ceil)*/
 		utils::FloatFloorToInt(lowestPoint.x()), 
 		utils::FloatCeilToInt(lowestPoint.x())
 		));
@@ -114,11 +91,6 @@ TerrainRangeLine::TerrainRangeLine(const Point2d & start, const Point2d & end, c
 			// to suppress conversion warnings below
 			const float is = static_cast<float>(i);
 
-			/*points[0] = GetIntersectionPoint(is, l1, true);
-			points[1] = GetIntersectionPoint(is, l2, true);
-			points[2] = GetIntersectionPoint(is, l3, false);
-			points[3] = GetIntersectionPoint(is, l4, false);*/
-
 			points[0] = GetIntersectionPoint(is, rr.ab, true);
 			points[1] = GetIntersectionPoint(is, rr.da, true);
 			points[2] = GetIntersectionPoint(is, rr.cd, false);
@@ -127,8 +99,6 @@ TerrainRangeLine::TerrainRangeLine(const Point2d & start, const Point2d & end, c
 			std::sort(points.begin(), points.end());
 
 			temp.push_back(Range(i, 
-				/*utils::FloatToNearInt(points[1], &floor), 
-				utils::FloatToNearInt(points[2], &ceil)*/
 				utils::FloatFloorToInt(points[1]), 
 				utils::FloatCeilToInt(points[2])
 				));
@@ -136,14 +106,11 @@ TerrainRangeLine::TerrainRangeLine(const Point2d & start, const Point2d & end, c
 
 		// top line
 		temp.push_back(Range(iMax, 
-			/*utils::FloatToNearInt(highestPoint.x(), &floor), 
-			utils::FloatToNearInt(highestPoint.x(), &ceil)*/
 			utils::FloatFloorToInt(highestPoint.x()), 
 			utils::FloatCeilToInt(highestPoint.x())
 			));
 	}
 
-	//int ratio = utils::FloatToNearInt(utils::CheckEqual(rr.da.a, 0.0f) ? 0.0f : std::abs(rr.da.b / rr.da.a), &ceil);
 	int ratio = utils::FloatCeilToInt(utils::CheckEqual(rr.da.a, 0.0f) ? 0.0f : std::abs(rr.da.b / rr.da.a));
 
 	if (ratio == 0)

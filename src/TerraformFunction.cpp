@@ -17,31 +17,27 @@ namespace
 {
 	const size_t RANDOM_MULTIPLIER = 100;
 
-	AxisType ConstantImpl(const Point2d & /*p*/, const AxisType /*h*/, const AxisType z)
+	bool ConstantImpl(const Point2d & /*p*/, AxisType & h, const AxisType z)
 	{
-		return z;
+		h = z;
+		return true;;
 	}
 
-	AxisType SphericalImpl(const Point2d & p, const AxisType h, const Point2d & center, const AxisType radii, const AxisType height)
+	bool SphericalImpl(const Point2d & p, AxisType & h, const Point2d & center, const AxisType radii, const AxisType height)
 	{
-		if (utils::CheckEqual(radii, 0.0f))
-		{
-			return h;
-		}
-
 		const float dist = utils::GetDistance(p, center);
 
-		if (dist >= radii)
+		if (!utils::CheckEqual(radii, 0.0f) && dist < radii)
 		{
-			return h;
+			const float t = -(height / (radii * radii)) * dist * dist + height;
+
+			h = (t >= h) ? t : h;
 		}
 
-		const float t = -(height / (radii * radii)) * dist * dist + height;
-
-		return t >= h ? t : h;
+		return true;
 	}
 
-	AxisType RandomImpl(const Point2d & /*p*/, const AxisType h, const AxisType height)
+	bool RandomImpl(const Point2d & /*p*/, AxisType & h, const AxisType height)
 	{
 		const int m = static_cast<int>(height * RANDOM_MULTIPLIER);
 
@@ -49,7 +45,9 @@ namespace
 		const int r = rand() % m;
 		const AxisType t = static_cast<AxisType>(r) / RANDOM_MULTIPLIER;
 
-		return h >= t ? h : t;
+		h = (h >= t) ? h : t;
+
+		return true;
 	}
 
 	struct RandOnce
@@ -66,53 +64,90 @@ namespace
 		static RandOnce r(seed);
 	}
 
-	AxisType SphericalRandomImpl(const Point2d & p, const AxisType h, const Point2d & center, const AxisType radii, const AxisType height)
+	bool SphericalRandomImpl(const Point2d & p, AxisType & h, const Point2d & center, const AxisType radii, const AxisType height)
 	{
-		const AxisType h1 = SphericalImpl(p, h, center, radii, height / 2);
-		const AxisType h2 = RandomImpl(p, 0.0f, height / 10);
+		AxisType valSpherical = 0.0f;
+		SphericalImpl(p, valSpherical, center, radii, height / 2);
+		AxisType valRandom = 0.0f;
+		RandomImpl(p, valRandom, height / 10);
 
-		const float t = h1 + h2;
+		const float t = valSpherical + valRandom;
 
-		return t >= height ? height : t;
+		h = (t >= height) ? height : t;
+
+		return true;
 	}
 
-	float LinearImpl(const float initialHeight, const Line & perpendicual, const Angle a, const Point2d & p, const AxisType /*oldHeight*/)
+	bool LinearImpl(const float initialHeight, const Line & perpendicual, const Angle a, const Point2d & p, AxisType & h)
 	{
 		const float dist = utils::GetDistance(perpendicual, p);
 
-		return dist * boost::units::tan(a) + initialHeight;;
+		h = dist * boost::units::tan(a) + initialHeight;
+
+		return true;
+	}
+
+	bool IncreaseImpl(const Point2d & /*p*/, AxisType & h, const AxisType z)
+	{
+		h += z;
+
+		return true;
+	}
+
+	template<typename T>
+	class TerraformerFunctionWrapper
+		: TerraformFunction
+	{
+	public:
+		TerraformerFunctionWrapper(const T & t)
+			: impl_(t)
+		{}
+
+		virtual bool operator () (const Point2d & p, AxisType & h) override
+		{
+			return impl_(p, h);
+		}
+
+	private:
+		T impl_;
+	};
+
+	template<typename T>
+	TerraformFunctionPtr MakeTerraformFunctoinPtr(const T & t)
+	{
+		return TerraformFunctionPtr(new TerraformerFunctionWrapper<T>(t));
 	}
 }
 
-TerraformFunction
+TerraformFunctionPtr
 TerraformFunctionFactory::GetConstant(const AxisType z)
 {
-	return boost::bind(&ConstantImpl, _1, _2, z);
+	return MakeTerraformFunctoinPtr(boost::bind(&ConstantImpl, _1, _2, z));
 }
 
-TerraformFunction
+TerraformFunctionPtr
 TerraformFunctionFactory::GetSpherical(const Point2d & p, const AxisType radii, const AxisType height)
 {
-	return boost::bind(&SphericalImpl, _1, _2, p, radii, height);
+	return MakeTerraformFunctoinPtr(boost::bind(&SphericalImpl, _1, _2, p, radii, height));
 }
 
-TerraformFunction
+TerraformFunctionPtr
 TerraformFunctionFactory::GetRandom(const AxisType height)
 {
 	InitRand(RANDOM_MULTIPLIER);
 
-	return boost::bind(&RandomImpl, _1, _2, height);
+	return MakeTerraformFunctoinPtr(boost::bind(&RandomImpl, _1, _2, height));
 }
 
-TerraformFunction
+TerraformFunctionPtr
 TerraformFunctionFactory::GetSphericalRandom(const Point2d & p, const AxisType radii, const AxisType height)
 {
 	InitRand(RANDOM_MULTIPLIER);
 
-	return boost::bind(&SphericalRandomImpl, _1, _2, p, radii, height);
+	return MakeTerraformFunctoinPtr(boost::bind(&SphericalRandomImpl, _1, _2, p, radii, height));
 }
 
-TerraformFunction 
+TerraformFunctionPtr 
 TerraformFunctionFactory::GetLinear(const Point3d & p1, const Point3d & p2)
 {
 	const float dist = utils::GetDistance(p1, p2);
@@ -123,5 +158,11 @@ TerraformFunctionFactory::GetLinear(const Point3d & p1, const Point3d & p2)
 	const Line lDir = utils::GetLine(p12d, Point2d::Cast(p2));
 	const Line lNorm = utils::GetPerpendicularAtPoint(lDir, p12d);
 
-	return boost::bind(&LinearImpl, p1.z(), lNorm, a, _1, _2);
+	return MakeTerraformFunctoinPtr(boost::bind(&LinearImpl, p1.z(), lNorm, a, _1, _2));
+}
+
+TerraformFunctionPtr 
+TerraformFunctionFactory::GetIncrease(const AxisType z)
+{
+	return MakeTerraformFunctoinPtr(boost::bind(&IncreaseImpl, _1, _2, z));
 }

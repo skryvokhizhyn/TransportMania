@@ -402,6 +402,12 @@
     <ClCompile Include="..\..\src\ModelReader.cpp">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\TerrainHeightCheck.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ScreenSizeManipulator.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -895,6 +901,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\ApplicationPauseEvent.h">
       <Filter>Events\SingleEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainHeightCheck.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ScreenSizeManipulator.h">
+      <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -28,7 +28,8 @@ namespace
 
 	bool IsVisible(const WorldProjection & wp, Point3d p, const size_t width)
 	{
-		const Point3d center = wp.GetScreenCenter();
+		Point3d center = wp.GetShiftPosition();
+		center.z() = 0.0f;
 
 		p += width / 2.0f;
 		p.z() = 0;
@@ -278,6 +279,7 @@ PatchGrid::Update(const WorldProjection & wp)
 		{
 			hm.Clear();
 			data.patch.Clear();
+			data.dirty = false;
 			data.valid = false;
 		}
 	}

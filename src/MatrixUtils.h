@@ -8,7 +8,9 @@ namespace trm
 {
 	Matrix operator * (const Matrix & m1, const Matrix & m2);
 	Point4d operator * (const Matrix & m, const Point4d & v);
+	Point3d operator * (const Matrix & m, const Point3d & v);
 	Matrix Transponate(const Matrix & m);
+	Matrix Inverse(const Matrix & m);
 
 } // namespace trm
 

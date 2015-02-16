@@ -1,5 +1,5 @@
-#pragma warning(push)
 #pragma warning(disable: 4100) // 'rank' : unreferenced formal parameter
+#pragma warning(disable: 4127) // conditional expression is constant
 
 #include "MatrixUtils.h"
 
@@ -28,6 +28,17 @@ Point4d trm::operator * (const Matrix & m, const Point4d & v)
 	return res;
 }
 
+Point3d trm::operator * (const Matrix & m, const Point3d & v)
+{
+	Point4d p4d = Point4d::Cast(v);
+	p4d.w() = 1.0f;
+
+	p4d = m * p4d;
+	p4d /= p4d.w();
+
+	return Point3d::Cast(p4d);
+}
+
 //const Point4d trm::operator * (const Point4d & v, const Matrix & m)
 //{
 //	Point4d res;
@@ -47,4 +58,29 @@ Matrix trm::Transponate(const Matrix & m)
 	return trans(m);
 }
 
-#pragma warning(pop)
+#include <boost/numeric/ublas/lu.hpp>
+#include "MatrixFactory.h"
+
+Matrix trm::Inverse(const Matrix & m)
+{
+	typedef permutation_matrix<std::size_t> pmatrix;
+
+	// create a permutation matrix for the LU-factorization
+	pmatrix pm(m.size1());
+
+	Matrix cp = m;
+
+	// perform LU-factorization
+	int res = lu_factorize(cp, pm);
+	if (res != 0)
+	{
+		throw std::runtime_error("Cannot inverse matrix");
+	}
+
+	Matrix inverse = MatrixFactory::Identity();
+
+	// backsubstitute to get the inverse
+	lu_substitute(cp, pm, inverse);
+
+	return inverse;
+}

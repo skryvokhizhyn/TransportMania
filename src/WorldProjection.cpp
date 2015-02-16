@@ -203,10 +203,18 @@ WorldProjection::GetOrthoViewMatrix() const
 	return orthoViewMatrix_;
 }
 
-Point3d 
-WorldProjection::GetScreenCenter() const
+const Point3d &
+WorldProjection::GetShiftPosition() const
 {
-	Point3d center = shiftPosition_;
-	center.z() = 0;
-	return center;
+	return shiftPosition_;
+}
+
+Point3d 
+WorldProjection::ToWorldCoordinates(const Point2d & p) const
+{
+	const Matrix invertedPV = trm::Inverse(projectionViewMatrix_);
+	Point3d nearPoint = Point3d::Cast(p);
+	nearPoint.z() = -1.0f;
+
+	return invertedPV * nearPoint;
 }

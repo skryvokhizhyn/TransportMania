@@ -30,7 +30,7 @@ Terraformer::Normalized(const Size2d & sz, TerrainRange::Range & r)
 
 	if (r.y < 0)
 	{
-		r.y = 0;
+		return false;
 	}
 
 	if (r.xBegin < 0)
@@ -61,7 +61,7 @@ Terraformer::Normalized(const Size2d & sz, TerrainRange::Range & r)
 	return true;
 }
 
-Terraformer::Terraformer(const TerrainRange & range, TerraformFunction func)
+Terraformer::Terraformer(const TerrainRange & range, TerraformFunction & func)
 	: range_(range), func_(func)
 {}
 
@@ -84,26 +84,31 @@ Terraformer::Apply(HeightMapBase & hm)
 			const Point2d at(static_cast<float>(r.xBegin), static_cast<float>(r.y));
 
 			const HeightMap::Value zOld = hm.At(at);
-			HeightMap::Value zNew = func_(at, zOld);
+			//HeightMap::Value zNew = func_(at, zOld);
+			HeightMap::Value zNew = zOld;
+			const bool processFurther = func_.get()(at, zNew);
 
-			if (zNew > Terrain::MAX_HEIGHT)
+			if (!utils::CheckEqual(zOld, zNew))
 			{
-				zNew = Terrain::MAX_HEIGHT;
-			}
-			else
-			if (zNew < Terrain::MIN_HEIGHT)
-			{
-				zNew = Terrain::MIN_HEIGHT;
+				if (zNew > Terrain::MAX_HEIGHT)
+				{
+					zNew = Terrain::MAX_HEIGHT;
+				}
+				else
+				if (zNew < Terrain::MIN_HEIGHT)
+				{
+					zNew = Terrain::MIN_HEIGHT;
+				}
+
+				hm.Set(at, zNew);
 			}
 
-			hm.Set(at, zNew);
+			if (!processFurther)
+			{
+				return;
+			}
+			
 			++r.xBegin;
 		}
 	}
 }
-
-//const TerrainRange & 
-//Terraformer::GetRange() const
-//{
-//	return range_;
-//}

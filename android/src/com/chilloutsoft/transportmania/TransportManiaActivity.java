@@ -20,7 +20,7 @@ public class TransportManiaActivity extends SDLActivity {
 	}
 
 	private static final String PREFERENCE_FIRST_RUN = "PREFERENCE_FIRST_RUN";
-	private static boolean FORCE_RESET_ASSETS = false;
+	private static boolean FORCE_RESET_ASSETS = true;
 	private static final String ASSETS_LOCATION = "/TransportMania/";
 
 	void createParentFolderIfNotExist(String path) throws Exception {
@@ -81,6 +81,7 @@ public class TransportManiaActivity extends SDLActivity {
 		copyFile("Textures/railway.png");
 		copyFile("Textures/windowbox.png");
 		copyFile("Textures/woodwagon.png");
+		copyFile("Textures/pausebutton.png");
 	}
 
 	private void resetAssets() {

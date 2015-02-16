@@ -230,6 +230,15 @@
     <ClCompile Include="..\..\src\UniqueId.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="ScreenPointToOglCoordinatesTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="MatrixUtilsTest.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ScreenSizeManipulator.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

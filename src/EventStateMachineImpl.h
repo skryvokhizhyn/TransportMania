@@ -84,6 +84,8 @@ namespace impl
 		// when at least one finger is pressed we stop terrain updates
 		if (targetState.fingers.empty())
 			fsm.subj_.StopTerrainUpdate();
+		else
+			targetState.processPress = false;
 
 		assert(targetState.fingers.count(evt.fingerId) == 0LL);
 
@@ -92,7 +94,7 @@ namespace impl
 			return;
 
 		// commit first
-		FingerCommitImpl(fsm.subj_, targetState.fingers, true);
+		FingerCommitImpl(fsm.subj_, targetState.fingers, true, false);
 
 		auto & fingerStruct = targetState.fingers[evt.fingerId];
 		fingerStruct = PointMove(evt.pos);
@@ -107,13 +109,16 @@ namespace impl
 		ACTION_IMPLEMENTATION_UNUSED_GUARD;
 
 		// commit first
-		FingerCommitImpl(fsm.subj_, sourceState.fingers, true);
+		FingerCommitImpl(fsm.subj_, sourceState.fingers, true, sourceState.processPress);
 
 		const int erazed = sourceState.fingers.erase(evt.fingerId);
 		
 		// when we release the last finger we can proceed with terrain updates
 		if (sourceState.fingers.empty())
+		{
 			fsm.subj_.ResumeTerrainUpdate();
+			sourceState.processPress = true;
+		}
 
 		// if we try to release non existing finger - it's ok
 		if (!erazed)
@@ -137,6 +142,8 @@ namespace impl
 		{
 			fingerStruct.to = evt.pos;
 		}
+
+		sourceState.processPress = false;
 
 #ifdef UNIT_TESTING_TURNED_ON
 		fsm.subj_.FingerMoved(evt.fingerId, fingerStruct.from, fingerStruct.to);
@@ -174,7 +181,7 @@ namespace impl
 	}
 
 	template<typename Subject, typename FingersType>
-	void FingerCommitImpl(Subject & subj, FingersType & fingers, bool isFinal)
+	void FingerCommitImpl(Subject & subj, FingersType & fingers, bool isFinal, bool processPress)
 	{
 		const int fingerCount = fingers.size();
 
@@ -185,7 +192,15 @@ namespace impl
 		{
 			const auto & f = fingers.begin()->second;
 			const Point2d diff = f.to - f.from;
-			subj.ShiftScene(diff.x(), diff.y());
+
+			if (diff.GetLength() > 0.1f)
+			{
+				subj.ShiftScene(diff.x(), diff.y());
+			}
+			else if (processPress)
+			{
+				subj.PressScene(f.to.x(), f.to.y());
+			}
 		}
 		else
 		{
@@ -210,7 +225,7 @@ namespace impl
 	{
 		ACTION_IMPLEMENTATION_UNUSED_GUARD;
 
-		FingerCommitImpl(fsm.subj_, sourceState.fingers, false);
+		FingerCommitImpl(fsm.subj_, sourceState.fingers, false, false);
 	}
 
 	ACTION_IMPLEMENTATION(FingerReset)
@@ -218,7 +233,7 @@ namespace impl
 		ACTION_IMPLEMENTATION_UNUSED_GUARD;
 
 		// commit first
-		FingerCommitImpl(fsm.subj_, sourceState.fingers, true);
+		FingerCommitImpl(fsm.subj_, sourceState.fingers, true, false);
 
 		#ifdef UNIT_TESTING_TURNED_ON
 		fsm.subj_.FingerReset(sourceState.fingers.size());

@@ -53,6 +53,7 @@ namespace impl
 			struct FingerPressedState : public bmf::state<> 
 			{
 				using FingersType = std::map<FingerId, PointMove>;
+				bool processPress = true;
 
 				FingersType fingers;
 			};

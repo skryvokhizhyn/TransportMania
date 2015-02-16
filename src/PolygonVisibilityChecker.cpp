@@ -52,13 +52,7 @@ namespace
 		boost::transform(points, converted.begin(),
 			[&](const Point3d & p)
 		{
-			Point4d p4d = Point4d::Cast(p);
-			p4d.w() = 1.0f;
-
-			p4d = pv * p4d;
-			p4d /= p4d.w();
-
-			return Point3d::Cast(p4d);
+			return pv * p;
 		});
 
 		return converted;

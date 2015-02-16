@@ -13,6 +13,7 @@
 #include "Angle.h"
 #include "Logger.h"
 #include "SceneEventHandler.h"
+#include "TerrainHeightCheck.h"
 
 #include "TextManagerProxy.h"
 #include "ComponentHolderProxy.h"
@@ -61,6 +62,7 @@ Application::InitApplication(const size_t width, const size_t height)
 		sceneHandlerPtr_);
 	
 	windowManager_.Init(Size2d(width, height));
+	screenConverter_.SetScreenSize(Size2d(width, height));
 
 	TextManagerProxy::Init(textManager_);
 	ComponentHolderProxy::Init(componentHolder_);
@@ -200,6 +202,43 @@ Application::BendScene(const Angle dtheta, const Angle dpsi)
 	worldProjection_.Bend(dtheta, dpsi);
 }
 
+#include "GeometryUtils.h"
+
+void 
+Application::PressScene(const float x, const float y)
+{
+	const Point3d & camera = worldProjection_.GetCameraPosition();
+
+	const Point2d pressedPoint(x, y);
+	const Point2d oglPoint = screenConverter_.ConvertToOgl(pressedPoint);
+
+	const Point3d pointIn3d = worldProjection_.ToWorldCoordinates(oglPoint);
+
+	const Point3d vec = utils::Normalized(pointIn3d - camera) * 200.0f;
+
+	TerrainRangeLine range(Point2d::Cast(pointIn3d), Point2d::Cast(camera + vec), 0.0f);
+
+	TerrainHeightCheck thc(oglPoint, worldProjection_.GetProjectionViewMatrix());
+	Terraformer t(range, thc);
+
+	terrainPtr_->Apply(t);
+
+	auto found = thc.Get();
+
+	//utils::Logger().Debug() << "------------ " << thc.dist_;
+
+	if (found)
+	{
+		TerrainRangeCircle range(Point2d::Cast(found.get()), 2);
+		
+		auto tf = TerraformFunctionFactory::GetIncrease(1.0f);
+		Terraformer te(range, *tf.get());
+		terrainPtr_->Apply(te);
+
+		terrainScenePtr_->UpdateRequired();
+	}
+}
+
 void
 Application::Commit()
 {
@@ -233,7 +272,8 @@ Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*
 
 	//TerrainRangeLine range(trm::Point2d(10, 10), trm::Point2d(50, 10), 10);
 
-	Terraformer t(range, TerraformFunctionFactory::GetConstant(0.0f));
+	auto tf = TerraformFunctionFactory::GetConstant(0.0f);
+	Terraformer t(range, *tf.get());
 	terrainPtr_->Apply(t);
 
 	terrainScenePtr_->UpdateRequired();
@@ -244,7 +284,8 @@ Application::PutRailRoadLine(const Point3d & from, const Point3d & to)
 {
 	TerrainRangeLine range(Point2d::Cast(from), Point2d::Cast(to), RailRoad::GetTotalWidth());
 
-	Terraformer t(range, TerraformFunctionFactory::GetLinear(from, to));
+	auto tf = TerraformFunctionFactory::GetLinear(from, to);
+	Terraformer t(range, *tf.get());
 	terrainPtr_->Apply(t);
 
 	const RailRoadPtr rrp = RailRoadFactory::Line(from, to);
@@ -264,7 +305,8 @@ Application::PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle
 {
 	TerrainRangeArc range(TerrainRangeArc::Data(Point2d::Cast(from), a, c, r), RailRoad::GetTotalWidth());
 
-	Terraformer t(range, TerraformFunctionFactory::GetConstant(from.z()));
+	auto tf = TerraformFunctionFactory::GetConstant(from.z());
+	Terraformer t(range, *tf.get());
 	terrainPtr_->Apply(t);
 
 	const RailRoadPtr rrp = RailRoadFactory::Arc(from, a, c, r);

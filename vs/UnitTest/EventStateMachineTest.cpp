@@ -42,6 +42,11 @@ namespace
 		void RotateScene(const Angle)
 		{}
 
+		void PressScene(const float, const float)
+		{
+			pressed = true;
+		}
+
 		void BendScene(const Angle, const Angle)
 		{}
 
@@ -95,6 +100,7 @@ namespace
 		Point2d from;
 		Point2d to;
 		int updates;
+		bool pressed = false;
 		bool canUpdate = false;
 	};
 }
@@ -466,4 +472,60 @@ BOOST_AUTO_TEST_CASE(EventStateMachineResetTest1)
 
 	BOOST_CHECK_EQUAL(s.dir, MoveDirection::Right | MoveDirection::Up);
 	BOOST_CHECK_EQUAL(s.fingersRegistered, 1);
+}
+
+BOOST_AUTO_TEST_CASE(EventStateMachinePressTest1)
+{
+	Subject s;
+	EventStateMachine<Subject> esm(s);
+
+	BOOST_CHECK(!s.pressed);
+
+	esm.Emit(FingerPressed(0, Point2d(0, 0)));
+
+	BOOST_CHECK(!s.pressed);
+
+	esm.Emit(FingerReleased{0, Point2d(0, 0)});
+
+	BOOST_CHECK(s.pressed);
+
+	s.pressed = false;
+	
+	esm.Emit(FingerPressed(0, Point2d(0, 0)));
+	esm.Emit(FingerPressed{1, Point2d(0, 0)});
+	esm.Emit(FingerReleased{0, Point2d(0, 0)});
+
+	BOOST_CHECK(!s.pressed);
+
+	esm.Emit(FingerReleased{1, Point2d(0, 0)});
+
+	BOOST_CHECK(!s.pressed);
+
+	s.pressed = false;
+
+	esm.Emit(FingerPressed(0, Point2d(0, 0)));
+	esm.Emit(FingerMoved(0, Point2d(1, 1)));
+	esm.Emit(FingerReleased{0, Point2d(0, 0)});
+
+	BOOST_CHECK(!s.pressed);
+}
+
+BOOST_AUTO_TEST_CASE(EventStateMachinePressTest2)
+{
+	Subject s;
+	EventStateMachine<Subject> esm(s);
+
+	esm.Emit(FingerPressed(0, Point2d(0, 0)));
+	esm.Emit(FingerMoved(0, Point2d(1, 1)));
+	esm.Emit(Commit());
+	esm.Emit(FingerReleased{0, Point2d(0, 0)});
+
+	BOOST_CHECK(!s.pressed);
+
+	esm.Emit(FingerPressed(0, Point2d(0, 0)));
+	esm.Emit(FingerMoved(0, Point2d(1, 1)));
+	esm.Emit(Reset());
+	esm.Emit(FingerReleased{0, Point2d(0, 0)});
+
+	BOOST_CHECK(!s.pressed);
 }

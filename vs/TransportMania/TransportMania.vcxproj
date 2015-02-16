@@ -34,9 +34,11 @@
     <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
     <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
     <ClCompile Include="..\..\src\DrawableItem.cpp" />
+    <ClCompile Include="..\..\src\ScreenSizeManipulator.cpp" />
     <ClCompile Include="..\..\src\SdlUserEvent.cpp" />
     <ClCompile Include="..\..\src\SdlUserEventVisitor.cpp" />
     <ClCompile Include="..\..\src\ShaderProgram.cpp" />
+    <ClCompile Include="..\..\src\TerrainHeightCheck.cpp" />
     <ClCompile Include="..\..\src\TextManager.cpp" />
     <ClCompile Include="..\..\src\TextRenderer.cpp" />
     <ClCompile Include="..\..\src\FpsCounter.cpp" />
@@ -142,11 +144,13 @@
     <ClInclude Include="..\..\src\ModelManagerProxy.h" />
     <ClInclude Include="..\..\src\ModelReader.h" />
     <ClInclude Include="..\..\src\Rectangle2f.h" />
+    <ClInclude Include="..\..\src\ScreenSizeManipulator.h" />
     <ClInclude Include="..\..\src\SdlUserEventVisitor.h" />
     <ClInclude Include="..\..\src\ShaderAttribute.h" />
     <ClInclude Include="..\..\src\ShaderProgram.h" />
     <ClInclude Include="..\..\src\EventContainer.h" />
     <ClInclude Include="..\..\src\Size2f.h" />
+    <ClInclude Include="..\..\src\TerrainHeightCheck.h" />
     <ClInclude Include="..\..\src\TextRendererProxy.h" />
     <ClInclude Include="..\..\src\TextureIdHashImpl.h" />
     <ClInclude Include="..\..\src\UserEventData.h" />

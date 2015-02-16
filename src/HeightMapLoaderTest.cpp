@@ -13,7 +13,8 @@ namespace
 	{
 		TerrainRangeCircle circle(trm::Point2d(32, 32), 10);
 
-		Terraformer t(circle, TerraformFunctionFactory::GetSpherical(trm::Point2d(32, 32), 10, 5));
+		auto tf = TerraformFunctionFactory::GetSpherical(trm::Point2d(32, 32), 10, 5);
+		Terraformer t(circle, *tf.get());
 		t.Apply(hm);
 	}
 
@@ -21,7 +22,8 @@ namespace
 	{
 		TerrainRangeCircle circle(trm::Point2d(4, 4), 4);
 
-		Terraformer t(circle, TerraformFunctionFactory::GetSpherical(trm::Point2d(4, 4), 3, 5));
+		auto tf = TerraformFunctionFactory::GetSpherical(trm::Point2d(4, 4), 3, 5);
+		Terraformer t(circle, *tf.get());
 		t.Apply(hm);
 	}
 }

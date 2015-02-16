@@ -3,6 +3,7 @@
 
 #include "Matrix.h"
 #include "Point3d.h"
+#include "Point2d.h"
 #include "Angle.h"
 
 namespace trm
@@ -24,8 +25,9 @@ namespace trm
 		const Point3d & GetCameraPosition() const;
 		const Matrix & GetProjectionViewMatrix() const;
 		const Matrix & GetOrthoViewMatrix() const;
-		Point3d GetScreenCenter() const;
+		const Point3d & GetShiftPosition() const;
 		bool IsPointVisible(const Point3d & p) const;
+		Point3d ToWorldCoordinates(const Point2d & p) const;
 
 	private:
 		void UpdateRotateMatrix();
