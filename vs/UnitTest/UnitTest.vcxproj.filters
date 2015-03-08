@@ -230,13 +230,28 @@
     <ClCompile Include="..\..\src\UniqueId.cpp">
       <Filter>obj</Filter>
     </ClCompile>
-    <ClCompile Include="ScreenPointToOglCoordinatesTest.cpp">
-      <Filter>Other</Filter>
-    </ClCompile>
     <ClCompile Include="MatrixUtilsTest.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\ScreenSizeManipulator.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="ScreenSizeManipulatorTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="RoadEventStateMachineTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
+    <ClCompile Include="ContainerAggregatorTest.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainPointCollectorTest.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainCoverDrawableObject.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainPointCollector.cpp">
       <Filter>obj</Filter>
     </ClCompile>
   </ItemGroup>

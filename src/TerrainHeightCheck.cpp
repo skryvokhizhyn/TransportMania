@@ -10,8 +10,7 @@ using namespace trm;
 TerrainHeightCheck::TerrainHeightCheck(const Point2d & p, const Matrix & pv)
 	: pvMatrix_(pv)
 	, point_(p)
-{
-}
+{}
 
 bool
 TerrainHeightCheck::operator () (const Point2d & p, float & height)
@@ -20,11 +19,7 @@ TerrainHeightCheck::operator () (const Point2d & p, float & height)
 
 	Point2d p2d = Point2d::Cast(pvMatrix_ * p3);
 
-	utils::Logger().Debug() << "------------ " << p;
-
 	const float dist = utils::GetDistance(p2d, point_);
-
-	dist_ = std::min(dist_, dist);
 
 	if (dist < 0.05f)
 	{
@@ -36,7 +31,7 @@ TerrainHeightCheck::operator () (const Point2d & p, float & height)
 	return true;
 }
 
-TerrainHeightCheck::OptionalPoint
+OptionalPoint3d
 TerrainHeightCheck::Get() const
 {
 	return pointFound_;

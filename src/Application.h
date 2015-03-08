@@ -16,7 +16,7 @@
 #include "TextureManager.h"
 #include "WindowManager.h"
 #include "CachedHandlerLocator.h"
-#include "SceneEventHandler.h"
+#include "MoveSceneEventHandler.h"
 #include "ModelManager.h"
 #include "ScreenSizeManipulator.h"
 
@@ -52,8 +52,10 @@ namespace trm
 
 		void Upper(const AxisType x, const AxisType y, const AxisType radii);
 
+		void PutRoad(const Point2d & from, const Point2d & to, bool commit);
 		void PutRailRoadLine(const Point3d & from, const Point3d & to);
 		void PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a, const Rotation r);
+		void PutLineDraft(const Point3d & from, const Point3d & to);
 
 		void EmulateDynamicScene1();
 		void EmulateDynamicScene2();
@@ -87,7 +89,7 @@ namespace trm
 		TextureManager textureManager_;
 		WindowManager windowManager_;
 		CachedHandlerLocator cachedHandlerLocator_;
-		SceneEventHandlerPtr sceneHandlerPtr_;
+		MoveSceneEventHandlerPtr sceneHandlerPtr_;
 		ModelManager modelManager_;
 		ScreenSizeManipulator screenConverter_;
 		bool processTerrainUpdate_ = true;

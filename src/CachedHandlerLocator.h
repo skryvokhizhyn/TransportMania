@@ -11,7 +11,7 @@ namespace trm
 	{
 	public:
 		// mimic EventHandlerLocator
-		void Put(UniqueId id, const Polygon2d & area, EventHandlerPtr ehPtr);
+		void Put(UniqueId id, const Polygon2d & area, HandlerLevel level, EventHandlerPtr ehPtr);
 		void Remove(UniqueId id);
 
 		// mimic EventHandler

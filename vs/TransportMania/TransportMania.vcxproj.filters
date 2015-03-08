@@ -55,9 +55,6 @@
     <Filter Include="Events">
       <UniqueIdentifier>{e4d51b87-8e73-43bf-bac5-56aaf8b57ca4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Application\SceneEventStateMachine">
-      <UniqueIdentifier>{5d8d19b0-1b26-4f73-b1a8-0ba7b0b4d87a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Events\SingleEvents">
       <UniqueIdentifier>{553c4959-4251-4fa3-aae9-7b6c9d8bdde4}</UniqueIdentifier>
     </Filter>
@@ -69,6 +66,9 @@
     </Filter>
     <Filter Include="Railroad\Visitors">
       <UniqueIdentifier>{7970fd1a-511b-4ca8-ad8f-f25b1349671f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events\SceneEventStateMachine">
+      <UniqueIdentifier>{5d8d19b0-1b26-4f73-b1a8-0ba7b0b4d87a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -262,7 +262,7 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\SubjectAction.cpp">
-      <Filter>Application\SceneEventStateMachine</Filter>
+      <Filter>Events\SceneEventStateMachine</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\HeightMap.cpp">
       <Filter>Terrain\HeightMap</Filter>
@@ -348,9 +348,6 @@
     <ClCompile Include="..\..\src\AppEventHandler.cpp">
       <Filter>Application</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\SceneEventHandler.cpp">
-      <Filter>Application</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\UniqueId.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -407,6 +404,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\ScreenSizeManipulator.cpp">
       <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\MoveSceneEventHandler.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainPositionLocator.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainPointCollector.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainCoverDrawableObject.cpp">
+      <Filter>Terrain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -663,16 +672,16 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\EventStateMachineImpl.h">
-      <Filter>Application\SceneEventStateMachine</Filter>
+      <Filter>Events\SceneEventStateMachine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\EventStateMachine.h">
-      <Filter>Application\SceneEventStateMachine</Filter>
+      <Filter>Events\SceneEventStateMachine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\EventStateMachineDefs.h">
-      <Filter>Application\SceneEventStateMachine</Filter>
+      <Filter>Events\SceneEventStateMachine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\SubjectAction.h">
-      <Filter>Application\SceneEventStateMachine</Filter>
+      <Filter>Events\SceneEventStateMachine</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\TriangleNodeAllocator.h">
       <Filter>Terrain\LOD</Filter>
@@ -797,9 +806,6 @@
     <ClInclude Include="..\..\src\AppEventHandler.h">
       <Filter>Application</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\SceneEventHandler.h">
-      <Filter>Application</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\WindowManagerProxy.h">
       <Filter>Window</Filter>
     </ClInclude>
@@ -907,6 +913,36 @@
     </ClInclude>
     <ClInclude Include="..\..\src\ScreenSizeManipulator.h">
       <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SceneEventHandler.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\MoveSceneEventHandler.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SceneEventHandlerWrapper.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SceneEventStateMachine.h">
+      <Filter>Events\SceneEventStateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RoadEventStateMachine.h">
+      <Filter>Events\SceneEventStateMachine</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainPositionLocator.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\OptionalPoint3d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ContainerAggregator.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainPointCollector.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainCoverDrawableObject.h">
+      <Filter>Terrain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

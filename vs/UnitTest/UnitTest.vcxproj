@@ -115,6 +115,8 @@
     <ClCompile Include="..\..\src\Terraformer.cpp" />
     <ClCompile Include="..\..\src\TerraformFunction.cpp" />
     <ClCompile Include="..\..\src\Terrain.cpp" />
+    <ClCompile Include="..\..\src\TerrainCoverDrawableObject.cpp" />
+    <ClCompile Include="..\..\src\TerrainPointCollector.cpp" />
     <ClCompile Include="..\..\src\TerrainRange.cpp" />
     <ClCompile Include="..\..\src\TerrainRangeArc.cpp" />
     <ClCompile Include="..\..\src\TerrainRangeCircle.cpp" />
@@ -132,6 +134,7 @@
     <ClCompile Include="..\TransportMania\LeakDetectorInitializer.cpp" />
     <ClCompile Include="..\TransportMania\Logger.cpp" />
     <ClCompile Include="CommonUtilsTest.cpp" />
+    <ClCompile Include="ContainerAggregatorTest.cpp" />
     <ClCompile Include="EventStateMachineTest.cpp" />
     <ClCompile Include="GeometryUtilsTest.cpp" />
     <ClCompile Include="HeightMapTest.cpp" />
@@ -145,13 +148,15 @@
     <ClCompile Include="RailRoadVisitorsTest.cpp" />
     <ClCompile Include="RangeTest.cpp" />
     <ClCompile Include="ResourceProxyTest.cpp" />
+    <ClCompile Include="RoadEventStateMachineTest.cpp" />
     <ClCompile Include="RoadNetworkTest.cpp" />
     <ClCompile Include="RoadPointTest.cpp" />
-    <ClCompile Include="ScreenPointToOglCoordinatesTest.cpp" />
+    <ClCompile Include="ScreenSizeManipulatorTest.cpp" />
     <ClCompile Include="SettingsTest.cpp" />
     <ClCompile Include="SubjectActionTest.cpp" />
     <ClCompile Include="SymmetricMapTest.cpp" />
     <ClCompile Include="TerraformTest.cpp" />
+    <ClCompile Include="TerrainPointCollectorTest.cpp" />
     <ClCompile Include="TiangleMapperTest.cpp" />
     <ClCompile Include="TrainStateMachineTest.cpp" />
     <ClCompile Include="TriangleNodeTest.cpp" />

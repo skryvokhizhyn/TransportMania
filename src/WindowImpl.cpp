@@ -17,7 +17,7 @@ WindowImpl::WindowImpl(const WindowItemRenderer::RenderedData & renderedData)
 	{
 		if (d.handlerPtr)
 		{
-			CachedHandlerLocatorProxy()->Put(d.id, d.polygon, d.handlerPtr);
+			CachedHandlerLocatorProxy()->Put(d.id, d.polygon, HandlerLevel::Button, d.handlerPtr);
 			return WindowData(d.id, d.drawableItem, true);
 		}
 		else

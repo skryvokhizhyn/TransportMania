@@ -4,9 +4,9 @@
 using namespace trm;
 
 void
-CachedHandlerLocator::Put(UniqueId id, const Polygon2d & area, EventHandlerPtr ehPtr)
+CachedHandlerLocator::Put(UniqueId id, const Polygon2d & area, HandlerLevel level, EventHandlerPtr ehPtr)
 {
-	ehLocator_.Put(id, area, ehPtr);
+	ehLocator_.Put(id, area, level, ehPtr);
 	idToHandlerMap_.emplace(id, ehPtr);
 }
 

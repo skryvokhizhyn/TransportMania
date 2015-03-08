@@ -96,7 +96,7 @@ namespace
 
 	template<typename T>
 	class TerraformerFunctionWrapper
-		: TerraformFunction
+		: public TerraformFunction
 	{
 	public:
 		TerraformerFunctionWrapper(const T & t)

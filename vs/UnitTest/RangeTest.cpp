@@ -1,11 +1,10 @@
-//#define BOOST_TEST_DYN_LINK
+#include <boost/test/unit_test.hpp>
 
 #include <TerrainRangeCircle.h>
 #include <TerrainRangeLine.h>
 #include <TerrainRangeArc.h>
 #include <GeometryUtils.h>
 #include <RangeRectangle.h>
-#include <boost/test/unit_test.hpp>
 
 using namespace trm;
 BOOST_AUTO_TEST_CASE(TerrainRangeTest1)

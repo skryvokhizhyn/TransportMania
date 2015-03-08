@@ -3,6 +3,7 @@
 #include "Size2d.h"
 #include "Point2d.h"
 #include "Matrix.h"
+#include "Polygon2d.h"
 
 namespace trm
 {
@@ -13,6 +14,7 @@ namespace trm
 
 		Point2d ConvertToOgl(const Point2d & p) const;
 		Point2d ShiftFromCenter(const Point2d & p) const;
+		Polygon2d GetScreenPolygon() const;
 
 	private:
 		Size2d screenSize_;

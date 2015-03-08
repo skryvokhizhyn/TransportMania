@@ -12,8 +12,8 @@
 #include "Settings.h"
 #include "Angle.h"
 #include "Logger.h"
-#include "SceneEventHandler.h"
-#include "TerrainHeightCheck.h"
+#include "TerrainPositionLocator.h"
+#include "TerrainPointCollector.h"
 
 #include "TextManagerProxy.h"
 #include "ComponentHolderProxy.h"
@@ -31,17 +31,10 @@
 using namespace trm;
 using namespace trm::terrain;
 
-namespace
-{
-	const int SCENE_EVENT_HANDLER_ID = -1;
-}
-
 bool 
 Application::InitApplication(const size_t width, const size_t height)
 {
 	stopped_ = false;
-
-	//auto png = utils::PngHandler(GetTexturePath("graybackground.png"));
 
 	worldProjection_.SetRatio(width, height);
 	//worldProjection_.SetAngles(Degrees(69), Degrees(0), Degrees(-32));
@@ -52,17 +45,14 @@ Application::InitApplication(const size_t width, const size_t height)
 	textManager_.Init(Size2d(width, height));
 	textRenderer_.Init();
 
-	sceneHandlerPtr_ = std::make_shared<SceneEventHandler>(*this);
-	
-	const float w = boost::numeric_cast<float>(width);
-	const float h = boost::numeric_cast<float>(height);
+	sceneHandlerPtr_ = std::make_shared<MoveSceneEventHandler>();
+	sceneHandlerPtr_->SetMoveHandler(*this);
+	screenConverter_.SetScreenSize(Size2d(width, height));
 
-	cachedHandlerLocator_.Put(/*SCENE_EVENT_HANDLER_ID*/UniqueId(), 
-		{Point2d(0.0f, 0.0f), Point2d(0.0f, h), Point2d(w, h), Point2d(w, 0.0f)}, 
-		sceneHandlerPtr_);
+	cachedHandlerLocator_.Put(UniqueId(), screenConverter_.GetScreenPolygon(), 
+		HandlerLevel::Terrain, sceneHandlerPtr_);
 	
 	windowManager_.Init(Size2d(width, height));
-	screenConverter_.SetScreenSize(Size2d(width, height));
 
 	TextManagerProxy::Init(textManager_);
 	ComponentHolderProxy::Init(componentHolder_);
@@ -73,7 +63,8 @@ Application::InitApplication(const size_t width, const size_t height)
 
 	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateTextWindow, boost::ref(windowManager_), L"My first text window!"));
 	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateLockScreen, boost::ref(windowManager_)));
-	windowManager_.CreateOKButton(boost::bind(&Application::EmulateDynamicScene1, this));
+	//windowManager_.CreateOKButton(boost::bind(&Application::EmulateDynamicScene1, this));
+	windowManager_.CreateOKButton(boost::bind(&MoveSceneEventHandler::SetRoadHandler, sceneHandlerPtr_, std::ref(*this)));
 	windowManager_.CreatePauseButton();
 
 	return true;
@@ -202,30 +193,11 @@ Application::BendScene(const Angle dtheta, const Angle dpsi)
 	worldProjection_.Bend(dtheta, dpsi);
 }
 
-#include "GeometryUtils.h"
-
 void 
 Application::PressScene(const float x, const float y)
 {
-	const Point3d & camera = worldProjection_.GetCameraPosition();
-
-	const Point2d pressedPoint(x, y);
-	const Point2d oglPoint = screenConverter_.ConvertToOgl(pressedPoint);
-
-	const Point3d pointIn3d = worldProjection_.ToWorldCoordinates(oglPoint);
-
-	const Point3d vec = utils::Normalized(pointIn3d - camera) * 200.0f;
-
-	TerrainRangeLine range(Point2d::Cast(pointIn3d), Point2d::Cast(camera + vec), 0.0f);
-
-	TerrainHeightCheck thc(oglPoint, worldProjection_.GetProjectionViewMatrix());
-	Terraformer t(range, thc);
-
-	terrainPtr_->Apply(t);
-
-	auto found = thc.Get();
-
-	//utils::Logger().Debug() << "------------ " << thc.dist_;
+	auto found = GetTerrainPosition(Point2d(x, y),
+		worldProjection_, screenConverter_, terrainPtr_);
 
 	if (found)
 	{
@@ -374,4 +346,33 @@ void
 Application::Pause()
 {
 	paused_ = !paused_;
+}
+
+void 
+Application::PutRoad(const Point2d & from, const Point2d & to, bool commit)
+{
+	if (commit)
+	{
+		auto foundFrom = GetTerrainPosition(from, worldProjection_, screenConverter_, terrainPtr_);
+		auto foundTo = GetTerrainPosition(to, worldProjection_, screenConverter_, terrainPtr_);
+
+		if (foundFrom && foundTo && foundFrom != foundTo)
+		{
+			//PutRailRoadLine(foundFrom.get(), foundTo.get());
+			PutLineDraft(foundFrom.get(), foundTo.get());
+		}
+	}
+}
+
+void 
+Application::PutLineDraft(const Point3d & from, const Point3d & to)
+{
+	TerrainRangeLine range(Point2d::Cast(from), Point2d::Cast(to), RailRoad::GetTotalWidth());
+
+	TerrainPointCollector tpc;
+	
+	Terraformer t(range, tpc);
+	terrainPtr_->Apply(t);
+
+	staticSceneObjects_.push_back(StaticSceneObjectFactory::ForTerrainCover(tpc.GetPoints()));
 }
