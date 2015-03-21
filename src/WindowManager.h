@@ -21,9 +21,11 @@ namespace trm
 		void Init(const Size2d & screenSize);
 
 		void CreateOKButton(EventAction cb);
+		void CreateNOButton(EventAction cb);
 		void CreatePauseButton();
 		void CreateLockScreen();
 		void CreateTextWindow(const std::wstring & text);
+		void CreateMouseModeButton();
 
 		void CloseWindow(UniqueId id);
 

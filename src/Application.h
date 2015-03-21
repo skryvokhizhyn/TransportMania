@@ -62,6 +62,8 @@ namespace trm
 
 		void CloseWindow(UniqueId id);
 		void Pause();
+		void ChangeMouseMode();
+		void SubmitDraftRoads(bool yesNo);
 
 	private:
 		typedef std::vector<StaticSceneObjectPtr> StaticSceneObjects;
@@ -80,6 +82,7 @@ namespace trm
 		TerrainPtr terrainPtr_;
 		TerrainSceneObjectPtr terrainScenePtr_;
 		StaticSceneObjects staticSceneObjects_;
+		StaticSceneObjects tempRoadObjects_;
 		RoadNetwork roadNetwork_;
 		RoadRoutePtrs roadRoutePtrs_;
 		TransportManagers managers_;

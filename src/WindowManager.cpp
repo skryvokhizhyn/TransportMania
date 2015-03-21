@@ -5,6 +5,7 @@
 
 #include "WindowCloseEvent.h"
 #include "ApplicationPauseEvent.h"
+#include "MouseModeChangeEvent.h"
 
 #include "WindowItemBox.h"
 #include "WindowItemRenderer.h"
@@ -48,7 +49,22 @@ WindowManager::CreateOKButton(EventAction cb)
 
 	WindowItemBoxPtr windowPtr(new WindowItemBox(windowId, sz, TextureId::OkButton,
 		EventContainer::Create({cb, WindowCloseEvent(windowId)}, EventActionType::Single), 
-		WindowPosition::p100, WindowPosition::p50));
+		WindowPosition::p100, WindowPosition::p0));
+
+	ProcessWindowData(std::move(windowPtr));
+}
+
+void 
+WindowManager::CreateNOButton(EventAction cb)
+{
+	const float windowSize = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
+
+	Size2f sz(windowSize, windowSize);
+	UniqueId windowId;
+
+	WindowItemBoxPtr windowPtr(new WindowItemBox(windowId, sz, TextureId::NoButton,
+		EventContainer::Create({cb, WindowCloseEvent(windowId)}, EventActionType::Single), 
+		WindowPosition::p50, WindowPosition::p0));
 
 	ProcessWindowData(std::move(windowPtr));
 }
@@ -113,6 +129,20 @@ WindowManager::CloseWindow(UniqueId id)
 
 	it->second.Close();
 	windows_.erase(it);
+}
+
+void 
+WindowManager::CreateMouseModeButton()
+{
+	const float windowSize = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
+
+	Size2f sz(windowSize, windowSize);
+
+	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId(), sz, TextureId::MouseMode,
+		EventContainer::Create({MouseModeChangeEvent()}, EventActionType::Repeatable), 
+		WindowPosition::p100, WindowPosition::p50));
+
+	ProcessWindowData(std::move(windowPtr));
 }
 
 void

@@ -8,12 +8,14 @@ namespace trm
 		Ground, 
 		Font,
 		OkButton,
+		NoButton,
 		TransparentGray,
 		WindowBox,
 		Railway,
 		Wagon,
 		Locomotive,
-		PauseButton
+		PauseButton,
+		MouseMode
 	};
 
 } // namespace trm

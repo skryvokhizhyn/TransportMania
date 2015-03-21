@@ -6,27 +6,20 @@
 
 #include <map>
 #include <cassert>
+#include <type_traits>
 
 using namespace trm;
 using namespace UserEventData;
 
-namespace
+namespace priv
 {
-	enum SdlUserEventType
-	{
-		CloseWindowType,
-		PauseApplicationType
-	};
+	enum SdlUserEventType : unsigned short;
 
 	struct UserEventType
 	{
 		template<typename T>
 		SdlUserEventType Get();
 	};
-
-	// specialize for every user event data
-	template<> SdlUserEventType UserEventType::Get<CloseWindow>() { return SdlUserEventType::CloseWindowType; }
-	template<> SdlUserEventType UserEventType::Get<PauseApplication>() { return SdlUserEventType::PauseApplicationType; }
 
 	template<typename Event>
 	class SdlUserEventTmpl
@@ -57,6 +50,8 @@ namespace
 	}
 }
 
+using namespace priv;
+
 template<typename Event>
 SdlUserEventWrapper 
 SdlUserEventCoder::Encode(const Event & e)
@@ -68,27 +63,6 @@ SdlUserEventCoder::Encode(const Event & e)
 	evt.user.data2 = nullptr;
 
 	return SdlUserEventWrapper(evt);
-}
-
-template SdlUserEventWrapper SdlUserEventCoder::Encode<CloseWindow>(const CloseWindow &);
-template SdlUserEventWrapper SdlUserEventCoder::Encode<PauseApplication>(const PauseApplication &);
-
-SdlUserEventPtr 
-SdlUserEventCoder::Decode(const SDL_Event & e)
-{
-	assert(e.type == SDL_USEREVENT);
-	
-	switch (e.user.code)
-	{
-	case SdlUserEventType::CloseWindowType:
-		return ConvertAndClear<CloseWindow>(e.user.data1);
-
-	case SdlUserEventType::PauseApplicationType:
-		return ConvertAndClear<PauseApplication>(e.user.data1);
-
-	default:
-		throw std::runtime_error((boost::format("Unknown User Event id=%d given for decoding") % e.user.code).str());
-	}
 }
 
 SdlUserEventWrapper::SdlUserEventWrapper(const SDL_Event & e)
@@ -122,3 +96,57 @@ SdlUserEventWrapper::Emit()
 	SDL_PushEvent(&evt_);
 	emitted_ = true;
 }
+
+#define USER_EVENT_TO_ENUM_TYPE(cls, typ) \
+	template<> SdlUserEventType UserEventType::Get< cls >() { return SdlUserEventType:: typ ; }
+	
+#define USER_EVENT_ENCODE_SPECIALIZATION(cls) \
+	template SdlUserEventWrapper SdlUserEventCoder::Encode< cls >(std::add_const< cls >::type &)
+
+#define USER_EVENT_DECODE_SWITCH_CASE(typ,cls) \
+	case SdlUserEventType:: typ : \
+		return ConvertAndClear< cls >(e.user.data1)
+
+namespace priv
+{
+	enum SdlUserEventType : unsigned short
+	{
+		CloseWindowType,
+		PauseApplicationType,
+		MouseModeChangeType,
+		SubmitDraftRoadsType
+	};
+
+	// specialize for every user event data
+	USER_EVENT_TO_ENUM_TYPE(CloseWindow, CloseWindowType);
+	USER_EVENT_TO_ENUM_TYPE(PauseApplication, PauseApplicationType);
+	USER_EVENT_TO_ENUM_TYPE(ChangeMouseMode, MouseModeChangeType);
+	USER_EVENT_TO_ENUM_TYPE(SubmitDraftRoads, SubmitDraftRoadsType);
+
+} // namespace priv
+
+USER_EVENT_ENCODE_SPECIALIZATION(CloseWindow);
+USER_EVENT_ENCODE_SPECIALIZATION(PauseApplication);
+USER_EVENT_ENCODE_SPECIALIZATION(ChangeMouseMode);
+USER_EVENT_ENCODE_SPECIALIZATION(SubmitDraftRoads);
+
+SdlUserEventPtr 
+SdlUserEventCoder::Decode(const SDL_Event & e)
+{
+	assert(e.type == SDL_USEREVENT);
+	
+	switch (e.user.code)
+	{
+		USER_EVENT_DECODE_SWITCH_CASE(CloseWindowType, CloseWindow);
+		USER_EVENT_DECODE_SWITCH_CASE(PauseApplicationType, PauseApplication);
+		USER_EVENT_DECODE_SWITCH_CASE(MouseModeChangeType, ChangeMouseMode);
+		USER_EVENT_DECODE_SWITCH_CASE(SubmitDraftRoadsType, SubmitDraftRoads);
+
+	default:
+		throw std::runtime_error((boost::format("Unknown User Event id=%d given for decoding") % e.user.code).str());
+	}
+}
+
+#undef USER_EVENT_DECODE_SWITCH_CASE
+#undef USER_EVENT_TO_ENUM_TYPE
+#undef USER_EVENT_ENCODE_SPECIALIZATION

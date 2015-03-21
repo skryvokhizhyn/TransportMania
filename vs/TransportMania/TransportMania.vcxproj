@@ -34,6 +34,7 @@
     <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
     <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
     <ClCompile Include="..\..\src\DrawableItem.cpp" />
+    <ClCompile Include="..\..\src\SceneContent.cpp" />
     <ClCompile Include="..\..\src\ScreenSizeManipulator.cpp" />
     <ClCompile Include="..\..\src\SdlUserEvent.cpp" />
     <ClCompile Include="..\..\src\SdlUserEventVisitor.cpp" />
@@ -143,8 +144,10 @@
     <ClInclude Include="..\..\src\EventDispatcher.h" />
     <ClInclude Include="..\..\src\EventHandlerLocator.h" />
     <ClInclude Include="..\..\src\CachedHandlerLocatorProxy.h" />
+    <ClInclude Include="..\..\src\MouseModeChangeEvent.h" />
     <ClInclude Include="..\..\src\OptionalPoint3d.h" />
     <ClInclude Include="..\..\src\RoadEventStateMachine.h" />
+    <ClInclude Include="..\..\src\SceneContent.h" />
     <ClInclude Include="..\..\src\SceneEventStateMachine.h" />
     <ClInclude Include="..\..\src\SceneEventHandlerWrapper.h" />
     <ClInclude Include="..\..\src\FingerIdType.h" />
@@ -159,6 +162,7 @@
     <ClInclude Include="..\..\src\ShaderProgram.h" />
     <ClInclude Include="..\..\src\EventContainer.h" />
     <ClInclude Include="..\..\src\Size2f.h" />
+    <ClInclude Include="..\..\src\SubmitDraftRoadsEvent.h" />
     <ClInclude Include="..\..\src\TerrainCoverDrawableObject.h" />
     <ClInclude Include="..\..\src\TerrainPointCollector.h" />
     <ClInclude Include="..\..\src\TerrainHeightCheck.h" />

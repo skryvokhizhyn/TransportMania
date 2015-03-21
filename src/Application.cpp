@@ -14,6 +14,7 @@
 #include "Logger.h"
 #include "TerrainPositionLocator.h"
 #include "TerrainPointCollector.h"
+#include "SceneContent.h"
 
 #include "TextManagerProxy.h"
 #include "ComponentHolderProxy.h"
@@ -61,11 +62,7 @@ Application::InitApplication(const size_t width, const size_t height)
 	TextRendererProxy::Init(textRenderer_);
 	ModelManagerProxy::Init(modelManager_);
 
-	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateTextWindow, boost::ref(windowManager_), L"My first text window!"));
-	//windowManager_.CreateOKWindow(boost::bind(&WindowManager::CreateLockScreen, boost::ref(windowManager_)));
-	//windowManager_.CreateOKButton(boost::bind(&Application::EmulateDynamicScene1, this));
-	windowManager_.CreateOKButton(boost::bind(&MoveSceneEventHandler::SetRoadHandler, sceneHandlerPtr_, std::ref(*this)));
-	windowManager_.CreatePauseButton();
+	SceneContent::Init(windowManager_, SceneContent::Type::Init);
 
 	return true;
 }
@@ -91,6 +88,7 @@ bool
 Application::ReleaseView()
 {
 	// all rendering objects have to be cleared here
+	tempRoadObjects_.clear();
 	staticSceneObjects_.clear();
 	terrainScenePtr_.reset();
 	context_.Term();
@@ -158,6 +156,10 @@ Application::Draw()
 
 	// uses context transformation of terrain so no Transform method call
 	std::for_each(staticSceneObjects_.cbegin(), staticSceneObjects_.cend(), 
+		[](const StaticSceneObjectPtr & ssoPtr){ssoPtr->Draw();});
+
+	// uses context transformation of terrain so no Transform method call
+	std::for_each(tempRoadObjects_.cbegin(), tempRoadObjects_.cend(), 
 		[](const StaticSceneObjectPtr & ssoPtr){ssoPtr->Draw();});
 
 	componentHolder_.Draw(context_, pvm);
@@ -348,6 +350,18 @@ Application::Pause()
 	paused_ = !paused_;
 }
 
+void
+Application::ChangeMouseMode()
+{
+	sceneHandlerPtr_->ChangeHandler(*this);
+}
+
+void 
+Application::SubmitDraftRoads(bool /*yesNo*/)
+{
+
+}
+
 void 
 Application::PutRoad(const Point2d & from, const Point2d & to, bool commit)
 {
@@ -374,5 +388,7 @@ Application::PutLineDraft(const Point3d & from, const Point3d & to)
 	Terraformer t(range, tpc);
 	terrainPtr_->Apply(t);
 
-	staticSceneObjects_.push_back(StaticSceneObjectFactory::ForTerrainCover(tpc.GetPoints()));
+	tempRoadObjects_.push_back(StaticSceneObjectFactory::ForTerrainCover(tpc.GetPoints()));
+
+	SceneContent::Init(windowManager_, SceneContent::Type::Draw);
 }

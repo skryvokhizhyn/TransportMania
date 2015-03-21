@@ -14,11 +14,13 @@ namespace
 		(TextureId::Ground,				"grass.png")
 		(TextureId::Font,				"arial_ttf_cyr_lat_0.png")
 		(TextureId::OkButton,			"okbutton.png")
+		(TextureId::NoButton,			"nobutton.png")
 		(TextureId::TransparentGray,	"graybackground.png")
 		(TextureId::WindowBox,			"windowbox.png")
 		(TextureId::Railway,			"railway.png")
 		(TextureId::Wagon,				"woodwagon.png")
 		(TextureId::PauseButton,		"pausebutton.png")
+		(TextureId::MouseMode,			"mousemode.png")
 		;
 
 	std::string GetTextureLocation(TextureId id)

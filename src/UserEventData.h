@@ -15,5 +15,9 @@ namespace UserEventData
 
 	struct PauseApplication {};
 
+	struct ChangeMouseMode {};
+
+	struct SubmitDraftRoads { bool yesNo; };
+
 } // namespace UserEventData
 } // namespace trm

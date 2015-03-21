@@ -78,10 +78,12 @@ public class TransportManiaActivity extends SDLActivity {
 		copyFile("Textures/grass.png");
 		copyFile("Textures/graybackground.png");
 		copyFile("Textures/okbutton.png");
+		copyFile("Textures/nobutton.png");
 		copyFile("Textures/railway.png");
 		copyFile("Textures/windowbox.png");
 		copyFile("Textures/woodwagon.png");
 		copyFile("Textures/pausebutton.png");
+		copyFile("Textures/mousemode.png");
 	}
 
 	private void resetAssets() {

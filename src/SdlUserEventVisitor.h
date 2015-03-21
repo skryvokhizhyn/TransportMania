@@ -16,6 +16,8 @@ namespace trm
 
 		void Visit(UserEventData::CloseWindow & e);
 		void Visit(UserEventData::PauseApplication & e);
+		void Visit(UserEventData::ChangeMouseMode & e);
+		void Visit(UserEventData::SubmitDraftRoads & e);
 
 	private:
 		Application & app_;

@@ -37,6 +37,24 @@ MoveSceneEventHandler::Reset()
 }
 
 void 
+MoveSceneEventHandler::ChangeHandler(Application & app)
+{
+	switch (type_)
+	{
+	case HandlerType::Move:
+		SetRoadHandler(app);
+		break;
+
+	case HandlerType::Draw:
+		SetMoveHandler(app);
+		break;
+
+	default:
+		throw std::runtime_error("Unknown Scene handler type provided")	;
+	}
+}
+
+void 
 MoveSceneEventHandler::SetMoveHandler(Application & app)
 {
 	if (handlerPtr_)
@@ -45,6 +63,7 @@ MoveSceneEventHandler::SetMoveHandler(Application & app)
 	}
 
 	handlerPtr_ = MakeSceneWrapper(new impl::EventStateMachine<Application>(app));
+	type_ = HandlerType::Move;
 }
 
 void 
@@ -56,4 +75,5 @@ MoveSceneEventHandler::SetRoadHandler(Application & app)
 	}
 
 	handlerPtr_ = MakeSceneWrapper(new impl::RoadEventStateMachine<Application>(app));
+	type_ = HandlerType::Draw;
 }

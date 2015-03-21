@@ -13,6 +13,7 @@ namespace trm
 		// handler selectors
 		void SetMoveHandler(Application & app);
 		void SetRoadHandler(Application & app);
+		void ChangeHandler(Application & app);
 
 		// SceneEventHandler
 		virtual void Commit() const override;
@@ -24,6 +25,15 @@ namespace trm
 		virtual void Reset() override;
 
 	private:
+		enum class HandlerType
+		{
+			Unknown,
+			Move,
+			Draw
+		};
+
+	private:
+		HandlerType type_ = HandlerType::Unknown;
 		SceneEventHandlerPtr handlerPtr_;
 	};
 

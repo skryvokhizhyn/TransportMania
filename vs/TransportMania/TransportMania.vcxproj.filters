@@ -417,6 +417,9 @@
     <ClCompile Include="..\..\src\TerrainCoverDrawableObject.cpp">
       <Filter>Terrain</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\SceneContent.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -943,6 +946,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\TerrainCoverDrawableObject.h">
       <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SceneContent.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\MouseModeChangeEvent.h">
+      <Filter>Events\SingleEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\SubmitDraftRoadsEvent.h">
+      <Filter>Events\SingleEvents</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

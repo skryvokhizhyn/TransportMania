@@ -15,7 +15,19 @@ SdlUserEventVisitor::Visit(CloseWindow & e)
 }
 
 void
-SdlUserEventVisitor::Visit(UserEventData::PauseApplication &)
+SdlUserEventVisitor::Visit(PauseApplication & /*e*/)
 {
 	app_.Pause();
+}
+
+void 
+SdlUserEventVisitor::Visit(UserEventData::ChangeMouseMode & /*e*/)
+{
+	app_.ChangeMouseMode();
+}
+
+void 
+SdlUserEventVisitor::Visit(UserEventData::SubmitDraftRoads & e)
+{
+	app_.SubmitDraftRoads(e.yesNo);
 }
