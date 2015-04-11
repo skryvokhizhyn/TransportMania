@@ -1,24 +1,21 @@
 #pragma once
 
 #include "RailRoadVisitor.h"
-#include "Point3d.h"
+#include "TerrainRange.h"
 
 namespace trm
 {
-	class RailRoadMover
+	class RailRoadRangeGenerator
 		: public RailRoadVisitor
 	{
 	public:
-		RailRoadMover(Point3d p, const float dist);
-
 		virtual void Visit(RailRoadArc & rra) override;
 		virtual void Visit(RailRoadLine & rrl) override;
 
-		const Point3d & GetPosition() const;
+		const TerrainRange & GetRange();
 
 	private:
-		const float dist_;
-		Point3d pos_;
+		TerrainRange range_;
 	};
 
 } // namespace trm

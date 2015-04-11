@@ -3,8 +3,11 @@
 
 #include "Types.h"
 #include "RailRoadVisitor.h"
+
 #include <boost/noncopyable.hpp>
+
 #include <memory>
+#include <vector>
 
 namespace trm
 {
@@ -26,6 +29,7 @@ namespace trm
 	};
 
 	typedef std::shared_ptr<RailRoad> RailRoadPtr;
+	typedef std::vector<RailRoadPtr> RailRoadPtrs;
 
 } // namespace trm
 

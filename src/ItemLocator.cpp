@@ -76,7 +76,7 @@ class ItemLocator::ItemLocatorImpl
 	using IdToBoxMap = std::unordered_map<UniqueId, Box2d>;
 	using RTreeValue = IdToBoxMap::key_type;
 	using MapIndexableType = priv::MapIndexableGetter<IdToBoxMap>;
-	using CreationAlgo = bg::index::rstar<16, 4>;
+	using CreationAlgo = bg::index::rstar<16u>;
 	using RTree = bg::index::rtree<RTreeValue, CreationAlgo, MapIndexableType>;
 
 public:

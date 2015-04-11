@@ -64,7 +64,7 @@ WindowManager::CreateNOButton(EventAction cb)
 
 	WindowItemBoxPtr windowPtr(new WindowItemBox(windowId, sz, TextureId::NoButton,
 		EventContainer::Create({cb, WindowCloseEvent(windowId)}, EventActionType::Single), 
-		WindowPosition::p50, WindowPosition::p0));
+		WindowPosition::p75, WindowPosition::p0));
 
 	ProcessWindowData(std::move(windowPtr));
 }

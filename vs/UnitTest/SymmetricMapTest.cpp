@@ -72,3 +72,29 @@ BOOST_AUTO_TEST_CASE(SymmetricMapTest4)
 	BOOST_CHECK(sm.Normalized(SymmetricIntMap::KeyPair(0, 1)));
 	BOOST_CHECK(!sm.Normalized(SymmetricIntMap::KeyPair(1, 0)));
 }
+
+BOOST_AUTO_TEST_CASE(SymmetricMapTest5)
+{
+	SymmetricIntMap sm;
+
+	sm.Insert(SymmetricIntMap::KeyPair(0, 1), 1);
+	
+	BOOST_CHECK(sm.Exists(SymmetricIntMap::KeyPair(0, 1)));
+	BOOST_CHECK(sm.Exists(SymmetricIntMap::KeyPair(1, 0)));
+	BOOST_CHECK(!sm.Exists(SymmetricIntMap::KeyPair(1, 1)));
+}
+
+BOOST_AUTO_TEST_CASE(SymmetricMapTest7)
+{
+	SymmetricIntMap sm;
+
+	BOOST_CHECK(!sm.Exists(SymmetricIntMap::KeyPair(0, 1)));
+
+	sm.Insert(SymmetricIntMap::KeyPair(0, 1), 1);
+	
+	BOOST_CHECK(sm.Exists(SymmetricIntMap::KeyPair(0, 1)));
+
+	sm.Clear();
+
+	BOOST_CHECK(!sm.Exists(SymmetricIntMap::KeyPair(0, 1)));
+}

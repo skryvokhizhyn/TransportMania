@@ -6,7 +6,7 @@
 #include "WorldProjection.h"
 #include "Terrain.h"
 #include "StaticSceneObject.h"
-#include "RoadNetwork.h"
+#include "RoadNetworkManager.h"
 #include "RailRoad.h"
 #include "Train.h"
 #include "TransportManager.h"
@@ -23,6 +23,7 @@
 namespace trm
 {
 	class StaticSceneObject;
+	class TerrainRange;
 	struct Point3d;
 
 	class Application
@@ -55,6 +56,8 @@ namespace trm
 		void PutRoad(const Point2d & from, const Point2d & to, bool commit);
 		void PutRailRoadLine(const Point3d & from, const Point3d & to);
 		void PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a, const Rotation r);
+		void PutRailRoad(const RailRoadPtr & rrp);
+		void PutRoadDraft(const RailRoadPtr & rrp);
 		void PutLineDraft(const Point3d & from, const Point3d & to);
 
 		void EmulateDynamicScene1();
@@ -83,7 +86,7 @@ namespace trm
 		TerrainSceneObjectPtr terrainScenePtr_;
 		StaticSceneObjects staticSceneObjects_;
 		StaticSceneObjects tempRoadObjects_;
-		RoadNetwork roadNetwork_;
+		RoadNetworkManager roadNetworkManager_;
 		RoadRoutePtrs roadRoutePtrs_;
 		TransportManagers managers_;
 		TextManager textManager_;

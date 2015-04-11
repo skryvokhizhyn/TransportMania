@@ -107,6 +107,7 @@
     <ClCompile Include="..\..\src\RailRoadSizer.cpp" />
     <ClCompile Include="..\..\src\RangeRectangle.cpp" />
     <ClCompile Include="..\..\src\RoadNetwork.cpp" />
+    <ClCompile Include="..\..\src\RoadNetworkManager.cpp" />
     <ClCompile Include="..\..\src\RoadPoint.cpp" />
     <ClCompile Include="..\..\src\RoadRoute.cpp" />
     <ClCompile Include="..\..\src\ScreenSizeManipulator.cpp" />

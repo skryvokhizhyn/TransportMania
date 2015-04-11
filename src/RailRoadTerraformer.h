@@ -1,24 +1,22 @@
 #pragma once
 
 #include "RailRoadVisitor.h"
-#include "Point3d.h"
+#include "TerraformFunction.h"
 
 namespace trm
 {
-	class RailRoadMover
+	class RailRoadTerraformer
 		: public RailRoadVisitor
 	{
 	public:
-		RailRoadMover(Point3d p, const float dist);
-
 		virtual void Visit(RailRoadArc & rra) override;
 		virtual void Visit(RailRoadLine & rrl) override;
 
-		const Point3d & GetPosition() const;
+		// moves the terraformer out
+		TerraformFunctionPtr GetTerraformer();
 
 	private:
-		const float dist_;
-		Point3d pos_;
+		TerraformFunctionPtr terraformer_;
 	};
 
 } // namespace trm

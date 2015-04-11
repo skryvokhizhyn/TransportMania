@@ -234,7 +234,7 @@ BOOST_AUTO_TEST_CASE(PointIn3DTest2)
 
 	const Point3d p = wp.ToWorldCoordinates(Point2d(0, 0));
 
-	const Point3d c = wp.GetCameraPosition();
+	const Point3d & c = wp.GetCameraPosition();
 
 	BOOST_CHECK_EQUAL(p, Point3d(0, 0, 99));
 	BOOST_CHECK_EQUAL(c, Point3d(0, 0, 100));

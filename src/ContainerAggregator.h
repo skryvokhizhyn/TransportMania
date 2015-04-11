@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/ref.hpp>
 #include <boost/circular_buffer.hpp>
 
 #include <cstdint>

@@ -1,7 +1,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <RoadNetworkImpl.h>
-#include <RoadNetwork.h>
+#include <RoadNetworkManager.h>
 #include <RailRoadFactory.h>
 #include <Point3d.h>
 #include <Point2d.h>
@@ -191,11 +191,11 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest8)
 
 BOOST_AUTO_TEST_CASE(RoadNetworkTest9)
 {
-	RoadNetwork rn;
-	rn.Insert(RailRoadFactory::Line(Point3d(), Point3d(1, 0, 0)));
-	rn.Insert(RailRoadFactory::Line(Point3d(2, 0, 0), Point3d(1, 0, 0)));
-	rn.Insert(RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2), Rotation::AntiClockwise));
-	rn.Insert(RailRoadFactory::Line(Point3d(4, 2, 0), Point3d(4, 4, 0)));
+	RoadNetworkManager rn;
+	rn.InsertPermanent(RailRoadFactory::Line(Point3d(), Point3d(1, 0, 0)));
+	rn.InsertPermanent(RailRoadFactory::Line(Point3d(2, 0, 0), Point3d(1, 0, 0)));
+	rn.InsertPermanent(RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2), Rotation::AntiClockwise));
+	rn.InsertPermanent(RailRoadFactory::Line(Point3d(4, 2, 0), Point3d(4, 4, 0)));
 
 	RoadRoutePtr rrp = rn.GetRoute(Point3d(), Point3d(4, 4, 0));
 
@@ -217,10 +217,10 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest10)
 	arcPtr->Accept(rrs);
 	const float arcLen = rrs.GetLenght();
 
-	RoadNetwork rn;
-	rn.Insert(RailRoadFactory::Line(p1, p2));
-	rn.Insert(arcPtr);
-	rn.Insert(RailRoadFactory::Line(p3, p4));
+	RoadNetworkManager rn;
+	rn.InsertPermanent(RailRoadFactory::Line(p1, p2));
+	rn.InsertPermanent(arcPtr);
+	rn.InsertPermanent(RailRoadFactory::Line(p3, p4));
 
 	RoadRoutePtr rrp = rn.GetRoute(p1, p4);
 
@@ -243,14 +243,3 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest10)
 	rp.Move(5.0f);
 	BOOST_CHECK_EQUAL(rp.Get(), p4);
 } 
-
-/*
-	4212726775 1
-	4223548445 2
-
-	4223548445 2
-	4223416913 1
-
-	4223416913 2
-	4212860331 1
-*/

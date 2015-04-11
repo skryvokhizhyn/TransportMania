@@ -26,9 +26,9 @@ TrainVisibleObject::TrainVisibleObject(const TrainPartType type, PositionWPtr po
 
 	drawer_.Load(md);
 
-	if (auto posPtr = sourcePosition_.lock())
+	if (auto posPtrLocked = sourcePosition_.lock())
 	{
-		const Point3d & startingPos = *posPtr;
+		const Point3d & startingPos = *posPtrLocked;
 		positionFrom_ = startingPos;
 		positionTo_ = nextPos;
 	}

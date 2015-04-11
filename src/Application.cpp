@@ -1,20 +1,21 @@
 #include "Application.h"
 #include "Terraformer.h"
 #include "Point2d.h"
-#include "TerrainRangeLine.h"
-#include "TerrainRangeArc.h"
+//#include "TerrainRangeLine.h"
+//#include "TerrainRangeArc.h"
 #include "TerrainRangeCircle.h"
 #include "TerraformFunction.h"
 #include "HeightMapLoaderFactory.h"
 #include "RailRoadFactory.h"
 #include "StaticSceneObjectFactory.h"
-#include "Train.h"
 #include "Settings.h"
 #include "Angle.h"
 #include "Logger.h"
 #include "TerrainPositionLocator.h"
 #include "TerrainPointCollector.h"
 #include "SceneContent.h"
+#include "RailRoadRangeGenerator.h"
+#include "RailRoadTerraformer.h"
 
 #include "TextManagerProxy.h"
 #include "ComponentHolderProxy.h"
@@ -241,14 +242,38 @@ void
 Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*radii*/)
 {
 	//TerrainRangeLine range(trm::Point2d(x, y), trm::Point2d(x + 10.0f, y), radii);
-	TerrainRangeArc range(TerrainRangeArc::Data(Point2d(5, 15), Degrees(150), Point2d(15, 15), Rotation::AntiClockwise), 1);
+	//TerrainRangeArc range(TerrainRangeArc::Data(Point2d(5, 15), Degrees(150), Point2d(15, 15), Rotation::AntiClockwise), 1);
 	//TerrainRangeCircle range(trm::Point2d(x, y), radii);
 
 	//TerrainRangeLine range(trm::Point2d(10, 10), trm::Point2d(50, 10), 10);
 
-	auto tf = TerraformFunctionFactory::GetConstant(0.0f);
+	/*auto tf = TerraformFunctionFactory::GetConstant(0.0f);
 	Terraformer t(range, *tf.get());
 	terrainPtr_->Apply(t);
+
+	terrainScenePtr_->UpdateRequired();*/
+}
+
+void 
+Application::PutRailRoad(const RailRoadPtr & rrp)
+{
+	RailRoadRangeGenerator rrrg;
+	rrp->Accept(rrrg);
+
+	RailRoadTerraformer rrtf;
+	rrp->Accept(rrtf);
+
+	TerraformFunctionPtr tFuncPtr = rrtf.GetTerraformer();
+
+	Terraformer t(rrrg.GetRange(), *tFuncPtr);
+	terrainPtr_->Apply(t);
+
+	if (!roadNetworkManager_.InsertPermanent(rrp))
+	{
+		return;
+	}
+
+	staticSceneObjects_.push_back(StaticSceneObjectFactory::ForRailRoad(rrp));
 
 	terrainScenePtr_->UpdateRequired();
 }
@@ -256,43 +281,15 @@ Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*
 void 
 Application::PutRailRoadLine(const Point3d & from, const Point3d & to)
 {
-	TerrainRangeLine range(Point2d::Cast(from), Point2d::Cast(to), RailRoad::GetTotalWidth());
-
-	auto tf = TerraformFunctionFactory::GetLinear(from, to);
-	Terraformer t(range, *tf.get());
-	terrainPtr_->Apply(t);
-
 	const RailRoadPtr rrp = RailRoadFactory::Line(from, to);
-
-	if (!roadNetwork_.Insert(rrp))
-	{
-		return;
-	}
-
-	staticSceneObjects_.push_back(StaticSceneObjectFactory::ForRailRoad(rrp));
-
-	terrainScenePtr_->UpdateRequired();
+	PutRailRoad(rrp);
 }
 
 void 
 Application::PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a, const Rotation r)
 {
-	TerrainRangeArc range(TerrainRangeArc::Data(Point2d::Cast(from), a, c, r), RailRoad::GetTotalWidth());
-
-	auto tf = TerraformFunctionFactory::GetConstant(from.z());
-	Terraformer t(range, *tf.get());
-	terrainPtr_->Apply(t);
-
 	const RailRoadPtr rrp = RailRoadFactory::Arc(from, a, c, r);
-	
-	if (!roadNetwork_.Insert(rrp))
-	{
-		return;
-	}
-
-	staticSceneObjects_.push_back(StaticSceneObjectFactory::ForRailRoad(rrp));
-
-	terrainScenePtr_->UpdateRequired();
+	PutRailRoad(rrp);
 }
 
 void 
@@ -309,7 +306,7 @@ Application::EmulateDynamicScene1()
 	PutRailRoadLine(p1, p2);
 	PutRailRoadArc(p3, Point2d(30, 30), Degrees(90), Rotation::AntiClockwise);
 
-	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p3, p2);
+	const RoadRoutePtr rrPtr = roadNetworkManager_.GetRoute(p3, p2);
 
 	managers_.emplace_back(RoadRouteHolder(rrPtr, Heading::Forward));
 }
@@ -333,7 +330,7 @@ Application::EmulateDynamicScene2()
 	PutRailRoadArc(p4, c2, a, Rotation::Clockwise);
 	PutRailRoadLine(p5, p6);
 	 
-	const RoadRoutePtr rrPtr = roadNetwork_.GetRoute(p1, p6);
+	const RoadRoutePtr rrPtr = roadNetworkManager_.GetRoute(p1, p6);
 
 	roadRoutePtrs_.push_back(rrPtr);
 }
@@ -357,9 +354,16 @@ Application::ChangeMouseMode()
 }
 
 void 
-Application::SubmitDraftRoads(bool /*yesNo*/)
+Application::SubmitDraftRoads(bool yesNo)
 {
+	RailRoadPtrs tempRoads = roadNetworkManager_.GetTemporary();
+	tempRoadObjects_.clear();
+	roadNetworkManager_.ClearTemporary();
 
+	if (yesNo)
+	{
+		boost::for_each(tempRoads, boost::bind(&Application::PutRailRoad, this, _1));
+	}
 }
 
 void 
@@ -372,23 +376,37 @@ Application::PutRoad(const Point2d & from, const Point2d & to, bool commit)
 
 		if (foundFrom && foundTo && foundFrom != foundTo)
 		{
-			//PutRailRoadLine(foundFrom.get(), foundTo.get());
 			PutLineDraft(foundFrom.get(), foundTo.get());
 		}
 	}
 }
 
 void 
-Application::PutLineDraft(const Point3d & from, const Point3d & to)
+Application::PutRoadDraft(const RailRoadPtr & rrp)
 {
-	TerrainRangeLine range(Point2d::Cast(from), Point2d::Cast(to), RailRoad::GetTotalWidth());
+	if (!roadNetworkManager_.InsertTemporary(rrp))
+	{
+		return;
+	}
+
+	if (tempRoadObjects_.empty())
+	{
+		SceneContent::Init(windowManager_, SceneContent::Type::Draw);
+	}
+
+	RailRoadRangeGenerator rrrg;
+	rrp->Accept(rrrg);
 
 	TerrainPointCollector tpc;
-	
-	Terraformer t(range, tpc);
+	Terraformer t(rrrg.GetRange(), tpc);
 	terrainPtr_->Apply(t);
 
 	tempRoadObjects_.push_back(StaticSceneObjectFactory::ForTerrainCover(tpc.GetPoints()));
+}
 
-	SceneContent::Init(windowManager_, SceneContent::Type::Draw);
+void 
+Application::PutLineDraft(const Point3d & from, const Point3d & to)
+{
+	const RailRoadPtr rrp = RailRoadFactory::Line(from, to);
+	PutRoadDraft(rrp);
 }

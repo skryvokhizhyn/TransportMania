@@ -20,7 +20,7 @@ public class TransportManiaActivity extends SDLActivity {
 	}
 
 	private static final String PREFERENCE_FIRST_RUN = "PREFERENCE_FIRST_RUN";
-	private static boolean FORCE_RESET_ASSETS = true;
+	private static boolean FORCE_RESET_ASSETS = false;
 	private static final String ASSETS_LOCATION = "/TransportMania/";
 
 	void createParentFolderIfNotExist(String path) throws Exception {
@@ -36,11 +36,18 @@ public class TransportManiaActivity extends SDLActivity {
 	}
 
 	private void copyFile(String fileName) throws Exception {
-		AssetManager assetManager = getAssets();
-
-		InputStream in = assetManager.open(fileName);
+		
+		Log.v("TRM", Environment.getExternalStorageDirectory().toString());
+		
 		String path = new String(Environment.getExternalStorageDirectory()
 				.getPath() + ASSETS_LOCATION + fileName);
+		
+		Log.v("TRM", fileName);
+		Log.v("TRM", path);
+		
+		AssetManager assetManager = getAssets();
+		
+		InputStream in = assetManager.open(fileName);
 
 		createParentFolderIfNotExist(path);
 
@@ -59,31 +66,44 @@ public class TransportManiaActivity extends SDLActivity {
 		out.flush();
 		out.close();
 		out = null;
+		
+		Log.v("TRM", "File " + fileName + " copied");
 	}
 
+	private void copyFilesFromFolder(String folder) throws Exception {
+		String pathToFolder = new String(Environment.getExternalStorageDirectory()
+			.getPath() + ASSETS_LOCATION + folder);
+
+		File filesFolder = new File(pathToFolder);
+		File [] files = filesFolder.listFiles();
+		
+		for (File f : files) {
+			
+			if (f.exists() || !FORCE_RESET_ASSETS)
+				continue;
+			
+		    copyFile(folder + '/' + f.getName());
+		}
+	}
+	
 	private void copyFonts() throws Exception {
-		copyFile("Fonts/arial_ttf_cyr_lat.fnt");
+		Log.v("TRM", "Fonts...");
+		copyFilesFromFolder("Fonts");
 	}
 
 	private void copyHeightMaps() throws Exception {
-		copyFile("HeightMaps/hf_513.bmp");
+		Log.v("TRM", "Height Maps...");
+		copyFilesFromFolder("HeightMaps");
 	}
 
 	private void copyModels() throws Exception {
-		copyFile("Models/wagon.obj");
+		Log.v("TRM", "Models...");
+		copyFilesFromFolder("Models");
 	}
 
 	private void copyTextures() throws Exception {
-		copyFile("Textures/arial_ttf_cyr_lat_0.png");
-		copyFile("Textures/grass.png");
-		copyFile("Textures/graybackground.png");
-		copyFile("Textures/okbutton.png");
-		copyFile("Textures/nobutton.png");
-		copyFile("Textures/railway.png");
-		copyFile("Textures/windowbox.png");
-		copyFile("Textures/woodwagon.png");
-		copyFile("Textures/pausebutton.png");
-		copyFile("Textures/mousemode.png");
+		Log.v("TRM", "Textures...");
+		copyFilesFromFolder("Textures");
 	}
 
 	private void resetAssets() {
@@ -107,13 +127,13 @@ public class TransportManiaActivity extends SDLActivity {
 		super.onCreate(savedInstanceState);
 
 		// do first run assets deployment
-		SharedPreferences p = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		boolean firstRun = p.getBoolean(PREFERENCE_FIRST_RUN, true);
+		//SharedPreferences p = PreferenceManager
+		//		.getDefaultSharedPreferences(this);
+		//boolean firstRun = p.getBoolean(PREFERENCE_FIRST_RUN, true);
 
-		if (FORCE_RESET_ASSETS || firstRun) {
-			p.edit().putBoolean(PREFERENCE_FIRST_RUN, false).commit();
+		//if (FORCE_RESET_ASSETS || firstRun) {
 			resetAssets();
-		}
+			//p.edit().putBoolean(PREFERENCE_FIRST_RUN, false).commit();
+		//}
 	}
 }

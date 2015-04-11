@@ -420,6 +420,15 @@
     <ClCompile Include="..\..\src\SceneContent.cpp">
       <Filter>Application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\RoadNetworkManager.cpp">
+      <Filter>RoadNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadRangeGenerator.cpp">
+      <Filter>Railroad\Visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadTerraformer.cpp">
+      <Filter>Railroad\Visitors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -955,6 +964,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\SubmitDraftRoadsEvent.h">
       <Filter>Events\SingleEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Point3i.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RoadNetworkManager.h">
+      <Filter>RoadNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadRangeGenerator.h">
+      <Filter>Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadTerraformer.h">
+      <Filter>Railroad\Visitors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

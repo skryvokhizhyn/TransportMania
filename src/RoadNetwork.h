@@ -1,11 +1,9 @@
 #pragma once
 
-#include "RailRoad.h"
-#include "SymmetricMap.h"
-#include "RoadRoute.h"
 #include <boost/noncopyable.hpp>
+
 #include <memory>
-#include <map>
+#include <deque>
 
 namespace trm
 {
@@ -15,23 +13,27 @@ namespace network_impl
 
 } // network_impl
 
+	struct Point3i;
+
 	class RoadNetwork
 		: boost::noncopyable
 	{
 	public:
-		RoadNetwork();
+		using Route = std::deque<Point3i>;
 
-		bool Insert(const RailRoadPtr & p);
-		RoadRoutePtr GetRoute(const Point3d & from, const Point3d & to) const;
+	public:
+		RoadNetwork();
+		~RoadNetwork();
+
+		bool Insert(const Point3i & from, const Point3i & to, float dist);
+		Route GetRoute(const Point3i & from, const Point3i & to) const;
 		
 	private:
-		typedef network_impl::RoadNetworkImpl<size_t, float> RoadNetworkType;
-		typedef std::shared_ptr<RoadNetworkType> ImplPtr;
-		typedef SymmetricMap<size_t, RailRoadPtr> RoadsType;
+		typedef network_impl::RoadNetworkImpl<Point3i, float> RoadNetworkType;
+		typedef std::unique_ptr<RoadNetworkType> ImplPtr;
 		
 	private:
 		ImplPtr implPtr_;
-		RoadsType roads_;
 	};
 
 } // namespace trm

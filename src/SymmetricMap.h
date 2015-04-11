@@ -9,17 +9,20 @@ namespace trm
 	{
 	public:
 		typedef std::pair<Key,Key> KeyPair;
+		typedef std::pair<Value, bool> ValueType;
+		typedef std::map<KeyPair, ValueType> MapType;
 
 	public:
 		bool Insert(const KeyPair & k, Value);
 		bool Erase(const KeyPair & k);
 		bool Find(const KeyPair & k, Value & v, bool & d) const;
+		bool Exists(const KeyPair & k) const;
 		
 		bool Normalized(const KeyPair & k) const;
 
-	private:
-		typedef std::pair<Value, bool> ValueType;
-		typedef std::map<KeyPair, ValueType> MapType;
+		void Clear();
+
+		const MapType & Data() const;
 
 	private:
 		KeyPair NormalizePair(const KeyPair & k) const;
@@ -38,7 +41,7 @@ namespace trm
 			direct = false;
 		}
 
-		return map_.emplace(std::make_pair(std::move(p), std::make_pair(std::move(v), direct))).second;
+		return map_.emplace(std::move(p), std::make_pair(std::move(v), direct)).second;
 	}
 
 	template<typename Key, typename Value>
@@ -85,6 +88,32 @@ namespace trm
 		d = (k == p) ? b : !b;
 
 		return true;
+	}
+
+	template<typename Key, typename Value>
+	bool SymmetricMap<Key, Value>::Exists(const KeyPair & k) const
+	{
+		const KeyPair p = NormalizePair(k);
+
+		return map_.find(p) != map_.end();
+	}
+
+	/*template<typename Key, typename Value>
+	void SymmetricMap<Key, Value>::CopyFrom(const SymmetricMap & other)
+	{
+		map_.insert(other.map_.begin(), other.map_.end());
+	}*/
+
+	template<typename Key, typename Value>
+	void SymmetricMap<Key, Value>::Clear()
+	{
+		map_.clear();
+	}
+
+	template<typename Key, typename Value>
+	auto SymmetricMap<Key, Value>::Data() const -> const MapType &
+	{
+		return map_;
 	}
 
 } // namespace trm
