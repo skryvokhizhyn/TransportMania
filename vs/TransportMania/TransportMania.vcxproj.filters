@@ -70,6 +70,12 @@
     <Filter Include="Events\SceneEventStateMachine">
       <UniqueIdentifier>{5d8d19b0-1b26-4f73-b1a8-0ba7b0b4d87a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Terrain\Terraforming">
+      <UniqueIdentifier>{c0e32ea7-735f-436e-a3ad-3c7abfedf035}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Terrain\Ranges">
+      <UniqueIdentifier>{78ae1390-38cb-49d7-9ebc-5202f3b68fc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -182,24 +188,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Variance.cpp">
       <Filter>Terrain\LOD</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Terraformer.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TerraformFunction.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TerrainRange.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TerrainRangeArc.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TerrainRangeCircle.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TerrainRangeLine.cpp">
-      <Filter>Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\TransportManager.cpp">
       <Filter>Transport</Filter>
@@ -399,9 +387,6 @@
     <ClCompile Include="..\..\src\ModelReader.cpp">
       <Filter>Model</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\TerrainHeightCheck.cpp">
-      <Filter>Terrain</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\ScreenSizeManipulator.cpp">
       <Filter>Application</Filter>
     </ClCompile>
@@ -410,9 +395,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\TerrainPositionLocator.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TerrainPointCollector.cpp">
-      <Filter>Terrain</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\TerrainCoverDrawableObject.cpp">
       <Filter>Terrain</Filter>
@@ -428,6 +410,36 @@
     </ClCompile>
     <ClCompile Include="..\..\src\RailRoadTerraformer.cpp">
       <Filter>Railroad\Visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadClosestPoint.cpp">
+      <Filter>Railroad\Visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Terraformer.cpp">
+      <Filter>Terrain\Terraforming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerraformFunction.cpp">
+      <Filter>Terrain\Terraforming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainHeightCheck.cpp">
+      <Filter>Terrain\Terraforming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainPointCollector.cpp">
+      <Filter>Terrain\Terraforming</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRange.cpp">
+      <Filter>Terrain\Ranges</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRangeArc.cpp">
+      <Filter>Terrain\Ranges</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRangeCircle.cpp">
+      <Filter>Terrain\Ranges</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainRangeLine.cpp">
+      <Filter>Terrain\Ranges</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\TerrainHeightGetter.cpp">
+      <Filter>Terrain\Terraforming</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -586,24 +598,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Variance.h">
       <Filter>Terrain\LOD</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Terraformer.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TerraformFunction.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TerrainRange.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TerrainRangeArc.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TerrainRangeCircle.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\TerrainRangeLine.h">
-      <Filter>Terrain</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\TrainStateMachine.h">
       <Filter>Transport</Filter>
@@ -920,9 +914,6 @@
     <ClInclude Include="..\..\src\ApplicationPauseEvent.h">
       <Filter>Events\SingleEvents</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TerrainHeightCheck.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\ScreenSizeManipulator.h">
       <Filter>Application</Filter>
     </ClInclude>
@@ -950,9 +941,6 @@
     <ClInclude Include="..\..\src\ContainerAggregator.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TerrainPointCollector.h">
-      <Filter>Terrain</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\TerrainCoverDrawableObject.h">
       <Filter>Terrain</Filter>
     </ClInclude>
@@ -976,6 +964,39 @@
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadTerraformer.h">
       <Filter>Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Point2i.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadClosestPoint.h">
+      <Filter>Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Terraformer.h">
+      <Filter>Terrain\Terraforming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerraformFunction.h">
+      <Filter>Terrain\Terraforming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainHeightCheck.h">
+      <Filter>Terrain\Terraforming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainPointCollector.h">
+      <Filter>Terrain\Terraforming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainHeightGetter.h">
+      <Filter>Terrain\Terraforming</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainRange.h">
+      <Filter>Terrain\Ranges</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainRangeArc.h">
+      <Filter>Terrain\Ranges</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainRangeCircle.h">
+      <Filter>Terrain\Ranges</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainRangeLine.h">
+      <Filter>Terrain\Ranges</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

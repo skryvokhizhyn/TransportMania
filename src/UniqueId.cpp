@@ -2,11 +2,18 @@
 
 using namespace trm;
 
-UniqueId::UniqueId()
-	: id_(0)
+UniqueId::UniqueId(IdType val)
+	: id_(val)
+{}
+
+UniqueId
+UniqueId::Generate()
 {
 	static IdType global_id = IdType();
-	id_ = global_id++;
+
+	UniqueId id(global_id++);
+	
+	return id;
 }
 
 bool

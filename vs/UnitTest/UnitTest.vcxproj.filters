@@ -257,6 +257,12 @@
     <ClCompile Include="..\..\src\RoadNetworkManager.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadClosestPoint.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadRangeGenerator.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

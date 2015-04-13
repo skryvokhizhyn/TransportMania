@@ -8,7 +8,7 @@ using namespace trm;
 BOOST_AUTO_TEST_CASE(ItemLocatorTest1)
 {
 	ItemLocator il;
-	UniqueId id;
+	UniqueId id = UniqueId::Generate();
 	il.Put(id, {Point2d(0, 0), Point2d(0, 1), Point2d(1, 1), Point2d(1, 0)});
 
 	BOOST_CHECK_EQUAL(il.At({Point2d(0, 0), Point2d(0, 1), Point2d(1, 1)}).size(), 1u);
@@ -27,17 +27,19 @@ BOOST_AUTO_TEST_CASE(ItemLocatorTest1)
 BOOST_AUTO_TEST_CASE(ItemLocatorTest2)
 {
 	ItemLocator il;
-	UniqueId id;
+	UniqueId id = UniqueId::Generate();
 	il.Put(id, {Point2d(0, 0), Point2d(0, 1), Point2d(1, 1), Point2d(1, 0)});
 
 	BOOST_CHECK_THROW(il.Put(id, {Point2d(0, 0)}), std::runtime_error);
-	BOOST_CHECK_THROW(il.Remove(UniqueId()), std::runtime_error);
+	BOOST_CHECK_THROW(il.Remove(UniqueId::Generate()), std::runtime_error);
 }
 
 BOOST_AUTO_TEST_CASE(ItemLocatorTest3)
 {
 	ItemLocator il;
-	UniqueId id1, id2;
+	UniqueId id1 = UniqueId::Generate();
+	UniqueId id2 = UniqueId::Generate();
+
 	il.Put(id1, {Point2d(-1, -1), Point2d(-1, 1), Point2d(0, 1), Point2d(0, -1)});
 	il.Put(id2, {Point2d(1, 1), Point2d(1, -1), Point2d(0, -1), Point2d(0, 1)});
 	
@@ -48,11 +50,13 @@ BOOST_AUTO_TEST_CASE(ItemLocatorTest3)
 	BOOST_CHECK_EQUAL(ids[1], id2);
 }
 
+#include <map>
+
 BOOST_AUTO_TEST_CASE(ItemLocatorTest4)
 {
 	ItemLocator il;
-	il.Put(UniqueId(), {Point2d(-2, -1), Point2d(-2, 1), Point2d(-1, 1), Point2d(-1, -1)});
-	il.Put(UniqueId(), {Point2d(2, 1), Point2d(2, -1), Point2d(1, -1), Point2d(1, 1)});
+	il.Put(UniqueId::Generate(), {Point2d(-2, -1), Point2d(-2, 1), Point2d(-1, 1), Point2d(-1, -1)});
+	il.Put(UniqueId::Generate(), {Point2d(2, 1), Point2d(2, -1), Point2d(1, -1), Point2d(1, 1)});
 	
 	BOOST_CHECK_EQUAL(il.At({Point2d(-0.5, -0.5), Point2d(-0.5, 0.5), Point2d(0.5, 0.5)}).size(), 0u);
 }

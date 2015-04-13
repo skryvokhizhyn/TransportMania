@@ -14,4 +14,6 @@ namespace trm
 		const ScreenSizeManipulator & sm,
 		const TerrainPtr & tPtr);
 
+	OptionalPoint3d GetPointAtTerrain(const Point2d & p, const TerrainPtr & tPtr);
+
 } // namespace trm

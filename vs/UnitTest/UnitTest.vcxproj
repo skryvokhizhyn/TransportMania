@@ -100,10 +100,12 @@
     <ClCompile Include="..\..\src\PoolUsageCounterHolder.cpp" />
     <ClCompile Include="..\..\src\RailRoad.cpp" />
     <ClCompile Include="..\..\src\RailRoadArc.cpp" />
+    <ClCompile Include="..\..\src\RailRoadClosestPoint.cpp" />
     <ClCompile Include="..\..\src\RailRoadFactory.cpp" />
     <ClCompile Include="..\..\src\RailRoadLine.cpp" />
     <ClCompile Include="..\..\src\RailRoadMover.cpp" />
     <ClCompile Include="..\..\src\RailRoadParametersTaker.cpp" />
+    <ClCompile Include="..\..\src\RailRoadRangeGenerator.cpp" />
     <ClCompile Include="..\..\src\RailRoadSizer.cpp" />
     <ClCompile Include="..\..\src\RangeRectangle.cpp" />
     <ClCompile Include="..\..\src\RoadNetwork.cpp" />

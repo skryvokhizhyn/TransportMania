@@ -4,7 +4,7 @@
 using namespace trm;
 
 WindowItemText::WindowItemText(const std::wstring & text, float size, WindowPosition horPos, WindowPosition verPos)
-	: WindowItem(UniqueId(), TextureId::Font, EventHandlerPtr(), horPos, verPos)
+	: WindowItem(UniqueId::Generate(), TextureId::Font, EventHandlerPtr(), horPos, verPos)
 	, text_(text)
 	, size_(size)
 {}

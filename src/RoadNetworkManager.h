@@ -5,9 +5,14 @@
 #include "RailRoad.h"
 #include "Point3i.h"
 #include "RoadRoute.h"
+#include "ItemLocator.h"
+
+#include <unordered_map>
 
 namespace trm
 {
+	class UniqueId;
+
 	class RoadNetworkManager
 	{
 	public:
@@ -18,13 +23,18 @@ namespace trm
 		RailRoadPtrs GetTemporary() const;
 		void ClearTemporary();
 
+		Point2d AdjustPoint(const Point2d & p) const;
+
 	private:
-		using RoadsHodler = SymmetricMap<Point3i, RailRoadPtr>;
+		using RoadMap = std::unordered_map<UniqueId, RailRoadPtr>;
+		using RoadSearcher = SymmetricMap<Point3i, UniqueId>;
 
 	private:
 		RoadNetwork roadNetwork_;
-		RoadsHodler permRoads_;
-		RoadsHodler tempRoads_;
+		RoadSearcher permRoads_;
+		RoadSearcher tempRoads_;
+		RoadMap roadMap_;
+		ItemLocator locator_;
 	};
 
 } // namespace trm

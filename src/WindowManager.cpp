@@ -45,7 +45,7 @@ WindowManager::CreateOKButton(EventAction cb)
 	const float windowSize = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
 
 	Size2f sz(windowSize, windowSize);
-	UniqueId windowId;
+	UniqueId windowId = UniqueId::Generate();
 
 	WindowItemBoxPtr windowPtr(new WindowItemBox(windowId, sz, TextureId::OkButton,
 		EventContainer::Create({cb, WindowCloseEvent(windowId)}, EventActionType::Single), 
@@ -60,7 +60,7 @@ WindowManager::CreateNOButton(EventAction cb)
 	const float windowSize = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
 
 	Size2f sz(windowSize, windowSize);
-	UniqueId windowId;
+	UniqueId windowId = UniqueId::Generate();
 
 	WindowItemBoxPtr windowPtr(new WindowItemBox(windowId, sz, TextureId::NoButton,
 		EventContainer::Create({cb, WindowCloseEvent(windowId)}, EventActionType::Single), 
@@ -76,7 +76,7 @@ WindowManager::CreatePauseButton()
 
 	Size2f sz(windowSize, windowSize);
 
-	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId(), sz, TextureId::PauseButton,
+	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId::Generate(), sz, TextureId::PauseButton,
 		EventContainer::Create({ApplicationPauseEvent()}, EventActionType::Repeatable), 
 		WindowPosition::p100, WindowPosition::p100));
 
@@ -88,7 +88,7 @@ WindowManager::CreateLockScreen()
 {
 	Size2f sz = Size2f::Cast(screenSize_);
 
-	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId(), sz, TextureId::TransparentGray,
+	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId::Generate(), sz, TextureId::TransparentGray,
 		EventContainer::Create({}, EventActionType::Repeatable), 
 		WindowPosition::p0, WindowPosition::p0));
 
@@ -102,7 +102,7 @@ WindowManager::CreateTextWindow(const std::wstring & text)
 	Size2f windowSize = Size2f::Cast(screenSize_);
 	windowSize *= TEXT_WINDOW_SIZE;
 
-	UniqueId windowId;
+	UniqueId windowId = UniqueId::Generate();
 
 	WindowItemBoxPtr windowPtr(new WindowItemBox(windowId, windowSize, TextureId::WindowBox,
 		EventContainer::Create({WindowCloseEvent(windowId)}, EventActionType::Single), 
@@ -138,7 +138,7 @@ WindowManager::CreateMouseModeButton()
 
 	Size2f sz(windowSize, windowSize);
 
-	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId(), sz, TextureId::MouseMode,
+	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId::Generate(), sz, TextureId::MouseMode,
 		EventContainer::Create({MouseModeChangeEvent()}, EventActionType::Repeatable), 
 		WindowPosition::p100, WindowPosition::p50));
 

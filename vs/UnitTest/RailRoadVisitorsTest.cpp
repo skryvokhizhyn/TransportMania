@@ -5,6 +5,9 @@
 #include <RailRoadArc.h>
 #include <RailRoadLine.h>
 #include <CommonUtils.h>
+#include <RailRoadClosestPoint.h>
+#include <Point2d.h>
+
 #include <boost/math/constants/constants.hpp>
 
 using namespace trm;
@@ -91,4 +94,164 @@ BOOST_AUTO_TEST_CASE(RailRoadParametersTakerTest4)
 
 	BOOST_CHECK_EQUAL(rrpt.GetStart(), Point3d(0, 0, 0));
 	BOOST_CHECK_EQUAL(rrpt.GetEnd(), Point3d(10, 10, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest1)
+{
+	RailRoadLine rrl(Point3d(0, 0, 0), Point3d(1, 0, 0));
+
+	RailRoadClosestPoint rrcp1(Point2d(0, 0), true);
+	rrl.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(0, 0));
+
+	RailRoadClosestPoint rrcp2(Point2d(1, 0), true);
+	rrl.Accept(rrcp2);
+
+	BOOST_CHECK_EQUAL(rrcp2.GetPoint(), Point2d(1, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest2)
+{
+	RailRoadLine rrl(Point3d(0, 0, 0), Point3d(1, 0, 0));
+
+	RailRoadClosestPoint rrcp1(Point2d(-1, 0), true);
+	rrl.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(0, 0));
+
+	RailRoadClosestPoint rrcp2(Point2d(2, 0), true);
+	rrl.Accept(rrcp2);
+
+	BOOST_CHECK_EQUAL(rrcp2.GetPoint(), Point2d(1, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest21)
+{
+	RailRoadLine rrl(Point3d(0, 0, 0), Point3d(1, 0, 0));
+
+	RailRoadClosestPoint rrcp1(Point2d(-std::numeric_limits<float>::min(), 0), true);
+	rrl.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(0, 0));
+
+	RailRoadClosestPoint rrcp2(Point2d(1 + std::numeric_limits<float>::min(), 0), true);
+	rrl.Accept(rrcp2);
+
+	BOOST_CHECK_EQUAL(rrcp2.GetPoint(), Point2d(1, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest22)
+{
+	RailRoadLine rrl(Point3d(0, 0, 0), Point3d(1, 0, 0));
+
+	RailRoadClosestPoint rrcp1(Point2d(std::numeric_limits<float>::min(), 0), true);
+	rrl.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(0, 0));
+
+	RailRoadClosestPoint rrcp2(Point2d(1 - std::numeric_limits<float>::min(), 0), true);
+	rrl.Accept(rrcp2);
+
+	BOOST_CHECK_EQUAL(rrcp2.GetPoint(), Point2d(1, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest3)
+{
+	RailRoadLine rrl(Point3d(0, 0, 0), Point3d(1, 0, 0));
+
+	RailRoadClosestPoint rrcp1(Point2d(-1, 0), false);
+	rrl.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(-1, 0));
+
+	RailRoadClosestPoint rrcp2(Point2d(2, 0), false);
+	rrl.Accept(rrcp2);
+
+	BOOST_CHECK_EQUAL(rrcp2.GetPoint(), Point2d(2, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest4)
+{
+	RailRoadLine rrl(Point3d(0, 0, 0), Point3d(1, 0, 0));
+
+	RailRoadClosestPoint rrcp1(Point2d(-1, 1), true);
+	rrl.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(0, 0));
+
+	RailRoadClosestPoint rrcp2(Point2d(2, -1), true);
+	rrl.Accept(rrcp2);
+
+	BOOST_CHECK_EQUAL(rrcp2.GetPoint(), Point2d(1, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest5)
+{
+	RailRoadArc rra(Point3d(10, 0, 0), Degrees(360), Point2d(0, 0), Rotation::Clockwise);
+
+	RailRoadClosestPoint rrcp1(Point2d(0, 0), true);
+	rra.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(10, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest6)
+{
+	RailRoadArc rra(Point3d(10, 0, 0), Degrees(360), Point2d(0, 0), Rotation::Clockwise);
+
+	RailRoadClosestPoint rrcp1(Point2d(10, 0), true);
+	rra.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(10, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest7)
+{
+	RailRoadArc rra(Point3d(10, 0, 0), Degrees(360), Point2d(0, 0), Rotation::Clockwise);
+
+	RailRoadClosestPoint rrcp1(Point2d(5, 0), true);
+	rra.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(10, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest8)
+{
+	RailRoadArc rra(Point3d(10, 10, 0), Degrees(360), Point2d(0, 10), Rotation::Clockwise);
+
+	RailRoadClosestPoint rrcp1(Point2d(5, 10), true);
+	rra.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(10, 10));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest9)
+{
+	RailRoadArc rra(Point3d(10, 10, 0), Degrees(360), Point2d(0, 10), Rotation::Clockwise);
+
+	RailRoadClosestPoint rrcp1(Point2d(15, 10), true);
+	rra.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(10, 10));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest10)
+{
+	RailRoadArc rra(Point3d(10, 10, 0), Degrees(90), Point2d(0, 10), Rotation::Clockwise);
+
+	RailRoadClosestPoint rrcp1(Point2d(20, 10), true);
+	rra.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(10, 10));
+}
+
+BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest11)
+{
+	RailRoadArc rra(Point3d(10, 10, 0), Degrees(90), Point2d(0, 10), Rotation::Clockwise);
+
+	RailRoadClosestPoint rrcp1(Point2d(20, 10), false);
+	rra.Accept(rrcp1);
+
+	BOOST_CHECK_EQUAL(rrcp1.GetPoint(), Point2d(10, 10));
 }

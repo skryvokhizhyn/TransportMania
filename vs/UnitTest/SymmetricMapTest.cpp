@@ -40,26 +40,29 @@ BOOST_AUTO_TEST_CASE(SymmetricMapTest3)
 	BOOST_CHECK(sm.Insert(SymmetricIntMap::KeyPair(0, 1), 1));
 	BOOST_CHECK(sm.Insert(SymmetricIntMap::KeyPair(2, 1), 2));
 	
-	int i = 0;
-	bool d = false;
+	const auto found1 = sm.Find(SymmetricIntMap::KeyPair(1, 0));
 
-	BOOST_CHECK(sm.Find(SymmetricIntMap::KeyPair(1, 0), i, d));
-	BOOST_CHECK_EQUAL(i, 1);
-	BOOST_CHECK(!d);
+	BOOST_CHECK(found1);
+	BOOST_CHECK_EQUAL(found1->first, 1);
+	BOOST_CHECK(!found1->second);
 
-	BOOST_CHECK(sm.Find(SymmetricIntMap::KeyPair(1, 2), i, d));
-	BOOST_CHECK_EQUAL(i, 2);
-	BOOST_CHECK(!d);
+	const auto found2 = sm.Find(SymmetricIntMap::KeyPair(1, 2));
 
-	BOOST_CHECK(sm.Find(SymmetricIntMap::KeyPair(2, 1), i, d));
-	BOOST_CHECK_EQUAL(i, 2);
-	BOOST_CHECK(d);
+	BOOST_CHECK(found2);
+	BOOST_CHECK_EQUAL(found2->first, 2);
+	BOOST_CHECK(!found2->second);
 
-	BOOST_CHECK(!sm.Find(SymmetricIntMap::KeyPair(1, 3), i, d));
+	const auto found3 = sm.Find(SymmetricIntMap::KeyPair(2, 1));
+
+	BOOST_CHECK(found3);
+	BOOST_CHECK_EQUAL(found3->first, 2);
+	BOOST_CHECK(found3->second);
+
+	BOOST_CHECK(!sm.Find(SymmetricIntMap::KeyPair(1, 3)));
 
 	BOOST_CHECK(sm.Erase(SymmetricIntMap::KeyPair(1, 0)));
 
-	BOOST_CHECK(!sm.Find(SymmetricIntMap::KeyPair(1, 0), i, d));
+	BOOST_CHECK(!sm.Find(SymmetricIntMap::KeyPair(1, 0)));
 }
 
 BOOST_AUTO_TEST_CASE(SymmetricMapTest4)

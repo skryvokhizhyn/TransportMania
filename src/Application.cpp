@@ -1,8 +1,6 @@
 #include "Application.h"
 #include "Terraformer.h"
 #include "Point2d.h"
-//#include "TerrainRangeLine.h"
-//#include "TerrainRangeArc.h"
 #include "TerrainRangeCircle.h"
 #include "TerraformFunction.h"
 #include "HeightMapLoaderFactory.h"
@@ -51,7 +49,7 @@ Application::InitApplication(const size_t width, const size_t height)
 	sceneHandlerPtr_->SetMoveHandler(*this);
 	screenConverter_.SetScreenSize(Size2d(width, height));
 
-	cachedHandlerLocator_.Put(UniqueId(), screenConverter_.GetScreenPolygon(), 
+	cachedHandlerLocator_.Put(UniqueId::Generate(), screenConverter_.GetScreenPolygon(), 
 		HandlerLevel::Terrain, sceneHandlerPtr_);
 	
 	windowManager_.Init(Size2d(width, height));
@@ -376,7 +374,16 @@ Application::PutRoad(const Point2d & from, const Point2d & to, bool commit)
 
 		if (foundFrom && foundTo && foundFrom != foundTo)
 		{
-			PutLineDraft(foundFrom.get(), foundTo.get());
+			const Point2d adjustedFrom2d = roadNetworkManager_.AdjustPoint(Point2d::Cast(*foundFrom));
+			const Point2d adjustedTo2d = roadNetworkManager_.AdjustPoint(Point2d::Cast(*foundTo));
+
+			auto adjustedFrom3d = GetPointAtTerrain(adjustedFrom2d, terrainPtr_);
+			auto adjustedTo3d = GetPointAtTerrain(adjustedTo2d, terrainPtr_);
+
+			if (adjustedFrom3d && adjustedTo3d && adjustedFrom3d != adjustedTo3d)
+			{
+				PutLineDraft(*adjustedFrom3d, *adjustedTo3d);
+			}
 		}
 	}
 }

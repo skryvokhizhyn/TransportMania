@@ -10,12 +10,16 @@ namespace trm
 		using IdType = unsigned long;
 
 	public:
-		UniqueId();
+		// creates initialized UniqueId
+		static UniqueId Generate();
 
 		bool operator == (const UniqueId & other) const;
 		bool operator < (const UniqueId & other) const;
 		
 		IdType Data() const;
+
+	private:
+		UniqueId(IdType val);
 
 	private:
 		IdType id_;

@@ -34,6 +34,7 @@
     <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
     <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
     <ClCompile Include="..\..\src\DrawableItem.cpp" />
+    <ClCompile Include="..\..\src\RailRoadClosestPoint.cpp" />
     <ClCompile Include="..\..\src\RailRoadRangeGenerator.cpp" />
     <ClCompile Include="..\..\src\RailRoadTerraformer.cpp" />
     <ClCompile Include="..\..\src\RoadNetworkManager.cpp" />
@@ -43,6 +44,7 @@
     <ClCompile Include="..\..\src\SdlUserEventVisitor.cpp" />
     <ClCompile Include="..\..\src\ShaderProgram.cpp" />
     <ClCompile Include="..\..\src\TerrainCoverDrawableObject.cpp" />
+    <ClCompile Include="..\..\src\TerrainHeightGetter.cpp" />
     <ClCompile Include="..\..\src\TerrainPointCollector.cpp" />
     <ClCompile Include="..\..\src\TerrainHeightCheck.cpp" />
     <ClCompile Include="..\..\src\TerrainPositionLocator.cpp" />
@@ -149,7 +151,9 @@
     <ClInclude Include="..\..\src\CachedHandlerLocatorProxy.h" />
     <ClInclude Include="..\..\src\MouseModeChangeEvent.h" />
     <ClInclude Include="..\..\src\OptionalPoint3d.h" />
+    <ClInclude Include="..\..\src\Point2i.h" />
     <ClInclude Include="..\..\src\Point3i.h" />
+    <ClInclude Include="..\..\src\RailRoadClosestPoint.h" />
     <ClInclude Include="..\..\src\RailRoadRangeGenerator.h" />
     <ClInclude Include="..\..\src\RailRoadTerraformer.h" />
     <ClInclude Include="..\..\src\RoadEventStateMachine.h" />
@@ -171,6 +175,7 @@
     <ClInclude Include="..\..\src\Size2f.h" />
     <ClInclude Include="..\..\src\SubmitDraftRoadsEvent.h" />
     <ClInclude Include="..\..\src\TerrainCoverDrawableObject.h" />
+    <ClInclude Include="..\..\src\TerrainHeightGetter.h" />
     <ClInclude Include="..\..\src\TerrainPointCollector.h" />
     <ClInclude Include="..\..\src\TerrainHeightCheck.h" />
     <ClInclude Include="..\..\src\TerrainPositionLocator.h" />

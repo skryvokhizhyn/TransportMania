@@ -1,5 +1,6 @@
 #pragma once
 
+#include <boost/optional.hpp>
 #include <map>
 
 namespace trm
@@ -10,12 +11,13 @@ namespace trm
 	public:
 		typedef std::pair<Key,Key> KeyPair;
 		typedef std::pair<Value, bool> ValueType;
+		typedef boost::optional<ValueType> OptionalValueType;
 		typedef std::map<KeyPair, ValueType> MapType;
 
 	public:
 		bool Insert(const KeyPair & k, Value);
 		bool Erase(const KeyPair & k);
-		bool Find(const KeyPair & k, Value & v, bool & d) const;
+		OptionalValueType Find(const KeyPair & k) const;
 		bool Exists(const KeyPair & k) const;
 		
 		bool Normalized(const KeyPair & k) const;
@@ -72,7 +74,7 @@ namespace trm
 	}
 
 	template<typename Key, typename Value>
-	bool SymmetricMap<Key, Value>::Find(const KeyPair & k, Value & v, bool & d) const
+	auto SymmetricMap<Key, Value>::Find(const KeyPair & k) const -> OptionalValueType
 	{
 		const KeyPair p = NormalizePair(k);
 
@@ -80,14 +82,14 @@ namespace trm
 
 		if (found == map_.end())
 		{
-			return false;
+			return OptionalValueType();
 		}
 
-		v = found->second.first;
+		const Value v = found->second.first;
 		const bool b = found->second.second;
-		d = (k == p) ? b : !b;
+		const bool d = (k == p) ? b : !b;
 
-		return true;
+		return ValueType(v, d);
 	}
 
 	template<typename Key, typename Value>

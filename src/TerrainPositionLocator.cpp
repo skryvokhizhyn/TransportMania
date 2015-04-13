@@ -6,10 +6,13 @@
 #include "TerrainRangeLine.h"
 #include "TerrainHeightCheck.h"
 #include "Terraformer.h"
+#include "TerrainRangeCircle.h"
+#include "TerrainHeightGetter.h"
 
 using namespace trm;
 
-OptionalPoint3d trm::GetTerrainPosition(
+OptionalPoint3d 
+trm::GetTerrainPosition(
 	const Point2d & p,
 	const WorldProjection & wp, 
 	const ScreenSizeManipulator & sm,
@@ -27,4 +30,25 @@ OptionalPoint3d trm::GetTerrainPosition(
 	tPtr->Apply(t);
 
 	return thc.Get();
+}
+
+OptionalPoint3d 
+trm::GetPointAtTerrain(const Point2d & p, const TerrainPtr & tPtr)
+{
+	TerrainRangeCircle pointRange(p, 0.0f);
+	TerrainHeightGetter heightGetter;
+
+	Terraformer t(pointRange, heightGetter);
+
+	tPtr->Apply(t);
+
+	const Polygon3d & points = heightGetter.Get();
+
+	if (points.empty())
+	{
+		return OptionalPoint3d();
+	}
+	
+	assert(points.size() == 1);
+	return points[0];
 }
