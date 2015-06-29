@@ -37,9 +37,8 @@ Application::InitApplication(const size_t width, const size_t height)
 	stopped_ = false;
 
 	worldProjection_.SetRatio(width, height);
-	//worldProjection_.SetAngles(Degrees(69), Degrees(0), Degrees(-32));
-	worldProjection_.SetAngles(Degrees(55), Degrees(0), Degrees(10));
-	//worldProjection_.SetAngles(Degrees(-61), Degrees(0), Degrees(-6));
+	worldProjection_.SetAngles(Degrees(0), Degrees(0), Degrees(0));
+	//worldProjection_.SetAngles(Degrees(55), Degrees(0), Degrees(10));
 	worldProjection_.SetShift(Point3d(30, 30, 100));
 	
 	textManager_.Init(Size2d(width, height));
@@ -255,6 +254,11 @@ Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*
 void 
 Application::PutRailRoad(const RailRoadPtr & rrp)
 {
+	if (!roadNetworkManager_.InsertPermanent(rrp))
+	{
+		return;
+	}
+
 	RailRoadRangeGenerator rrrg;
 	rrp->Accept(rrrg);
 
@@ -265,11 +269,6 @@ Application::PutRailRoad(const RailRoadPtr & rrp)
 
 	Terraformer t(rrrg.GetRange(), *tFuncPtr);
 	terrainPtr_->Apply(t);
-
-	if (!roadNetworkManager_.InsertPermanent(rrp))
-	{
-		return;
-	}
 
 	staticSceneObjects_.push_back(StaticSceneObjectFactory::ForRailRoad(rrp));
 
@@ -369,21 +368,14 @@ Application::PutRoad(const Point2d & from, const Point2d & to, bool commit)
 {
 	if (commit)
 	{
-		auto foundFrom = GetTerrainPosition(from, worldProjection_, screenConverter_, terrainPtr_);
-		auto foundTo = GetTerrainPosition(to, worldProjection_, screenConverter_, terrainPtr_);
+		const auto foundFrom = GetTerrainPosition(from, worldProjection_, screenConverter_, terrainPtr_);
+		const auto foundTo = GetTerrainPosition(to, worldProjection_, screenConverter_, terrainPtr_);
 
 		if (foundFrom && foundTo && foundFrom != foundTo)
 		{
-			const Point2d adjustedFrom2d = roadNetworkManager_.AdjustPoint(Point2d::Cast(*foundFrom));
-			const Point2d adjustedTo2d = roadNetworkManager_.AdjustPoint(Point2d::Cast(*foundTo));
+			RailRoadPtrs roads = roadNetworkManager_.CreateRoad(*foundFrom, *foundTo);
 
-			auto adjustedFrom3d = GetPointAtTerrain(adjustedFrom2d, terrainPtr_);
-			auto adjustedTo3d = GetPointAtTerrain(adjustedTo2d, terrainPtr_);
-
-			if (adjustedFrom3d && adjustedTo3d && adjustedFrom3d != adjustedTo3d)
-			{
-				PutLineDraft(*adjustedFrom3d, *adjustedTo3d);
-			}
+			boost::for_each(roads, boost::bind(&Application::PutRoadDraft, this, _1));
 		}
 	}
 }
@@ -410,10 +402,10 @@ Application::PutRoadDraft(const RailRoadPtr & rrp)
 
 	tempRoadObjects_.push_back(StaticSceneObjectFactory::ForTerrainCover(tpc.GetPoints()));
 }
-
-void 
-Application::PutLineDraft(const Point3d & from, const Point3d & to)
-{
-	const RailRoadPtr rrp = RailRoadFactory::Line(from, to);
-	PutRoadDraft(rrp);
-}
+//
+//void 
+//Application::PutLineDraft(const Point3d & from, const Point3d & to)
+//{
+//	const RailRoadPtr rrp = RailRoadFactory::Line(from, to);
+//	PutRoadDraft(rrp);
+//}

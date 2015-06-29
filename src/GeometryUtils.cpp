@@ -133,7 +133,18 @@ utils::GetSignedAngle(const trm::Point2d & a, const trm::Point2d & b)
 	assert(a != Point2d());
 	assert(b != Point2d());
 
-	return Radians(::asin((a.x() * b.y() - a.y() * b.x()) / (a.GetLength() * b.GetLength())));
+	float asinVal = (a.x() * b.y() - a.y() * b.x()) / (a.GetLength() * b.GetLength());
+
+	if (asinVal > 1.0f)
+	{
+		asinVal = 1.0f;
+	}
+	else if (asinVal < -1.0f)
+	{
+		asinVal = -1.0f;
+	}
+
+	return Radians(::asin(asinVal));
 }
 
 Angle 

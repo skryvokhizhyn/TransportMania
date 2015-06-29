@@ -12,6 +12,7 @@ namespace trm
 	{
 		static RailRoadPtr Line(const Point3d & s, const Point3d & e);
 		static RailRoadPtr Arc(const Point3d & s, const Angle a, const Point2d & c, const Rotation r);
+		static RailRoadPtr Arc(const Point3d & start, const Point3d & direction, const Point2d & end);
 	};
 
 } // namespace trm

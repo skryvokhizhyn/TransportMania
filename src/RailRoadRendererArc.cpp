@@ -58,8 +58,16 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 		const Point2d far = utils::RotateVector(farStart, a, rot);
 		const Point2d near = utils::RotateVector(nearStart, a, rot);
 		
-		PushPoint(near, center, h, md);
-		PushPoint(far, center, h, md);
+		if (rot == Rotation::AntiClockwise)
+		{
+			PushPoint(near, center, h, md);
+			PushPoint(far, center, h, md);
+		}
+		else
+		{
+			PushPoint(far, center, h, md);
+			PushPoint(near, center, h, md);
+		}
 
 		md.textures.push_back(Point2d(pathPassed, 0.0f));
 		md.textures.push_back(Point2d(pathPassed, 1.0f));

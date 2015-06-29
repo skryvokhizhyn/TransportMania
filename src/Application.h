@@ -58,7 +58,7 @@ namespace trm
 		void PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a, const Rotation r);
 		void PutRailRoad(const RailRoadPtr & rrp);
 		void PutRoadDraft(const RailRoadPtr & rrp);
-		void PutLineDraft(const Point3d & from, const Point3d & to);
+		//void PutLineDraft(const Point3d & from, const Point3d & to);
 
 		void EmulateDynamicScene1();
 		void EmulateDynamicScene2();

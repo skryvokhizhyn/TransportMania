@@ -7,17 +7,23 @@ using namespace trm;
 RailRoadArc::RailRoadArc(const Point3d & s, const Angle a, const Point2d & c, const Rotation rot)
 	: start_(s), angle_(a), center_(c), rotation_(rot)
 {
-	const AxisType radii = utils::GetDistance(Point2d::Cast(s), c);
+	/*const AxisType radii = utils::GetDistance(Point2d::Cast(s), c);
 	
-	if (radii <= RAIL_ROAD_WIDTH / 2)
+	if (radii < RAIL_ROAD_WIDTH / 2)
 	{
-		throw std::runtime_error("Trying to build Railroad Arc with too small radii. r < width");
+		const auto msg = (boost::format("Trying to build Railroad Arc with too small radii. %1% < %2%") 
+			% radii % (RAIL_ROAD_WIDTH / 2));
+
+		throw std::runtime_error(msg.str());
 	}
 
-	if (radii <= RAIL_ROAD_STEP)
+	if (radii < RAIL_ROAD_STEP)
 	{
-		throw std::runtime_error("Trying to build Railroad Arc with too small radii. r < step");
-	}
+		const auto msg = (boost::format("Trying to build Railroad Arc with too small radii. %1% < %2%") 
+			% radii % RAIL_ROAD_STEP);
+
+		throw std::runtime_error(msg.str());
+	}*/
 }
 
 const Point3d & 

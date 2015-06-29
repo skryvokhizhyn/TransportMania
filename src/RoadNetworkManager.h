@@ -23,11 +23,15 @@ namespace trm
 		RailRoadPtrs GetTemporary() const;
 		void ClearTemporary();
 
-		Point2d AdjustPoint(const Point2d & p) const;
+		RailRoadPtrs CreateRoad(const Point3d & from, const Point3d & to) const;
 
 	private:
 		using RoadMap = std::unordered_map<UniqueId, RailRoadPtr>;
 		using RoadSearcher = SymmetricMap<Point3i, UniqueId>;
+		using AdjustedPoint = std::pair<Point3d, RailRoadPtr>;
+
+	private:
+		AdjustedPoint AdjustPoint(const Point3d & p) const;
 
 	private:
 		RoadNetwork roadNetwork_;

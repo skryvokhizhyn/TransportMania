@@ -6,24 +6,26 @@
 
 using namespace trm;
 
-RailRoadClosestPoint::RailRoadClosestPoint(const Point2d & p, bool stickToBorders)
+RailRoadClosestPoint::RailRoadClosestPoint(const Point2d & p, bool stickToBorders, float bordersTolerance)
 	: currentPos_(p)
 	, stickToBorders_(stickToBorders)
+	, bordersTolerance_(bordersTolerance)
 {}
 
 void 
 RailRoadClosestPoint::Visit(RailRoadArc & rra)
 {
 	const Point2d & center = rra.GetCenter();
+	const Point3d & start3d = rra.GetStart();
 
 	const Point2d shiftedCurrentPos = currentPos_ - center;
 	const float distToPos = shiftedCurrentPos.GetLength();
-	
-	const Point2d start2d = Point2d::Cast(rra.GetStart());
 
-	if (distToPos < 0.0001f)
+	const Point2d start2d = Point2d::Cast(start3d);
+
+	if (distToPos < bordersTolerance_)
 	{
-		foundPos_ = start2d;
+		foundPos_ = start3d;
 		return;
 	}
 
@@ -33,86 +35,105 @@ RailRoadClosestPoint::Visit(RailRoadArc & rra)
 
 	if (!stickToBorders_)
 	{
-		foundPos_ = posOnArc + center;
+		foundPos_ = Point3d::Cast(posOnArc + center);
+		foundPos_.z() = start3d.z();
 		return;
 	}
-	
+
 	const Angle strictAngle = utils::GetRotationAngle360(start2d, posOnArc, rra.GetRotation());
 
 	const Angle & angle = rra.GetAngle();
 
 	if (strictAngle < angle)
 	{
-		foundPos_ = posOnArc + center;
+		foundPos_ = Point3d::Cast(posOnArc + center);
+		foundPos_.z() = start3d.z();
 		return;
 	}
-
+	
 	const Angle extraAngle = strictAngle - angle;
 	const Angle overAngle = Degrees(360) - angle;
 
 	if (extraAngle >= overAngle / 2.0f)
 	{
-		foundPos_ = start2d;
+		foundPos_ = start3d;
 	}
 	else
 	{
 		const Point2d endPoint = utils::RotateVector(start2d, angle, rra.GetRotation());
-		foundPos_ = endPoint + center;
+		foundPos_ = Point3d::Cast(endPoint + center);
+		foundPos_.z() = start3d.z();
 	}
 }
 
 void 
 RailRoadClosestPoint::Visit(RailRoadLine & rrl)
 {
-	const Point2d pStart = Point2d::Cast(rrl.GetStart());
-	const Point2d pEnd = Point2d::Cast(rrl.GetEnd());
+	const Point3d & pStart3d = rrl.GetStart();
+	const Point2d pStart = Point2d::Cast(pStart3d);
+	const Point3d & pEnd3d = rrl.GetEnd();
+	const Point2d pEnd = Point2d::Cast(pEnd3d);
 
-	static const float allowedPrecision = 0.00001f;
-
-	if ((currentPos_ - pStart).GetLength() < allowedPrecision)
+	if ((currentPos_ - pStart).GetLength() < bordersTolerance_)
 	{
-		foundPos_ = pStart;
+		foundPos_ = pStart3d;
 		return;
 	}
 
-	if ((currentPos_ - pEnd).GetLength() < allowedPrecision)
+	if ((currentPos_ - pEnd).GetLength() < bordersTolerance_)
 	{
-		foundPos_ = pEnd;
+		foundPos_ = pEnd3d;
 		return;
 	}
 
 	const Line line = utils::GetLine(pStart, pEnd);
 	const Line perp = utils::GetPerpendicularAtPoint(line, currentPos_);
 
-	foundPos_ = utils::GetIntersectionPoint(line, perp);
+	const Point2d intersectionPos = utils::GetIntersectionPoint(line, perp);
 
-	if (!stickToBorders_)
-	{
-		return;
-	}
-
-	const Point2d dirStart = pStart - foundPos_;
-	const Point2d dirEnd = pEnd - foundPos_;
+	const Point2d dirStart = pStart - intersectionPos;
+	const Point2d dirEnd = pEnd - intersectionPos;
 
 	const float dirStartLen = dirStart.GetLength();
 	const float dirEndLen = dirEnd.GetLength();
 	const float dirRoad = (pEnd - pStart).GetLength();
 	
-	// if summ of the dists is bigger than the whole dist
-	if (dirStartLen + dirEndLen > dirRoad && dirStartLen < dirRoad && dirEndLen < dirRoad)
+	if (dirStartLen + dirEndLen <= dirRoad)
 	{
-		if (dirStartLen > dirEndLen)
+		foundPos_ = Point3d::Cast(intersectionPos);
+		foundPos_.z() = pStart3d.z() + (pEnd3d.z() - pStart3d.z()) * dirStartLen / dirRoad;
+
+		return;
+	}
+
+	if (!stickToBorders_)
+	{
+		foundPos_ = Point3d::Cast(intersectionPos);
+
+		if (dirStartLen < dirEndLen)
 		{
-			foundPos_ = pEnd;
+			foundPos_.z() = pStart3d.z() - (pEnd3d.z() - pStart3d.z()) * dirStartLen / dirRoad;
 		}
 		else
 		{
-			foundPos_ = pStart;
+			foundPos_.z() = pEnd3d.z() + (pEnd3d.z() - pStart3d.z()) * dirEndLen / dirRoad;
 		}
+
+		return;
+	}
+
+	// if summ of the dists is bigger than the whole dist
+	if (dirStartLen > dirEndLen)
+	{
+		foundPos_ = pEnd3d;
+	}
+	else
+	{
+		foundPos_ = pStart3d;
 	}
 }
 
-const Point2d &
+const Point3d &
 RailRoadClosestPoint::GetPoint() const
 {
 	return foundPos_;

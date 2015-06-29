@@ -8,6 +8,7 @@
 #include "RailRoadClosestPoint.h"
 #include "RailRoadParametersTaker.h"
 #include "RailRoadSizer.h"
+#include "RailRoadConnector.h"
 
 #include <boost/range/algorithm/transform.hpp>
 #include <boost/range/algorithm/for_each.hpp>
@@ -193,25 +194,42 @@ RoadNetworkManager::ClearTemporary()
 		[&](const RoadSearcher::ValueType & val)
 	{
 		roadMap_.erase(val.first);
+		locator_.Remove(val.first);
 	});
 
 	tempRoads_.Clear();
 }
 
-Point2d 
-RoadNetworkManager::AdjustPoint(const Point2d & p) const
+auto 
+RoadNetworkManager::AdjustPoint(const Point3d & p) const -> AdjustedPoint
 {
-	TerrainRangeCircle circle(p, 1.0f);
+	const Point2d p2d = Point2d::Cast(p);
+
+	TerrainRangeCircle circle(p2d, 1.0f);
 
 	auto ids = locator_.At(ConvertRangeToPolygon(circle.GetRanges()));
 
 	if (ids.empty())
-		return p;
+		return {p, RailRoadPtr()};
 
 	const RailRoadPtr & foundRoad = roadMap_.at(ids.front());
 
-	RailRoadClosestPoint rrcp(p, true);
+	RailRoadClosestPoint rrcp(p2d, true, 1.0f);
 	foundRoad->Accept(rrcp);
 
-	return rrcp.GetPoint();
+	return {rrcp.GetPoint(), foundRoad};
+}
+
+RailRoadPtrs 
+RoadNetworkManager::CreateRoad(const Point3d & from, const Point3d & to) const
+{
+	const AdjustedPoint adjustedFrom = AdjustPoint(from);
+	const AdjustedPoint adjustedTo = AdjustPoint(to);
+
+	if (adjustedFrom.first != adjustedTo.first)
+	{
+		return RailRoadConnector::GetRoads(adjustedFrom.first, adjustedFrom.second, adjustedTo.first, adjustedTo.second);
+	}
+
+	return RailRoadPtrs();
 }

@@ -873,6 +873,13 @@ BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test9)
 	BOOST_CHECK_EQUAL(a, Degrees(0));
 }
 
+BOOST_AUTO_TEST_CASE(GeometryGetRotationAngle360Test10)
+{
+	Angle a = utils::GetRotationAngle360(Point2d(0.707106769f, -0.707106769f), Point2d(-0.707106769f, -0.707106769f), Rotation::AntiClockwise);
+
+	BOOST_CHECK_EQUAL(a, Degrees(270));
+}
+
 BOOST_AUTO_TEST_CASE(GeometryLineAtTest1)
 {
 	const Line l = utils::GetLine(Point2d(-1, -1), Point2d(1, 1));
