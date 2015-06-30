@@ -263,6 +263,18 @@
     <ClCompile Include="..\..\src\RailRoadRangeGenerator.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadTangent.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="RailRoadConnectorTest.cpp">
+      <Filter>RoadNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadConnector.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="RailRoadFactoryTest.cpp">
+      <Filter>Other</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

@@ -22,6 +22,7 @@ namespace trm
 
 		void CreateOKButton(EventAction cb);
 		void CreateNOButton(EventAction cb);
+		void CreateOKNOGroup(EventAction cbOK, EventAction cbNO);
 		void CreatePauseButton();
 		void CreateLockScreen();
 		void CreateTextWindow(const std::wstring & text);

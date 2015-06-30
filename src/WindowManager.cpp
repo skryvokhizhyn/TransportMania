@@ -69,6 +69,27 @@ WindowManager::CreateNOButton(EventAction cb)
 	ProcessWindowData(std::move(windowPtr));
 }
 
+void 
+WindowManager::CreateOKNOGroup(EventAction cbOK, EventAction cbNO)
+{
+	UniqueId windowOKId = UniqueId::Generate();
+	UniqueId windowNOId = UniqueId::Generate();
+
+	const float windowSize = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
+	Size2f sz(windowSize, windowSize);
+
+	WindowItemBoxPtr windowOKPtr(new WindowItemBox(windowOKId, sz, TextureId::OkButton,
+		EventContainer::Create({cbOK, WindowCloseEvent(windowOKId), WindowCloseEvent(windowNOId)}, EventActionType::Single), 
+		WindowPosition::p100, WindowPosition::p0));
+
+	WindowItemBoxPtr windowNOPtr(new WindowItemBox(windowNOId, sz, TextureId::NoButton,
+		EventContainer::Create({cbNO, WindowCloseEvent(windowNOId), WindowCloseEvent(windowOKId)}, EventActionType::Single), 
+		WindowPosition::p75, WindowPosition::p0));
+
+	ProcessWindowData(std::move(windowOKPtr));
+	ProcessWindowData(std::move(windowNOPtr));
+}
+
 void
 WindowManager::CreatePauseButton()
 {

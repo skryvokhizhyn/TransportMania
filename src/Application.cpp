@@ -52,6 +52,7 @@ Application::InitApplication(const size_t width, const size_t height)
 		HandlerLevel::Terrain, sceneHandlerPtr_);
 	
 	windowManager_.Init(Size2d(width, height));
+	sceneContent_.SetWindowManager(windowManager_);
 
 	TextManagerProxy::Init(textManager_);
 	ComponentHolderProxy::Init(componentHolder_);
@@ -60,7 +61,7 @@ Application::InitApplication(const size_t width, const size_t height)
 	TextRendererProxy::Init(textRenderer_);
 	ModelManagerProxy::Init(modelManager_);
 
-	SceneContent::Init(windowManager_, SceneContent::Type::Init);
+	sceneContent_.Init(SceneContent::Type::Init);
 
 	return true;
 }
@@ -361,6 +362,8 @@ Application::SubmitDraftRoads(bool yesNo)
 	{
 		boost::for_each(tempRoads, boost::bind(&Application::PutRailRoad, this, _1));
 	}
+
+	sceneContent_.Close(SceneContent::Type::Draw);
 }
 
 void 
@@ -390,7 +393,7 @@ Application::PutRoadDraft(const RailRoadPtr & rrp)
 
 	if (tempRoadObjects_.empty())
 	{
-		SceneContent::Init(windowManager_, SceneContent::Type::Draw);
+		sceneContent_.Init(SceneContent::Type::Draw);
 	}
 
 	RailRoadRangeGenerator rrrg;

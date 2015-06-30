@@ -19,6 +19,7 @@
 #include "MoveSceneEventHandler.h"
 #include "ModelManager.h"
 #include "ScreenSizeManipulator.h"
+#include "SceneContent.h"
 
 namespace trm
 {
@@ -98,6 +99,7 @@ namespace trm
 		MoveSceneEventHandlerPtr sceneHandlerPtr_;
 		ModelManager modelManager_;
 		ScreenSizeManipulator screenConverter_;
+		SceneContent sceneContent_;
 		bool processTerrainUpdate_ = true;
 		bool paused_ = false;
 	};

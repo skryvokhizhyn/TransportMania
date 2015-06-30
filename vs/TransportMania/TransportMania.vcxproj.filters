@@ -438,8 +438,11 @@
     <ClCompile Include="..\..\src\TerrainRangeLine.cpp">
       <Filter>Terrain\Ranges</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\TerrainHeightGetter.cpp">
-      <Filter>Terrain\Terraforming</Filter>
+    <ClCompile Include="..\..\src\RailRoadTangent.cpp">
+      <Filter>Railroad\Visitors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadConnector.cpp">
+      <Filter>Railroad</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -983,9 +986,6 @@
     <ClInclude Include="..\..\src\TerrainPointCollector.h">
       <Filter>Terrain\Terraforming</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\TerrainHeightGetter.h">
-      <Filter>Terrain\Terraforming</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\TerrainRange.h">
       <Filter>Terrain\Ranges</Filter>
     </ClInclude>
@@ -997,6 +997,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\TerrainRangeLine.h">
       <Filter>Terrain\Ranges</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadTangent.h">
+      <Filter>Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadConnector.h">
+      <Filter>Railroad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadTangentData.h">
+      <Filter>Railroad</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
