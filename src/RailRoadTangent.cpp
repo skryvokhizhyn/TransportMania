@@ -49,15 +49,16 @@ RailRoadTangent::Visit(RailRoadArc & rra)
 {
 	const Point2d & c = rra.GetCenter();
 	Point3d c3d = Point3d::Cast(c);
-	const Point3d & s3d = rra.GetStart();
-	c3d.z() = s3d.z();
+	Point3d n3d = Point3d::Cast(nearPos_);
+	n3d.z() = rra.GetStart().z();
+	c3d.z() = n3d.z();
 
-	const Point3d dir = c3d - s3d;
+	const Point3d dir = c3d - n3d;
 	const Point2d nextPoint = utils::RotateVector(Point2d::Cast(dir), Degrees(90), rra.GetRotation());
 	Point3d nextPoint3d = Point3d::Cast(nextPoint);
-	nextPoint3d.z() = s3d.z();
+	nextPoint3d.z() = n3d.z();
 
-	ProcessLine(nextPoint3d + s3d, s3d);
+	ProcessLine(nextPoint3d + n3d, n3d);
 }
 
 void

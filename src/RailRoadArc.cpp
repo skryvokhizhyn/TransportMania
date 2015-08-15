@@ -24,6 +24,8 @@ RailRoadArc::RailRoadArc(const Point3d & s, const Angle a, const Point2d & c, co
 
 		throw std::runtime_error(msg.str());
 	}*/
+
+	assert(angle_ >= Degrees(0));
 }
 
 const Point3d & 

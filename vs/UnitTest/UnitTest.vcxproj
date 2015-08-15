@@ -108,6 +108,7 @@
     <ClCompile Include="..\..\src\RailRoadParametersTaker.cpp" />
     <ClCompile Include="..\..\src\RailRoadRangeGenerator.cpp" />
     <ClCompile Include="..\..\src\RailRoadSizer.cpp" />
+    <ClCompile Include="..\..\src\RailRoadSplitter.cpp" />
     <ClCompile Include="..\..\src\RailRoadTangent.cpp" />
     <ClCompile Include="..\..\src\RangeRectangle.cpp" />
     <ClCompile Include="..\..\src\RoadNetwork.cpp" />
@@ -150,8 +151,11 @@
     <ClCompile Include="PointImplTest.cpp" />
     <ClCompile Include="PointTest.cpp" />
     <ClCompile Include="PolygonVisibilityCheckerTest.cpp" />
+    <ClCompile Include="RailRoadClosestPointTest.cpp" />
     <ClCompile Include="RailRoadConnectorTest.cpp" />
     <ClCompile Include="RailRoadFactoryTest.cpp" />
+    <ClCompile Include="RailRoadSplitterTest.cpp" />
+    <ClCompile Include="RailRoadTangentTest.cpp" />
     <ClCompile Include="RailRoadVisitorsTest.cpp" />
     <ClCompile Include="RangeTest.cpp" />
     <ClCompile Include="ResourceProxyTest.cpp" />

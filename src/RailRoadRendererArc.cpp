@@ -36,14 +36,14 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 
 	const Point2d vec1 = s - center;
 
-	const AxisType halfWidth = RailRoad::RAIL_ROAD_WIDTH / 2;
+	const AxisType halfWidth = RailRoad::GetRoadWidth() / 2;
 	const AxisType radii = vec1.GetLength();
 	const AxisType radiiMax = radii + halfWidth;
 	const AxisType radiiMin = radii - halfWidth;
 	const Point2d farStart = Point2d::Cast(vec1 * radiiMax / radii);
 	const Point2d nearStart = Point2d::Cast(vec1 * radiiMin / radii);
 
-	const Angle rotationStep = Radians(2 * std::asin(RailRoad::RAIL_ROAD_STEP / 2 / radiiMax));
+	const Angle rotationStep = Radians(2 * std::asin(RailRoad::GetRoadStep() / 2 / radiiMax));
 	
 	const int pointsToProceed = boost::numeric_cast<int>(std::ceil(angle / rotationStep) + 1.0f) * 2; 
 	md.points.reserve(pointsToProceed);
@@ -92,7 +92,7 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 		placeholder1_type Arg1;
 
 	boost::transform(md.points, md.points.begin(), 
-			ret<Point3d>(Arg1 + Point3d(0.0f, 0.0f, RailRoad::RAIL_ROAD_Z_SHIFT)));
+			ret<Point3d>(Arg1 + Point3d(0.0f, 0.0f, RailRoad::GetRoadZShift())));
 
 	md.normales.resize(md.points.size(), Point3d(0.0f, 0.0f, 1.0f));
 #else

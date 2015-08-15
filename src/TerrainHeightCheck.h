@@ -25,6 +25,7 @@ namespace trm
 		boost::reference_wrapper<const Matrix> pvMatrix_;
 		Point2d point_;
 		OptionalPoint3d pointFound_;
+		float minDist_;
 	};
 
 } // namespace trm

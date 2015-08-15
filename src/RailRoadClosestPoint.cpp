@@ -18,10 +18,11 @@ RailRoadClosestPoint::Visit(RailRoadArc & rra)
 	const Point2d & center = rra.GetCenter();
 	const Point3d & start3d = rra.GetStart();
 
-	const Point2d shiftedCurrentPos = currentPos_ - center;
-	const float distToPos = shiftedCurrentPos.GetLength();
-
 	const Point2d start2d = Point2d::Cast(start3d);
+
+	const Point2d shiftedCurrentPos = currentPos_ - center;
+	const Point2d shiftedStartPos = start2d - center;
+	const float distToPos = shiftedCurrentPos.GetLength();
 
 	if (distToPos < bordersTolerance_)
 	{
@@ -40,7 +41,7 @@ RailRoadClosestPoint::Visit(RailRoadArc & rra)
 		return;
 	}
 
-	const Angle strictAngle = utils::GetRotationAngle360(start2d, posOnArc, rra.GetRotation());
+	const Angle strictAngle = utils::GetRotationAngle360(shiftedStartPos, posOnArc, rra.GetRotation());
 
 	const Angle & angle = rra.GetAngle();
 
@@ -60,7 +61,7 @@ RailRoadClosestPoint::Visit(RailRoadArc & rra)
 	}
 	else
 	{
-		const Point2d endPoint = utils::RotateVector(start2d, angle, rra.GetRotation());
+		const Point2d endPoint = utils::RotateVector(shiftedStartPos, angle, rra.GetRotation());
 		foundPos_ = Point3d::Cast(endPoint + center);
 		foundPos_.z() = start3d.z();
 	}

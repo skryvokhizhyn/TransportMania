@@ -10,6 +10,7 @@ using namespace trm;
 TerrainHeightCheck::TerrainHeightCheck(const Point2d & p, const Matrix & pv)
 	: pvMatrix_(pv)
 	, point_(p)
+	, minDist_(std::numeric_limits<float>::max())
 {}
 
 bool
@@ -23,8 +24,15 @@ TerrainHeightCheck::operator () (const Point2d & p, float & height)
 
 	if (dist < 0.05f)
 	{
-		pointFound_ = p3;
-
+		// keep on searching for the closest point
+		if (dist < minDist_)
+		{
+			pointFound_ = p3;
+		}
+	}
+	// getting away from the nearest found point
+	else if (pointFound_)
+	{
 		return false;
 	}
 

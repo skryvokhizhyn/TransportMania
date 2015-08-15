@@ -9,6 +9,8 @@ namespace trm
 		: public RailRoadVisitor
 	{
 	public:
+		RailRoadRangeGenerator(bool useFullWidth);
+
 		virtual void Visit(RailRoadArc & rra) override;
 		virtual void Visit(RailRoadLine & rrl) override;
 
@@ -16,6 +18,7 @@ namespace trm
 
 	private:
 		TerrainRange range_;
+		const bool useFullWidth_;
 	};
 
 } // namespace trm

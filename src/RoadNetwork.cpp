@@ -22,6 +22,12 @@ RoadNetwork::Insert(const Point3i & from, const Point3i & to, float dist)
 	return implPtr_->InsertEdge(from, to, dist);
 }
 
+bool 
+RoadNetwork::Remove(const Point3i & from, const Point3i & to)
+{
+	return implPtr_->RemoveEdge(from, to);
+}
+
 RoadNetwork::Route 
 RoadNetwork::GetRoute(const Point3i & from, const Point3i & to) const
 {

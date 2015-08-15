@@ -29,9 +29,9 @@ namespace
 		const Point2d dist = pE - pS;
 		Point2d distAbs(std::abs(dist.x()), std::abs(dist.y()));
 
-		const RangeRectangle rr = GetRangeRectangle(pS, pE, RailRoad::RAIL_ROAD_WIDTH); 
+		const RangeRectangle rr = GetRangeRectangle(pS, pE, RailRoad::GetRoadWidth()); 
 
-		const Point2d vec = utils::GetDirectionVector(pS, pE) * RailRoad::RAIL_ROAD_STEP;
+		const Point2d vec = utils::GetDirectionVector(pS, pE) * RailRoad::GetRoadStep();
 		const Point2d vecAbs(std::abs(vec.x()), std::abs(vec.y()));
 
 		for (Point2d p = pS; distAbs >= Point2d(); p += vec, distAbs -= vecAbs)
@@ -57,21 +57,21 @@ namespace
 		const Point2d pS = Point2d::Cast(start);
 		const Point2d pE = Point2d::Cast(end);
 
-		const RangeRectangle rr = GetRangeRectangle(pS, pE, RailRoad::RAIL_ROAD_WIDTH); 
+		const RangeRectangle rr = GetRangeRectangle(pS, pE, RailRoad::GetRoadWidth()); 
 
 		const Line lS = utils::GetPerpendicularAtPoint(rr.base, pS);
 		const Point2d pS1 = utils::GetIntersectionPoint(lS, rr.bc);
 		const Point2d pS2 = utils::GetIntersectionPoint(lS, rr.da);
 
-		const Point3d pSUp3d(pS1.x(), pS1.y(), start.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
-		const Point3d pSDown3d(pS2.x(), pS2.y(), start.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
+		const Point3d pSUp3d(pS1.x(), pS1.y(), start.z() + RailRoad::GetRoadZShift());
+		const Point3d pSDown3d(pS2.x(), pS2.y(), start.z() + RailRoad::GetRoadZShift());
 
 		const Line lE = utils::GetPerpendicularAtPoint(rr.base, pE);
 		const Point2d pE1 = utils::GetIntersectionPoint(lE, rr.bc);
 		const Point2d pE2 = utils::GetIntersectionPoint(lE, rr.da);
 
-		const Point3d pEUp3d(pE1.x(), pE1.y(), end.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
-		const Point3d pEDown3d(pE2.x(), pE2.y(), end.z() + RailRoad::RAIL_ROAD_Z_SHIFT);
+		const Point3d pEUp3d(pE1.x(), pE1.y(), end.z() + RailRoad::GetRoadZShift());
+		const Point3d pEDown3d(pE2.x(), pE2.y(), end.z() + RailRoad::GetRoadZShift());
 
 		md.points.reserve(4);
 		md.indexes.reserve(4);

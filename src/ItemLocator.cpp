@@ -13,10 +13,10 @@
 
 #include <boost/geometry/algorithms/envelope.hpp>
 #include <boost/geometry/algorithms/correct.hpp>
+#include <boost/geometry/algorithms/make.hpp>
 
 #include <boost/range/algorithm/transform.hpp>
-
-#include <unordered_map>
+#include <boost/range/algorithm/for_each.hpp>
 
 using namespace trm;
 
@@ -54,19 +54,26 @@ namespace priv
 
 namespace
 {
-	Box2d ConvertToBox2d(const Polygon2d & polygon)
+	BGPolygon2d ConvertToBGPolygon2d(const Polygon2d & p)
 	{
-		BGPolygon2d polygon2d;
-		polygon2d.outer().reserve(polygon.size() + 1);
+		BGPolygon2d bgPolygon;
+		bgPolygon.outer().reserve(p.size() + 1);
 
-		boost::transform(polygon, std::back_inserter(polygon2d.outer()),
-			[](const Point2d & p)
+		boost::transform(p, std::back_inserter(bgPolygon.outer()), 
+			[](const Point2d & p2d)
 		{
-			return bg::make<BGPoint2d>(p.x(), p.y());
+			return bg::make<BGPoint2d>(p2d.x(), p2d.y());
 		});
 
-		bg::correct(polygon2d);
+		bg::correct(bgPolygon);
 
+		return bgPolygon;
+	}
+
+	Box2d ConvertToBox2d(const Polygon2d & polygon)
+	{
+		BGPolygon2d polygon2d = ConvertToBGPolygon2d(polygon);
+		
 		return bg::return_envelope<Box2d>(polygon2d);
 	}
 }
@@ -125,23 +132,61 @@ private:
 };
 
 ItemLocator::ItemLocator()
-	: implPtr_(std::make_shared<ItemLocatorImpl>())
+	: implPtr_(new ItemLocatorImpl())
+{}
+
+ItemLocator::~ItemLocator()
 {}
 
 void 
 ItemLocator::Put(UniqueId id, const Polygon2d & p)
 {
+	Polygon2d polygonCopy = p;
+	Put(id, std::move(polygonCopy));
+}
+
+void 
+ItemLocator::Put(UniqueId id, Polygon2d && p)
+{
 	implPtr_->Put(id, p);
+	if (!polyMap_.emplace(id, std::move(p)).second)
+	{
+		throw std::runtime_error(boost::str(boost::format("Polygon with id=%d is already in the locator") % id));
+	}
 }
 
 void 
 ItemLocator::Remove(UniqueId id)
 {
 	implPtr_->Remove(id);
+	if (polyMap_.erase(id) == 0)
+	{
+		throw std::runtime_error(boost::str(boost::format("Trying to remove unknow polygon id=%d from locator") % id));
+	}
 }
 
 ItemLocator::Ids 
 ItemLocator::At(const Polygon2d & p) const
 {
-	return implPtr_->At(p);
+	Ids resultIds;
+
+	const BGPolygon2d requestedPolygon = ConvertToBGPolygon2d(p);
+
+	boost::for_each(implPtr_->At(p),
+		[&](const UniqueId & id)
+	{
+		const auto foundPolygond = polyMap_.find(id);
+
+		if (foundPolygond == polyMap_.end())
+		{
+			throw std::runtime_error(boost::str(boost::format("Trying to fetch unknow polygon id=%d from locator") % id));
+		}
+	
+		if (bg::intersects(requestedPolygon, ConvertToBGPolygon2d(foundPolygond->second)))
+		{
+			resultIds.push_back(id);
+		}
+	});
+
+	return resultIds;
 }

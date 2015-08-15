@@ -5,10 +5,12 @@
 #include "Point2i.h"
 
 #include "RailRoadRangeGenerator.h"
-#include "RailRoadClosestPoint.h"
+//#include "RailRoadClosestPoint.h"
 #include "RailRoadParametersTaker.h"
 #include "RailRoadSizer.h"
 #include "RailRoadConnector.h"
+
+#include "RailRoadConnectionResult.h"
 
 #include <boost/range/algorithm/transform.hpp>
 #include <boost/range/algorithm/for_each.hpp>
@@ -60,7 +62,7 @@ namespace
 
 	Polygon2d ConvertRoadToPolygon(const RailRoadPtr & p)
 	{
-		RailRoadRangeGenerator rrrg;
+		RailRoadRangeGenerator rrrg(false);
 		p->Accept(rrrg);
 
 		return ConvertRangeToPolygon(rrrg.GetRange().GetRanges());
@@ -68,7 +70,7 @@ namespace
 }
 
 bool 
-RoadNetworkManager::InsertPermanent(const RailRoadPtr & p)
+RoadNetworkManager::InsertPermanentRoad(const RailRoadPtr & p)
 {
 	Point3i piStart;
 	Point3i piEnd;
@@ -99,7 +101,38 @@ RoadNetworkManager::InsertPermanent(const RailRoadPtr & p)
 
 	return true;
 }
-		
+
+bool 
+RoadNetworkManager::RemovePermanentRoad(const RailRoadPtr & p)
+{
+	Point3i piStart;
+	Point3i piEnd;
+
+	std::tie(piStart, piEnd) = GetStartEnd(p);
+
+	const auto roadId = permRoads_.Find(RoadSearcher::KeyPair(piStart, piEnd));
+
+	if (!roadId)
+	{
+		return false;
+	}
+
+	locator_.Remove(roadId->first);
+	roadMap_.erase(roadId->first);
+
+	if (!roadNetwork_.Remove(piStart, piEnd))
+	{
+		throw std::runtime_error("Failed to remove permanent road from road network");
+	}
+
+	if (!permRoads_.Erase(RoadSearcher::KeyPair(piStart, piEnd)))
+	{
+		throw std::runtime_error("Trying to remove not existing permanent road");
+	}
+
+	return true;
+}
+
 RoadRoutePtr 
 RoadNetworkManager::GetRoute(const Point3d & from, const Point3d & to) const
 {
@@ -139,7 +172,7 @@ RoadNetworkManager::GetRoute(const Point3d & from, const Point3d & to) const
 }
 
 bool 
-RoadNetworkManager::InsertTemporary(const RailRoadPtr & p)
+RoadNetworkManager::InsertTemporaryRoad(const RailRoadPtr & p)
 {
 	RoadSearcher::KeyPair key = GetStartEnd(p);
 
@@ -165,8 +198,14 @@ RoadNetworkManager::InsertTemporary(const RailRoadPtr & p)
 	return true;
 }
 
+void 
+RoadNetworkManager::InsertTemporaryIntersections(const RailRoadIntersections & intersections)
+{
+	tempIntersections_.insert(tempIntersections_.end(), intersections.begin(), intersections.end());
+}
+
 RailRoadPtrs
-RoadNetworkManager::GetTemporary() const
+RoadNetworkManager::GetTemporaryRoads() const
 {
 	RailRoadPtrs result;
 
@@ -186,7 +225,7 @@ RoadNetworkManager::GetTemporary() const
 }
 
 void
-RoadNetworkManager::ClearTemporary()
+RoadNetworkManager::ClearTemporaryData()
 {
 	using namespace boost::adaptors;
 
@@ -205,7 +244,7 @@ RoadNetworkManager::AdjustPoint(const Point3d & p) const -> AdjustedPoint
 {
 	const Point2d p2d = Point2d::Cast(p);
 
-	TerrainRangeCircle circle(p2d, 1.0f);
+	TerrainRangeCircle circle(p2d, 0.0f);
 
 	auto ids = locator_.At(ConvertRangeToPolygon(circle.GetRanges()));
 
@@ -214,13 +253,10 @@ RoadNetworkManager::AdjustPoint(const Point3d & p) const -> AdjustedPoint
 
 	const RailRoadPtr & foundRoad = roadMap_.at(ids.front());
 
-	RailRoadClosestPoint rrcp(p2d, true, 1.0f);
-	foundRoad->Accept(rrcp);
-
-	return {rrcp.GetPoint(), foundRoad};
+	return {p, foundRoad};
 }
 
-RailRoadPtrs 
+RailRoadConnectionResult 
 RoadNetworkManager::CreateRoad(const Point3d & from, const Point3d & to) const
 {
 	const AdjustedPoint adjustedFrom = AdjustPoint(from);
@@ -231,5 +267,36 @@ RoadNetworkManager::CreateRoad(const Point3d & from, const Point3d & to) const
 		return RailRoadConnector::GetRoads(adjustedFrom.first, adjustedFrom.second, adjustedTo.first, adjustedTo.second);
 	}
 
-	return RailRoadPtrs();
+	return RailRoadConnectionResult();
+}
+
+#include "RailRoadSplitter.h"
+
+void 
+RoadNetworkManager::CommitIntersections()
+{
+	// ? what if commit failed
+
+	boost::for_each(tempIntersections_, 
+		[&](const RailRoadIntersection & rri)
+	{
+		RailRoadSplitter rrs(rri.intersectionPoint);
+		rri.roadPtr->Accept(rrs);
+
+		const RailRoadSplitResult & splitResult = rrs.GetSplitResult();
+
+		if (!splitResult)
+		{
+			return;
+		}
+
+		if (RemovePermanentRoad(rri.roadPtr))
+		{
+			InsertPermanentRoad(splitResult->first);
+			InsertPermanentRoad(splitResult->second);
+		}
+	});
+
+	// have to clear it here as second run of commit will create duplicates
+	tempIntersections_.clear();
 }

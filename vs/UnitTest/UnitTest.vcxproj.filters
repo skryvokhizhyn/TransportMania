@@ -23,9 +23,6 @@
     <ClCompile Include="PointImplTest.cpp">
       <Filter>Point</Filter>
     </ClCompile>
-    <ClCompile Include="RailRoadVisitorsTest.cpp">
-      <Filter>RoadNetwork</Filter>
-    </ClCompile>
     <ClCompile Include="RoadNetworkTest.cpp">
       <Filter>RoadNetwork</Filter>
     </ClCompile>
@@ -275,6 +272,21 @@
     <ClCompile Include="RailRoadFactoryTest.cpp">
       <Filter>Other</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadSplitter.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
+    <ClCompile Include="RailRoadVisitorsTest.cpp">
+      <Filter>RailRoadVisitors</Filter>
+    </ClCompile>
+    <ClCompile Include="RailRoadClosestPointTest.cpp">
+      <Filter>RailRoadVisitors</Filter>
+    </ClCompile>
+    <ClCompile Include="RailRoadTangentTest.cpp">
+      <Filter>RailRoadVisitors</Filter>
+    </ClCompile>
+    <ClCompile Include="RailRoadSplitterTest.cpp">
+      <Filter>RailRoadVisitors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">
@@ -297,6 +309,9 @@
     </Filter>
     <Filter Include="Utils">
       <UniqueIdentifier>{ab2b3bec-d8d5-4605-bab6-38d167d85d74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RailRoadVisitors">
+      <UniqueIdentifier>{d27e0907-1088-468b-8241-41976b6198f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

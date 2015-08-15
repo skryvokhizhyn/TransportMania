@@ -1,5 +1,7 @@
 #include <boost/test/unit_test.hpp>
 
+#define UNIT_TESTING_ON
+
 #include <RoadNetworkImpl.h>
 #include <RoadNetworkManager.h>
 #include <RailRoadFactory.h>
@@ -21,14 +23,14 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest1)
 	BOOST_CHECK(n.InsertEdge(0, 2, 1));
 	BOOST_CHECK(!n.InsertEdge(1, 0, 1));
 
-	auto r1 = n.GetEdge(0, 1);
+	auto r1 = n.GetEdgeValue(0, 1);
 	BOOST_CHECK(r1.second);
 	BOOST_CHECK_EQUAL(r1.first, 0);
 
-	auto r2 = n.GetEdge(0, 3);
+	auto r2 = n.GetEdgeValue(0, 3);
 	BOOST_CHECK_EQUAL(r2.second, false);
 
-	auto r3 = n.GetEdge(2, 0);
+	auto r3 = n.GetEdgeValue(2, 0);
 	BOOST_CHECK(r3.second);
 	BOOST_CHECK_EQUAL(r3.first, 1);
 }
@@ -192,10 +194,10 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest8)
 BOOST_AUTO_TEST_CASE(RoadNetworkTest9)
 {
 	RoadNetworkManager rn;
-	rn.InsertPermanent(RailRoadFactory::Line(Point3d(), Point3d(1, 0, 0)));
-	rn.InsertPermanent(RailRoadFactory::Line(Point3d(2, 0, 0), Point3d(1, 0, 0)));
-	rn.InsertPermanent(RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2), Rotation::AntiClockwise));
-	rn.InsertPermanent(RailRoadFactory::Line(Point3d(4, 2, 0), Point3d(4, 4, 0)));
+	rn.InsertPermanentRoad(RailRoadFactory::Line(Point3d(), Point3d(1, 0, 0)));
+	rn.InsertPermanentRoad(RailRoadFactory::Line(Point3d(2, 0, 0), Point3d(1, 0, 0)));
+	rn.InsertPermanentRoad(RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2), Rotation::AntiClockwise));
+	rn.InsertPermanentRoad(RailRoadFactory::Line(Point3d(4, 2, 0), Point3d(4, 4, 0)));
 
 	RoadRoutePtr rrp = rn.GetRoute(Point3d(), Point3d(4, 4, 0));
 
@@ -218,9 +220,9 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest10)
 	const float arcLen = rrs.GetLenght();
 
 	RoadNetworkManager rn;
-	rn.InsertPermanent(RailRoadFactory::Line(p1, p2));
-	rn.InsertPermanent(arcPtr);
-	rn.InsertPermanent(RailRoadFactory::Line(p3, p4));
+	rn.InsertPermanentRoad(RailRoadFactory::Line(p1, p2));
+	rn.InsertPermanentRoad(arcPtr);
+	rn.InsertPermanentRoad(RailRoadFactory::Line(p3, p4));
 
 	RoadRoutePtr rrp = rn.GetRoute(p1, p4);
 
@@ -242,4 +244,118 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest10)
 	BOOST_CHECK_EQUAL(rp.Get(), Point3d(15, 30, 3));
 	rp.Move(5.0f);
 	BOOST_CHECK_EQUAL(rp.Get(), p4);
+} 
+
+BOOST_AUTO_TEST_CASE(RoadNetworkTest11)
+{
+	RoadNetworkImpl<int, int> n;
+
+	BOOST_CHECK(n.InsertEdge(0, 1, 0));
+	BOOST_CHECK(n.GetEdgeValue(0, 1).second);
+	BOOST_CHECK(n.CheckPointExists(0));
+	BOOST_CHECK(n.CheckPointExists(1));
+
+	BOOST_CHECK(n.RemoveEdge(0, 1));
+	BOOST_CHECK(!n.GetEdgeValue(0, 1).second);
+	BOOST_CHECK(!n.CheckPointExists(0));
+	BOOST_CHECK(!n.CheckPointExists(1));
+
+	BOOST_CHECK(n.InsertEdge(0, 1, 0));
+}
+
+BOOST_AUTO_TEST_CASE(RoadNetworkTest12)
+{
+	RoadNetworkImpl<int, int> n;
+
+	BOOST_CHECK(n.InsertEdge(0, 1, 0));
+	BOOST_CHECK(n.InsertEdge(1, 2, 0));
+	BOOST_CHECK(n.InsertEdge(2, 3, 0));
+	
+	BOOST_CHECK(n.RemoveEdge(1, 2));
+	BOOST_CHECK(!n.GetEdgeValue(1, 2).second);
+	BOOST_CHECK(n.CheckPointExists(1));
+	BOOST_CHECK(n.CheckPointExists(2));
+}
+
+BOOST_AUTO_TEST_CASE(RoadNetworkTest13)
+{
+	RoadNetworkImpl<int, int> n;
+
+	BOOST_CHECK(!n.RemoveEdge(1, 2));
+	BOOST_CHECK(n.InsertEdge(0, 1, 0));
+	BOOST_CHECK(!n.RemoveEdge(1, 2));
+	BOOST_CHECK(n.InsertEdge(2, 3, 0));
+	BOOST_CHECK(!n.RemoveEdge(1, 2));
+}
+
+BOOST_AUTO_TEST_CASE(RoadNetworkTest14)
+{
+	RoadNetworkImpl<int, int> n;
+
+	BOOST_CHECK(n.InsertEdge(0, 1, 0));
+	BOOST_CHECK(n.InsertEdge(1, 2, 0));
+	
+	auto r1 = n.GetRoute(0, 2);
+
+	BOOST_CHECK_EQUAL(r1.Size(), 3u);
+
+	auto it = r1.Begin();
+
+	BOOST_CHECK_EQUAL(it.Value(), 0); it.Next();
+	BOOST_CHECK_EQUAL(it.Value(), 1); it.Next();
+	BOOST_CHECK_EQUAL(it.Value(), 2);
+
+	BOOST_CHECK(n.RemoveEdge(0, 1));
+	BOOST_CHECK_EQUAL(n.GetRoute(0, 2).Size(), 0u);
+	BOOST_CHECK(!n.CheckPointExists(0));
+
+	BOOST_CHECK(n.InsertEdge(0, 1, 0));
+	BOOST_CHECK_EQUAL(n.GetRoute(0, 2).Size(), 3u);
+}
+
+BOOST_AUTO_TEST_CASE(RoadNetworkTest15)
+{
+	RoadNetworkManager rn;
+	BOOST_CHECK(rn.InsertPermanentRoad(RailRoadFactory::Line(Point3d(0, 0, 0), Point3d(1, 0, 0))));
+	BOOST_CHECK(rn.RemovePermanentRoad(RailRoadFactory::Line(Point3d(0, 0, 0), Point3d(1, 0, 0))));
+
+	// reversed remove
+	BOOST_CHECK(rn.InsertPermanentRoad(RailRoadFactory::Line(Point3d(0, 0, 0), Point3d(1, 0, 0))));
+	BOOST_CHECK(rn.RemovePermanentRoad(RailRoadFactory::Line(Point3d(1, 0, 0), Point3d(0, 0, 0))));
+} 
+
+BOOST_AUTO_TEST_CASE(RoadNetworkTest16)
+{
+	const Point3d p1(0, 0, 0);
+	const Point3d p2(5, 0, 0);
+	const Point3d p3(10, 0, 0);
+
+	const RailRoadPtr r = RailRoadFactory::Line(p1, p3);
+
+	RoadNetworkManager rn;
+	BOOST_CHECK(rn.InsertPermanentRoad(r));
+	
+	BOOST_CHECK(rn.GetRoute(p1, p3)->Valid());
+
+	RailRoadIntersections intersections;
+	intersections.push_back(RailRoadIntersection(r, p2));
+
+	rn.InsertTemporaryIntersections(intersections);
+	rn.CommitIntersections();
+
+	RoadRoutePtr rrp1 = rn.GetRoute(p1, p3);
+	
+	BOOST_CHECK(rrp1->Valid());
+	
+	RoadPoint rp = rrp1->GetStartingPoint(Heading::Forward);
+
+	BOOST_CHECK_EQUAL(rp.Get(), p1);
+	rp.Move(5.0f);
+	BOOST_CHECK_EQUAL(rp.Get(), p2);
+	rp.Move(5.0f);
+	BOOST_CHECK_EQUAL(rp.Get(), p3);
+
+	BOOST_CHECK(!rn.InsertPermanentRoad(RailRoadFactory::Line(p1, p2)));
+	BOOST_CHECK(!rn.InsertPermanentRoad(RailRoadFactory::Line(p2, p3)));
+	BOOST_CHECK(rn.InsertPermanentRoad(RailRoadFactory::Line(p1, p3)));
 } 

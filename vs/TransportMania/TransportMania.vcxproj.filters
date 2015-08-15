@@ -444,6 +444,9 @@
     <ClCompile Include="..\..\src\RailRoadConnector.cpp">
       <Filter>Railroad</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadSplitter.cpp">
+      <Filter>Railroad\Visitors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -1006,6 +1009,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadTangentData.h">
       <Filter>Railroad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadIntersection.h">
+      <Filter>Railroad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadConnectionResult.h">
+      <Filter>Railroad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadSplitter.h">
+      <Filter>Railroad\Visitors</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

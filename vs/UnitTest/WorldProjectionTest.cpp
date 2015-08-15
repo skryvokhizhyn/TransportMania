@@ -273,4 +273,3 @@ BOOST_AUTO_TEST_CASE(PointIn3DTest3)
 	BOOST_CHECK_CLOSE(p1.x(), x, 0.001f);
 	BOOST_CHECK_CLOSE(p2.y(), x / x_s * y_s, 0.001f);
 }
-

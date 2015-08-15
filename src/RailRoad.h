@@ -20,12 +20,10 @@ namespace trm
 		virtual void Accept(RailRoadVisitor & v) = 0;
 		
 	public:
-		static const AxisType RAIL_ROAD_WIDTH;
-		static const AxisType RAIL_ROAD_BORDER;
-		static const AxisType RAIL_ROAD_STEP;
-		static const AxisType RAIL_ROAD_Z_SHIFT;
-
 		static AxisType GetTotalWidth();
+		static AxisType GetRoadWidth();
+		static AxisType GetRoadStep();
+		static AxisType GetRoadZShift();
 	};
 
 	typedef std::shared_ptr<RailRoad> RailRoadPtr;

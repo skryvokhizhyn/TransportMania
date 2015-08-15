@@ -6,24 +6,29 @@
 #include "Point3i.h"
 #include "RoadRoute.h"
 #include "ItemLocator.h"
+#include "RailRoadIntersection.h"
 
 #include <unordered_map>
 
 namespace trm
 {
 	class UniqueId;
+	struct RailRoadConnectionResult;
 
 	class RoadNetworkManager
 	{
 	public:
-		bool InsertPermanent(const RailRoadPtr & p);
+		bool InsertPermanentRoad(const RailRoadPtr & p);
+		bool RemovePermanentRoad(const RailRoadPtr & p);
+		void CommitIntersections();
 		RoadRoutePtr GetRoute(const Point3d & from, const Point3d & to) const;
 
-		bool InsertTemporary(const RailRoadPtr & p);
-		RailRoadPtrs GetTemporary() const;
-		void ClearTemporary();
+		bool InsertTemporaryRoad(const RailRoadPtr & p);
+		void InsertTemporaryIntersections(const RailRoadIntersections & intersections);
+		RailRoadPtrs GetTemporaryRoads() const;
+		void ClearTemporaryData();
 
-		RailRoadPtrs CreateRoad(const Point3d & from, const Point3d & to) const;
+		RailRoadConnectionResult CreateRoad(const Point3d & from, const Point3d & to) const;
 
 	private:
 		using RoadMap = std::unordered_map<UniqueId, RailRoadPtr>;
@@ -37,6 +42,7 @@ namespace trm
 		RoadNetwork roadNetwork_;
 		RoadSearcher permRoads_;
 		RoadSearcher tempRoads_;
+		RailRoadIntersections tempIntersections_;
 		RoadMap roadMap_;
 		ItemLocator locator_;
 	};

@@ -58,29 +58,45 @@ namespace network_impl
 			RouteType route_;
 		};
 
+#ifdef UNIT_TESTING_ON
+
 	public:	
-		typedef std::pair<EdgeValueType, bool> EdgeSearchType;
+		typedef std::pair<EdgeValueType, bool> EdgeValueSearchType;
+		EdgeValueSearchType GetEdgeValue(const PointValueType p1, const PointValueType p2);
+		bool CheckPointExists(const PointValueType p) const;
+
+#endif // UNIT_TESTING_ON		
 
 	public:
 		bool InsertEdge(const PointValueType p1, const PointValueType p2, const EdgeValueType edge);
-		EdgeSearchType GetEdge(const PointValueType p1, const PointValueType p2);
+		bool RemoveEdge(const PointValueType p1, const PointValueType p2);
 		Route GetRoute(const PointValueType p1, const PointValueType p2);
 
 	private:
 		typedef boost::property<boost::edge_weight_t, EdgeValueType> EdgeWeight;
-		typedef boost::adjacency_list_traits<boost::setS, boost::listS, boost::undirectedS>::vertex_descriptor VertexType;
+		typedef boost::adjacency_list_traits<boost::setS, boost::listS, boost::undirectedS> GraphTraits;
+		typedef GraphTraits::vertex_descriptor VertexType;
+		typedef GraphTraits::edge_descriptor EdgeType;
 		typedef boost::property<boost::vertex_index_t, int, boost::property<boost::vertex_predecessor_t, VertexType>> VertexProperties;
 		typedef boost::adjacency_list<boost::setS, boost::listS, boost::undirectedS, VertexProperties, EdgeWeight> Graph;
 		typedef boost::bimap<VertexType, PointValueType> VertexDescriptorMap;
+		typedef std::pair<VertexType, bool> VertexSearchType;
 		typedef std::tuple<VertexType, VertexType, bool> VertexesSearchType;
+		typedef std::pair<EdgeType, bool> EdgeSearchType;
+		using IndexMapType = typename boost::property_map<Graph, boost::vertex_index_t>::type;
 
 	private:
 		VertexType InsertPoint(const PointValueType point);
+		VertexSearchType GetVertex(const PointValueType p1) const;
 		VertexesSearchType GetVertexes(const PointValueType p1, const PointValueType p2) const;
+		EdgeSearchType GetEdge(const PointValueType p1, const PointValueType p2);
+		void TryRemoveVertex(const VertexType & v);
+		void RebuildIndexMap();
 
 	private:
 		Graph graph_;
 		VertexDescriptorMap vertexDescriptorMap_;
+		bool indexMapInvalid_ = false;
 	};
 
 	template<typename PointValueType, typename EdgeValueType>
@@ -103,6 +119,43 @@ namespace network_impl
 	}
 
 	template<typename PointValueType, typename EdgeValueType>
+	void RoadNetworkImpl<PointValueType, EdgeValueType>::TryRemoveVertex(const VertexType & v)
+	{
+		const auto e_out = boost::out_edges(v, graph_);
+		const auto e_in = boost::in_edges(v, graph_);
+
+		// if no edges exist then do proper removal
+		if (e_out.first == e_out.second && e_in.first == e_in.second)
+		{
+			boost::remove_vertex(v, graph_);
+			vertexDescriptorMap_.left.erase(v);
+			indexMapInvalid_ = true;
+			// no need to clean up index map as this property is removed with vertex
+		}
+	}
+
+	template<typename PointValueType, typename EdgeValueType>
+	bool RoadNetworkImpl<PointValueType, EdgeValueType>::RemoveEdge(const PointValueType p1, const PointValueType p2)
+	{
+		const VertexesSearchType v = GetVertexes(p1, p2);
+
+		if (!std::get<2>(v))
+			return false;
+
+		const EdgeSearchType e = boost::edge(std::get<0>(v), std::get<1>(v), graph_);
+
+		if (!e.second)
+			return false;
+
+		boost::remove_edge(e.first, graph_);
+
+		TryRemoveVertex(std::get<0>(v));
+		TryRemoveVertex(std::get<1>(v));
+
+		return true;
+	}
+
+	template<typename PointValueType, typename EdgeValueType>
 	auto RoadNetworkImpl<PointValueType, EdgeValueType>::InsertPoint(const PointValueType p) -> VertexType
 	{
 		VertexType vertex;
@@ -118,60 +171,83 @@ namespace network_impl
 			vertex = boost::add_vertex(graph_);
 			vertexDescriptorMap_.insert(typename VertexDescriptorMap::value_type(vertex, p));
 
-			using IndexMapType = typename boost::property_map<Graph, boost::vertex_index_t>::type;
-
-			IndexMapType indexMap = boost::get(boost::vertex_index, graph_);
-			indexMap[vertex] = boost::num_vertices(graph_) - 1;
+			if (!indexMapInvalid_)
+			{
+				IndexMapType indexMap = boost::get(boost::vertex_index, graph_);
+				indexMap[vertex] = boost::num_vertices(graph_) - 1;
+			}
 		}
 
 		return vertex;
 	}
 
 	template<typename PointValueType, typename EdgeValueType>
-	auto RoadNetworkImpl<PointValueType, EdgeValueType>::GetVertexes(const PointValueType p1, const PointValueType p2) const -> VertexesSearchType
+	auto RoadNetworkImpl<PointValueType, EdgeValueType>::GetVertex(const PointValueType p) const -> VertexSearchType
 	{
-		VertexesSearchType falseResult(VertexType(), VertexType(), false);
-
-		const auto pI1 = vertexDescriptorMap_.right.find(p1);
-		if (pI1 == vertexDescriptorMap_.right.end())
+		const auto pI = vertexDescriptorMap_.right.find(p);
+		if (pI == vertexDescriptorMap_.right.end())
 		{
-			return falseResult;
+			return VertexSearchType(VertexType(), false);
 		}
-		const VertexType v1 = pI1->second;
-
-		const auto pI2 = vertexDescriptorMap_.right.find(p2);
-		if (pI2 == vertexDescriptorMap_.right.end())
-		{
-			return falseResult;
-		}
-		const VertexType v2 = pI2->second;
-
-		return VertexesSearchType(v1, v2, true);
+		
+		return VertexSearchType(pI->second, true);
 	}
 
 	template<typename PointValueType, typename EdgeValueType>
-	auto RoadNetworkImpl<PointValueType, EdgeValueType>::GetEdge(const PointValueType p1, const PointValueType p2) -> EdgeSearchType
+	auto RoadNetworkImpl<PointValueType, EdgeValueType>::GetVertexes(const PointValueType p1, const PointValueType p2) const -> VertexesSearchType
 	{
-		const EdgeSearchType falseSearchResult = EdgeSearchType(EdgeValueType(), false);
+		const VertexesSearchType falseResult(VertexType(), VertexType(), false);
 
-		const VertexesSearchType vertexes = GetVertexes(p1, p2);
+		const VertexSearchType v1S = GetVertex(p1);
 
-		if (std::get<2>(vertexes) == false)
-		{
-			return falseSearchResult;
-		}
+		if (!v1S.second)
+			return falseResult;
 
-		const auto e = boost::edge(std::get<0>(vertexes), std::get<1>(vertexes), graph_);
+		const VertexSearchType v2S = GetVertex(p2);
+
+		if (!v2S.second)
+			return falseResult;
+
+		return VertexesSearchType(v1S.first, v2S.first, true);
+	}
+
+#ifdef UNIT_TESTING_ON
+
+	template<typename PointValueType, typename EdgeValueType>
+	auto RoadNetworkImpl<PointValueType, EdgeValueType>::GetEdgeValue(const PointValueType p1, const PointValueType p2) -> EdgeValueSearchType
+	{
+		const auto e = GetEdge(p1, p2);
 
 		if (!e.second)
 		{
-			return falseSearchResult;
+			return EdgeValueSearchType(EdgeValueType(), false);
 		}
 
 		using EdgeWeightPropertyType = typename boost::property_map<Graph, boost::edge_weight_t>::type;
 
 		EdgeWeightPropertyType edgeWeightProperty = boost::get(boost::edge_weight_t(), graph_);
-		return EdgeSearchType(edgeWeightProperty[e.first], true);
+		return EdgeValueSearchType(edgeWeightProperty[e.first], true);
+	}
+
+	template<typename PointValueType, typename EdgeValueType>
+	bool RoadNetworkImpl<PointValueType, EdgeValueType>::CheckPointExists(const PointValueType p) const
+	{
+		return GetVertex(p).second;
+	}
+
+#endif // UNIT_TESTING_ON
+
+	template<typename PointValueType, typename EdgeValueType>
+	auto RoadNetworkImpl<PointValueType, EdgeValueType>::GetEdge(const PointValueType p1, const PointValueType p2) -> EdgeSearchType
+	{
+		const VertexesSearchType vertexes = GetVertexes(p1, p2);
+
+		if (std::get<2>(vertexes) == false)
+		{
+			return EdgeSearchType(EdgeType(), false);
+		}
+
+		return boost::edge(std::get<0>(vertexes), std::get<1>(vertexes), graph_);
 	}
 
 	template<typename PointValueType, typename EdgeValueType>
@@ -199,6 +275,24 @@ namespace network_impl
 	}
 
 	template<typename PointValueType, typename EdgeValueType>
+	void RoadNetworkImpl<PointValueType, EdgeValueType>::RebuildIndexMap()
+	{
+		IndexMapType indexMap = boost::get(boost::vertex_index, graph_);
+
+		typedef typename boost::graph_traits<Graph>::vertex_iterator VertexIter;
+		VertexIter vIter, vIterEnd;
+		int c = 0;
+		
+		for(boost::tie(vIter, vIterEnd) = boost::vertices(graph_); 
+			vIter != vIterEnd; ++vIter, ++c)
+		{
+			indexMap[*vIter] = c;
+		}
+
+		indexMapInvalid_ = false;
+	}
+
+	template<typename PointValueType, typename EdgeValueType>
 	auto RoadNetworkImpl<PointValueType, EdgeValueType>::GetRoute(const PointValueType p1, const PointValueType p2) -> Route
 	{
 		const VertexesSearchType vertexes = GetVertexes(p1, p2);
@@ -214,6 +308,9 @@ namespace network_impl
 		const VertexType startVertex = std::get<0>(vertexes);
 
 		using VertexPredecessorType = typename boost::property_map<Graph, boost::vertex_predecessor_t>::type;
+
+		if (indexMapInvalid_)
+			RebuildIndexMap();
 
 		VertexPredecessorType p = boost::get(boost::vertex_predecessor, graph_);
 		boost::dijkstra_shortest_paths(graph_, startVertex, boost::predecessor_map(p));

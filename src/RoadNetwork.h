@@ -26,6 +26,7 @@ namespace network_impl
 		~RoadNetwork();
 
 		bool Insert(const Point3i & from, const Point3i & to, float dist);
+		bool Remove(const Point3i & from, const Point3i & to);
 		Route GetRoute(const Point3i & from, const Point3i & to) const;
 		
 	private:

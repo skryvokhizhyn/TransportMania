@@ -14,6 +14,7 @@
 #include "SceneContent.h"
 #include "RailRoadRangeGenerator.h"
 #include "RailRoadTerraformer.h"
+#include "RailRoadConnectionResult.h"
 
 #include "TextManagerProxy.h"
 #include "ComponentHolderProxy.h"
@@ -202,7 +203,7 @@ Application::PressScene(const float x, const float y)
 
 	if (found)
 	{
-		TerrainRangeCircle range(Point2d::Cast(found.get()), 2);
+		TerrainRangeCircle range(Point2d::Cast(found.get()), 1);
 		
 		auto tf = TerraformFunctionFactory::GetIncrease(1.0f);
 		Terraformer te(range, *tf.get());
@@ -255,12 +256,12 @@ Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*
 void 
 Application::PutRailRoad(const RailRoadPtr & rrp)
 {
-	if (!roadNetworkManager_.InsertPermanent(rrp))
+	if (!roadNetworkManager_.InsertPermanentRoad(rrp))
 	{
 		return;
 	}
 
-	RailRoadRangeGenerator rrrg;
+	RailRoadRangeGenerator rrrg(true);
 	rrp->Accept(rrrg);
 
 	RailRoadTerraformer rrtf;
@@ -354,15 +355,16 @@ Application::ChangeMouseMode()
 void 
 Application::SubmitDraftRoads(bool yesNo)
 {
-	RailRoadPtrs tempRoads = roadNetworkManager_.GetTemporary();
+	RailRoadPtrs tempRoads = roadNetworkManager_.GetTemporaryRoads();
 	tempRoadObjects_.clear();
-	roadNetworkManager_.ClearTemporary();
 
 	if (yesNo)
 	{
+		roadNetworkManager_.CommitIntersections();
 		boost::for_each(tempRoads, boost::bind(&Application::PutRailRoad, this, _1));
 	}
 
+	roadNetworkManager_.ClearTemporaryData();
 	sceneContent_.Close(SceneContent::Type::Draw);
 }
 
@@ -376,9 +378,10 @@ Application::PutRoad(const Point2d & from, const Point2d & to, bool commit)
 
 		if (foundFrom && foundTo && foundFrom != foundTo)
 		{
-			RailRoadPtrs roads = roadNetworkManager_.CreateRoad(*foundFrom, *foundTo);
+			const RailRoadConnectionResult connectionResult = roadNetworkManager_.CreateRoad(*foundFrom, *foundTo);
 
-			boost::for_each(roads, boost::bind(&Application::PutRoadDraft, this, _1));
+			boost::for_each(connectionResult.roadPtrs, boost::bind(&Application::PutRoadDraft, this, _1));
+			roadNetworkManager_.InsertTemporaryIntersections(connectionResult.intersestions);
 		}
 	}
 }
@@ -386,7 +389,7 @@ Application::PutRoad(const Point2d & from, const Point2d & to, bool commit)
 void 
 Application::PutRoadDraft(const RailRoadPtr & rrp)
 {
-	if (!roadNetworkManager_.InsertTemporary(rrp))
+	if (!roadNetworkManager_.InsertTemporaryRoad(rrp))
 	{
 		return;
 	}
@@ -396,7 +399,7 @@ Application::PutRoadDraft(const RailRoadPtr & rrp)
 		sceneContent_.Init(SceneContent::Type::Draw);
 	}
 
-	RailRoadRangeGenerator rrrg;
+	RailRoadRangeGenerator rrrg(true);
 	rrp->Accept(rrrg);
 
 	TerrainPointCollector tpc;

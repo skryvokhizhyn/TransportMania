@@ -9,6 +9,7 @@
 
 #include "RailRoadTangent.h"
 #include "RailRoadClosestPoint.h"
+#include "RailRoadConnectionResult.h"
 
 #include "Line.h"
 
@@ -38,7 +39,7 @@ namespace
 			return OptionalPoint3d();
 		}
 
-		RailRoadTangent rrt(near, far, Degrees(89));
+		RailRoadTangent rrt(near, far, Degrees(60));
 		rrp->Accept(rrt);
 
 		return rrt.GetTangentVector();
@@ -100,18 +101,22 @@ namespace
 }
 
 TangentPointPair 
-RailRoadConnector::GetRoadTangents(Point3d pLeft, const RailRoadPtr & rrpLeft, Point3d pRight, const RailRoadPtr & rrpRight)
+RailRoadConnector::GetRoadTangents(const Point3d & pLeft, const RailRoadPtr & rrpLeft, const Point3d & pRight, const RailRoadPtr & rrpRight)
 {
-	pLeft = AdjustPoint(pLeft, rrpLeft);
-	pRight = AdjustPoint(pRight, rrpRight);
+	const Point3d leftAdjusted = AdjustPoint(pLeft, rrpLeft);
+	const Point3d rightAdjusted = AdjustPoint(pRight, rrpRight);
 
 	TangentPointPair result;
 
-	const Point2d pLeft2d = Point2d::Cast(pLeft);
-	const Point2d pRight2d = Point2d::Cast(pRight);
+	const Point2d pLeft2d = Point2d::Cast(leftAdjusted);
+	const Point2d pRight2d = Point2d::Cast(rightAdjusted);
 
-	result.first = {pLeft, GetTangentData(rrpLeft, pLeft2d, pRight2d)};
-	result.second = {pRight, GetTangentData(rrpRight, pRight2d, pLeft2d)};
+	const OptionalPoint3d leftTangent = GetTangentData(rrpLeft, pLeft2d, pRight2d);
+	const OptionalPoint3d rightTangent = GetTangentData(rrpRight, pRight2d, pLeft2d);
+
+	// we roll back to the initial point if no tangent has been found
+	result.first = {leftTangent ? leftAdjusted : pLeft, leftTangent};
+	result.second = {rightTangent ? rightAdjusted : pRight, rightTangent};
 	
 	return result;
 }
@@ -148,8 +153,23 @@ RailRoadConnector::GetRoads(const TangentPointPair & tangents)
 	return result;
 }
 
-RailRoadPtrs 
+RailRoadConnectionResult 
 RailRoadConnector::GetRoads(Point3d pLeft, const RailRoadPtr & rrpLeft, Point3d pRight, const RailRoadPtr & rrpRight)
 {
-	return GetRoads(GetRoadTangents(pLeft, rrpLeft, pRight, rrpRight));
+	const TangentPointPair tangentPair = GetRoadTangents(pLeft, rrpLeft, pRight, rrpRight);
+
+	RailRoadConnectionResult result;
+	result.roadPtrs = GetRoads(tangentPair);
+
+	if (tangentPair.first.direction)
+	{
+		result.intersestions.emplace_back(rrpLeft, tangentPair.first.point);
+	}
+
+	if (tangentPair.second.direction)
+	{
+		result.intersestions.emplace_back(rrpRight, tangentPair.second.point);
+	}
+
+	return result;
 }

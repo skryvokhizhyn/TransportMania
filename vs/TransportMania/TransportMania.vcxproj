@@ -37,6 +37,7 @@
     <ClCompile Include="..\..\src\RailRoadClosestPoint.cpp" />
     <ClCompile Include="..\..\src\RailRoadConnector.cpp" />
     <ClCompile Include="..\..\src\RailRoadRangeGenerator.cpp" />
+    <ClCompile Include="..\..\src\RailRoadSplitter.cpp" />
     <ClCompile Include="..\..\src\RailRoadTangent.cpp" />
     <ClCompile Include="..\..\src\RailRoadTerraformer.cpp" />
     <ClCompile Include="..\..\src\RoadNetworkManager.cpp" />
@@ -155,8 +156,11 @@
     <ClInclude Include="..\..\src\Point2i.h" />
     <ClInclude Include="..\..\src\Point3i.h" />
     <ClInclude Include="..\..\src\RailRoadClosestPoint.h" />
+    <ClInclude Include="..\..\src\RailRoadConnectionResult.h" />
     <ClInclude Include="..\..\src\RailRoadConnector.h" />
+    <ClInclude Include="..\..\src\RailRoadIntersection.h" />
     <ClInclude Include="..\..\src\RailRoadRangeGenerator.h" />
+    <ClInclude Include="..\..\src\RailRoadSplitter.h" />
     <ClInclude Include="..\..\src\RailRoadTangent.h" />
     <ClInclude Include="..\..\src\RailRoadTangentData.h" />
     <ClInclude Include="..\..\src\RailRoadTerraformer.h" />
