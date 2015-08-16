@@ -447,6 +447,9 @@
     <ClCompile Include="..\..\src\RailRoadSplitter.cpp">
       <Filter>Railroad\Visitors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadIntersection.cpp">
+      <Filter>Railroad</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -1018,6 +1021,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\RailRoadSplitter.h">
       <Filter>Railroad\Visitors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadUtils.h">
+      <Filter>Railroad</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

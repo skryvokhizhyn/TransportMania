@@ -5,10 +5,11 @@
 #include "Point2i.h"
 
 #include "RailRoadRangeGenerator.h"
-//#include "RailRoadClosestPoint.h"
 #include "RailRoadParametersTaker.h"
 #include "RailRoadSizer.h"
 #include "RailRoadConnector.h"
+
+#include "RailRoadUtils.h"
 
 #include "RailRoadConnectionResult.h"
 
@@ -18,28 +19,10 @@
 #include <boost/range/adaptor/reversed.hpp>
 
 using namespace trm;
+using namespace trm::road_utils;
 
 namespace
 {
-	Point3i RoundPoint(const Point3d & p)
-	{
-		// the higher the better
-		const int precision = 100;
-
-		return Point3i::Cast(p * precision);
-	}
-
-	std::pair<Point3i, Point3i> GetStartEnd(const RailRoadPtr & p)
-	{
-		RailRoadParametersTaker rrpt;
-		p->Accept(rrpt);
-
-		const Point3d & pStart = rrpt.GetStart();
-		const Point3d & pEnd = rrpt.GetEnd();
-
-		return std::make_pair(RoundPoint(pStart), RoundPoint(pEnd));
-	}
-
 	Polygon2d ConvertRangeToPolygon(const TerrainRange::Ranges & ranges)
 	{
 		Polygon2d result;
@@ -201,7 +184,9 @@ RoadNetworkManager::InsertTemporaryRoad(const RailRoadPtr & p)
 void 
 RoadNetworkManager::InsertTemporaryIntersections(const RailRoadIntersections & intersections)
 {
-	tempIntersections_.insert(tempIntersections_.end(), intersections.begin(), intersections.end());
+	boost::for_each(intersections, boost::bind(&RailRoadIntersectionMap::Insert, boost::ref(tempIntersections_), _1));
+
+	//tempIntersections_.insert(tempIntersections_.end(), intersections.begin(), intersections.end());
 }
 
 RailRoadPtrs
@@ -275,28 +260,25 @@ RoadNetworkManager::CreateRoad(const Point3d & from, const Point3d & to) const
 void 
 RoadNetworkManager::CommitIntersections()
 {
-	// ? what if commit failed
-
-	boost::for_each(tempIntersections_, 
-		[&](const RailRoadIntersection & rri)
+	boost::for_each(tempIntersections_.GetIntersections(), 
+		[&](const RailRoadIntersectionMap::IntersectionValue & val)
 	{
-		RailRoadSplitter rrs(rri.intersectionPoint);
-		rri.roadPtr->Accept(rrs);
+		RailRoadSplitter rrs(val.second);
+		val.first->Accept(rrs);
 
 		const RailRoadSplitResult & splitResult = rrs.GetSplitResult();
 
-		if (!splitResult)
+		if (splitResult.empty())
 		{
 			return;
 		}
 
-		if (RemovePermanentRoad(rri.roadPtr))
+		if (RemovePermanentRoad(val.first))
 		{
-			InsertPermanentRoad(splitResult->first);
-			InsertPermanentRoad(splitResult->second);
+			boost::for_each(splitResult, boost::bind(&RoadNetworkManager::InsertPermanentRoad, this, _1));
 		}
 	});
 
 	// have to clear it here as second run of commit will create duplicates
-	tempIntersections_.clear();
+	tempIntersections_.Clear();
 }

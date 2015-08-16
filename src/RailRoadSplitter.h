@@ -1,22 +1,21 @@
 #pragma once
 
 #include "RailRoadVisitor.h"
-#include "Point3d.h"
+#include "Polygon3d.h"
 #include "RailRoad.h"
 
-#include <boost/optional.hpp>
-
 #include <utility>
+#include <vector>
 
 namespace trm
 {
-	using RailRoadSplitResult = boost::optional<std::pair<RailRoadPtr, RailRoadPtr>>;
+	using RailRoadSplitResult = std::vector<RailRoadPtr>;
 
 	class RailRoadSplitter
 		: public RailRoadVisitor
 	{
 	public:
-		RailRoadSplitter(const Point3d & p);
+		RailRoadSplitter(const Polygon3d & p);
 
 		virtual void Visit(RailRoadArc & rra) override;
 		virtual void Visit(RailRoadLine & rrl) override;
@@ -24,7 +23,7 @@ namespace trm
 		const RailRoadSplitResult & GetSplitResult() const;
 
 	private:
-		const Point3d splitPoint_;
+		Polygon3d splitPoints_;
 		const RailRoadPtr originalRoadPtr_;
 		RailRoadSplitResult spitResult_;
 	};

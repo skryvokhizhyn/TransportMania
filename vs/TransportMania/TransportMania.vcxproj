@@ -36,6 +36,7 @@
     <ClCompile Include="..\..\src\DrawableItem.cpp" />
     <ClCompile Include="..\..\src\RailRoadClosestPoint.cpp" />
     <ClCompile Include="..\..\src\RailRoadConnector.cpp" />
+    <ClCompile Include="..\..\src\RailRoadIntersection.cpp" />
     <ClCompile Include="..\..\src\RailRoadRangeGenerator.cpp" />
     <ClCompile Include="..\..\src\RailRoadSplitter.cpp" />
     <ClCompile Include="..\..\src\RailRoadTangent.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="..\..\src\RailRoadTangent.h" />
     <ClInclude Include="..\..\src\RailRoadTangentData.h" />
     <ClInclude Include="..\..\src\RailRoadTerraformer.h" />
+    <ClInclude Include="..\..\src\RailRoadUtils.h" />
     <ClInclude Include="..\..\src\RoadEventStateMachine.h" />
     <ClInclude Include="..\..\src\RoadNetworkManager.h" />
     <ClInclude Include="..\..\src\SceneContent.h" />

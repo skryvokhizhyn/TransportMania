@@ -329,21 +329,23 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest16)
 	const Point3d p1(0, 0, 0);
 	const Point3d p2(5, 0, 0);
 	const Point3d p3(10, 0, 0);
+	const Point3d p4(20, 0, 0);
 
-	const RailRoadPtr r = RailRoadFactory::Line(p1, p3);
+	const RailRoadPtr r = RailRoadFactory::Line(p1, p4);
 
 	RoadNetworkManager rn;
 	BOOST_CHECK(rn.InsertPermanentRoad(r));
 	
-	BOOST_CHECK(rn.GetRoute(p1, p3)->Valid());
+	BOOST_CHECK(rn.GetRoute(p1, p4)->Valid());
 
 	RailRoadIntersections intersections;
 	intersections.push_back(RailRoadIntersection(r, p2));
+	intersections.push_back(RailRoadIntersection(r, p3));
 
 	rn.InsertTemporaryIntersections(intersections);
 	rn.CommitIntersections();
 
-	RoadRoutePtr rrp1 = rn.GetRoute(p1, p3);
+	RoadRoutePtr rrp1 = rn.GetRoute(p1, p4);
 	
 	BOOST_CHECK(rrp1->Valid());
 	
@@ -354,8 +356,37 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest16)
 	BOOST_CHECK_EQUAL(rp.Get(), p2);
 	rp.Move(5.0f);
 	BOOST_CHECK_EQUAL(rp.Get(), p3);
+	rp.Move(10.0f);
+	BOOST_CHECK_EQUAL(rp.Get(), p4);
 
 	BOOST_CHECK(!rn.InsertPermanentRoad(RailRoadFactory::Line(p1, p2)));
 	BOOST_CHECK(!rn.InsertPermanentRoad(RailRoadFactory::Line(p2, p3)));
+	BOOST_CHECK(!rn.InsertPermanentRoad(RailRoadFactory::Line(p3, p4)));
 	BOOST_CHECK(rn.InsertPermanentRoad(RailRoadFactory::Line(p1, p3)));
+	BOOST_CHECK(rn.InsertPermanentRoad(RailRoadFactory::Line(p1, p4)));
+	BOOST_CHECK(rn.InsertPermanentRoad(RailRoadFactory::Line(p2, p4)));
 } 
+
+// RailRoadIntersection
+
+BOOST_AUTO_TEST_CASE(RailRoadIntersectionTest1)
+{
+	RailRoadIntersectionMap rrim;
+
+	RailRoadPtr rrl = RailRoadFactory::Line(Point3d(0, 0, 0), Point3d(10, 10, 10));
+
+	rrim.Insert(RailRoadIntersection(rrl, Point3d(1, 1, 1)));
+	rrim.Insert(RailRoadIntersection(rrl, Point3d(2, 2, 2)));
+	rrim.Insert(RailRoadIntersection(rrl, Point3d(2, 2, 2)));
+
+	RailRoadPtr rra = RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2), Rotation::AntiClockwise);
+
+	rrim.Insert(RailRoadIntersection(rra, Point3d(2, 2, 0)));
+
+	const auto & intersections = rrim.GetIntersections();
+
+	BOOST_CHECK_EQUAL(intersections.size(), 2u);
+
+	BOOST_CHECK_EQUAL(intersections.front().second.size(), 3u);
+	BOOST_CHECK_EQUAL(intersections.back().second.size(), 1u);
+}

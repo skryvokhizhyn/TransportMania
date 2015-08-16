@@ -287,6 +287,9 @@
     <ClCompile Include="RailRoadSplitterTest.cpp">
       <Filter>RailRoadVisitors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\RailRoadIntersection.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

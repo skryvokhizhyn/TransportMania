@@ -103,6 +103,7 @@
     <ClCompile Include="..\..\src\RailRoadClosestPoint.cpp" />
     <ClCompile Include="..\..\src\RailRoadConnector.cpp" />
     <ClCompile Include="..\..\src\RailRoadFactory.cpp" />
+    <ClCompile Include="..\..\src\RailRoadIntersection.cpp" />
     <ClCompile Include="..\..\src\RailRoadLine.cpp" />
     <ClCompile Include="..\..\src\RailRoadMover.cpp" />
     <ClCompile Include="..\..\src\RailRoadParametersTaker.cpp" />

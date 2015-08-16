@@ -42,7 +42,7 @@ namespace trm
 		RoadNetwork roadNetwork_;
 		RoadSearcher permRoads_;
 		RoadSearcher tempRoads_;
-		RailRoadIntersections tempIntersections_;
+		RailRoadIntersectionMap tempIntersections_;
 		RoadMap roadMap_;
 		ItemLocator locator_;
 	};
