@@ -31,3 +31,17 @@ SdlUserEventVisitor::Visit(UserEventData::SubmitDraftRoads & e)
 {
 	app_.SubmitDraftRoads(e.yesNo);
 }
+
+void 
+SdlUserEventVisitor::Visit(UserEventData::RoadAffectedIds & e)
+{
+	using CallbackType = void (Application::*)(UniqueId);
+	CallbackType cb;
+
+	if (e.type == RoadAffectedIds::Permanent)
+		cb = &Application::DrawPermanentRailRoad;
+	else
+		cb = &Application::DrawTemporaryRailRoad;
+
+	boost::for_each(e.addedIds, boost::bind(cb, boost::ref(app_), _1));
+}

@@ -1,6 +1,9 @@
 #pragma once
 
+#include <boost/optional.hpp>
+
 #include <ostream>
+#include <vector>
 
 namespace trm
 {
@@ -26,6 +29,9 @@ namespace trm
 	};
 
 	std::ostream & operator << (std::ostream & o, const UniqueId & id);
+
+	using OptionalUniqueId = boost::optional<UniqueId>;
+	using UniqueIdVector = std::vector<UniqueId>;
 
 } // namespace trm
 

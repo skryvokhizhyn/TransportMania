@@ -1025,5 +1025,11 @@
     <ClInclude Include="..\..\src\RailRoadUtils.h">
       <Filter>Railroad</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadAffectedIds.h">
+      <Filter>Railroad</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RailRoadUpdateEvent.h">
+      <Filter>Events\SingleEvents</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

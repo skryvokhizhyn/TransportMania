@@ -256,7 +256,22 @@ Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*
 void 
 Application::PutRailRoad(const RailRoadPtr & rrp)
 {
-	if (!roadNetworkManager_.InsertPermanentRoad(rrp))
+	OptionalUniqueId roadId = roadNetworkManager_.InsertPermanentRoad(rrp);
+	
+	if (!roadId)
+	{
+		return;
+	}
+
+	DrawPermanentRailRoad(roadId.get());
+}
+
+void 
+Application::DrawPermanentRailRoad(UniqueId id)
+{
+	const RailRoadPtr & rrp = roadNetworkManager_.GetRoadById(id);
+
+	if (!rrp)
 	{
 		return;
 	}
@@ -352,19 +367,22 @@ Application::ChangeMouseMode()
 	sceneHandlerPtr_->ChangeHandler(*this);
 }
 
+#include "RailRoadUpdateEvent.h"
+
 void 
 Application::SubmitDraftRoads(bool yesNo)
 {
-	RailRoadPtrs tempRoads = roadNetworkManager_.GetTemporaryRoads();
 	tempRoadObjects_.clear();
 
 	if (yesNo)
 	{
-		roadNetworkManager_.CommitIntersections();
-		boost::for_each(tempRoads, boost::bind(&Application::PutRailRoad, this, _1));
+		RailRoadUpdateEvent(roadNetworkManager_.CommitTemporaryRoads());
+	}
+	else
+	{
+		roadNetworkManager_.ClearTemporaryData();
 	}
 
-	roadNetworkManager_.ClearTemporaryData();
 	sceneContent_.Close(SceneContent::Type::Draw);
 }
 
@@ -389,7 +407,25 @@ Application::PutRoad(const Point2d & from, const Point2d & to, bool commit)
 void 
 Application::PutRoadDraft(const RailRoadPtr & rrp)
 {
-	if (!roadNetworkManager_.InsertTemporaryRoad(rrp))
+	OptionalUniqueId roadId = roadNetworkManager_.InsertTemporaryRoad(rrp);
+
+	if (!roadId)
+	{
+		return;
+	}
+
+	RailRoadAffectedIds ids(RailRoadAffectedIds::Temporary);
+	ids.addedIds.push_back(roadId.get());
+
+	RailRoadUpdateEvent(ids);
+}
+
+void 
+Application::DrawTemporaryRailRoad(UniqueId id)
+{
+	const RailRoadPtr & rrp = roadNetworkManager_.GetRoadById(id);
+	
+	if (!rrp)
 	{
 		return;
 	}
@@ -408,10 +444,3 @@ Application::PutRoadDraft(const RailRoadPtr & rrp)
 
 	tempRoadObjects_.push_back(StaticSceneObjectFactory::ForTerrainCover(tpc.GetPoints()));
 }
-//
-//void 
-//Application::PutLineDraft(const Point3d & from, const Point3d & to)
-//{
-//	const RailRoadPtr rrp = RailRoadFactory::Line(from, to);
-//	PutRoadDraft(rrp);
-//}

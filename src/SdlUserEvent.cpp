@@ -114,7 +114,8 @@ namespace priv
 		CloseWindowType,
 		PauseApplicationType,
 		MouseModeChangeType,
-		SubmitDraftRoadsType
+		SubmitDraftRoadsType,
+		RailRoadAffectedIdsType
 	};
 
 	// specialize for every user event data
@@ -122,6 +123,7 @@ namespace priv
 	USER_EVENT_TO_ENUM_TYPE(PauseApplication, PauseApplicationType);
 	USER_EVENT_TO_ENUM_TYPE(ChangeMouseMode, MouseModeChangeType);
 	USER_EVENT_TO_ENUM_TYPE(SubmitDraftRoads, SubmitDraftRoadsType);
+	USER_EVENT_TO_ENUM_TYPE(RoadAffectedIds, RailRoadAffectedIdsType);
 
 } // namespace priv
 
@@ -129,6 +131,7 @@ USER_EVENT_ENCODE_SPECIALIZATION(CloseWindow);
 USER_EVENT_ENCODE_SPECIALIZATION(PauseApplication);
 USER_EVENT_ENCODE_SPECIALIZATION(ChangeMouseMode);
 USER_EVENT_ENCODE_SPECIALIZATION(SubmitDraftRoads);
+USER_EVENT_ENCODE_SPECIALIZATION(RailRoadAffectedIds);
 
 SdlUserEventPtr 
 SdlUserEventCoder::Decode(const SDL_Event & e)
@@ -141,6 +144,7 @@ SdlUserEventCoder::Decode(const SDL_Event & e)
 		USER_EVENT_DECODE_SWITCH_CASE(PauseApplicationType, PauseApplication);
 		USER_EVENT_DECODE_SWITCH_CASE(MouseModeChangeType, ChangeMouseMode);
 		USER_EVENT_DECODE_SWITCH_CASE(SubmitDraftRoadsType, SubmitDraftRoads);
+		USER_EVENT_DECODE_SWITCH_CASE(RailRoadAffectedIdsType, RoadAffectedIds);
 
 	default:
 		throw std::runtime_error((boost::format("Unknown User Event id=%d given for decoding") % e.user.code).str());

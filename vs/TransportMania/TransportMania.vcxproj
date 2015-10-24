@@ -156,6 +156,7 @@
     <ClInclude Include="..\..\src\OptionalPoint3d.h" />
     <ClInclude Include="..\..\src\Point2i.h" />
     <ClInclude Include="..\..\src\Point3i.h" />
+    <ClInclude Include="..\..\src\RailRoadAffectedIds.h" />
     <ClInclude Include="..\..\src\RailRoadClosestPoint.h" />
     <ClInclude Include="..\..\src\RailRoadConnectionResult.h" />
     <ClInclude Include="..\..\src\RailRoadConnector.h" />
@@ -165,6 +166,7 @@
     <ClInclude Include="..\..\src\RailRoadTangent.h" />
     <ClInclude Include="..\..\src\RailRoadTangentData.h" />
     <ClInclude Include="..\..\src\RailRoadTerraformer.h" />
+    <ClInclude Include="..\..\src\RailRoadUpdateEvent.h" />
     <ClInclude Include="..\..\src\RailRoadUtils.h" />
     <ClInclude Include="..\..\src\RoadEventStateMachine.h" />
     <ClInclude Include="..\..\src\RoadNetworkManager.h" />

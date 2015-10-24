@@ -343,7 +343,7 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest16)
 	intersections.push_back(RailRoadIntersection(r, p3));
 
 	rn.InsertTemporaryIntersections(intersections);
-	rn.CommitIntersections();
+	rn.CommitTemporaryRoads();
 
 	RoadRoutePtr rrp1 = rn.GetRoute(p1, p4);
 	

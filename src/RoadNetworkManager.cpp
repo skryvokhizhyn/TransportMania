@@ -8,6 +8,7 @@
 #include "RailRoadParametersTaker.h"
 #include "RailRoadSizer.h"
 #include "RailRoadConnector.h"
+#include "RailRoadSplitter.h"
 
 #include "RailRoadUtils.h"
 
@@ -52,68 +53,62 @@ namespace
 	}
 }
 
-bool 
+OptionalUniqueId 
 RoadNetworkManager::InsertPermanentRoad(const RailRoadPtr & p)
 {
-	Point3i piStart;
-	Point3i piEnd;
-
-	std::tie(piStart, piEnd) = GetStartEnd(p);
+	const RoadSearcher::KeyPair keyPair = GetStartEnd(p);
 
 	const UniqueId newId = roadMap_.emplace(UniqueId::Generate(), p).first->first;
 
-	if (!permRoads_.Insert(RoadSearcher::KeyPair(piStart, piEnd), newId))
+	if (!allRoads_.Insert(keyPair, newId))
 	{
-		return false;
+		return OptionalUniqueId();
 	}
 
 	RailRoadSizer rrs;
 	p->Accept(rrs);
 
-	if (!roadNetwork_.Insert(piStart, piEnd, rrs.GetLenght()))
+	if (!roadNetwork_.Insert(keyPair.first, keyPair.second, rrs.GetLenght()))
 	{
-		if (!permRoads_.Erase(RoadSearcher::KeyPair(piStart, piEnd)))
+		if (!allRoads_.Erase(keyPair))
 		{
 			throw std::runtime_error("De-synchronized roads cache with roads graph");
 		}
 
-		return false;
+		return OptionalUniqueId();
 	}
 
 	locator_.Put(newId, ConvertRoadToPolygon(p));
 
-	return true;
+	return newId;
 }
 
-bool 
+OptionalUniqueId 
 RoadNetworkManager::RemovePermanentRoad(const RailRoadPtr & p)
 {
-	Point3i piStart;
-	Point3i piEnd;
+	const RoadSearcher::KeyPair keyPair = GetStartEnd(p);
 
-	std::tie(piStart, piEnd) = GetStartEnd(p);
-
-	const auto roadId = permRoads_.Find(RoadSearcher::KeyPair(piStart, piEnd));
+	const auto roadId = allRoads_.Find(keyPair);
 
 	if (!roadId)
 	{
-		return false;
+		return OptionalUniqueId();
 	}
 
 	locator_.Remove(roadId->first);
 	roadMap_.erase(roadId->first);
 
-	if (!roadNetwork_.Remove(piStart, piEnd))
+	if (!allRoads_.Erase(keyPair))
+	{
+		throw std::runtime_error("Trying to remove not existing road");
+	}
+
+	if (!roadNetwork_.Remove(keyPair.first, keyPair.second))
 	{
 		throw std::runtime_error("Failed to remove permanent road from road network");
 	}
 
-	if (!permRoads_.Erase(RoadSearcher::KeyPair(piStart, piEnd)))
-	{
-		throw std::runtime_error("Trying to remove not existing permanent road");
-	}
-
-	return true;
+	return roadId->first;
 }
 
 RoadRoutePtr 
@@ -133,7 +128,7 @@ RoadNetworkManager::GetRoute(const Point3d & from, const Point3d & to) const
 
 		while (itNext != route.end())
 		{
-			const auto found = permRoads_.Find(RoadSearcher::KeyPair(*itPrev, *itNext));
+			const auto found = allRoads_.Find(RoadSearcher::KeyPair(*itPrev, *itNext));
 
 			if (found)
 			{
@@ -154,59 +149,37 @@ RoadNetworkManager::GetRoute(const Point3d & from, const Point3d & to) const
 	return std::make_shared<RoadRoute>(std::move(rc));
 }
 
-bool 
+OptionalUniqueId 
 RoadNetworkManager::InsertTemporaryRoad(const RailRoadPtr & p)
 {
 	RoadSearcher::KeyPair key = GetStartEnd(p);
 
-	if (permRoads_.Exists(key))
+	if (allRoads_.Exists(key))
 	{
-		return false;
-	}
-
-	if (tempRoads_.Exists(key))
-	{
-		return false;
+		return OptionalUniqueId();
 	}
 
 	UniqueId newId = roadMap_.emplace(UniqueId::Generate(), p).first->first;
 
-	if (!tempRoads_.Insert(key, newId))
+	if (!tempRoadIds_.insert(newId).second)
 	{
-		return false;
+		return OptionalUniqueId();
+	}
+
+	if (!allRoads_.Insert(key, newId))
+	{
+		return OptionalUniqueId();
 	}
 
 	locator_.Put(newId, ConvertRoadToPolygon(p));
 
-	return true;
+	return newId;
 }
 
 void 
 RoadNetworkManager::InsertTemporaryIntersections(const RailRoadIntersections & intersections)
 {
 	boost::for_each(intersections, boost::bind(&RailRoadIntersectionMap::Insert, boost::ref(tempIntersections_), _1));
-
-	//tempIntersections_.insert(tempIntersections_.end(), intersections.begin(), intersections.end());
-}
-
-RailRoadPtrs
-RoadNetworkManager::GetTemporaryRoads() const
-{
-	RailRoadPtrs result;
-
-	const auto & data = tempRoads_.Data();
-
-	result.reserve(data.size());
-
-	using namespace boost::adaptors;
-
-	boost::transform(data | map_values, std::back_inserter(result),
-		[&](const RoadSearcher::ValueType & val)
-	{
-		return roadMap_.at(val.first);
-	});
-
-	return result;
 }
 
 void
@@ -214,14 +187,14 @@ RoadNetworkManager::ClearTemporaryData()
 {
 	using namespace boost::adaptors;
 
-	boost::for_each(tempRoads_.Data() | map_values, 
-		[&](const RoadSearcher::ValueType & val)
+	boost::for_each(tempRoadIds_, 
+		[&](const UniqueId & id)
 	{
-		roadMap_.erase(val.first);
-		locator_.Remove(val.first);
+		roadMap_.erase(id);
+		locator_.Remove(id);
 	});
 
-	tempRoads_.Clear();
+	tempRoadIds_.clear();
 }
 
 auto 
@@ -255,11 +228,27 @@ RoadNetworkManager::CreateRoad(const Point3d & from, const Point3d & to) const
 	return RailRoadConnectionResult();
 }
 
-#include "RailRoadSplitter.h"
-
-void 
-RoadNetworkManager::CommitIntersections()
+RailRoadAffectedIds 
+RoadNetworkManager::CommitTemporaryRoads()
 {
+	boost::for_each(tempRoadIds_,
+		[&](const UniqueId & id)
+	{
+		const auto & p = roadMap_.at(id);
+
+		RailRoadSizer rrs;
+		p->Accept(rrs);
+
+		RoadSearcher::KeyPair key = GetStartEnd(p);
+
+		roadNetwork_.Insert(key.first, key.second, rrs.GetLenght());
+	});
+
+	RailRoadAffectedIds result(RailRoadAffectedIds::Permanent);
+	result.addedIds.insert(result.addedIds.end(), tempRoadIds_.begin(), tempRoadIds_.end());
+
+	tempRoadIds_.clear();
+
 	boost::for_each(tempIntersections_.GetIntersections(), 
 		[&](const RailRoadIntersectionMap::IntersectionValue & val)
 	{
@@ -273,12 +262,39 @@ RoadNetworkManager::CommitIntersections()
 			return;
 		}
 
-		if (RemovePermanentRoad(val.first))
+		const OptionalUniqueId removedId = RemovePermanentRoad(val.first);
+
+		if (removedId)
 		{
-			boost::for_each(splitResult, boost::bind(&RoadNetworkManager::InsertPermanentRoad, this, _1));
+			result.addedIds.reserve(splitResult.size());
+
+			for (const auto & roadToInsert : splitResult)
+			{
+				const OptionalUniqueId insertedId = InsertPermanentRoad(roadToInsert);
+
+				if (insertedId)
+				{
+					result.addedIds.push_back(insertedId.get());
+				}
+			}
 		}
 	});
 
 	// have to clear it here as second run of commit will create duplicates
 	tempIntersections_.Clear();
+
+	return result;
+}
+
+RailRoadPtr 
+RoadNetworkManager::GetRoadById(const UniqueId & id) const
+{
+	auto it = roadMap_.find(id);
+
+	if (it == roadMap_.end())
+	{
+		return RailRoadPtr();
+	}
+
+	return it->second;
 }

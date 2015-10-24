@@ -7,8 +7,10 @@
 #include "RoadRoute.h"
 #include "ItemLocator.h"
 #include "RailRoadIntersection.h"
+#include "RailRoadAffectedIds.h"
 
 #include <unordered_map>
+#include <unordered_set>
 
 namespace trm
 {
@@ -18,30 +20,32 @@ namespace trm
 	class RoadNetworkManager
 	{
 	public:
-		bool InsertPermanentRoad(const RailRoadPtr & p);
-		bool RemovePermanentRoad(const RailRoadPtr & p);
-		void CommitIntersections();
+		OptionalUniqueId InsertPermanentRoad(const RailRoadPtr & p);
+		RailRoadAffectedIds CommitTemporaryRoads();
 		RoadRoutePtr GetRoute(const Point3d & from, const Point3d & to) const;
 
-		bool InsertTemporaryRoad(const RailRoadPtr & p);
+		OptionalUniqueId InsertTemporaryRoad(const RailRoadPtr & p);
 		void InsertTemporaryIntersections(const RailRoadIntersections & intersections);
-		RailRoadPtrs GetTemporaryRoads() const;
 		void ClearTemporaryData();
 
 		RailRoadConnectionResult CreateRoad(const Point3d & from, const Point3d & to) const;
+
+		OptionalUniqueId RemovePermanentRoad(const RailRoadPtr & p);
+		RailRoadPtr GetRoadById(const UniqueId & id) const;
 
 	private:
 		using RoadMap = std::unordered_map<UniqueId, RailRoadPtr>;
 		using RoadSearcher = SymmetricMap<Point3i, UniqueId>;
 		using AdjustedPoint = std::pair<Point3d, RailRoadPtr>;
+		using TempRoadIds = std::unordered_set<UniqueId>;
 
 	private:
 		AdjustedPoint AdjustPoint(const Point3d & p) const;
 
 	private:
 		RoadNetwork roadNetwork_;
-		RoadSearcher permRoads_;
-		RoadSearcher tempRoads_;
+		TempRoadIds tempRoadIds_;
+		RoadSearcher allRoads_;
 		RailRoadIntersectionMap tempIntersections_;
 		RoadMap roadMap_;
 		ItemLocator locator_;

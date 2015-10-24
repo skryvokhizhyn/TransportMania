@@ -1,6 +1,7 @@
 #pragma once
 
 #include "UniqueId.h"
+#include "RailRoadAffectedIds.h"
 
 namespace trm
 {
@@ -18,6 +19,8 @@ namespace UserEventData
 	struct ChangeMouseMode {};
 
 	struct SubmitDraftRoads { bool yesNo; };
+
+	using RoadAffectedIds = RailRoadAffectedIds;
 
 } // namespace UserEventData
 } // namespace trm

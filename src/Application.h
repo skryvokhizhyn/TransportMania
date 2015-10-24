@@ -68,6 +68,8 @@ namespace trm
 		void Pause();
 		void ChangeMouseMode();
 		void SubmitDraftRoads(bool yesNo);
+		void DrawPermanentRailRoad(UniqueId id);
+		void DrawTemporaryRailRoad(UniqueId id);
 
 	private:
 		typedef std::vector<StaticSceneObjectPtr> StaticSceneObjects;
