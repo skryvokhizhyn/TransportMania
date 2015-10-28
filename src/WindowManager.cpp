@@ -19,6 +19,32 @@ using namespace trm;
 namespace
 {
 	const float OK_WINDOW_RELATIVE_SIZE = 0.2f;
+
+	WindowItemBoxPtr CreatePauseGoButton(TextureId tId, const float szF)
+	{
+		Size2f sz(szF, szF);
+
+		const UniqueId winId = UniqueId::Generate();
+
+		WindowItemBoxPtr windowPtr(new WindowItemBox(winId, sz, tId,
+			EventContainer::Create({ApplicationPauseEvent(), WindowCloseEvent(winId)}, EventActionType::Single), 
+			WindowPosition::p100, WindowPosition::p100));
+
+		return windowPtr;
+	}
+
+	WindowItemBoxPtr CreateMouseModeButton(TextureId tId, MoveSceneEventHandlerType nextType, const float szF)
+	{
+		Size2f sz(szF, szF);
+
+		UniqueId winId = UniqueId::Generate();
+
+		WindowItemBoxPtr windowPtr(new WindowItemBox(winId, sz, tId,
+			EventContainer::Create({MouseModeChangeEvent(nextType), WindowCloseEvent(winId)}, EventActionType::Single),
+			WindowPosition::p100, WindowPosition::p50));
+
+		return windowPtr;
+	}
 }
 
 void
@@ -93,15 +119,19 @@ WindowManager::CreateOKNOGroup(EventAction cbOK, EventAction cbNO)
 void
 WindowManager::CreatePauseButton()
 {
-	const float windowSize = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
+	const float szF = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
 
-	Size2f sz(windowSize, windowSize);
+	ProcessWindowData(std::move(
+		CreatePauseGoButton(TextureId::PauseButton, szF)));
+}
 
-	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId::Generate(), sz, TextureId::PauseButton,
-		EventContainer::Create({ApplicationPauseEvent()}, EventActionType::Repeatable), 
-		WindowPosition::p100, WindowPosition::p100));
+void 
+WindowManager::CreateGoButton()
+{
+	const float szF = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
 
-	ProcessWindowData(std::move(windowPtr));
+	ProcessWindowData(std::move(
+		CreatePauseGoButton(TextureId::GoButton, szF)));
 }
 
 void 
@@ -153,17 +183,39 @@ WindowManager::CloseWindow(UniqueId id)
 }
 
 void 
-WindowManager::CreateMouseModeButton()
+WindowManager::CreateSceneMoveButton()
 {
 	const float windowSize = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
 
-	Size2f sz(windowSize, windowSize);
+	/*Size2f sz(windowSize, windowSize);
 
-	WindowItemBoxPtr windowPtr(new WindowItemBox(UniqueId::Generate(), sz, TextureId::MouseMode,
-		EventContainer::Create({MouseModeChangeEvent()}, EventActionType::Repeatable), 
+	UniqueId winId = UniqueId::Generate();
+
+	WindowItemBoxPtr windowPtr(new WindowItemBox(winId, sz, TextureId::MouseMode,
+		EventContainer::Create({MouseModeChangeEvent(MoveSceneEventHandlerType::Draw), WindowCloseEvent(winId)}, EventActionType::Single), 
+		WindowPosition::p100, WindowPosition::p50));*/
+
+	//ProcessWindowData(std::move(windowPtr));
+
+	ProcessWindowData(CreateMouseModeButton(TextureId::SceneMove, MoveSceneEventHandlerType::Draw, windowSize));
+}
+
+void 
+WindowManager::CreateRoadDrawButton()
+{
+	const float windowSize = screenSize_.y() * OK_WINDOW_RELATIVE_SIZE;
+
+	/*Size2f sz(windowSize, windowSize);
+
+	UniqueId winId = UniqueId::Generate();
+
+	WindowItemBoxPtr windowPtr(new WindowItemBox(winId, sz, TextureId::MouseMode,
+		EventContainer::Create({MouseModeChangeEvent(MoveSceneEventHandlerType::Draw), WindowCloseEvent(winId)}, EventActionType::Single), 
 		WindowPosition::p100, WindowPosition::p50));
 
-	ProcessWindowData(std::move(windowPtr));
+	ProcessWindowData(std::move(windowPtr));*/
+
+	ProcessWindowData(CreateMouseModeButton(TextureId::RoadDraw, MoveSceneEventHandlerType::Move, windowSize));
 }
 
 void

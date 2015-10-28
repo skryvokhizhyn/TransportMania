@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SceneEventHandler.h"
+#include "MoveSceneEventHandlerType.h"
 
 #include <boost/ref.hpp>
 
@@ -12,22 +13,14 @@ namespace trm
 		: boost::noncopyable
 	{
 	public:
-		enum class Type
-		{
-			Init,
-			Mode,
-			Draw
-		};
-
-	public:
 		void SetWindowManager(WindowManager & wm);
 
-		void Init(Type t);
-		void Close(Type t);
+		void PutPauseGoButton(bool isPaused);
+		void PutSubmitDraftRoadButtons();
+		void PutMouseModeButton(MoveSceneEventHandlerType type);
 
 	private:
 		WindowManager * pWm_ = nullptr;
-		bool drawEnabled_ = false;
 	};
 
 } // namespace trm

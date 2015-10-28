@@ -66,7 +66,7 @@ namespace trm
 
 		void CloseWindow(UniqueId id);
 		void Pause();
-		void ChangeMouseMode();
+		void ChangeMouseMode(MoveSceneEventHandlerType type);
 		void SubmitDraftRoads(bool yesNo);
 		void DrawPermanentRailRoad(UniqueId id);
 		void DrawTemporaryRailRoad(UniqueId id);

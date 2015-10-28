@@ -1031,5 +1031,8 @@
     <ClInclude Include="..\..\src\RailRoadUpdateEvent.h">
       <Filter>Events\SingleEvents</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\MoveSceneEventHandlerType.h">
+      <Filter>Events</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

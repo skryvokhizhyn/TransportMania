@@ -15,6 +15,7 @@
 #include "RailRoadRangeGenerator.h"
 #include "RailRoadTerraformer.h"
 #include "RailRoadConnectionResult.h"
+#include "RailRoadUpdateEvent.h"
 
 #include "TextManagerProxy.h"
 #include "ComponentHolderProxy.h"
@@ -45,8 +46,8 @@ Application::InitApplication(const size_t width, const size_t height)
 	textManager_.Init(Size2d(width, height));
 	textRenderer_.Init();
 
-	sceneHandlerPtr_ = std::make_shared<MoveSceneEventHandler>();
-	sceneHandlerPtr_->SetMoveHandler(*this);
+	sceneHandlerPtr_ = std::make_shared<MoveSceneEventHandler>(*this);
+
 	screenConverter_.SetScreenSize(Size2d(width, height));
 
 	cachedHandlerLocator_.Put(UniqueId::Generate(), screenConverter_.GetScreenPolygon(), 
@@ -62,7 +63,8 @@ Application::InitApplication(const size_t width, const size_t height)
 	TextRendererProxy::Init(textRenderer_);
 	ModelManagerProxy::Init(modelManager_);
 
-	sceneContent_.Init(SceneContent::Type::Init);
+	sceneContent_.PutPauseGoButton(paused_);
+	ChangeMouseMode(MoveSceneEventHandlerType::Move);
 
 	return true;
 }
@@ -359,15 +361,17 @@ void
 Application::Pause()
 {
 	paused_ = !paused_;
+
+	sceneContent_.PutPauseGoButton(paused_);
 }
 
 void
-Application::ChangeMouseMode()
+Application::ChangeMouseMode(MoveSceneEventHandlerType type)
 {
-	sceneHandlerPtr_->ChangeHandler(*this);
+	sceneHandlerPtr_->ChangeHandler(type);
+	
+	sceneContent_.PutMouseModeButton(type);
 }
-
-#include "RailRoadUpdateEvent.h"
 
 void 
 Application::SubmitDraftRoads(bool yesNo)
@@ -382,8 +386,6 @@ Application::SubmitDraftRoads(bool yesNo)
 	{
 		roadNetworkManager_.ClearTemporaryData();
 	}
-
-	sceneContent_.Close(SceneContent::Type::Draw);
 }
 
 void 
@@ -432,7 +434,7 @@ Application::DrawTemporaryRailRoad(UniqueId id)
 
 	if (tempRoadObjects_.empty())
 	{
-		sceneContent_.Init(SceneContent::Type::Draw);
+		sceneContent_.PutSubmitDraftRoadButtons();
 	}
 
 	RailRoadRangeGenerator rrrg(true);

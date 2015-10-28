@@ -24,9 +24,11 @@ namespace trm
 		void CreateNOButton(EventAction cb);
 		void CreateOKNOGroup(EventAction cbOK, EventAction cbNO);
 		void CreatePauseButton();
+		void CreateGoButton();
 		void CreateLockScreen();
 		void CreateTextWindow(const std::wstring & text);
-		void CreateMouseModeButton();
+		void CreateSceneMoveButton();
+		void CreateRoadDrawButton();
 
 		void CloseWindow(UniqueId id);
 
@@ -34,6 +36,7 @@ namespace trm
 
 	private:
 		void ProcessWindowData(WindowItemPtr ptr);
+		
 
 	private:
 		using Windows = std::unordered_map<UniqueId, WindowImpl>;

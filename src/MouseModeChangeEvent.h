@@ -7,11 +7,11 @@
 
 namespace trm
 {
-	auto MouseModeChangeEvent = []()
+	auto MouseModeChangeEvent = [](MoveSceneEventHandlerType type) -> EventAction
 	{
-		return []()
+		return [=]()
 		{
-			SdlUserEventWrapper evt = SdlUserEventCoder::Encode(UserEventData::ChangeMouseMode());
+			SdlUserEventWrapper evt = SdlUserEventCoder::Encode(UserEventData::ChangeMouseMode{type});
 			evt.Emit();
 		};
 	};

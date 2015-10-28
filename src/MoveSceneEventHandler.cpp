@@ -6,6 +6,10 @@
 
 using namespace trm;
 
+MoveSceneEventHandler::MoveSceneEventHandler(Application & app)
+	: appRef_(app)
+{}
+
 void
 MoveSceneEventHandler::Commit() const
 {
@@ -36,17 +40,20 @@ MoveSceneEventHandler::Reset()
 	handlerPtr_->Reset();
 }
 
+//void 
+//MoveSceneEventHandler::ChangeHandler(Application & app)
+
 void 
-MoveSceneEventHandler::ChangeHandler(Application & app)
+MoveSceneEventHandler::ChangeHandler(MoveSceneEventHandlerType type)
 {
-	switch (type_)
+	switch (type)
 	{
-	case HandlerType::Move:
-		SetRoadHandler(app);
+	case MoveSceneEventHandlerType::Move:
+		SetMoveHandler();
 		break;
 
-	case HandlerType::Draw:
-		SetMoveHandler(app);
+	case MoveSceneEventHandlerType::Draw:
+		SetRoadHandler();
 		break;
 
 	default:
@@ -55,25 +62,25 @@ MoveSceneEventHandler::ChangeHandler(Application & app)
 }
 
 void 
-MoveSceneEventHandler::SetMoveHandler(Application & app)
+MoveSceneEventHandler::SetMoveHandler()
 {
 	if (handlerPtr_)
 	{
 		handlerPtr_->Reset();
 	}
 
-	handlerPtr_ = MakeSceneWrapper(new impl::EventStateMachine<Application>(app));
-	type_ = HandlerType::Move;
+	handlerPtr_ = MakeSceneWrapper(new impl::EventStateMachine<Application>(appRef_));
+	//type_ = HandlerType::Move;
 }
 
 void 
-MoveSceneEventHandler::SetRoadHandler(Application & app)
+MoveSceneEventHandler::SetRoadHandler()
 {
 	if (handlerPtr_)
 	{
 		handlerPtr_->Reset();
 	}
 
-	handlerPtr_ = MakeSceneWrapper(new impl::RoadEventStateMachine<Application>(app));
-	type_ = HandlerType::Draw;
+	handlerPtr_ = MakeSceneWrapper(new impl::RoadEventStateMachine<Application>(appRef_));
+	//type_ = HandlerType::Draw;
 }

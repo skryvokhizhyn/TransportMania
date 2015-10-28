@@ -6,65 +6,50 @@
 
 using namespace trm;
 
-namespace
-{
-	void SceneInit(WindowManager & wm)
-	{
-		wm.CreatePauseButton();
-		wm.CreateMouseModeButton();
-	}
-
-	void SceneDraw(WindowManager & wm)
-	{
-		wm.CreateOKNOGroup(SubmitDraftRoadsEvent(true), SubmitDraftRoadsEvent(false));
-	}
-}
-
 void 
 SceneContent::SetWindowManager(WindowManager & wm)
 {
 	pWm_ = &wm;
 }
 
-void
-SceneContent::Init(Type t)
+void 
+SceneContent::PutMouseModeButton(MoveSceneEventHandlerType type)
 {
 	assert(pWm_);
 
-	switch (t)
+	switch (type)
 	{
-	case Type::Init:
-		SceneInit(*pWm_);
+	case MoveSceneEventHandlerType::Move:
+		pWm_->CreateSceneMoveButton();
 		break;
-
-	case Type::Draw:
-		if (!drawEnabled_)
-		{
-			SceneDraw(*pWm_);
-			drawEnabled_;
-		}
-		break;
-
-	case Type::Mode:
+	
+	case MoveSceneEventHandlerType::Draw:
+		pWm_->CreateRoadDrawButton();
 		break;
 
 	default:
-		utils::Logger().Debug() << "Unknown Scene Type given " << static_cast<int>(t);
+		throw std::runtime_error("Wront mouse mode type given");
 	}
 }
 
 void
-SceneContent::Close(Type t)
+SceneContent::PutPauseGoButton(bool isPaused)
 {
 	assert(pWm_);
 
-	switch (t)
+	if (isPaused)
 	{
-	case Type::Draw:
-		drawEnabled_ = false;
-		break;
-
-	default:
-		break;
+		pWm_->CreateGoButton();
 	}
+	else
+	{
+		pWm_->CreatePauseButton();
+	}
+}
+
+void 
+SceneContent::PutSubmitDraftRoadButtons()
+{
+	assert(pWm_);
+	pWm_->CreateOKNOGroup(SubmitDraftRoadsEvent(true), SubmitDraftRoadsEvent(false));
 }

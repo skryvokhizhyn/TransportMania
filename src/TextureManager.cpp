@@ -20,7 +20,9 @@ namespace
 		(TextureId::Railway,			"railway.png")
 		(TextureId::Wagon,				"woodwagon.png")
 		(TextureId::PauseButton,		"pausebutton.png")
-		(TextureId::MouseMode,			"mousemode.png")
+		(TextureId::SceneMove,			"mousemode.png")
+		(TextureId::RoadDraw,			"roaddraw.png")
+		(TextureId::GoButton,			"gobutton.png")
 		;
 
 	std::string GetTextureLocation(TextureId id)

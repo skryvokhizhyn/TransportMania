@@ -2,6 +2,7 @@
 
 #include "UniqueId.h"
 #include "RailRoadAffectedIds.h"
+#include "MoveSceneEventHandlerType.h"
 
 namespace trm
 {
@@ -16,7 +17,7 @@ namespace UserEventData
 
 	struct PauseApplication {};
 
-	struct ChangeMouseMode {};
+	struct ChangeMouseMode { MoveSceneEventHandlerType type; };
 
 	struct SubmitDraftRoads { bool yesNo; };
 

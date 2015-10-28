@@ -21,9 +21,9 @@ SdlUserEventVisitor::Visit(PauseApplication & /*e*/)
 }
 
 void 
-SdlUserEventVisitor::Visit(UserEventData::ChangeMouseMode & /*e*/)
+SdlUserEventVisitor::Visit(UserEventData::ChangeMouseMode & e)
 {
-	app_.ChangeMouseMode();
+	app_.ChangeMouseMode(e.type);
 }
 
 void 

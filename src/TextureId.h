@@ -15,7 +15,9 @@ namespace trm
 		Wagon,
 		Locomotive,
 		PauseButton,
-		MouseMode
+		GoButton,
+		SceneMove,
+		RoadDraw
 	};
 
 } // namespace trm

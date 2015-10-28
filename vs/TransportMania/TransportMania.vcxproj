@@ -153,6 +153,7 @@
     <ClInclude Include="..\..\src\EventHandlerLocator.h" />
     <ClInclude Include="..\..\src\CachedHandlerLocatorProxy.h" />
     <ClInclude Include="..\..\src\MouseModeChangeEvent.h" />
+    <ClInclude Include="..\..\src\MoveSceneEventHandlerType.h" />
     <ClInclude Include="..\..\src\OptionalPoint3d.h" />
     <ClInclude Include="..\..\src\Point2i.h" />
     <ClInclude Include="..\..\src\Point3i.h" />
