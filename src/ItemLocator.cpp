@@ -1,9 +1,9 @@
-#include "ItemLocator.h"
-#include "Point2d.h"
-
 // 4503 decorated name length exceeded, name was truncated
 // 4512 assignment operator could not be generated
 #pragma warning(disable: 4512 4503)
+
+#include "ItemLocator.h"
+#include "Point2d.h"
 
 #include <boost/geometry/index/rtree.hpp>
 

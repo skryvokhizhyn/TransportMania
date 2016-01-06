@@ -22,9 +22,9 @@ namespace trm
 			std::uint16_t y;
 			std::uint8_t width;
 			std::uint8_t height;
-			std::uint8_t xoffset;
-			std::uint8_t yoffset;
-			std::uint8_t xadvance;
+			std::int16_t xoffset;
+			std::int16_t yoffset;
+			std::int16_t xadvance;
 
 			Char() 
 				: id(0), x(0), y(0), width(0)
@@ -36,7 +36,7 @@ namespace trm
 		{
 			uint16_t first;
 			uint16_t second;
-			std::uint8_t amount;
+			std::int16_t amount;
 
 			Kerning()
 				: first(0), second(0), amount(0)

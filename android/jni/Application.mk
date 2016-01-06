@@ -1,6 +1,6 @@
 
 # use this to select gcc instead of clang
-NDK_TOOLCHAIN_VERSION := 4.8
+NDK_TOOLCHAIN_VERSION := 4.9
 # otherwise, the following line select the latest clang version.
 # NDK_TOOLCHAIN_VERSION := clang
 # enable c++11 extensions in source code
