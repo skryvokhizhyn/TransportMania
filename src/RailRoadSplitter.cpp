@@ -79,6 +79,10 @@ RailRoadSplitter::Visit(RailRoadArc & rra)
 	const Point2d start2d = Point2d::Cast(start);
 	const Point3d & end = rrpt.GetEnd();
 	const Point2d & center = rra.GetCenter();
+	const Rotation rotation = utils::GetAngleRotation(rra.GetAngle());
+	const Angle absAngle = utils::GetAngleAbs(rra.GetAngle());
+	const Point2d shiftedStart = start2d - center;
+	const float radiiFromStart = shiftedStart.GetLength();
 
 	using SortedPointsMap = std::map<Angle, Point3d>;
 	SortedPointsMap sortedPoints;
@@ -92,34 +96,32 @@ RailRoadSplitter::Visit(RailRoadArc & rra)
 		}
 
 		const Point2d shiftedSplit = Point2d::Cast(p) - center;
-		const Point2d shiftedStart = start2d - center;
-
 		const float radiiFromSplit = shiftedSplit.GetLength();
-		const float radiiFromStart = shiftedStart.GetLength();
-
+	
+		// ignore split point not on the arc
 		if (!utils::CheckNear(radiiFromSplit, radiiFromStart, 0.0001f))
 		{
 			return;
 		}
 
-		const Angle angleToSplit = utils::GetRotationAngle360(shiftedStart, shiftedSplit, rra.GetRotation());
+		const Angle angleToSplit = utils::GetRotationAngle360(shiftedStart, shiftedSplit, rotation);
 
-		if (angleToSplit > rra.GetAngle())
+		if (angleToSplit > absAngle)
 		{
 			return;
 		}
 
-		assert(angleToSplit >= Degrees(0) && rra.GetAngle() >= Degrees(0));
-
 		sortedPoints.emplace(angleToSplit, p);
 	});
 
+	// if no points did a split, then nothing to return
+	// ignore points not on the arc and points outside of the arc
 	if (sortedPoints.empty())
 	{
 		return;
 	}
 
-	sortedPoints.emplace(rra.GetAngle(), end);
+	sortedPoints.emplace(absAngle, end);
 
 	Angle prevAngle;
 	Point3d startPoint = start;
@@ -127,7 +129,7 @@ RailRoadSplitter::Visit(RailRoadArc & rra)
 	boost::for_each(sortedPoints,
 		[&](const SortedPointsMap::value_type & v)
 	{
-		spitResult_.push_back(RailRoadFactory::Arc(startPoint, v.first - prevAngle, rra.GetCenter(), rra.GetRotation()));
+		spitResult_.push_back(RailRoadFactory::Arc(startPoint, utils::GetAdjustedAngleByRotation(v.first - prevAngle, rotation), rra.GetCenter()));
 		startPoint = v.second;
 		prevAngle = v.first;
 	});

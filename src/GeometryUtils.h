@@ -4,6 +4,7 @@
 #include "Triangle3d.h"
 #include "Triangle2d.h"
 #include "Angle.h"
+#include "Rotation.h"
 
 namespace trm
 {
@@ -29,6 +30,9 @@ namespace utils
 	trm::Point2d GetIntersectionPoint(const trm::Line & l1, const trm::Line & l2);
 	trm::Angle GetAngle(const trm::Point3d & a, const trm::Point3d & b);
 	trm::Angle GetAngle(const trm::Point2d & a, const trm::Point2d & b);
+	trm::Angle GetAngleAbs(trm::Angle a);
+	trm::Rotation GetAngleRotation(trm::Angle a);
+	trm::Angle GetAdjustedAngleByRotation(trm::Angle a, trm::Rotation r);
 	// returns angle from (-90, 90) based on sin
 	trm::Angle GetSignedAngle(const trm::Point2d & a, const trm::Point2d & b);
 	// returns angle from range [-180, 180) based on cos and rotation.

@@ -171,6 +171,7 @@
     <ClInclude Include="..\..\src\RailRoadUtils.h" />
     <ClInclude Include="..\..\src\RoadEventStateMachine.h" />
     <ClInclude Include="..\..\src\RoadNetworkManager.h" />
+    <ClInclude Include="..\..\src\Rotation.h" />
     <ClInclude Include="..\..\src\SceneContent.h" />
     <ClInclude Include="..\..\src\SceneEventStateMachine.h" />
     <ClInclude Include="..\..\src\SceneEventHandlerWrapper.h" />

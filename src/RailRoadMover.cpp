@@ -20,7 +20,7 @@ RailRoadMover::Visit(RailRoadArc & rra)
 	const Angle a = Radians(dist_ / radii);
 
 	Point2d v = Point2d::Cast(pos_) - rra.GetCenter();
-	v = utils::RotateVector(v, a, rra.GetRotation());
+	v = utils::RotateVector(v, a, utils::GetAngleRotation(rra.GetAngle()));
 	Point3d pos = Point3d::Cast(v + rra.GetCenter());
 	pos.z() = pos_.z();
 

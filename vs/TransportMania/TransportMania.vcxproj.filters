@@ -1034,5 +1034,8 @@
     <ClInclude Include="..\..\src\MoveSceneEventHandlerType.h">
       <Filter>Events</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Rotation.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

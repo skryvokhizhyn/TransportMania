@@ -458,6 +458,86 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle1807)
 	BOOST_CHECK(a - Degrees(-45) < Degrees(0.1f));
 }
 
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleAbs1)
+{
+	BOOST_CHECK_EQUAL(GetAngleAbs(Degrees(-90)), Degrees(90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleAbs2)
+{
+	BOOST_CHECK_EQUAL(GetAngleAbs(Degrees(90)), Degrees(90));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleAbs3)
+{
+	BOOST_CHECK_EQUAL(GetAngleAbs(Degrees(-0.0f)), Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleAbs4)
+{
+	BOOST_CHECK_EQUAL(GetAngleAbs(Degrees(0.0f)), Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleAbs5)
+{
+	BOOST_CHECK_GE(GetAngleAbs(Degrees(-7487320.0f)), Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleAbs6)
+{
+	BOOST_CHECK_GE(GetAngleAbs(Degrees(7487320.0f)), Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleRotation1)
+{
+	BOOST_CHECK_GE(GetAngleRotation(Degrees(7487320.0f)), Rotation::AntiClockwise);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleRotation2)
+{
+	BOOST_CHECK_GE(GetAngleRotation(Degrees(-7487320.0f)), Rotation::Clockwise);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleRotation3)
+{
+	BOOST_CHECK_GE(GetAngleRotation(Degrees(0.0f)), Rotation::AntiClockwise);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleRotation4)
+{
+	BOOST_CHECK_GE(GetAngleRotation(Degrees(-0.0f)), Rotation::Clockwise);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAdjustedAngleByRotation1)
+{
+	BOOST_CHECK_GE(GetAdjustedAngleByRotation(Degrees(10), Rotation::AntiClockwise), Degrees(10));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAdjustedAngleByRotation2)
+{
+	BOOST_CHECK_GE(GetAdjustedAngleByRotation(Degrees(-10), Rotation::Clockwise), Degrees(-10));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAdjustedAngleByRotation3)
+{
+	BOOST_CHECK_GE(GetAdjustedAngleByRotation(Degrees(-10), Rotation::AntiClockwise), Degrees(10));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAdjustedAngleByRotation4)
+{
+	BOOST_CHECK_GE(GetAdjustedAngleByRotation(Degrees(10), Rotation::Clockwise), Degrees(-10));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAdjustedAngleByRotation5)
+{
+	BOOST_CHECK_GE(GetAdjustedAngleByRotation(Degrees(-0.0f), Rotation::Clockwise), Degrees(-0.0f));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAdjustedAngleByRotation6)
+{
+	BOOST_CHECK_GE(GetAdjustedAngleByRotation(Degrees(0.0f), Rotation::AntiClockwise), Degrees(0.0f));
+}
+
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest22)
 {
 	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(90), Rotation::Clockwise);

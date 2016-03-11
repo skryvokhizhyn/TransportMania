@@ -17,7 +17,9 @@ RailRoadParametersTaker::Visit(RailRoadArc & rra)
 {
 	start_ = rra.GetStart();
 
-	const Point2d end2d = utils::RotateVector(Point2d::Cast(start_) - rra.GetCenter(), rra.GetAngle(), rra.GetRotation());
+	const Angle angleAbs = utils::GetAngleAbs(rra.GetAngle());
+	const Rotation rotation = utils::GetAngleRotation(rra.GetAngle());
+	const Point2d end2d = utils::RotateVector(Point2d::Cast(start_) - rra.GetCenter(), angleAbs, rotation);
 
 	end_ = Point3d::Cast(end2d + rra.GetCenter());
 	end_.z() = start_.z();

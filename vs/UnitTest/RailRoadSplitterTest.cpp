@@ -73,11 +73,6 @@ namespace
 			return false;
 		}
 
-		if (rra.GetRotation() != r2ToArc->GetRotation())
-		{
-			return false;
-		}
-
 		return true;
 	}
 }
@@ -111,7 +106,7 @@ BOOST_AUTO_TEST_CASE(RailRoadSplitterTest3)
 
 BOOST_AUTO_TEST_CASE(RailRoadSplitterTest4)
 {
-	RailRoadArc rra(Point3d(0, 0, 0), Degrees(90), Point2d(0, 2), Rotation::AntiClockwise);
+	RailRoadArc rra(Point3d(0, 0, 0), Degrees(90), Point2d(0, 2));
 
 	RailRoadSplitter rrs1({Point3d(-1, -1, 0)});
 	rra.Accept(rrs1);
@@ -136,7 +131,7 @@ BOOST_AUTO_TEST_CASE(RailRoadSplitterTest4)
 
 BOOST_AUTO_TEST_CASE(RailRoadSplitterTest5)
 {
-	RailRoadArc rra(Point3d(0, 0, 0), Degrees(180), Point2d(0, 2), Rotation::AntiClockwise);
+	RailRoadArc rra(Point3d(0, 0, 0), Degrees(180), Point2d(0, 2));
 	
 	RailRoadSplitter rrs1({Point3d(2, 2, 0)});
 	rra.Accept(rrs1);
@@ -144,16 +139,16 @@ BOOST_AUTO_TEST_CASE(RailRoadSplitterTest5)
 	BOOST_CHECK_EQUAL(rrs1.GetSplitResult().size(), 2u);
 
 	BOOST_CHECK(CheckRoadsEqual(
-		RailRoadArc(Point3d(0, 0, 0), Degrees(90), Point2d(0, 2), Rotation::AntiClockwise), 
+		RailRoadArc(Point3d(0, 0, 0), Degrees(90), Point2d(0, 2)), 
 		rrs1.GetSplitResult().front()));
 	BOOST_CHECK(CheckRoadsEqual(
-		RailRoadArc(Point3d(2, 2, 0), Degrees(90), Point2d(0, 2), Rotation::AntiClockwise),
+		RailRoadArc(Point3d(2, 2, 0), Degrees(90), Point2d(0, 2)),
 		rrs1.GetSplitResult().back()));
 }
 
 BOOST_AUTO_TEST_CASE(RailRoadSplitterTest6)
 {
-	RailRoadArc rra(Point3d(0, 0, 0), Degrees(180), Point2d(0, 2), Rotation::Clockwise);
+	RailRoadArc rra(Point3d(0, 0, 0), Degrees(-180), Point2d(0, 2));
 	
 	RailRoadSplitter rrs1({Point3d(-2, 2, 0)});
 	rra.Accept(rrs1);
@@ -161,9 +156,9 @@ BOOST_AUTO_TEST_CASE(RailRoadSplitterTest6)
 	BOOST_CHECK_EQUAL(rrs1.GetSplitResult().size(), 2u);
 
 	BOOST_CHECK(CheckRoadsEqual(
-		RailRoadArc(Point3d(0, 0, 0), Degrees(90), Point2d(0, 2), Rotation::Clockwise), 
+		RailRoadArc(Point3d(0, 0, 0), Degrees(-90), Point2d(0, 2)), 
 		rrs1.GetSplitResult().front()));
 	BOOST_CHECK(CheckRoadsEqual(
-		RailRoadArc(Point3d(-2, 2, 0), Degrees(90), Point2d(0, 2), Rotation::Clockwise),
+		RailRoadArc(Point3d(-2, 2, 0), Degrees(-90), Point2d(0, 2)),
 		rrs1.GetSplitResult().back()));
 }

@@ -128,6 +128,39 @@ utils::GetAngle(const trm::Point2d & a, const trm::Point2d & b)
 }
 
 Angle 
+utils::GetAngleAbs(trm::Angle a)
+{
+	if (a < Degrees(0))
+	{
+		return a * -1.0f;
+	}
+
+	return a;
+}
+
+Rotation
+utils::GetAngleRotation(trm::Angle a)
+{
+	if (a >= Degrees(0))
+	{
+		return Rotation::AntiClockwise;
+	}
+	
+	return Rotation::Clockwise;
+}
+
+Angle
+utils::GetAdjustedAngleByRotation(trm::Angle a, Rotation r)
+{
+	if (GetAngleRotation(a) == r)
+	{
+		return a;
+	}
+
+	return a * -1.0f;
+}
+
+Angle 
 utils::GetSignedAngle(const trm::Point2d & a, const trm::Point2d & b)
 {
 	assert(a != Point2d());

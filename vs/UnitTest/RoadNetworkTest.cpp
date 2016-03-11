@@ -196,7 +196,7 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest9)
 	RoadNetworkManager rn;
 	rn.InsertPermanentRoad(RailRoadFactory::Line(Point3d(), Point3d(1, 0, 0)));
 	rn.InsertPermanentRoad(RailRoadFactory::Line(Point3d(2, 0, 0), Point3d(1, 0, 0)));
-	rn.InsertPermanentRoad(RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2), Rotation::AntiClockwise));
+	rn.InsertPermanentRoad(RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2)));
 	rn.InsertPermanentRoad(RailRoadFactory::Line(Point3d(4, 2, 0), Point3d(4, 4, 0)));
 
 	RoadRoutePtr rrp = rn.GetRoute(Point3d(), Point3d(4, 4, 0));
@@ -214,7 +214,7 @@ BOOST_AUTO_TEST_CASE(RoadNetworkTest10)
 	const Point3d p3(20, 30, 3);
 	const Point3d p4(10, 30, 3);
 
-	const auto arcPtr = RailRoadFactory::Arc(p2, a, c1, Rotation::AntiClockwise);
+	const auto arcPtr = RailRoadFactory::Arc(p2, a, c1);
 	RailRoadSizer rrs;
 	arcPtr->Accept(rrs);
 	const float arcLen = rrs.GetLenght();
@@ -379,7 +379,7 @@ BOOST_AUTO_TEST_CASE(RailRoadIntersectionTest1)
 	rrim.Insert(RailRoadIntersection(rrl, Point3d(2, 2, 2)));
 	rrim.Insert(RailRoadIntersection(rrl, Point3d(2, 2, 2)));
 
-	RailRoadPtr rra = RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2), Rotation::AntiClockwise);
+	RailRoadPtr rra = RailRoadFactory::Arc(Point3d(2, 0, 0), Degrees(90), Point2d(2, 2));
 
 	rrim.Insert(RailRoadIntersection(rra, Point3d(2, 2, 0)));
 

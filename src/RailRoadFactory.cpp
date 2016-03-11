@@ -19,7 +19,7 @@ RailRoadFactory::Line(const Point3d & s, const Point3d & e)
 }
 
 RailRoadPtr 
-RailRoadFactory::Arc(const Point3d & s, const Angle a, const Point2d & c, const Rotation r)
+RailRoadFactory::Arc(const Point3d & s, const Angle a, const Point2d & c)
 {
 	if (a == Degrees(0))
 	{
@@ -31,7 +31,7 @@ RailRoadFactory::Arc(const Point3d & s, const Angle a, const Point2d & c, const 
 		throw std::runtime_error("Cannot build Arc based on zero radii");
 	}
 
-	return std::make_shared<RailRoadArc>(s, a, c, r);
+	return std::make_shared<RailRoadArc>(s, a, c);
 }
 
 RailRoadPtr 
@@ -62,17 +62,11 @@ RailRoadFactory::Arc(const Point3d & start, const Point3d & direction, const Poi
 	const Point2d vEnd = Point2d::Cast(dirEnd) - center;
 
 	const Angle rotAngle = utils::GetSignedAngle(vStart, vEnd);
-
-	Rotation rot = Rotation::Clockwise;
-
-	if (rotAngle > Degrees(0))
-	{
-		rot = Rotation::AntiClockwise;
-	}
+	const Rotation rot = utils::GetAngleRotation(rotAngle);
 
 	const Point2d end2dShifted = end - center;
 
 	const Angle a = utils::GetRotationAngle360(vStart, end2dShifted, rot);
 
-	return RailRoadFactory::Arc(start, a, center, rot);
+	return RailRoadFactory::Arc(start, utils::GetAdjustedAngleByRotation(a, rot), center);
 }

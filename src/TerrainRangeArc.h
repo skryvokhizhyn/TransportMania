@@ -5,6 +5,7 @@
 #include "Point2d.h"
 #include "Angle.h"
 #include "Types.h"
+#include "Rotation.h"
 
 namespace trm
 {
