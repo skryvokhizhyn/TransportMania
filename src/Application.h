@@ -56,7 +56,7 @@ namespace trm
 
 		void PutRoad(const Point2d & from, const Point2d & to, bool commit);
 		void PutRailRoadLine(const Point3d & from, const Point3d & to);
-		void PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a, const Rotation r);
+		void PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a);
 		void PutRailRoad(const RailRoadPtr & rrp);
 		void PutRoadDraft(const RailRoadPtr & rrp);
 		//void PutLineDraft(const Point3d & from, const Point3d & to);
