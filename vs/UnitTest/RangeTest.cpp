@@ -350,7 +350,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeTest13)
 
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest1)
 {
-	TerrainRangeArc::Data d(trm::Point2d(0, -5), Degrees(360), trm::Point2d(0, 0), Rotation::Clockwise);
+	TerrainRangeArc::Data d(trm::Point2d(0, -5), Degrees(-360), trm::Point2d(0, 0));
 
 	TerrainRangeArc c(d, 0.5f + 2.0f);
 	const TerrainRange::Ranges & r = c.GetRanges();
@@ -460,7 +460,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest1)
 
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest20)
 {
-	TerrainRangeArc::Data d(trm::Point2d(0, -2), Degrees(180), trm::Point2d(0, 0), Rotation::Clockwise);
+	TerrainRangeArc::Data d(trm::Point2d(0, -2), Degrees(-180), trm::Point2d(0, 0));
 
 	TerrainRangeArc c(d, 1.0f + 2.0f);
 	const TerrainRange::Ranges & r = c.GetRanges();
@@ -516,7 +516,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest20)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest80)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-1, 1), Degrees(90), Rotation::Clockwise, 2, AxisPairType(-6.0f, 6.0f));
+		Point2d(-1, 1), Degrees(-90), 2, AxisPairType(-6.0f, 6.0f));
 	
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -2);
@@ -526,7 +526,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest80)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest81)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-1, 1), Degrees(180), Rotation::Clockwise, 2, AxisPairType(-6.0f, 6.0f));
+		Point2d(-1, 1), Degrees(-180), 2, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -2);
@@ -536,7 +536,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest81)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest82)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, -1), Degrees(180), Rotation::AntiClockwise, 2, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, -1), Degrees(180), 2, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_CLOSE(r[0].first, 4.0f, 0.0001f);
@@ -546,7 +546,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest82)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest83)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 1), Degrees(0), Rotation::AntiClockwise, 2, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, 1), Degrees(0), 2, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -4);
@@ -556,7 +556,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest83)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest84)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-1, 1), Degrees(270), Rotation::AntiClockwise, 2, AxisPairType(-6.0f, 6.0f));
+		Point2d(-1, 1), Degrees(270), 2, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 2u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -568,7 +568,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest84)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest85)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, -1), Degrees(180), Rotation::Clockwise, 2, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, -1), Degrees(-180), 2, AxisPairType(-6.0f, 6.0f));
 	 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -578,7 +578,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest85)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest86)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, -1), Degrees(180), Rotation::AntiClockwise, 2, AxisPairType(-1.0f, 1.0f));
+		Point2d(-2, -1), Degrees(180), 2, AxisPairType(-1.0f, 1.0f));
 
 	BOOST_CHECK(r.empty());
 }
@@ -586,7 +586,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest86)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest87)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, -1), Degrees(170), Rotation::AntiClockwise, 2, AxisPairType(-1.0f, 1.0f));
+		Point2d(-2, -1), Degrees(170), 2, AxisPairType(-1.0f, 1.0f));
 
 	BOOST_CHECK(r.empty());
 }
@@ -594,7 +594,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest87)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest88)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-3, -1), Degrees(190), Rotation::AntiClockwise, 2, AxisPairType(-1.0f, 1.0f));
+		Point2d(-3, -1), Degrees(190), 2, AxisPairType(-1.0f, 1.0f));
 
 	BOOST_CHECK(r.empty());
 }
@@ -602,7 +602,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest88)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest89)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-3, -1), Degrees(190), Rotation::AntiClockwise, -2, AxisPairType(-1.0f, 1.0f));
+		Point2d(-3, -1), Degrees(190), -2, AxisPairType(-1.0f, 1.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -1);
@@ -612,7 +612,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest89)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest90)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, -1), Degrees(90), Rotation::AntiClockwise, -2, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, -1), Degrees(90), -2, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -4);
@@ -622,7 +622,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest90)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest91)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, -1), Degrees(270), Rotation::Clockwise, -4, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, -1), Degrees(-270), -4, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, 2);
@@ -632,7 +632,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest91)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest92)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(180), Rotation::Clockwise, -2, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, 0), Degrees(-180), -2, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK(r.empty());
 }
@@ -640,7 +640,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest92)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest93)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, -1), Degrees(230), Rotation::Clockwise, -4, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, -1), Degrees(-230), -4, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK(r.empty());
 }
@@ -648,7 +648,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest93)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest94)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-1, -1), Degrees(200), Rotation::Clockwise, -4, AxisPairType(-6.0f, 0.0f));
+		Point2d(-1, -1), Degrees(-200), -4, AxisPairType(-6.0f, 0.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -658,7 +658,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest94)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest95)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(180), Rotation::Clockwise, 2, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, 0), Degrees(-180), 2, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -668,7 +668,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest95)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest951)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(180), Rotation::AntiClockwise, -2, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, 0), Degrees(180), -2, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -678,7 +678,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest951)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest952)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(0, -2), Degrees(90), Rotation::Clockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(0, -2), Degrees(-90), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -688,7 +688,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest952)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest96)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(180), Rotation::Clockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, 0), Degrees(-180), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -698,7 +698,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest96)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest97)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(180), Rotation::AntiClockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, 0), Degrees(180), 0, AxisPairType(-6.0f, 6.0f));
 	 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -708,7 +708,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest97)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest98)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(0, -2), Degrees(180), Rotation::AntiClockwise, 0, AxisPairType(-3.0f, -1.0f));
+		Point2d(0, -2), Degrees(180), 0, AxisPairType(-3.0f, -1.0f));
 
 	BOOST_CHECK(r.empty());
 }
@@ -716,7 +716,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest98)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest100)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(90), Rotation::AntiClockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, 0), Degrees(90), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -726,7 +726,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest100)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest101)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(2, 0), Degrees(90), Rotation::Clockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(2, 0), Degrees(-90), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, 0);
@@ -736,7 +736,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest101)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest99)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(0, -2), Degrees(180), Rotation::AntiClockwise, 0, AxisPairType(1.0f, 3.0f));
+		Point2d(0, -2), Degrees(180), 0, AxisPairType(1.0f, 3.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, 1);
@@ -746,7 +746,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest99)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest102)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(0, 2), Degrees(90), Rotation::Clockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(0, 2), Degrees(-90), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, 0);
@@ -756,7 +756,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest102)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest103)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(0, 2), Degrees(90), Rotation::AntiClockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(0, 2), Degrees(90), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -766,7 +766,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest103)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest104)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(0, 2), Degrees(91), Rotation::AntiClockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(0, 2), Degrees(91), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -776,7 +776,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest104)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest105)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(0, 2), Degrees(91), Rotation::Clockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(0, 2), Degrees(-91), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, 0);
@@ -786,7 +786,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest105)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest106)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(181), Rotation::Clockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, 0), Degrees(-181), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -796,7 +796,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest106)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest107)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(-179), Rotation::Clockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, 0), Degrees(-179), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -806,7 +806,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest107)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest108)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(-181), Rotation::Clockwise, 0, AxisPairType(-6.0f, 6.0f));
+		Point2d(-2, 0), Degrees(-181), 0, AxisPairType(-6.0f, 6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -816,7 +816,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest108)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest109)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(-181), Rotation::Clockwise, 0, AxisPairType(-6.0f, -6.0f));
+		Point2d(-2, 0), Degrees(-181), 0, AxisPairType(-6.0f, -6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -826,7 +826,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest109)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest110)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(181), Rotation::Clockwise, 1, AxisPairType(-6.0f, -6.0f));
+		Point2d(-2, 0), Degrees(-181), 1, AxisPairType(-6.0f, -6.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -6);
@@ -836,7 +836,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest110)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest111)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(0, 2), Degrees(90), Rotation::Clockwise, 0, AxisPairType(-3.0f, -1.0f));
+		Point2d(0, 2), Degrees(-90), 0, AxisPairType(-3.0f, -1.0f));
 
 	BOOST_CHECK(r.empty());
 }
@@ -844,7 +844,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest111)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest112)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(0), Rotation::Clockwise, 0, AxisPairType(-3.0f, -1.0f));
+		Point2d(-2, 0), Degrees(-0.0f), 0, AxisPairType(-3.0f, -1.0f));
 
 	BOOST_CHECK_EQUAL(r.size(), 1u);
 	BOOST_CHECK_EQUAL(r[0].first, -3);
@@ -854,7 +854,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest112)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest113)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(2, 0), Degrees(0), Rotation::Clockwise, 0, AxisPairType(-3.0f, -1.0f));
+		Point2d(2, 0), Degrees(-0.0f), 0, AxisPairType(-3.0f, -1.0f));
 
 	BOOST_CHECK(r.empty());
 }
@@ -862,7 +862,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest113)
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest114)
 {
 	const TerrainRangeArc::IntersectionType r = TerrainRangeArc::GetIntersection(
-		Point2d(-2, 0), Degrees(0), Rotation::Clockwise, 0, AxisPairType(1.0f, 3.0f));
+		Point2d(-2, 0), Degrees(-0.0f), 0, AxisPairType(1.0f, 3.0f));
 
 	BOOST_CHECK(r.empty());
 }
@@ -989,7 +989,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeGetRangeRectangleTest9)
 
 BOOST_AUTO_TEST_CASE(TerrainRangeArcWrongTopPointTest1)
 {
-	TerrainRangeArc r(TerrainRangeArc::Data(Point2d(1, 3), Degrees(90), Point2d(3, 3), Rotation::AntiClockwise), 1.0f);
+	TerrainRangeArc r(TerrainRangeArc::Data(Point2d(1, 3), Degrees(90), Point2d(3, 3)), 1.0f);
 	const auto & ranges = r.GetRanges();
 	BOOST_CHECK_EQUAL(ranges.size(), 4u);
 	BOOST_CHECK_EQUAL(ranges[0].y, 0u);

@@ -23,15 +23,15 @@ namespace
 	}
 }
 
-TerrainRangeArc::Data::Data(const Point2d & s, const Angle a, const Point2d & c, const Rotation r)
-: start(s), angle(a), center(c), rotation(r)
+TerrainRangeArc::Data::Data(const Point2d & s, const Angle a, const Point2d & c)
+: start(s), angle(a), center(c)
 {
 }
 
 void 
-TerrainRangeArc::ProcessRange(const Point2d & vec, const Angle a, const Rotation rotation, const int y, const AxisPairType & pt, const Point2d & c)
+TerrainRangeArc::ProcessRange(const Point2d & vec, const Angle a, const int y, const AxisPairType & pt, const Point2d & c)
 {
-	const IntersectionType & r = GetIntersection(vec, a, rotation, y, pt);
+	const IntersectionType & r = GetIntersection(vec, a, y, pt);
 
 	for (const AxisPairType & apt : r)
 	{
@@ -63,7 +63,7 @@ TerrainRangeArc::TerrainRangeArc(const Data & data, AxisType width)
 
 		if (std::abs(i) >= iRadiiMin)
 		{
-			ProcessRange(vec, data.angle, data.rotation, i, AxisPairType(-xMax, xMax), data.center);
+			ProcessRange(vec, data.angle, i, AxisPairType(-xMax, xMax), data.center);
 		}
 		else
 		{
@@ -74,26 +74,22 @@ TerrainRangeArc::TerrainRangeArc(const Data & data, AxisType width)
 
 			if (lxMin == rxMin)
 			{
-				ProcessRange(vec, data.angle, data.rotation, i, AxisPairType(-xMax, xMax), data.center);
+				ProcessRange(vec, data.angle, i, AxisPairType(-xMax, xMax), data.center);
 			}
 			else
 			{
-				ProcessRange(vec, data.angle, data.rotation, i, AxisPairType(-xMax, (float)lxMin), data.center);
-				ProcessRange(vec, data.angle, data.rotation, i, AxisPairType((float)rxMin, xMax), data.center);
+				ProcessRange(vec, data.angle, i, AxisPairType(-xMax, (float)lxMin), data.center);
+				ProcessRange(vec, data.angle, i, AxisPairType((float)rxMin, xMax), data.center);
 			}
 		}
 	}
 }
 
 auto
-TerrainRangeArc::GetIntersection(Point2d vec, Angle a, Rotation rot, const int y, const AxisPairType & p) -> IntersectionType
+TerrainRangeArc::GetIntersection(Point2d vec, Angle a, const int y, const AxisPairType & p) -> IntersectionType
 {
-	// revert negative angles
-	if (a < Degrees(0))
-	{
-		a *= -1;
-		rot = (rot == Rotation::Clockwise ? Rotation::AntiClockwise : Rotation::Clockwise);
-	}
+	Rotation rot = utils::GetAngleRotation(a);
+	a = utils::GetAngleAbs(a);
 
 	if ((y >= 0 && rot == Rotation::AntiClockwise) || (y < 0 && rot == Rotation::Clockwise))
 	{
