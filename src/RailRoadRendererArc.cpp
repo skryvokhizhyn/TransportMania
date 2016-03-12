@@ -28,6 +28,7 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 {
 	const Point3d & start = rrl.GetStart();
 	const Angle angle = rrl.GetAngle();
+	const Angle angleAbs = utils::GetAngleAbs(angle);
 	const Point2d & center = rrl.GetCenter();
 	const Rotation rot = utils::GetAngleRotation(angle);
 
@@ -50,13 +51,14 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 	md.indexes.reserve(pointsToProceed);
 	md.textures.reserve(pointsToProceed);
 
-	Angle a = Degrees(0);
+	Angle aAbs = Degrees(0);
 	float pathPassed = 0.0f;
 
-	while(a <= angle)
+	while(aAbs <= angle)
 	{
-		const Point2d far = utils::RotateVector(farStart, a, rot);
-		const Point2d near = utils::RotateVector(nearStart, a, rot);
+		Angle a = utils::GetAdjustedAngleByRotation(aAbs, rot);
+		const Point2d far = utils::RotateVector(farStart, a);
+		const Point2d near = utils::RotateVector(nearStart, a);
 		
 		if (rot == Rotation::AntiClockwise)
 		{
@@ -72,13 +74,13 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 		md.textures.push_back(Point2d(pathPassed, 0.0f));
 		md.textures.push_back(Point2d(pathPassed, 1.0f));
 		
-		if (a < angle && (a + rotationStep) > angle)
+		if (aAbs < angle && (aAbs + rotationStep) > angle)
 		{
-			a = angle;
+			aAbs = angle;
 		}
 		else
 		{
-			a += rotationStep;
+			aAbs += rotationStep;
 		}
 
 		pathPassed += 1.0f;
