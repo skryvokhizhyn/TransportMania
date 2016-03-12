@@ -89,13 +89,15 @@ auto
 TerrainRangeArc::GetIntersection(Point2d vec, Angle a, const int y, const AxisPairType & p) -> IntersectionType
 {
 	Rotation rot = utils::GetAngleRotation(a);
-	a = utils::GetAngleAbs(a);
 
 	if ((y >= 0 && rot == Rotation::AntiClockwise) || (y < 0 && rot == Rotation::Clockwise))
 	{
-		vec = utils::RotateVector(vec, a, rot);
+		vec = utils::RotateVector(vec, a);
+		a *= -1.0f;
 		rot = (rot == Rotation::AntiClockwise) ? Rotation::Clockwise : Rotation::AntiClockwise;
 	}
+
+	const Angle aAbs = utils::GetAngleAbs(a);
 
 	IntersectionType r;
 
@@ -110,12 +112,12 @@ TerrainRangeArc::GetIntersection(Point2d vec, Angle a, const int y, const AxisPa
 
 	if (y == 0) 
 	{
-		if ((a >= aFrom - MINIMAL_MEANINGFUL_ANGLE) && p.first <= 0.0f)
+		if ((aAbs >= aFrom - MINIMAL_MEANINGFUL_ANGLE) && p.first <= 0.0f)
 		{
 			r.emplace_back(p.first, std::min(0.0f, p.second));
 		}
 
-		if ((a >= aTo - MINIMAL_MEANINGFUL_ANGLE) && 0.0f <= p.second)
+		if ((aAbs >= aTo - MINIMAL_MEANINGFUL_ANGLE) && 0.0f <= p.second)
 		{
 			r.emplace_back(std::max(0.0f, p.first), p.second);
 		}
@@ -124,10 +126,10 @@ TerrainRangeArc::GetIntersection(Point2d vec, Angle a, const int y, const AxisPa
 	{
 		if (aFrom > aTo)
 		{
-			if (a > aFrom)
+			if (aAbs > aFrom)
 			{
 				const Point2d lpF = GetIntersectionWithVector(l, vec);
-				const Point2d vecTo = utils::RotateVector(vec, a, rot);
+				const Point2d vecTo = utils::RotateVector(vec, a);
 				const Point2d lpT = GetIntersectionWithVector(l, vecTo);
 
 				r.push_back(AxisPairType(p.first, lpT.x()));
@@ -137,9 +139,9 @@ TerrainRangeArc::GetIntersection(Point2d vec, Angle a, const int y, const AxisPa
 			{
 				const Point2d lpF = GetIntersectionWithVector(l, vec);
 
-				if (a < aTo)
+				if (aAbs < aTo)
 				{
-					const Point2d vecTo = utils::RotateVector(vec, a, rot);
+					const Point2d vecTo = utils::RotateVector(vec, a);
 					const Point2d lpT = GetIntersectionWithVector(l, vecTo);
 
 					r.push_back(AxisPairType(lpF.x(), lpT.x()));
@@ -151,14 +153,14 @@ TerrainRangeArc::GetIntersection(Point2d vec, Angle a, const int y, const AxisPa
 			}
 		}
 		else
-		if (a >= aTo)
+		if (aAbs >= aTo)
 		{
 			r.push_back(p);
 		}
 		else
-		if (a > aFrom)
+		if (aAbs > aFrom)
 		{
-			const Point2d vecTo = utils::RotateVector(vec, a, rot);
+			const Point2d vecTo = utils::RotateVector(vec, a);
 			const Point2d lp = GetIntersectionWithVector(l, vecTo);
 
 			r.push_back(AxisPairType(p.first, lp.x()));

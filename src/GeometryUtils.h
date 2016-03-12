@@ -26,7 +26,7 @@ namespace utils
 	trm::Line GetPerpendicularAtPoint(const trm::Line & l, const trm::Point2d & p);
 	trm::Line GetParallelAtPoint(const trm::Line & l, const trm::Point2d & p);
 	bool CheckColinear(const trm::Point2d & p1, const trm::Point2d & p2);
-	trm::Point2d RotateVector(const trm::Point2d & p, const trm::Angle a, const trm::Rotation rot);
+	trm::Point2d RotateVector(const trm::Point2d & p, const trm::Angle a);
 	trm::Point2d GetIntersectionPoint(const trm::Line & l1, const trm::Line & l2);
 	trm::Angle GetAngle(const trm::Point3d & a, const trm::Point3d & b);
 	trm::Angle GetAngle(const trm::Point2d & a, const trm::Point2d & b);

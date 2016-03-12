@@ -54,7 +54,8 @@ RailRoadTangent::Visit(RailRoadArc & rra)
 	c3d.z() = n3d.z();
 
 	const Point3d dir = c3d - n3d;
-	const Point2d nextPoint = utils::RotateVector(Point2d::Cast(dir), Degrees(90), utils::GetAngleRotation(rra.GetAngle()));
+	const Angle rotationAngle = utils::GetAdjustedAngleByRotation(Degrees(90), utils::GetAngleRotation(rra.GetAngle()));
+	const Point2d nextPoint = utils::RotateVector(Point2d::Cast(dir), rotationAngle);
 	Point3d nextPoint3d = Point3d::Cast(nextPoint);
 	nextPoint3d.z() = n3d.z();
 

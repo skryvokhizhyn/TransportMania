@@ -17,10 +17,11 @@ RailRoadMover::Visit(RailRoadArc & rra)
 
 	const float radii = utils::GetDistance(start, center);
 
-	const Angle a = Radians(dist_ / radii);
+	Angle a = Radians(dist_ / radii);
+	a = utils::GetAdjustedAngleByRotation(a, utils::GetAngleRotation(rra.GetAngle()));
 
 	Point2d v = Point2d::Cast(pos_) - rra.GetCenter();
-	v = utils::RotateVector(v, a, utils::GetAngleRotation(rra.GetAngle()));
+	v = utils::RotateVector(v, a);
 	Point3d pos = Point3d::Cast(v + rra.GetCenter());
 	pos.z() = pos_.z();
 

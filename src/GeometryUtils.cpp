@@ -185,7 +185,7 @@ utils::GetSignedAngle180(const trm::Point2d & v1, const trm::Point2d & v2)
 {
 	Angle a = GetAngle(v1, v2);
 
-	if (CheckCodirectional(RotateVector(v1, a, Rotation::Clockwise), v2) == Codirection::Same)
+	if (CheckCodirectional(RotateVector(v1, a), v2) != Codirection::Same || a == Degrees(180))
 	{
 		a *= -1;
 	}
@@ -297,25 +297,15 @@ utils::CheckColinear(const Point2d & p1, const Point2d & p2)
 }
 
 Point2d 
-utils::RotateVector(const Point2d & p, const Angle a, const Rotation rot)
+utils::RotateVector(const trm::Point2d & p, const trm::Angle a)
 {
 	const float cosa = boost::units::cos(a);
 	const float sina = boost::units::sin(a);
 
-	if (rot == Rotation::AntiClockwise)
-	{
-		Point2d::Type x = cosa * p.x() - sina * p.y();
-		Point2d::Type y = sina * p.x() + cosa * p.y();
+	Point2d::Type x = cosa * p.x() - sina * p.y();
+	Point2d::Type y = sina * p.x() + cosa * p.y();
 
-		return Point2d(x, y);
-	}
-	else
-	{
-		Point2d::Type x = cosa * p.x() + sina * p.y();
-		Point2d::Type y = -sina * p.x() + cosa * p.y();
-
-		return Point2d(x, y);
-	}
+	return Point2d(x, y);
 }
 
 float 

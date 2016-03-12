@@ -540,35 +540,35 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAdjustedAngleByRotation6)
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest22)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(90), Rotation::Clockwise);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(-90));
 
 	BOOST_CHECK_EQUAL(p, Point2d(-1, 0));
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest23)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(90), Rotation::AntiClockwise);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(90));
 
 	BOOST_CHECK_EQUAL(p, Point2d(1, 0));
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest24)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(180), Rotation::Clockwise);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(-180));
 
 	BOOST_CHECK_EQUAL(p, Point2d(0, 1));
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest25)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(180), Rotation::AntiClockwise);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(180));
 
 	BOOST_CHECK_EQUAL(p, Point2d(0, 1));
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest26)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(135), Rotation::Clockwise);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(-135));
 
 	BOOST_CHECK_CLOSE(p.x(), -0.707107f, 0.0001f);
 	BOOST_CHECK_CLOSE(p.y(), 0.707107f, 0.0001f);
@@ -576,7 +576,7 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTest26)
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTest27)
 {
-	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(135), Rotation::AntiClockwise);
+	const Point2d p = utils::RotateVector(Point2d(0, -1), Degrees(135));
 
 	BOOST_CHECK_CLOSE(p.x(), 0.707107f, 0.0001f);
 	BOOST_CHECK_CLOSE(p.y(), 0.707107f, 0.0001f);

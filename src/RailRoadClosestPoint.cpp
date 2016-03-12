@@ -44,17 +44,17 @@ RailRoadClosestPoint::Visit(RailRoadArc & rra)
 	const Rotation rotation = utils::GetAngleRotation(rra.GetAngle());
 	const Angle strictAngle = utils::GetRotationAngle360(shiftedStartPos, posOnArc, rotation);
 
-	const Angle angle = utils::GetAngleAbs(rra.GetAngle());
+	const Angle angleAbs = utils::GetAngleAbs(rra.GetAngle());
 
-	if (strictAngle < angle)
+	if (strictAngle < angleAbs)
 	{
 		foundPos_ = Point3d::Cast(posOnArc + center);
 		foundPos_.z() = start3d.z();
 		return;
 	}
 	
-	const Angle extraAngle = strictAngle - angle;
-	const Angle overAngle = Degrees(360) - angle;
+	const Angle extraAngle = strictAngle - angleAbs;
+	const Angle overAngle = Degrees(360) - angleAbs;
 
 	if (extraAngle >= overAngle / 2.0f)
 	{
@@ -62,7 +62,7 @@ RailRoadClosestPoint::Visit(RailRoadArc & rra)
 	}
 	else
 	{
-		const Point2d endPoint = utils::RotateVector(shiftedStartPos, angle, rotation);
+		const Point2d endPoint = utils::RotateVector(shiftedStartPos, rra.GetAngle());
 		foundPos_ = Point3d::Cast(endPoint + center);
 		foundPos_.z() = start3d.z();
 	}

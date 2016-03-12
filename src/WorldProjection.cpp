@@ -113,7 +113,7 @@ WorldProjection::Shift(const float x, const float y)
 	Point2d xyShift(x, y);
 	xyShift *= shiftPosition_.GetLength() * SHIFT_SLOWDOWN_COEF;
 
-	const Point2d rotatedXyShift = utils::RotateVector(xyShift, zAngle_, Rotation::AntiClockwise);
+	const Point2d rotatedXyShift = utils::RotateVector(xyShift, zAngle_);
 
 	shiftPosition_ += Point3d::Cast(rotatedXyShift);
 
