@@ -2,8 +2,7 @@
 #define _TERRAINRANGEARC_H_
 
 #include "TerrainRange.h"
-#include "Point2d.h"
-#include "Angle.h"
+#include "Arc2d.h"
 #include "Types.h"
 #include "Rotation.h"
 
@@ -13,18 +12,7 @@ namespace trm
 		: public TerrainRange
 	{
 	public:
-		struct Data
-			: boost::noncopyable
-		{
-			Data(const Point2d & s, const Angle a, const Point2d & c);
-
-			const Point2d start;
-			const Angle angle;
-			const Point2d center;
-		};
-		
-	public:
-		TerrainRangeArc(const Data & data, AxisType width);
+		TerrainRangeArc(const Arc2d & data, AxisType width);
 
 	public:
 		typedef std::vector<AxisPairType> IntersectionType;

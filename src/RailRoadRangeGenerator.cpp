@@ -13,8 +13,7 @@ RailRoadRangeGenerator::RailRoadRangeGenerator(bool useFullWidth)
 void 
 RailRoadRangeGenerator::Visit(RailRoadArc & rra)
 {
-	//rra
-	range_ = TerrainRangeArc(TerrainRangeArc::Data(Point2d::Cast(rra.GetStart()), rra.GetAngle(), rra.GetCenter()), 
+	range_ = TerrainRangeArc({ Point2d::Cast(rra.GetStart()), rra.GetAngle(), rra.GetCenter() },
 		useFullWidth_ ? RailRoad::GetTotalWidth() : RailRoad::GetRoadWidth());
 }
 		

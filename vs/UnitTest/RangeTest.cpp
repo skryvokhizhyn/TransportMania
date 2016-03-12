@@ -350,7 +350,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeTest13)
 
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest1)
 {
-	TerrainRangeArc::Data d(trm::Point2d(0, -5), Degrees(-360), trm::Point2d(0, 0));
+	Arc2d d{ trm::Point2d(0, -5), Degrees(-360), trm::Point2d(0, 0) };
 
 	TerrainRangeArc c(d, 0.5f + 2.0f);
 	const TerrainRange::Ranges & r = c.GetRanges();
@@ -460,7 +460,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcTest1)
 
 BOOST_AUTO_TEST_CASE(TerrainRangeArcTest20)
 {
-	TerrainRangeArc::Data d(trm::Point2d(0, -2), Degrees(-180), trm::Point2d(0, 0));
+	Arc2d d{ trm::Point2d(0, -2), Degrees(-180), trm::Point2d(0, 0) };
 
 	TerrainRangeArc c(d, 1.0f + 2.0f);
 	const TerrainRange::Ranges & r = c.GetRanges();
@@ -989,7 +989,7 @@ BOOST_AUTO_TEST_CASE(TerrainRangeGetRangeRectangleTest9)
 
 BOOST_AUTO_TEST_CASE(TerrainRangeArcWrongTopPointTest1)
 {
-	TerrainRangeArc r(TerrainRangeArc::Data(Point2d(1, 3), Degrees(90), Point2d(3, 3)), 1.0f);
+	TerrainRangeArc r({ Point2d(1, 3), Degrees(90), Point2d(3, 3) }, 1.0f);
 	const auto & ranges = r.GetRanges();
 	BOOST_CHECK_EQUAL(ranges.size(), 4u);
 	BOOST_CHECK_EQUAL(ranges[0].y, 0u);

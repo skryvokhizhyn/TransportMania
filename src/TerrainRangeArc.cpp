@@ -23,11 +23,6 @@ namespace
 	}
 }
 
-TerrainRangeArc::Data::Data(const Point2d & s, const Angle a, const Point2d & c)
-: start(s), angle(a), center(c)
-{
-}
-
 void 
 TerrainRangeArc::ProcessRange(const Point2d & vec, const Angle a, const int y, const AxisPairType & pt, const Point2d & c)
 {
@@ -45,7 +40,7 @@ TerrainRangeArc::ProcessRange(const Point2d & vec, const Angle a, const int y, c
 	}
 }
 
-TerrainRangeArc::TerrainRangeArc(const Data & data, AxisType width)
+TerrainRangeArc::TerrainRangeArc(const Arc2d & data, AxisType width)
 {
 	const Point2d vec = data.start - data.center;
 

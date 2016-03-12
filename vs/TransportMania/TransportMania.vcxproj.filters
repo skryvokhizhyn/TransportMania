@@ -1037,5 +1037,8 @@
     <ClInclude Include="..\..\src\Rotation.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Arc2d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
