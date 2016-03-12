@@ -29,7 +29,7 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 	const Point3d & start = rrl.GetStart();
 	const Angle angle = rrl.GetAngle();
 	const Point2d & center = rrl.GetCenter();
-	const Rotation rot = rrl.GetRotation();
+	const Rotation rot = utils::GetAngleRotation(angle);
 
 	const AxisType h = start.z();
 	const Point2d s = Point2d::Cast(start);
