@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(RailRoadSizerTest1)
 
 BOOST_AUTO_TEST_CASE(RailRoadSizerTest2)
 {
-	RailRoadArc rra(Point3d(0, 0, 0), Degrees(360), Point2d(10, 0));
+	RailRoadArc rra({ Point3d(0, 0, 0), Degrees(360), Point2d(10, 0) });
 
 	RailRoadSizer rrs;
 	rra.Accept(rrs);
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(RailRoadSizerTest2)
 
 BOOST_AUTO_TEST_CASE(RailRoadSizerTest3)
 {
-	RailRoadArc rra(Point3d(0, 0, 0), Degrees(180), Point2d(0, 10));
+	RailRoadArc rra({ Point3d(0, 0, 0), Degrees(180), Point2d(0, 10) });
 
 	RailRoadSizer rrs;
 	rra.Accept(rrs);
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(RailRoadSizerTest3)
 
 BOOST_AUTO_TEST_CASE(RailRoadParametersTakerTest1)
 {
-	RailRoadArc rra(Point3d(0, 0, 0), Degrees(180), Point2d(0, 10));
+	RailRoadArc rra({ Point3d(0, 0, 0), Degrees(180), Point2d(0, 10) });
 
 	RailRoadParametersTaker rrpt;
 	rra.Accept(rrpt);
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(RailRoadParametersTakerTest1)
 
 BOOST_AUTO_TEST_CASE(RailRoadParametersTakerTest2)
 {
-	RailRoadArc rra(Point3d(0, 0, 0), Degrees(-180), Point2d(0, 10));
+	RailRoadArc rra({ Point3d(0, 0, 0), Degrees(-180), Point2d(0, 10) });
 
 	RailRoadParametersTaker rrpt;
 	rra.Accept(rrpt);
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(RailRoadParametersTakerTest2)
 
 BOOST_AUTO_TEST_CASE(RailRoadParametersTakerTest3)
 {
-	RailRoadArc rra(Point3d(0, 0, 0), Degrees(-90), Point2d(0, 10));
+	RailRoadArc rra({ Point3d(0, 0, 0), Degrees(-90), Point2d(0, 10) });
 
 	RailRoadParametersTaker rrpt;
 	rra.Accept(rrpt);
@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE(RailRoadParametersTakerTest3)
 
 BOOST_AUTO_TEST_CASE(RailRoadParametersTakerTest4)
 {
-	RailRoadArc rra(Point3d(0, 0, 0), Degrees(90), Point2d(0, 10));
+	RailRoadArc rra({ Point3d(0, 0, 0), Degrees(90), Point2d(0, 10) });
 
 	RailRoadParametersTaker rrpt;
 	rra.Accept(rrpt);

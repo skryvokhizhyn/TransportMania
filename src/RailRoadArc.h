@@ -1,10 +1,7 @@
 #pragma once
 
 #include "RailRoadAcceptorTmpl.h"
-#include "Point3d.h"
-#include "Point2d.h"
-#include "Angle.h"
-#include "Rotation.h"
+#include "Spiral3d.h"
 
 namespace trm
 {
@@ -12,16 +9,14 @@ namespace trm
 		: public RailRoadAcceptorTmpl<RailRoadArc>
 	{
 	public:
-		RailRoadArc(const Point3d & s, const Angle a, const Point2d & c);
+		RailRoadArc(const Spiral3d & data);
 
 		const Point3d & GetStart() const;
 		Angle GetAngle() const;
 		const Point2d & GetCenter() const;
 
 	private:
-		const Point3d start_;
-		const Angle angle_;
-		const Point2d center_;
+		const Spiral3d data_;
 	};
 
 } // namespace trm

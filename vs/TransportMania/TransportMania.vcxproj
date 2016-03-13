@@ -188,6 +188,7 @@
     <ClInclude Include="..\..\src\ShaderProgram.h" />
     <ClInclude Include="..\..\src\EventContainer.h" />
     <ClInclude Include="..\..\src\Size2f.h" />
+    <ClInclude Include="..\..\src\Spiral3d.h" />
     <ClInclude Include="..\..\src\SubmitDraftRoadsEvent.h" />
     <ClInclude Include="..\..\src\TerrainCoverDrawableObject.h" />
     <ClInclude Include="..\..\src\TerrainPointCollector.h" />

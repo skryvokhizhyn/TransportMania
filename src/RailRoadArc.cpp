@@ -4,8 +4,8 @@
 
 using namespace trm;
 
-RailRoadArc::RailRoadArc(const Point3d & s, const Angle a, const Point2d & c)
-	: start_(s), angle_(a), center_(c)
+RailRoadArc::RailRoadArc(const Spiral3d & data)
+	: data_(data)
 {
 	/*const AxisType radii = utils::GetDistance(Point2d::Cast(s), c);
 	
@@ -25,23 +25,23 @@ RailRoadArc::RailRoadArc(const Point3d & s, const Angle a, const Point2d & c)
 		throw std::runtime_error(msg.str());
 	}*/
 
-	assert(angle_ != Degrees(0));
+	assert(data_.angle != Degrees(0));
 }
 
 const Point3d & 
 RailRoadArc::GetStart() const
 {
-	return start_;
+	return data_.start;
 }
 
 Angle 
 RailRoadArc::GetAngle() const
 {
-	return angle_;
+	return data_.angle;
 }
 
 const Point2d & 
 RailRoadArc::GetCenter() const
 {
-	return center_;
+	return data_.center;
 }

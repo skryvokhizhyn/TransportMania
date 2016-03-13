@@ -31,7 +31,7 @@ RailRoadFactory::Arc(const Point3d & s, const Angle a, const Point2d & c)
 		throw std::runtime_error("Cannot build Arc based on zero radii");
 	}
 
-	return std::make_shared<RailRoadArc>(s, a, c);
+	return std::make_shared<RailRoadArc>(Spiral3d{ s, a, c });
 }
 
 RailRoadPtr 
