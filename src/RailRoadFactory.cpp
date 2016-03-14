@@ -19,24 +19,24 @@ RailRoadFactory::Line(const Point3d & s, const Point3d & e)
 }
 
 RailRoadPtr 
-RailRoadFactory::Arc(const Point3d & s, const Angle a, const Point2d & c)
+RailRoadFactory::Arc(const Point3d & start, const Angle angle, const Point2d & center, float zShift)
 {
-	if (a == Degrees(0))
+	if (angle == Degrees(0))
 	{
 		throw std::runtime_error("Cannot build Arc based on zero angle");
 	}
 
-	if (Point2d::Cast(s) == c)
+	if (Point2d::Cast(start) == center)
 	{
 		throw std::runtime_error("Cannot build Arc based on zero radii");
 	}
 
-	Spiral3d spiral = { s, a, c };
+	Spiral3d spiral = { start, angle, center, zShift };
 	return std::make_shared<RailRoadArc>(spiral);
 }
 
 RailRoadPtr 
-RailRoadFactory::Arc(const Point3d & start, const Point2d & direction, const Point2d & end)
+RailRoadFactory::Arc(const Point3d & start, const Point2d & direction, const Point3d & end)
 {
 	if (direction == Point2d())
 	{
@@ -44,8 +44,9 @@ RailRoadFactory::Arc(const Point3d & start, const Point2d & direction, const Poi
 	}
 
 	const Point2d start2d = Point2d::Cast(start);
+	const Point2d end2d = Point2d::Cast(end);
 
-	if (start2d == end)
+	if (start2d == end2d)
 	{
 		throw std::runtime_error("Cannot build Arc based on the same start/end points");
 	}
@@ -54,8 +55,8 @@ RailRoadFactory::Arc(const Point3d & start, const Point2d & direction, const Poi
 
 	const trm::Line vecLine = utils::GetLine(start2d, dirEnd);
 	const trm::Line vecPerpendicularLine = utils::GetPerpendicularAtPoint(vecLine, start2d);
-	const trm::Line chordLine = utils::GetLine(start2d, end);
-	const trm::Line chordPerpendicularLine = utils::GetPerpendicularAtPoint(chordLine, (start2d + end) / 2.0f);
+	const trm::Line chordLine = utils::GetLine(start2d, end2d);
+	const trm::Line chordPerpendicularLine = utils::GetPerpendicularAtPoint(chordLine, (start2d + end2d) / 2.0f);
 
 	const Point2d center = utils::GetIntersectionPoint(vecPerpendicularLine, chordPerpendicularLine);
 
@@ -65,9 +66,9 @@ RailRoadFactory::Arc(const Point3d & start, const Point2d & direction, const Poi
 	const Angle rotAngle = utils::GetSignedAngle(vStart, vEnd);
 	const Rotation rot = utils::GetAngleRotation(rotAngle);
 
-	const Point2d end2dShifted = end - center;
+	const Point2d end2dShifted = end2d - center;
 
 	const Angle a = utils::GetRotationAngle360(vStart, end2dShifted, rot);
 
-	return RailRoadFactory::Arc(start, utils::GetAdjustedAngleByRotation(a, rot), center);
+	return RailRoadFactory::Arc(start, utils::GetAdjustedAngleByRotation(a, rot), center, end.z() - start.z());
 }

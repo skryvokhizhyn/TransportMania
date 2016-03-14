@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest4)
 
 BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest5)
 {
-	RailRoadArc rra({ Point3d(10, 0, 0), Degrees(-360), Point2d(0, 0) });
+	RailRoadArc rra({ Point3d(10, 0, 0), Degrees(-360), Point2d(0, 0), 1.0f });
 
 	RailRoadClosestPoint rrcp1(Point2d(0, 0), true, 0.0001f);
 	rra.Accept(rrcp1);
@@ -142,7 +142,7 @@ BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest5)
 
 BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest6)
 {
-	RailRoadArc rra({ Point3d(10, 0, 0), Degrees(-360), Point2d(0, 0) });
+	RailRoadArc rra({ Point3d(10, 0, 0), Degrees(-360), Point2d(0, 0), 1.0f });
 
 	RailRoadClosestPoint rrcp1(Point2d(10, 0), true, 0.0001f);
 	rra.Accept(rrcp1);
@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest6)
 
 BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest7)
 {
-	RailRoadArc rra({ Point3d(10, 0, 0), Degrees(-360), Point2d(0, 0) });
+	RailRoadArc rra({ Point3d(10, 0, 0), Degrees(-360), Point2d(0, 0), 1.0f });
 
 	RailRoadClosestPoint rrcp1(Point2d(5, 0), true, 0.0001f);
 	rra.Accept(rrcp1);
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest7)
 
 BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest8)
 {
-	RailRoadArc rra({ Point3d(10, 10, 0), Degrees(-360), Point2d(0, 10) });
+	RailRoadArc rra({ Point3d(10, 10, 0), Degrees(-360), Point2d(0, 10), 1.0f });
 
 	RailRoadClosestPoint rrcp1(Point2d(5, 10), true, 0.0001f);
 	rra.Accept(rrcp1);
@@ -172,7 +172,7 @@ BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest8)
 
 BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest9)
 {
-	RailRoadArc rra({ Point3d(10, 10, 0), Degrees(-360), Point2d(0, 10) });
+	RailRoadArc rra({ Point3d(10, 10, 0), Degrees(-360), Point2d(0, 10), 1.0f });
 
 	RailRoadClosestPoint rrcp1(Point2d(15, 10), true, 0.0001f);
 	rra.Accept(rrcp1);
@@ -182,7 +182,7 @@ BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest9)
 
 BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest10)
 {
-	RailRoadArc rra({ Point3d(10, 10, 0), Degrees(-90), Point2d(0, 10) });
+	RailRoadArc rra({ Point3d(10, 10, 0), Degrees(-90), Point2d(0, 10), 1.0f });
 
 	RailRoadClosestPoint rrcp1(Point2d(20, 10), true, 0.0001f);
 	rra.Accept(rrcp1);
@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest10)
 
 BOOST_AUTO_TEST_CASE(RailRoadClosestPointTest11)
 {
-	RailRoadArc rra({ Point3d(10, 10, 0), Degrees(-90), Point2d(0, 10) });
+	RailRoadArc rra({ Point3d(10, 10, 0), Degrees(-90), Point2d(0, 10), 1.0f });
 
 	RailRoadClosestPoint rrcp1(Point2d(20, 10), false, 0.0001f);
 	rra.Accept(rrcp1);

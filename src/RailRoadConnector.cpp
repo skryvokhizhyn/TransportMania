@@ -57,7 +57,7 @@ namespace
 		}
 		else
 		{
-			return RailRoadFactory::Arc(pointFrom, Point2d::Cast(direction), Point2d::Cast(pointNone));
+			return RailRoadFactory::Arc(pointFrom, Point2d::Cast(direction), pointNone);
 		}
 	}
 
@@ -86,11 +86,11 @@ namespace
 
 			if (angleBetweenDirections > Degrees(0))
 			{
-				result.push_back(RailRoadFactory::Arc(pointFrom, Point2d::Cast(directionFrom), Point2d::Cast(pointTo)));
+				result.push_back(RailRoadFactory::Arc(pointFrom, Point2d::Cast(directionFrom), pointTo));
 			}
 			else if (angleBetweenDirections < Degrees(0))
 			{
-				const Point2d midPoint = Point2d::Cast((pointFrom + pointTo) / 2.0f);
+				const Point3d midPoint = (pointFrom + pointTo) / 2.0f;
 				result.push_back(RailRoadFactory::Arc(pointFrom, Point2d::Cast(directionFrom), midPoint));
 				result.push_back(RailRoadFactory::Arc(pointTo, Point2d::Cast(directionTo), midPoint));
 			}
