@@ -79,6 +79,7 @@ RailRoadSplitter::Visit(RailRoadArc & rra)
 	const Point2d start2d = Point2d::Cast(start);
 	const Point3d & end = rrpt.GetEnd();
 	const Point2d & center = rra.GetCenter();
+	const float zShift = rra.GetZShift();
 	const Rotation rotation = utils::GetAngleRotation(rra.GetAngle());
 	const Angle absAngle = utils::GetAngleAbs(rra.GetAngle());
 	const Point2d shiftedStart = start2d - center;
@@ -88,7 +89,7 @@ RailRoadSplitter::Visit(RailRoadArc & rra)
 	SortedPointsMap sortedPoints;
 
 	boost::for_each(splitPoints_,
-		[&](const Point3d & p)
+		[&](Point3d p)
 	{
 		if (start == p || end == p)
 		{
@@ -111,6 +112,7 @@ RailRoadSplitter::Visit(RailRoadArc & rra)
 			return;
 		}
 
+		p.z() = start.z() + zShift * angleToSplit / absAngle;
 		sortedPoints.emplace(angleToSplit, p);
 	});
 
@@ -129,7 +131,7 @@ RailRoadSplitter::Visit(RailRoadArc & rra)
 	boost::for_each(sortedPoints,
 		[&](const SortedPointsMap::value_type & v)
 	{
-		spitResult_.push_back(RailRoadFactory::Arc(startPoint, utils::GetAdjustedAngleByRotation(v.first - prevAngle, rotation), rra.GetCenter()));
+		spitResult_.push_back(RailRoadFactory::Arc(startPoint, utils::GetAdjustedAngleByRotation(v.first - prevAngle, rotation), rra.GetCenter(), v.second.z() - startPoint.z()));
 		startPoint = v.second;
 		prevAngle = v.first;
 	});

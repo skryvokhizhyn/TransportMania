@@ -45,3 +45,9 @@ RailRoadArc::GetCenter() const
 {
 	return data_.center;
 }
+
+float 
+RailRoadArc::GetZShift() const
+{
+	return data_.zShift;
+}
