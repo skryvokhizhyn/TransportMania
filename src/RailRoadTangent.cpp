@@ -18,11 +18,18 @@ RailRoadTangent::ProcessLine(const Point3d & beg3d, const Point3d & end3d)
 	const Point2d beg = Point2d::Cast(beg3d);
 	const Point2d end = Point2d::Cast(end3d);
 
+	// near pos is away from line
+	if (utils::GetDistance(utils::GetLine(beg, end), nearPos_) > 0.0001f)
+	{
+		return;
+	}
+
 	const Point2d dirVec = farPos_ - nearPos_;
 	const Point2d rrlVec = end - beg;
 
 	const Angle deg = utils::GetAngle(rrlVec, dirVec);
 
+	// angle between vector and line is bigger than the given threshold
 	if (deg >= invalidAngle_ && deg <= Degrees(180) - invalidAngle_)
 	{
 		return;
@@ -40,7 +47,7 @@ RailRoadTangent::ProcessLine(const Point3d & beg3d, const Point3d & end3d)
 	}
 	else
 	{
-		direction_ = (deg < invalidAngle_) ? dirLine : Point3d(dirLine * -1);
+		direction_ = (utils::GetAngleAbs(deg) < invalidAngle_) ? dirLine : Point3d(dirLine * -1);
 	}
 }
 
@@ -48,18 +55,31 @@ void
 RailRoadTangent::Visit(RailRoadArc & rra)
 {
 	const Point2d & c = rra.GetCenter();
-	Point3d c3d = Point3d::Cast(c);
-	Point3d n3d = Point3d::Cast(nearPos_);
-	n3d.z() = rra.GetStart().z();
-	c3d.z() = n3d.z();
+	
+	const Point2d dir = nearPos_ - c;
+	const Rotation rotation = utils::GetAngleRotation(rra.GetAngle());
+	
+	const Point2d startShifted = Point2d::Cast(rra.GetStart()) - c;
+	const Angle rotationToNearPos = utils::GetRotationAngle360(startShifted, dir, rotation);
 
-	const Point3d dir = c3d - n3d;
-	const Angle rotationAngle = utils::GetAdjustedAngleByRotation(Degrees(90), utils::GetAngleRotation(rra.GetAngle()));
-	const Point2d nextPoint = utils::RotateVector(Point2d::Cast(dir), rotationAngle);
-	Point3d nextPoint3d = Point3d::Cast(nextPoint);
-	nextPoint3d.z() = n3d.z();
+	const Angle angleAbs = utils::GetAngleAbs(rra.GetAngle());
 
-	ProcessLine(nextPoint3d + n3d, n3d);
+	// ignore near point if it's out of the arc
+	if (rotationToNearPos > angleAbs)
+	{
+		return;
+	}
+
+	Point3d nearPos3d = Point3d::Cast(nearPos_);
+	nearPos3d.z() = rra.GetStart().z() + (rra.GetZShift() * rotationToNearPos / angleAbs);
+
+	const Angle rotationAngle = utils::GetAdjustedAngleByRotation(Degrees(90), rotation);
+	const Point2d nextPoint = utils::RotateVector(dir, rotationAngle);
+	
+	Point3d nextPos3d = Point3d::Cast(nextPoint);
+	nextPos3d.z() = rra.GetZShift() * Degrees(90) / angleAbs;
+
+	ProcessLine(nearPos3d, nextPos3d + nearPos3d);
 }
 
 void

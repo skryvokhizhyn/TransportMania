@@ -620,6 +620,24 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsGetDistanceTest2)
 	BOOST_CHECK_EQUAL(d1, 1);
 }
 
+BOOST_AUTO_TEST_CASE(GeometryUtilsGetDistanceTest3)
+{
+	const Line l = utils::GetLine(Point2d(1, 1), Point2d(1, 2));
+
+	const float d1 = utils::GetDistance(l, Point2d(1, 0));
+
+	BOOST_CHECK_EQUAL(d1, 0);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsGetDistanceTest4)
+{
+	const Line l = utils::GetLine(Point2d(1, 1), Point2d(1, 2));
+
+	const float d1 = utils::GetDistance(l, Point2d(-1, 4));
+
+	BOOST_CHECK_EQUAL(d1, 2);
+}
+
 BOOST_AUTO_TEST_CASE(GeometryUtilsCheckPerpendicularTest1)
 {
 	const Line l1 = utils::GetLine(Point2d(0, 0), Point2d(0, 1));

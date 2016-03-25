@@ -19,21 +19,21 @@ using namespace trm;
 namespace
 {
 	template<Direction head, Direction... tail>
-	static TriangleNode * Traverse(TriangleNode * tn)
+	TriangleNode * Traverse(TriangleNode * tn)
 	{
 		TriangleNode * pChild = Traverse<head>(tn);
 		return Traverse<tail...>(pChild);
 	}
 
 	template<>
-	static TriangleNode * Traverse<Direction::Left>(TriangleNode * tn)
+	TriangleNode * Traverse<Direction::Left>(TriangleNode * tn)
 	{
 		tn->Split();
 		return tn->GetLChild();
 	}
 
 	template<>
-	static TriangleNode * Traverse<Direction::Right>(TriangleNode * tn)
+	TriangleNode * Traverse<Direction::Right>(TriangleNode * tn)
 	{
 		tn->Split();
 		return tn->GetRChild();
@@ -578,7 +578,8 @@ BOOST_AUTO_TEST_CASE(TriangleNodeCacheTest6)
 
 	nodes.push_back(&tn);
 
-	auto llll = Traverse<Direction::Left, Direction::Left, Direction::Left, Direction::Left>(&tn);
+	// split tn
+	Traverse<Direction::Left, Direction::Left, Direction::Left, Direction::Left>(&tn);
 
 	TriangleNodeCache::Update(nodes);
 	BOOST_CHECK_EQUAL(nodes.size(), 9u);
