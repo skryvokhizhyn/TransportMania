@@ -1,8 +1,14 @@
 #include "FontReader.h"
 #include "FontData.h"
 
+#pragma warning(push)
+#pragma warning(disable: 6262)
+
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
+
+#pragma warning(pop)
+
 #include <boost/range/algorithm/transform.hpp>
 #include <boost/range/algorithm/sort.hpp>
 #include <boost/range/adaptor/map.hpp>

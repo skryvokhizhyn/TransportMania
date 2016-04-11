@@ -7,7 +7,6 @@
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/algorithm/transform.hpp>
-#include <boost/lambda/lambda.hpp>
 
 using namespace trm;
 
@@ -188,16 +187,15 @@ namespace
 		template<typename PointV, typename IndexV>
 		void PutCharModel(const PointV & pv, const IndexV & iv)
 		{
-			using namespace boost::lambda;
-			placeholder1_type Arg1;
 			trm::ModelData & md = mdRef;
 
 			md.points.reserve(md.points.size() + pv.size());
-			boost::transform(pv, std::back_inserter(md.points), ret<Point3d>(Arg1 + Point3d(shift, 0.0f, 0.0f)));
+			boost::transform(pv, std::back_inserter(md.points),
+				[=](Point3d p) { p.x() += shift; return p; });
 
 			md.indexes.reserve(md.indexes.size() + pv.size());
-			boost::transform(iv, std::back_inserter(md.indexes), 
-				ret<int>(Arg1 + (md.indexes.empty() ? 0 : md.indexes.back() + 1)));
+			boost::transform(iv, std::back_inserter(md.indexes),
+				[&](int i) { return i + (md.indexes.empty() ? 0 : md.indexes.back() + 1); });
 		}
 	};
 }
@@ -265,8 +263,8 @@ namespace
 			return p + Point3d(xShift, static_cast<float>(-yShift), 0);
 		});
 
-		boost::transform(charData.indexes, charData.indexes.begin(), 
-			boost::bind(std::plus<IndexVector::value_type>(), _1, globalData.indexes.size() / 6 * 4));
+		boost::transform(charData.indexes, charData.indexes.begin(),
+			[&](IndexVector::value_type val) { return val + globalData.indexes.size() / 6 * 4; });
 
 		globalData.points.insert(globalData.points.end(), charData.points.begin(), charData.points.end());
 		globalData.indexes.insert(globalData.indexes.end(), charData.indexes.begin(), charData.indexes.end());
@@ -385,9 +383,8 @@ TextRenderer::Render(const std::wstring & str, float fontSize, float maxWidth /*
 	}
 
 	// convert to expected size and shift
-	namespace bl = boost::lambda;
-	boost::transform(md.points, md.points.begin(), 
-		bl::ret<Point3d>(bl::ret<Point3d>(bl::_1 + Point3d(0, yShift, 0)) * sizeMultiplier));
+	boost::transform(md.points, md.points.begin(),
+		[=](Point3d p) { p.y() += yShift; p *= sizeMultiplier; return p; });
 
 	// increase to cover first row
 	yShift += fontData_.size;
