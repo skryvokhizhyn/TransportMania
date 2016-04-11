@@ -16,7 +16,7 @@ RailRoadTerraformer::Visit(RailRoadLine & rrl)
 	terraformer_ = TerraformFunctionFactory::GetLinear(rrl.GetStart(), rrl.GetEnd());
 }
 
-TerraformFunctionPtr 
+TerraformFunction 
 RailRoadTerraformer::GetTerraformer()
 {
 	return std::move(terraformer_);

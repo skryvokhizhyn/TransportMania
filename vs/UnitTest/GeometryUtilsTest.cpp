@@ -1,5 +1,3 @@
-//#define BOOST_TEST_DYN_LINK
-
 #include <Point2d.h>
 #include <GeometryUtils.h>
 #include <Line.h>
@@ -9,9 +7,9 @@
 using namespace utils;
 using namespace trm;
 
-namespace utils
+namespace trm
 {
-	std::ostream & operator << (std::ostream & o, const utils::Codirection c)
+	std::ostream & operator << (std::ostream & o, const Codirection c)
 	{
 		switch (c)
 		{
@@ -319,6 +317,27 @@ BOOST_AUTO_TEST_CASE(GeometryCheckCodirectionalTest2)
 BOOST_AUTO_TEST_CASE(GeometryCheckCodirectionalTest3)
 {
 	const Codirection r = utils::CheckCodirectional(Point2d(1, 2), Point2d(-2, 0));
+
+	BOOST_CHECK_EQUAL(r, Codirection::None);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryCheckCodirectionalAngleTest1)
+{
+	const Codirection r = utils::CheckCodirectionalWithinTolerance(Point3d(1, 0, 0), Point3d(2, 0, 0.2f), Degrees(45));
+
+	BOOST_CHECK_EQUAL(r, Codirection::Same);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryCheckCodirectionalAngleTest2)
+{
+	const Codirection r = utils::CheckCodirectionalWithinTolerance(Point3d(1, 0, 0), Point3d(-2, 0, 0.2f), Degrees(45));
+
+	BOOST_CHECK_EQUAL(r, Codirection::Opposite);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryCheckCodirectionalAngleTest3)
+{
+	const Codirection r = utils::CheckCodirectionalWithinTolerance(Point3d(1, 0, 0), Point3d(0, 0, 0.2f), Degrees(45));
 
 	BOOST_CHECK_EQUAL(r, Codirection::None);
 }
@@ -1011,4 +1030,180 @@ BOOST_AUTO_TEST_CASE(GeometryLineAtTest3)
 	BOOST_CHECK_EQUAL(l.AtX(1.0f), -1.0f);
 
 	BOOST_REQUIRE_THROW(l.AtY(0.0f), std::runtime_error);
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleParallelCodirectionalXTest1)
+{
+	BOOST_CHECK(CheckPointsOnCircle(
+		{ Point2d(1, 1), Point2d(1, 0) },
+		{ Point2d(1, 2), Point2d(1, 0) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleParallelCodirectionalYTest1)
+{
+	BOOST_CHECK(CheckPointsOnCircle(
+		{ Point2d(1, 1), Point2d(0, 1) },
+		{ Point2d(2, 1), Point2d(0, 1) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleParallelCodirectionalToleranceTest1)
+{
+	BOOST_CHECK(CheckPointsOnCircle(
+		{ Point2d(1, 1), Point2d(0, 1) },
+		{ Point2d(2, 1), Point2d(0.5f, 1.0f) },
+		Degrees(45)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleParallelCodirectionalTest1)
+{
+	BOOST_CHECK(CheckPointsOnCircle(
+	{ Point2d(1, 1), Point2d(0, 1) },
+	{ Point2d(2, 1), Point2d(0, 1) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleParallelCodirectional45Test1)
+{
+	BOOST_CHECK(CheckPointsOnCircle(
+		{ Point2d(-1, 1), Point2d(1, 1) },
+		{ Point2d(1, -1), Point2d(1, 1) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleAntiDirectionsXTest1)
+{
+	BOOST_CHECK(!CheckPointsOnCircle(
+		{ Point2d(0, -1), Point2d(1, 0) },
+		{ Point2d(0, 1), Point2d(-1, 0) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleAntiDirectionsYTest1)
+{
+	BOOST_CHECK(!CheckPointsOnCircle(
+		{ Point2d(-1, 0), Point2d(0, 1) },
+		{ Point2d(1, 0), Point2d(0, -1) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleSameDirectionTest1)
+{
+	BOOST_CHECK(!CheckPointsOnCircle(
+	{ Point2d(0, 0), Point2d(-1, 0) },
+	{ Point2d(1, 0), Point2d(-1, -0) },
+		Degrees(5)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleAntiDirections45Test1)
+{
+	BOOST_CHECK(!CheckPointsOnCircle(
+		{ Point2d(-1, 1), Point2d(1, 1) },
+		{ Point2d(1, -1), Point2d(-1, -1) },
+		Degrees(45)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleCrossingUpTest1)
+{
+	BOOST_CHECK(CheckPointsOnCircle(
+		{ Point2d(-1, 1), Point2d(0.5f, 1.0f) },
+		{ Point2d(1, 1), Point2d(-0.5f, 1.0f) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnCircleCrossingDownTest1)
+{
+	BOOST_CHECK(CheckPointsOnCircle(
+		{ Point2d(-1, 1), Point2d(0.5f, -1.0f) },
+		{ Point2d(1, 1), Point2d(-0.5f, -1.0f) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnLineXTest1)
+{
+	BOOST_CHECK(CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(1, 0) },
+		{ Point2d(2, 1), Point2d(-1, 0) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnLineYTest1)
+{
+	BOOST_CHECK(CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(0, 1) },
+		{ Point2d(1, 2), Point2d(0, -1) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnLine45Test1)
+{
+	BOOST_CHECK(CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(1, 1) },
+		{ Point2d(2, 2), Point2d(-1, -1) },
+		Degrees(0)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnLineWithinToleranceTest1)
+{
+	BOOST_CHECK(CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(1.0f, 0.5f) },
+		{ Point2d(2, 1), Point2d(-1, 0) },
+		Degrees(45)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsNotOnLineWithToleranceTest1)
+{
+	BOOST_CHECK(!CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(1.0f, 0.5f) },
+		{ Point2d(2, 1), Point2d(-1, 0) },
+		Degrees(5)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsAntiDirectionWithinToleranceTest1)
+{
+	BOOST_CHECK(!CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(-1, -1) },
+		{ Point2d(2, 2), Point2d(-1, -1) },
+		Degrees(45)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsAntiDirectionWithinToleranceTest2)
+{
+	BOOST_CHECK(!CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(1, 1) },
+		{ Point2d(2, 2), Point2d(1, 1) },
+		Degrees(45)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsAntiDirectionWithinToleranceTest3)
+{
+	BOOST_CHECK(!CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(-1, -1) },
+		{ Point2d(2, 2), Point2d(1, 1) },
+		Degrees(45)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsParallelTest1)
+{
+	BOOST_CHECK(!CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(0, 1) },
+		{ Point2d(2, 1), Point2d(0, 1) },
+		Degrees(45)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsParallelTest2)
+{
+	BOOST_CHECK(!CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(0, 1) },
+		{ Point2d(2, 1), Point2d(0, 11) },
+		Degrees(45)));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryPointsOnLineSamePointTest1)
+{
+	BOOST_CHECK(!CheckPointsOnLine(
+		{ Point2d(1, 1), Point2d(1, 0) },
+		{ Point2d(1, 1), Point2d(-1, 0) },
+			Degrees(45)));
 }

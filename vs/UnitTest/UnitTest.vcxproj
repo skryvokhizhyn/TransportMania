@@ -88,6 +88,7 @@
     <ClCompile Include="..\..\src\HeightMapLoaderConstant.cpp" />
     <ClCompile Include="..\..\src\ItemLocator.cpp" />
     <ClCompile Include="..\..\src\Line.cpp" />
+    <ClCompile Include="..\..\src\LinearHeightGetter.cpp" />
     <ClCompile Include="..\..\src\MatrixFactory.cpp" />
     <ClCompile Include="..\..\src\MatrixUtils.cpp" />
     <ClCompile Include="..\..\src\Patch.cpp" />

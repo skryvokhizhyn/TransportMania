@@ -450,6 +450,9 @@
     <ClCompile Include="..\..\src\RailRoadIntersection.cpp">
       <Filter>Railroad</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\LinearHeightGetter.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -1043,5 +1046,17 @@
     <ClInclude Include="..\..\src\Spiral3d.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\PointWithDirection2d.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Codirection.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\LinearHeightGetter.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

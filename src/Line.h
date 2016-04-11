@@ -8,16 +8,13 @@ namespace trm
 	// ax + by + c = 0
 	struct Line
 	{
-		const AxisType a, b, c;
+		AxisType a, b, c;
 
-		Line(const AxisType i, const AxisType k, const AxisType l);
+		Line(AxisType i, AxisType k, AxisType l);
 
 		// no test coverage
 		AxisType AtX(const AxisType x) const;
 		AxisType AtY(const AxisType y) const;
-
-		private:
-			void operator = (const Line &);
 	};
 
 } // namespace trm

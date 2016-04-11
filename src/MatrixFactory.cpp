@@ -213,7 +213,6 @@ MatrixFactory::Rotate(const Point3d & vF, const Point3d & vT, const Point3d & vD
 	}
 	else
 	{
-		//vR = utils::GetCrossProductLeft(vF, vT);
 		vR = utils::GetCrossProduct(vF, vT);
 	}
 

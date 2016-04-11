@@ -7,8 +7,6 @@
 
 #include <boost/noncopyable.hpp>
 
-#include <functional>
-
 namespace trm
 {
 	struct Size2d;
@@ -23,7 +21,7 @@ namespace terrain
 		: boost::noncopyable
 	{
 	public:
-		Terraformer(const TerrainRange & range, TerraformFunction & func);
+		Terraformer(const TerrainRange & range, TerraformFunction func);
 
 		void Apply(terrain::HeightMapBase & hm);
 
@@ -31,11 +29,8 @@ namespace terrain
 		static bool Normalized(const Size2d & sz, TerrainRange::Range & r);
 
 	private:
-		using TerraformFunctionRef = std::reference_wrapper<TerraformFunction>;
-
-	private:
 		const TerrainRange & range_;
-		TerraformFunctionRef func_;
+		TerraformFunction func_;
 	};
 
 } // namespace trm

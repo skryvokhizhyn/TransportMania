@@ -26,12 +26,12 @@ BOOST_AUTO_TEST_CASE(TerraformTest1)
 	const Point2d p1(0, 0);
 	const Point2d p2(0, 100);
 
-	TerraformFunctionPtr func = TerraformFunctionFactory::GetSpherical(p1, 10, 10);
+	TerraformFunction func = TerraformFunctionFactory::GetSpherical(p1, 10, 10);
 
 	AxisType h1 = 0.0f;
-	(*func)(p1, h1);
+	func(p1, h1);
 	AxisType h2 = 0.0f;
-	(*func)(p2, h2);
+	func(p2, h2);
 
 	BOOST_CHECK(utils::CheckEqual(h1, 10.0f));
 	BOOST_CHECK(utils::CheckEqual(h2, 0.0f));
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(TerraformTest2)
 	auto func = TerraformFunctionFactory::GetSpherical(center, r, h);
 
 	AxisType z = 0.0f;
-	(*func)(p, z);
+	func(p, z);
 
 	BOOST_CHECK(utils::CheckEqual(z, -h / (r * r) * d * d + h));
 }
@@ -58,21 +58,21 @@ BOOST_AUTO_TEST_CASE(TerraformTest3)
 	auto func = TerraformFunctionFactory::GetLinear(Point3d(0, 0, 1), Point3d(2, 0, 2));
 
 	AxisType z1 = 0.0f;
-	(*func)(Point2d(0, 0), z1);
+	func(Point2d(0, 0), z1);
 	AxisType z2 = 0.0f;
-	(*func)(Point2d(0, 1), z2);
+	func(Point2d(0, 1), z2);
 	AxisType z3 = 0.0f;
-	(*func)(Point2d(0, -1), z3);
+	func(Point2d(0, -1), z3);
 
 	AxisType z4 = 2.0f;
-	(*func)(Point2d(2, 0), z4);
+	func(Point2d(2, 0), z4);
 	AxisType z5 = 2.0f;
-	(*func)(Point2d(2, 1), z5);
+	func(Point2d(2, 1), z5);
 	AxisType z6 = 2.0f;
-	(*func)(Point2d(2, -1), z6);
+	func(Point2d(2, -1), z6);
 
 	AxisType z7 = 3.0f;
-	(*func)(Point2d(4, 1), z7);
+	func(Point2d(4, 1), z7);
 
 	BOOST_CHECK_EQUAL(z1, 1);
 	BOOST_CHECK_EQUAL(z2, 1);
@@ -90,21 +90,21 @@ BOOST_AUTO_TEST_CASE(TerraformTest4)
 	auto func = TerraformFunctionFactory::GetLinear(Point3d(0, 0, 1), Point3d(0, 2, 2));
 
 	AxisType z1 = 0.0f;
-	(*func)(Point2d(0, 0), z1);
+	func(Point2d(0, 0), z1);
 	AxisType z2 = 0.0f;
-	(*func)(Point2d(1, 0), z2);
+	func(Point2d(1, 0), z2);
 	AxisType z3 = 0.0f;
-	(*func)(Point2d(-1, 0), z3);
+	func(Point2d(-1, 0), z3);
 
 	AxisType z4 = 0.0f;
-	(*func)(Point2d(0, 2), z4);
+	func(Point2d(0, 2), z4);
 	AxisType z5 = 0.0f;
-	(*func)(Point2d(1, 2), z5);
+	func(Point2d(1, 2), z5);
 	AxisType z6 = 0.0f;
-	(*func)(Point2d(-1, 2), z6);
+	func(Point2d(-1, 2), z6);
 
 	AxisType z7 = 0.0f;
-	(*func)(Point2d(1, 4), z7);
+	func(Point2d(1, 4), z7);
 
 	BOOST_CHECK_EQUAL(z1, 1);
 	BOOST_CHECK_EQUAL(z2, 1);

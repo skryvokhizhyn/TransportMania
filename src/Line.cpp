@@ -3,7 +3,7 @@
 
 using namespace trm;
 
-Line::Line(const AxisType i, const AxisType k, const AxisType l)
+Line::Line(AxisType i, AxisType k, AxisType l)
 	: a(i), b(k), c(l)
 {
 	if (utils::CheckEqual(a, 0.0f) && utils::CheckEqual(b, 0.0f))

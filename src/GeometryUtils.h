@@ -5,13 +5,16 @@
 #include "Triangle2d.h"
 #include "Angle.h"
 #include "Rotation.h"
+#include "PointWithDirection2d.h"
+#include "Codirection.h"
+#include "Point2d.h"
+#include "Point3d.h"
+#include "Line.h"
+#include "Arc2d.h"
+#include <tuple>
 
 namespace trm
 {
-	struct Point2d;
-	struct Point3d;
-	struct Line;
-
 namespace terrain
 {
 	class HeightMap;
@@ -44,57 +47,24 @@ namespace utils
 	trm::Triangle3dPair GetTriangles(const trm::terrain::HeightMap & hm);
 	trm::Point2d GetDirectionVector(const trm::Point2d & a, const trm::Point2d & b);
 	trm::Point3d GetCrossProduct(const trm::Point3d & a, const trm::Point3d & b);
-	//trm::Point3d GetCrossProductLeft(const trm::Point3d & a, const trm::Point3d & b);
 	trm::Point3d GetNormaleForTriangleNonNormalized(const trm::Triangle3d & t);
 	trm::Point3d GetNormaleForTriangleNonNormalized(const trm::Point3d & l, const trm::Point3d & e, const trm::Point3d & r);
 	bool CheckTriangleValid(const trm::Triangle3d & t);
 	bool CheckTriangleValid(const trm::Point3d & l, const trm::Point3d & e, const trm::Point3d & r);
 	trm::Triangle3d GetTriangle3dFrom2d(const trm::Triangle2d & t2d, const trm::terrain::HeightMap & hm);
-
 	template<typename T, unsigned short N>
-	inline float GetDistance(const trm::PointImpl<T, N> & lhs, const trm::PointImpl<T, N> & rhs)
-	{
-		return (lhs - rhs).GetLength();
-	}
-
-	enum class Codirection
-	{
-		Same,
-		Opposite,
-		None
-	};
-
+	float GetDistance(trm::PointImpl<T, N> l, trm::PointImpl<T, N> r);
+	// check for codirecsion withing tolerance
 	template<typename T, unsigned short N>
-	inline Codirection CheckCodirectional(trm::PointImpl<T, N> l, trm::PointImpl<T, N> r)
-	{
-		typedef trm::PointImpl<T, N> PointType;
-
-		l.Normalize();
-		r.Normalize();
-
-		if (utils::CheckNear(utils::GetDistance(l, r), 0.0f, 0.00001f))
-		{
-			return Codirection::Same;
-		}
-		else if (l == -1.0f * r)
-		{
-			return Codirection::Opposite;
-		}
-		else
-		{
-			return Codirection::None;
-		}
-	}
-
+	trm::Codirection CheckCodirectionalWithinTolerance(trm::PointImpl<T, N> l, trm::PointImpl<T, N> r, trm::Angle tolerance);
+	// check for precise codirections (0.00001f tolerance)
+	template<typename T, unsigned short N>
+	trm::Codirection CheckCodirectional(trm::PointImpl<T, N> l, trm::PointImpl<T, N> r);
 	float GetDistance(const trm::Line & l, const trm::Point2d & p);
-
 	template<typename T, unsigned short N>
-	inline trm::PointImpl<T, N> 
-	Normalized(trm::PointImpl<T, N> p)
-	{
-		p.Normalize();
-		return p;
-	}
+	trm::PointImpl<T, N> Normalized(trm::PointImpl<T, N> p);
+	bool CheckPointsOnLine(const trm::PointWithDirection2d & p1, const trm::PointWithDirection2d & p2, trm::Angle toleranceAngle);
+	bool CheckPointsOnCircle(const trm::PointWithDirection2d & p1, const trm::PointWithDirection2d & p2, trm::Angle toleranceAngle);
 
 } // namespace utils
 

@@ -3,6 +3,7 @@
 #include "Point2d.h"
 #include "RailRoad.h"
 #include "RailRoadTangentData.h"
+#include "PointWithDirection2d.h"
 
 namespace trm
 {
@@ -16,6 +17,9 @@ namespace trm
 
 		static RailRoadPtrs GetRoads(const TangentPointPair & tangents);
 		static RailRoadConnectionResult GetRoads(Point3d pLeft, const RailRoadPtr & rrpLeft, Point3d pRight, const RailRoadPtr & rrpRight);
+
+		// returns middle point (can be improved to slight this point if angles aren't equal) if directions look at different sides
+		static Point2d GetArcsConnectionPoint(const PointWithDirection2d & pointDirFrom, const PointWithDirection2d & pointDirTo);
 	};
 
 } // namespace trm

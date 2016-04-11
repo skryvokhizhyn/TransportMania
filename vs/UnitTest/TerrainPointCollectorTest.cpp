@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_CASE(TerrainPointCollectorTest5)
 		(Point2d(0, 0), 0) (Point2d(1, 0), 1);
 
 	auto ids = TerrainCoverDrawableObject::GetTriangulationIndexes(pm);
-	BOOST_CHECK_EQUAL(ids.size(), 6);
+	BOOST_CHECK_EQUAL(ids.size(), 6u);
 	BOOST_CHECK_EQUAL(ids, IndexVector({0, 3, 2,  0, 1, 3}));
 }
 
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(TerrainPointCollectorTest6)
 		(Point2d(0, 0), 0) (Point2d(1, 0), 1);
 
 	auto ids = TerrainCoverDrawableObject::GetTriangulationIndexes(pm);
-	BOOST_CHECK_EQUAL(ids.size(), 12);
+	BOOST_CHECK_EQUAL(ids.size(), 12u);
 	BOOST_CHECK_EQUAL(ids, IndexVector({0, 3, 2,  0, 1, 3,  2, 5, 4,  2, 3, 5}));
 }
 
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(TerrainPointCollectorTest7)
 	TerrainCoverDrawableObject::PointMap pm;
 
 	auto ids = TerrainCoverDrawableObject::GetTriangulationIndexes(pm);
-	BOOST_CHECK_EQUAL(ids.size(), 0);
+	BOOST_CHECK_EQUAL(ids.size(), 0u);
 }
 
 BOOST_AUTO_TEST_CASE(TerrainDraftRoadGeneratorTest8)
@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE(TerrainDraftRoadGeneratorTest8)
 		(Point2d(0, 0), 0)						(Point2d(2, 0), 5);
 
 	auto ids = TerrainCoverDrawableObject::GetTriangulationIndexes(pm);
-	BOOST_CHECK_EQUAL(ids.size(), 9);
+	BOOST_CHECK_EQUAL(ids.size(), 9u);
 	BOOST_CHECK_EQUAL(ids, IndexVector({0, 2, 1,  2, 5, 3,  5, 4, 3}));
 }
 
@@ -121,7 +121,7 @@ BOOST_AUTO_TEST_CASE(TerrainPointCollectorTest9)
 		(Point2d(0, 0), 0)											(Point2d(3, 0), 5);
 
 	auto ids = TerrainCoverDrawableObject::GetTriangulationIndexes(pm);
-	BOOST_CHECK_EQUAL(ids.size(), 6);
+	BOOST_CHECK_EQUAL(ids.size(), 6u);
 	BOOST_CHECK_EQUAL(ids, IndexVector({0, 2, 1,  3, 5, 4}));
 }
 
@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE(TerrainPointCollectorTest10)
 		(Point2d(0, 0), 0)											(Point2d(4, 0), 5);
 
 	auto ids = TerrainCoverDrawableObject::GetTriangulationIndexes(pm);
-	BOOST_CHECK_EQUAL(ids.size(), 6);
+	BOOST_CHECK_EQUAL(ids.size(), 6u);
 	BOOST_CHECK_EQUAL(ids, IndexVector({0, 2, 1,  3, 5, 4}));
 }
 
@@ -145,6 +145,6 @@ BOOST_AUTO_TEST_CASE(TerrainPointCollectorTest11)
 							(Point2d(1, 0), 0)	(Point2d(2, 0), 5);
 
 	auto ids = TerrainCoverDrawableObject::GetTriangulationIndexes(pm);
-	BOOST_CHECK_EQUAL(ids.size(), 12);
+	BOOST_CHECK_EQUAL(ids.size(), 12u);
 	BOOST_CHECK_EQUAL(ids, IndexVector({1, 0, 2,  0, 3, 2,  0, 5, 3,  5, 4, 3}));
 }

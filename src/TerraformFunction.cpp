@@ -4,6 +4,7 @@
 #include "GeometryUtils.h"
 #include "Point2d.h"
 #include "Line.h"
+#include "LinearHeightGetter.h"
 
 #include <boost/bind.hpp>
 #include <boost/units/cmath.hpp>
@@ -93,76 +94,51 @@ namespace
 
 		return true;
 	}
-
-	template<typename T>
-	class TerraformerFunctionWrapper
-		: public TerraformFunction
-	{
-	public:
-		TerraformerFunctionWrapper(const T & t)
-			: impl_(t)
-		{}
-
-		virtual bool operator () (const Point2d & p, AxisType & h) override
-		{
-			return impl_(p, h);
-		}
-
-	private:
-		T impl_;
-	};
-
-	template<typename T>
-	TerraformFunctionPtr MakeTerraformFunctoinPtr(const T & t)
-	{
-		return TerraformFunctionPtr(new TerraformerFunctionWrapper<T>(t));
-	}
 }
 
-TerraformFunctionPtr
+TerraformFunction
 TerraformFunctionFactory::GetConstant(const AxisType z)
 {
-	return MakeTerraformFunctoinPtr(boost::bind(&ConstantImpl, _1, _2, z));
+	return boost::bind(&ConstantImpl, _1, _2, z);
 }
 
-TerraformFunctionPtr
+TerraformFunction
 TerraformFunctionFactory::GetSpherical(const Point2d & p, const AxisType radii, const AxisType height)
 {
-	return MakeTerraformFunctoinPtr(boost::bind(&SphericalImpl, _1, _2, p, radii, height));
+	return boost::bind(&SphericalImpl, _1, _2, p, radii, height);
 }
 
-TerraformFunctionPtr
+TerraformFunction
 TerraformFunctionFactory::GetRandom(const AxisType height)
 {
 	InitRand(RANDOM_MULTIPLIER);
 
-	return MakeTerraformFunctoinPtr(boost::bind(&RandomImpl, _1, _2, height));
+	return boost::bind(&RandomImpl, _1, _2, height);
 }
 
-TerraformFunctionPtr
+TerraformFunction
 TerraformFunctionFactory::GetSphericalRandom(const Point2d & p, const AxisType radii, const AxisType height)
 {
 	InitRand(RANDOM_MULTIPLIER);
 
-	return MakeTerraformFunctoinPtr(boost::bind(&SphericalRandomImpl, _1, _2, p, radii, height));
+	return boost::bind(&SphericalRandomImpl, _1, _2, p, radii, height);
 }
 
-TerraformFunctionPtr 
+TerraformFunction 
 TerraformFunctionFactory::GetLinear(const Point3d & p1, const Point3d & p2)
 {
-	const float dist = utils::GetDistance(p1, p2);
-	const Angle a = Radians(std::asin((p2.z() - p1.z()) / dist));
+	LinearHeightGetter heightGetter(p1, p2);
 
-	const Point2d p12d = Point2d::Cast(p1);
+	return [=](auto p, auto & h)
+	{
+		h = heightGetter(p);
 
-	const Line lDir = utils::GetLine(p12d, Point2d::Cast(p2));
-	const Line lNorm = utils::GetPerpendicularAtPoint(lDir, p12d);
-
-	return MakeTerraformFunctoinPtr(boost::bind(&LinearImpl, p1.z(), lNorm, a, _1, _2));
+		return true;
+	};
 }
 
-TerraformFunctionPtr 
+TerraformFunction 
 TerraformFunctionFactory::GetIncrease(const AxisType z)
 {
-	return MakeTerraformFunctoinPtr(boost::bind(&IncreaseImpl, _1, _2, z));
+	return boost::bind(&IncreaseImpl, _1, _2, z);
 }

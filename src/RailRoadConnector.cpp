@@ -10,6 +10,7 @@
 #include "RailRoadTangent.h"
 #include "RailRoadClosestPoint.h"
 #include "RailRoadConnectionResult.h"
+#include "LinearHeightGetter.h"
 
 #include "Line.h"
 
@@ -19,6 +20,8 @@ using namespace trm;
 
 namespace
 {
+	const Angle ACCEPTABLE_TOLERANCE_ANGLE = Degrees(5);
+
 	Point3d AdjustPoint(const Point3d & point, const RailRoadPtr & rrp)
 	{
 		if (rrp)
@@ -49,12 +52,20 @@ namespace
 	{
 		assert (direction != Point3d());
 
-		const Point3d shiftedTo = pointNone - pointFrom;
+		const PointWithDirection2d pointDirFrom = { Point2d::Cast(pointFrom), Point2d::Cast(direction) };
+		const PointWithDirection2d pointDirTo = { Point2d::Cast(pointNone), Point2d::Cast(pointFrom) - Point2d::Cast(pointNone) };
 
-		if (utils::CheckColinear(Point2d::Cast(shiftedTo), Point2d::Cast(direction)))
+		// check for same line
+		if (utils::CheckPointsOnLine(pointDirFrom, pointDirTo, ACCEPTABLE_TOLERANCE_ANGLE))
 		{
 			return RailRoadFactory::Line(pointFrom, pointNone);
 		}
+		// check for same line though codirectional (cannot build arc)
+		else if (Codirection::Same == utils::CheckCodirectionalWithinTolerance(pointDirFrom.direction, pointDirTo.direction, ACCEPTABLE_TOLERANCE_ANGLE))
+		{
+			return RailRoadPtr();
+		}
+		// all other cases covers Arc
 		else
 		{
 			return RailRoadFactory::Arc(pointFrom, Point2d::Cast(direction), pointNone);
@@ -65,35 +76,34 @@ namespace
 		const Point3d & pointTo, const Point3d & directionTo)
 	{
 		RailRoadPtrs result;
-		const static Angle lineToleranceAngle = Degrees(5);
 
-		const Angle angleFromToDirectionFrom = utils::GetSignedAngle180(Point2d::Cast(directionFrom), Point2d::Cast(directionTo));
-		
-		const Point2d directionFrom2d = Point2d::Cast(directionFrom);
-		const Point2d directionTo2d = Point2d::Cast(directionTo);
-		const Point2d fromToDirection2d = Point2d::Cast(pointTo - pointFrom);
+		const PointWithDirection2d pointDirFrom = { Point2d::Cast(pointFrom), Point2d::Cast(directionFrom) };
+		const PointWithDirection2d pointDirTo = { Point2d::Cast(pointTo), Point2d::Cast(directionTo) };
+		const Point2d dirFromTo = pointDirTo.point - pointDirFrom.point;
+		const Codirection pointFromCodirection = utils::CheckCodirectionalWithinTolerance(pointDirFrom.direction, dirFromTo, ACCEPTABLE_TOLERANCE_ANGLE);
+		const Codirection pointToCodirection = utils::CheckCodirectionalWithinTolerance(pointDirTo.direction, dirFromTo * -1.0f, ACCEPTABLE_TOLERANCE_ANGLE);
 
-		namespace bu = boost::units;
-
-		if (bu::abs(utils::GetSignedAngle(directionFrom2d, fromToDirection2d)) <= lineToleranceAngle
-			&& bu::abs(utils::GetSignedAngle(directionTo2d, fromToDirection2d)) <= lineToleranceAngle)
+		if (pointFromCodirection == pointToCodirection && pointFromCodirection == Codirection::Same)
 		{
 			result.push_back(RailRoadFactory::Line(pointFrom, pointTo));
 		}
+		else if (Codirection::None != pointFromCodirection || Codirection::None != pointToCodirection )
+		{
+			// do nothing
+		}
+		else if (utils::CheckPointsOnCircle(pointDirFrom, pointDirTo, ACCEPTABLE_TOLERANCE_ANGLE))
+		{
+			result.push_back(RailRoadFactory::Arc(pointFrom, Point2d::Cast(directionFrom), pointTo));
+		}
+		// draw with 2 arcs
 		else
 		{
-			const Angle angleBetweenDirections = utils::GetSignedAngle180(Point2d::Cast(directionFrom), Point2d::Cast(directionTo));
+			const Point2d midPoint2d = RailRoadConnector::GetArcsConnectionPoint(pointDirFrom, pointDirTo);
+			Point3d midPoint = Point3d::Cast(midPoint2d);
+			midPoint.z() = LinearHeightGetter(pointFrom, pointTo)(midPoint2d);
 
-			if (angleBetweenDirections > Degrees(0))
-			{
-				result.push_back(RailRoadFactory::Arc(pointFrom, Point2d::Cast(directionFrom), pointTo));
-			}
-			else if (angleBetweenDirections < Degrees(0))
-			{
-				const Point3d midPoint = (pointFrom + pointTo) / 2.0f;
-				result.push_back(RailRoadFactory::Arc(pointFrom, Point2d::Cast(directionFrom), midPoint));
-				result.push_back(RailRoadFactory::Arc(pointTo, Point2d::Cast(directionTo), midPoint));
-			}
+			result.push_back(RailRoadFactory::Arc(pointFrom, Point2d::Cast(directionFrom), midPoint));
+			result.push_back(RailRoadFactory::Arc(pointTo, Point2d::Cast(directionTo), midPoint));
 		}
 
 		return result;
@@ -136,13 +146,19 @@ RailRoadConnector::GetRoads(const TangentPointPair & tangents)
 	}
 	else if (firstTangent.direction && !secondTangent.direction)
 	{
-		result.push_back(
-			ProcessOneNone(firstTangent.point, firstTangent.direction.get(), secondTangent.point));
+		const auto road = ProcessOneNone(firstTangent.point, firstTangent.direction.get(), secondTangent.point);
+		if (road)
+		{
+			result.push_back(road);
+		}
 	}
 	else if (!firstTangent.direction && secondTangent.direction)
 	{
-		result.push_back(
-			ProcessOneNone(secondTangent.point, secondTangent.direction.get(), firstTangent.point));
+		const auto road = ProcessOneNone(secondTangent.point, secondTangent.direction.get(), firstTangent.point);
+		if (road)
+		{
+			result.push_back(road);
+		}
 	}
 	else
 	{
@@ -172,4 +188,28 @@ RailRoadConnector::GetRoads(Point3d pLeft, const RailRoadPtr & rrpLeft, Point3d 
 	}
 
 	return result;
+} 
+
+Point2d 
+RailRoadConnector::GetArcsConnectionPoint(const PointWithDirection2d & pointDirFrom, const PointWithDirection2d & pointDirTo)
+{
+	Point2d dirFromTo = pointDirTo.point - pointDirFrom.point;
+
+	const Angle angleBetweenDirFromToAndDirFrom = utils::GetSignedAngle180(dirFromTo, pointDirFrom.direction);
+	const Point2d dirMiddleFrom = utils::RotateVector(dirFromTo, angleBetweenDirFromToAndDirFrom * 0.5f);
+
+	dirFromTo *= -1.0f;
+
+	const Angle angleBetweenDirToFromAndDirTo = utils::GetSignedAngle180(pointDirTo.direction, dirFromTo);
+	const Point2d dirMiddleTo = utils::RotateVector(pointDirTo.direction, angleBetweenDirToFromAndDirTo * 0.5f);
+
+	if (utils::GetAngleRotation(angleBetweenDirFromToAndDirFrom) != utils::GetAngleRotation(angleBetweenDirToFromAndDirTo))
+	{
+		return (pointDirFrom.point + pointDirTo.point) * 0.5f;
+	}
+
+	const Line lineFrom = utils::GetLine(pointDirFrom.point, dirMiddleFrom + pointDirFrom.point);
+	const Line lineTo = utils::GetLine(pointDirTo.point, dirMiddleTo + pointDirTo.point);
+	
+	return utils::GetIntersectionPoint(lineFrom, lineTo);
 }

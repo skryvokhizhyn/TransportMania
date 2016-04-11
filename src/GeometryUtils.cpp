@@ -130,12 +130,7 @@ utils::GetAngle(const trm::Point2d & a, const trm::Point2d & b)
 Angle 
 utils::GetAngleAbs(trm::Angle a)
 {
-	if (a < Degrees(0))
-	{
-		return a * -1.0f;
-	}
-
-	return a;
+	return boost::units::abs(a);
 }
 
 Rotation
@@ -308,10 +303,146 @@ utils::RotateVector(const trm::Point2d & p, const trm::Angle a)
 	return Point2d(x, y);
 }
 
-float 
+template<typename T, unsigned short N>
+Codirection 
+utils::CheckCodirectionalWithinTolerance(trm::PointImpl<T, N> l, trm::PointImpl<T, N> r, trm::Angle tolerance)
+{
+	assert(tolerance >= Degrees(0));
+
+	if (tolerance == Degrees(0))
+	{
+		return CheckCodirectional(l, r);
+	}
+
+	const Angle angle = utils::GetAngle(l, r);
+
+	if (angle <= tolerance)
+	{
+		return Codirection::Same;
+	}
+	else if (Degrees(180) - angle <= tolerance)
+	{
+		return Codirection::Opposite;
+	}
+	else
+	{
+		return Codirection::None;
+	}
+}
+
+template Codirection utils::CheckCodirectionalWithinTolerance<float, 2>(trm::PointImpl<float, 2> l, trm::PointImpl<float, 2> r, trm::Angle a);
+template Codirection utils::CheckCodirectionalWithinTolerance<float, 3>(trm::PointImpl<float, 3> l, trm::PointImpl<float, 3> r, trm::Angle a);
+
+template<typename T, unsigned short N>
+Codirection
+utils::CheckCodirectional(trm::PointImpl<T, N> l, trm::PointImpl<T, N> r)
+{
+	l.Normalize();
+	r.Normalize();
+
+	if (utils::CheckNear(utils::GetDistance(l, r), 0.0f, 0.00001f))
+	{
+		return Codirection::Same;
+	}
+	else if (utils::CheckNear(utils::GetDistance(l, -1.0f * r), 0.0f, 0.00001f))
+	{
+		return Codirection::Opposite;
+	}
+	else
+	{
+		return Codirection::None;
+	}
+}
+
+template Codirection utils::CheckCodirectional<float, 2>(trm::PointImpl<float, 2> l, trm::PointImpl<float, 2> r);
+template Codirection utils::CheckCodirectional<float, 3>(trm::PointImpl<float, 3> l, trm::PointImpl<float, 3> r);
+
+float
 utils::GetDistance(const trm::Line & l, const trm::Point2d & p)
 {
 	return std::abs(l.a * p.x() + l.b * p.y() + l.c) / std::sqrt(l.a * l.a + l.b * l.b);
+}
+
+bool 
+utils::CheckPointsOnLine(const PointWithDirection2d & p1, const PointWithDirection2d & p2, Angle toleranceAngle)
+{
+	// cannot be on the same line if starting points are the same
+	if (p1.point == p2.point)
+	{
+		return false;
+	}
+
+	const Point2d p1ToP2 = p2.point - p1.point;
+	if (utils::CheckCodirectionalWithinTolerance(p1.direction, p1ToP2, toleranceAngle) == Codirection::Same
+		&& utils::CheckCodirectionalWithinTolerance(p2.direction, p1ToP2 * -1.0f, toleranceAngle) == Codirection::Same)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+namespace
+{
+	Codirection GetAngeCodirection(Angle a, Angle tolerance)
+	{
+		if (a <= tolerance)
+		{
+			return Codirection::Opposite;
+		}
+		else if (a > Degrees(180) - tolerance)
+		{
+			return Codirection::Same;
+		}
+
+		return Codirection::None;
+	}
+}
+
+template<typename T, unsigned short N>
+float 
+utils::GetDistance(trm::PointImpl<T, N> l, trm::PointImpl<T, N> r)
+{
+	return (l - r).GetLength();
+}
+
+template float utils::GetDistance<float, 2>(trm::PointImpl<float, 2> l, trm::PointImpl<float, 2> r);
+template float utils::GetDistance<float, 3>(trm::PointImpl<float, 3> l, trm::PointImpl<float, 3> r);
+
+template<typename T, unsigned short N>
+trm::PointImpl<T, N>
+utils::Normalized(trm::PointImpl<T, N> p)
+{
+	p.Normalize();
+	return p;
+}
+
+template trm::PointImpl<float, 2> utils::Normalized(trm::PointImpl<float, 2> p);
+template trm::PointImpl<float, 3> utils::Normalized(trm::PointImpl<float, 3> p);
+
+bool
+utils::CheckPointsOnCircle(const PointWithDirection2d & p1, const PointWithDirection2d & p2, Angle toleranceAngle)
+{
+	assert(toleranceAngle >= Degrees(0));
+
+	const Angle angleBetweenDierections = utils::GetSignedAngle180(p1.direction, p2.direction);
+	const Angle angleBetweenDierectionsAbs = utils::GetAngleAbs(angleBetweenDierections);
+
+	// fail opposite directions
+	if (angleBetweenDierectionsAbs > Degrees(90))
+	{
+		return false;
+	}
+
+	const Angle p1ToP2 = utils::GetSignedAngle180(p2.point - p1.point, p1.direction);
+	const Angle p2ToP1 = utils::GetSignedAngle180(p2.direction, p1.point - p2.point);
+
+	if (utils::GetAngleAbs(p1ToP2 - p2ToP1) <= toleranceAngle)
+	{
+		return true;
+	}
+
+	return false;
 }
 
 bool 
@@ -386,12 +517,6 @@ utils::GetCrossProduct(const trm::Point3d & a, const trm::Point3d & b)
 {
 	return Point3d(a.y() * b.z() - a.z() * b.y(), a.z() * b.x() - a.x() * b.z(), a.x() * b.y() - a.y() * b.x());
 }
-
-//Point3d 
-//utils::GetCrossProductLeft(const trm::Point3d & a, const trm::Point3d & b)
-//{
-//	return -1 * GetCrossProduct(a, b);
-//}
 
 Point3d
 utils::GetNormaleForTriangleNonNormalized(const trm::Triangle3d & t)

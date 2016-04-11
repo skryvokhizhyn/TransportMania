@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\src\EventContainer.cpp" />
     <ClCompile Include="..\..\src\EventDispatcher.cpp" />
     <ClCompile Include="..\..\src\EventHandlerLocator.cpp" />
+    <ClCompile Include="..\..\src\LinearHeightGetter.cpp" />
     <ClCompile Include="..\..\src\ModelManager.cpp" />
     <ClCompile Include="..\..\src\ModelReader.cpp" />
     <ClCompile Include="..\..\src\MoveSceneEventHandler.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="..\..\src\Arc2d.h" />
     <ClInclude Include="..\..\src\BmpHandler.h" />
     <ClInclude Include="..\..\src\CachedHandlerLocator.h" />
+    <ClInclude Include="..\..\src\Codirection.h" />
     <ClInclude Include="..\..\src\CommonUtils.h" />
     <ClInclude Include="..\..\src\ComponentHolder.h" />
     <ClInclude Include="..\..\src\ComponentHolderProxy.h" />
@@ -153,11 +155,13 @@
     <ClInclude Include="..\..\src\EventDispatcher.h" />
     <ClInclude Include="..\..\src\EventHandlerLocator.h" />
     <ClInclude Include="..\..\src\CachedHandlerLocatorProxy.h" />
+    <ClInclude Include="..\..\src\LinearHeightGetter.h" />
     <ClInclude Include="..\..\src\MouseModeChangeEvent.h" />
     <ClInclude Include="..\..\src\MoveSceneEventHandlerType.h" />
     <ClInclude Include="..\..\src\OptionalPoint3d.h" />
     <ClInclude Include="..\..\src\Point2i.h" />
     <ClInclude Include="..\..\src\Point3i.h" />
+    <ClInclude Include="..\..\src\PointWithDirection2d.h" />
     <ClInclude Include="..\..\src\RailRoadAffectedIds.h" />
     <ClInclude Include="..\..\src\RailRoadClosestPoint.h" />
     <ClInclude Include="..\..\src\RailRoadConnectionResult.h" />
@@ -335,6 +339,9 @@
     <ClInclude Include="..\..\src\WindowRenderer.h" />
     <ClInclude Include="..\..\src\WorldProjection.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7E079777-CC8C-4227-9090-890117B0B5F5}</ProjectGuid>
     <RootNamespace>TransportMania</RootNamespace>
@@ -414,5 +421,14 @@
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets" Condition="Exists('..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets')" />
+    <Import Project="..\packages\Microsoft.CppCoreCheck.14.0.23917.1\build\native\Microsoft.CppCoreCheck.targets" Condition="Exists('..\packages\Microsoft.CppCoreCheck.14.0.23917.1\build\native\Microsoft.CppCoreCheck.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CppCoreCheck.14.0.23917.1\build\native\Microsoft.CppCoreCheck.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CppCoreCheck.14.0.23917.1\build\native\Microsoft.CppCoreCheck.targets'))" />
+  </Target>
 </Project>

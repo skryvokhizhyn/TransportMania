@@ -290,6 +290,9 @@
     <ClCompile Include="..\..\src\RailRoadIntersection.cpp">
       <Filter>obj</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\LinearHeightGetter.cpp">
+      <Filter>obj</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Math">

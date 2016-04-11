@@ -992,8 +992,8 @@ BOOST_AUTO_TEST_CASE(TerrainRangeArcWrongTopPointTest1)
 	TerrainRangeArc r({ Point2d(1, 3), Degrees(90), Point2d(3, 3) }, 1.0f);
 	const auto & ranges = r.GetRanges();
 	BOOST_CHECK_EQUAL(ranges.size(), 4u);
-	BOOST_CHECK_EQUAL(ranges[0].y, 0u);
-	BOOST_CHECK_EQUAL(ranges[1].y, 1u);
-	BOOST_CHECK_EQUAL(ranges[2].y, 2u);
-	BOOST_CHECK_EQUAL(ranges[3].y, 3u);
+	BOOST_CHECK_EQUAL(ranges[0].y, 0);
+	BOOST_CHECK_EQUAL(ranges[1].y, 1);
+	BOOST_CHECK_EQUAL(ranges[2].y, 2);
+	BOOST_CHECK_EQUAL(ranges[3].y, 3);
 }

@@ -61,8 +61,8 @@ Terraformer::Normalized(const Size2d & sz, TerrainRange::Range & r)
 	return true;
 }
 
-Terraformer::Terraformer(const TerrainRange & range, TerraformFunction & func)
-	: range_(range), func_(func)
+Terraformer::Terraformer(const TerrainRange & range, TerraformFunction func)
+	: range_(range), func_(std::move(func))
 {}
 
 void 
@@ -86,7 +86,7 @@ Terraformer::Apply(HeightMapBase & hm)
 			const HeightMap::Value zOld = hm.At(at);
 			//HeightMap::Value zNew = func_(at, zOld);
 			HeightMap::Value zNew = zOld;
-			const bool processFurther = func_.get()(at, zNew);
+			const bool processFurther = func_(at, zNew);
 
 			if (!utils::CheckEqual(zOld, zNew))
 			{
