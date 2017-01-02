@@ -221,6 +221,8 @@ utils::GetRotationAngle360(const trm::Point2d & a, const trm::Point2d & b, const
 			aUnsigned = Degrees(0);
 		}
 
+		assert(aUnsigned <= Degrees(360));
+
 		return aUnsigned;
 	}
 }
@@ -340,11 +342,13 @@ utils::CheckCodirectional(trm::PointImpl<T, N> l, trm::PointImpl<T, N> r)
 	l.Normalize();
 	r.Normalize();
 
-	if (utils::CheckNear(utils::GetDistance(l, r), 0.0f, 0.00001f))
+	static const float tolerance = 0.0001f;
+
+	if (utils::CheckNear(utils::GetDistance(l, r), 0.0f, tolerance))
 	{
 		return Codirection::Same;
 	}
-	else if (utils::CheckNear(utils::GetDistance(l, -1.0f * r), 0.0f, 0.00001f))
+	else if (utils::CheckNear(utils::GetDistance(l, -1.0f * r), 0.0f, tolerance))
 	{
 		return Codirection::Opposite;
 	}

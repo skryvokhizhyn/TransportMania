@@ -71,15 +71,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\PoolUsageCounter.cpp" />
-    <ClCompile Include="..\..\src\PoolUsageCounterHolder.cpp" />
-    <ClCompile Include="..\..\src\TriangleNode.cpp" />
-    <ClCompile Include="..\..\src\TriangleNodePool.cpp" />
     <ClCompile Include="..\TransportMania\LeakDetectorInitializer.cpp" />
-    <ClCompile Include="..\TransportMania\Logger.cpp" />
     <ClCompile Include="FunctionalTest.cpp" />
-    <ClCompile Include="TriangleNodeLeakTest.cpp" />
-    <ClCompile Include="TriangleNodePerformanceTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LeakDetectorNew.h" />

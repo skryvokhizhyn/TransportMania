@@ -32,7 +32,6 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 	const Point2d & center = rrl.GetCenter();
 	const Rotation rot = utils::GetAngleRotation(angle);
 
-	const AxisType h = start.z();
 	const Point2d s = Point2d::Cast(start);
 
 	const Point2d vec1 = s - center;
@@ -46,20 +45,23 @@ void RailRoadRendererArc::Do(const RailRoadArc & rrl, ModelData & md)
 
 	const Angle rotationStep = Radians(2 * std::asin(RailRoad::GetRoadStep() / 2 / radiiMax));
 	
-	const int pointsToProceed = boost::numeric_cast<int>(std::ceil(angle / rotationStep) + 1.0f) * 2; 
+	const int pointsToProceed = boost::numeric_cast<int>(std::ceil(angleAbs / rotationStep) + 1.0f) * 2;
 	md.points.reserve(pointsToProceed);
 	md.indexes.reserve(pointsToProceed);
 	md.textures.reserve(pointsToProceed);
 
+	const AxisType hStart = start.z();
 	Angle aAbs = Degrees(0);
 	float pathPassed = 0.0f;
 
-	while(aAbs <= angle)
+	while(aAbs <= angleAbs)
 	{
 		Angle a = utils::GetAdjustedAngleByRotation(aAbs, rot);
 		const Point2d far = utils::RotateVector(farStart, a);
 		const Point2d near = utils::RotateVector(nearStart, a);
 		
+		const AxisType h = hStart + rrl.GetZShift() * a / angle;
+
 		if (rot == Rotation::AntiClockwise)
 		{
 			PushPoint(near, center, h, md);

@@ -12,11 +12,10 @@ namespace trm
 		virtual void Visit(RailRoadArc & rra) override;
 		virtual void Visit(RailRoadLine & rrl) override;
 
-		// moves the terraformer out
-		TerraformFunction GetTerraformer();
+		const TerraformFunctionPtr & GetTerraformer() const;
 
 	private:
-		TerraformFunction terraformer_;
+		TerraformFunctionPtr terraformer_;
 	};
 
 } // namespace trm

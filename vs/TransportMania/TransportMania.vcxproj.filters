@@ -1055,6 +1055,9 @@
     <ClInclude Include="..\..\src\LinearHeightGetter.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\MakeUniquePtr.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

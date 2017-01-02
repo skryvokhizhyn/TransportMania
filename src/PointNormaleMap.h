@@ -2,8 +2,9 @@
 
 #include "Size2d.h"
 #include "Point3d.h"
+#include "PointHash.h"
 
-#include <map>
+#include <unordered_map>
 #include <functional>
 
 namespace trm
@@ -11,7 +12,7 @@ namespace trm
 	class PointNormaleMap
 	{
 	public:
-		using NormaleMap = std::map<Size2d, Point3d>;
+		using NormaleMap = std::unordered_map<Size2d, Point3d, Hasher<Size2d>>;
 
 	public:
 		void Put(const Size2d & p, const Point3d & n);

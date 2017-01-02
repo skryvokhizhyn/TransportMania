@@ -51,3 +51,9 @@ RailRoadArc::GetZShift() const
 {
 	return data_.zShift;
 }
+
+const Spiral3d &
+RailRoadArc::GetSpiral() const
+{
+	return data_;
+}

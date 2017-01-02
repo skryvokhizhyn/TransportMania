@@ -5,15 +5,7 @@ using namespace trm;
 void
 PointNormaleMap::Put(const Size2d & p, const Point3d & n)
 {
-	auto found = normaleMap_.lower_bound(p);
-	if (found != normaleMap_.end() && !NormaleMap::key_compare()(p, found->first))
-	{
-		found->second += n;
-	}
-	else
-	{
-		normaleMap_.emplace_hint(found, p, n);
-	}
+	normaleMap_[p] += n;
 }
 
 const Point3d &

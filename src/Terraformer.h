@@ -21,7 +21,7 @@ namespace terrain
 		: boost::noncopyable
 	{
 	public:
-		Terraformer(const TerrainRange & range, TerraformFunction func);
+		Terraformer(const TerrainRange & range, TerraformFunction & funcPtr);
 
 		void Apply(terrain::HeightMapBase & hm);
 
@@ -30,7 +30,7 @@ namespace terrain
 
 	private:
 		const TerrainRange & range_;
-		TerraformFunction func_;
+		TerraformFunction & func_;
 	};
 
 } // namespace trm

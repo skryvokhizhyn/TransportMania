@@ -15,6 +15,7 @@ namespace trm
 		Angle GetAngle() const;
 		const Point2d & GetCenter() const;
 		float GetZShift() const;
+		const Spiral3d & GetSpiral() const;
 
 	private:
 		const Spiral3d data_;

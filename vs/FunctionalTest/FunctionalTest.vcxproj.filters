@@ -2,27 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="FunctionalTest.cpp" />
-    <ClCompile Include="TriangleNodePerformanceTest.cpp">
-      <Filter>TriangleNode</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TriangleNode.cpp">
-      <Filter>obj</Filter>
-    </ClCompile>
-    <ClCompile Include="..\TransportMania\Logger.cpp">
-      <Filter>obj</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\TriangleNodePool.cpp">
-      <Filter>obj</Filter>
-    </ClCompile>
-    <ClCompile Include="TriangleNodeLeakTest.cpp">
-      <Filter>TriangleNode</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\PoolUsageCounter.cpp">
-      <Filter>obj</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\PoolUsageCounterHolder.cpp">
-      <Filter>obj</Filter>
-    </ClCompile>
     <ClCompile Include="..\TransportMania\LeakDetectorInitializer.cpp">
       <Filter>obj</Filter>
     </ClCompile>
@@ -30,9 +9,6 @@
   <ItemGroup>
     <Filter Include="obj">
       <UniqueIdentifier>{f80f32ad-65c3-4b7a-9e72-ba9b63071ef3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TriangleNode">
-      <UniqueIdentifier>{59e5e54e-027e-4723-8f83-2051fdbcf2c0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

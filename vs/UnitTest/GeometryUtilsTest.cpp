@@ -474,7 +474,42 @@ BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngle1807)
 {
 	const Angle a = utils::GetSignedAngle180(Point2d(0, 1), Point2d(static_cast<float>(sqrt(2)/2), static_cast<float>(sqrt(2)/2)));
 
-	BOOST_CHECK(a - Degrees(-45) < Degrees(0.1f));
+	BOOST_CHECK_LT(a - Degrees(-45), Degrees(0.1f));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngleBug1)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(1.22999954f, 27.0200005f), Point2d(1.22999954f, 28.0200005f));
+
+	BOOST_CHECK_GT(a, Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngleBug2)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(1.22999954f, 27000.02f), Point2d(1.22999954f, 28000.02f));
+
+	BOOST_CHECK_GE(a, Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngleBug3)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(1.22999954f, 28000.02f), Point2d(1.22999954f, 27000.02f));
+
+	BOOST_CHECK_LE(a, Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngleBug4)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(27000.02f, 1.22999954f), Point2d(28000.02f, 1.22999954f));
+
+	BOOST_CHECK_LE(a, Degrees(0));
+}
+
+BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetSignedAngleBug5)
+{
+	const Angle a = utils::GetSignedAngle180(Point2d(28000.02f, 1.22999954f), Point2d(27000.02f, 1.22999954f));
+
+	BOOST_CHECK_GE(a, Degrees(0));
 }
 
 BOOST_AUTO_TEST_CASE(GeometryUtilsTestGetAngleAbs1)

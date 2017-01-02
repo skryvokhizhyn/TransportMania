@@ -21,7 +21,7 @@ namespace
 	bool ConstantImpl(const Point2d & /*p*/, AxisType & h, const AxisType z)
 	{
 		h = z;
-		return true;;
+		return true;
 	}
 
 	bool SphericalImpl(const Point2d & p, AxisType & h, const Point2d & center, const AxisType radii, const AxisType height)
@@ -34,6 +34,29 @@ namespace
 
 			h = (t >= h) ? t : h;
 		}
+
+		return true;
+	}
+
+	bool SpiralImpl(const Point2d & p, AxisType & h, const Spiral3d & spiral)
+	{
+		const Point2d vecStart = Point2d::Cast(spiral.start) - spiral.center;
+		const Point2d vecPoint = p - spiral.center;
+
+		const Angle absAngle = utils::GetAngleAbs(spiral.angle);
+		const Rotation spiralRotation = utils::GetAngleRotation(spiral.angle);
+		Angle pointAngle = utils::GetRotationAngle360(vecStart, vecPoint, utils::GetAngleRotation(spiral.angle));
+
+		if (pointAngle > absAngle)
+		{
+			const Angle signedAngle = utils::GetSignedAngle180(vecStart, vecPoint);
+			if (spiralRotation != utils::GetAngleRotation(signedAngle))
+			{
+				pointAngle -= Degrees(360);
+			}
+		}
+
+		h = spiral.start.z() + pointAngle / absAngle * spiral.zShift;
 
 		return true;
 	}
@@ -94,51 +117,81 @@ namespace
 
 		return true;
 	}
+
+	template<typename T>
+	class TerraformerFunctionWrapper
+		: public trm::TerraformFunction
+	{
+	public:
+		TerraformerFunctionWrapper(const T & t)
+			: impl_(t)
+		{}
+
+		virtual bool operator () (const Point2d & p, AxisType & h) override
+		{
+			return impl_(p, h);
+		}
+
+	private:
+		T impl_;
+	};
+
+	template<typename T>
+	TerraformFunctionPtr MakeTerraformFunctoinPtr(const T & t)
+	{
+		return std::make_shared<TerraformerFunctionWrapper<T>>(t);
+	}
 }
 
-TerraformFunction
+TerraformFunctionPtr
 TerraformFunctionFactory::GetConstant(const AxisType z)
 {
-	return boost::bind(&ConstantImpl, _1, _2, z);
+	return MakeTerraformFunctoinPtr(boost::bind(&ConstantImpl, _1, _2, z));
 }
 
-TerraformFunction
+TerraformFunctionPtr
 TerraformFunctionFactory::GetSpherical(const Point2d & p, const AxisType radii, const AxisType height)
 {
-	return boost::bind(&SphericalImpl, _1, _2, p, radii, height);
+	return MakeTerraformFunctoinPtr(boost::bind(&SphericalImpl, _1, _2, p, radii, height));
 }
 
-TerraformFunction
+TerraformFunctionPtr
 TerraformFunctionFactory::GetRandom(const AxisType height)
 {
 	InitRand(RANDOM_MULTIPLIER);
 
-	return boost::bind(&RandomImpl, _1, _2, height);
+	return MakeTerraformFunctoinPtr(boost::bind(&RandomImpl, _1, _2, height));
 }
 
-TerraformFunction
+TerraformFunctionPtr
 TerraformFunctionFactory::GetSphericalRandom(const Point2d & p, const AxisType radii, const AxisType height)
 {
 	InitRand(RANDOM_MULTIPLIER);
 
-	return boost::bind(&SphericalRandomImpl, _1, _2, p, radii, height);
+	return MakeTerraformFunctoinPtr(boost::bind(&SphericalRandomImpl, _1, _2, p, radii, height));
 }
 
-TerraformFunction 
+TerraformFunctionPtr
 TerraformFunctionFactory::GetLinear(const Point3d & p1, const Point3d & p2)
 {
 	LinearHeightGetter heightGetter(p1, p2);
 
-	return [=](auto p, auto & h)
+	return MakeTerraformFunctoinPtr([=](auto p, auto & h)
 	{
 		h = heightGetter(p);
 
 		return true;
-	};
+	});
 }
 
-TerraformFunction 
+TerraformFunctionPtr
 TerraformFunctionFactory::GetIncrease(const AxisType z)
 {
-	return boost::bind(&IncreaseImpl, _1, _2, z);
+	return MakeTerraformFunctoinPtr(boost::bind(&IncreaseImpl, _1, _2, z));
+}
+
+TerraformFunctionPtr
+TerraformFunctionFactory::GetSpiral(const Spiral3d & s)
+{
+	return MakeTerraformFunctoinPtr(boost::bind(&SpiralImpl, _1, _2, s));
 }

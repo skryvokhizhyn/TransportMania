@@ -7,7 +7,7 @@ using namespace trm;
 void 
 RailRoadTerraformer::Visit(RailRoadArc & rra)
 {
-	terraformer_ = TerraformFunctionFactory::GetConstant(rra.GetStart().z());
+	terraformer_ = TerraformFunctionFactory::GetSpiral(rra.GetSpiral());
 }
 
 void 
@@ -16,8 +16,8 @@ RailRoadTerraformer::Visit(RailRoadLine & rrl)
 	terraformer_ = TerraformFunctionFactory::GetLinear(rrl.GetStart(), rrl.GetEnd());
 }
 
-TerraformFunction 
-RailRoadTerraformer::GetTerraformer()
+const TerraformFunctionPtr &
+RailRoadTerraformer::GetTerraformer() const
 {
-	return std::move(terraformer_);
+	return terraformer_;
 }

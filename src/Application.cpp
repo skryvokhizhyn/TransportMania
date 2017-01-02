@@ -208,7 +208,7 @@ Application::PressScene(const float x, const float y)
 		TerrainRangeCircle range(Point2d::Cast(found.get()), 1);
 		
 		auto tf = TerraformFunctionFactory::GetIncrease(1.0f);
-		Terraformer te(range, tf);
+		Terraformer te(range, *tf);
 		terrainPtr_->Apply(te);
 
 		terrainScenePtr_->UpdateRequired();
@@ -284,9 +284,9 @@ Application::DrawPermanentRailRoad(UniqueId id)
 	RailRoadTerraformer rrtf;
 	rrp->Accept(rrtf);
 
-	TerraformFunction tFuncPtr = rrtf.GetTerraformer();
+	TerraformFunctionPtr tFuncPtr = rrtf.GetTerraformer();
 
-	Terraformer t(rrrg.GetRange(), tFuncPtr);
+	Terraformer t(rrrg.GetRange(), *tFuncPtr);
 	terrainPtr_->Apply(t);
 
 	staticSceneObjects_.push_back(StaticSceneObjectFactory::ForRailRoad(rrp));
