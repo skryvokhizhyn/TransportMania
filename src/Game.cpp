@@ -7,6 +7,7 @@
 #include "UpdateRate.h"
 #include "TextManagerProxy.h"
 #include "SdlUserEvent.h"
+#include "RenderRateGuard.h"
 
 #include <boost/format.hpp>
 #include <stdexcept>
@@ -127,9 +128,13 @@ Game::Run()
 	
 	FpsCounter fpsCounter(1); /* report each 1 seconds */
 	UpdateRate updateRate(30); /* 30 updates per sedond */
+	RenderRateGuard renderRateGuard(30); /* 30 renders per second*/
 
 	for (;;)
 	{
+		// makes "updateRate" updates per second
+		// sacrifices with rendering so updates happen with 
+		// expected rate
 		while (updateRate.NeedMore())
 		{
 			while (SDL_PollEvent(&event))
@@ -163,7 +168,6 @@ Game::Run()
 		{
 			const unsigned frames = fpsCounter.GetFrames();
 
-			//utils::Logger().Debug() << "Frames " << frames;
 			TextManagerProxy()->PutFrameRate(frames);
 		}
 
@@ -172,5 +176,8 @@ Game::Run()
 		{
 			utils::Logger().Debug() << "Heavily loaded. Updates " << cnt;
 		}
+
+		// guarantees that render rate will be as specified by render rate guard
+		renderRateGuard.Snooze();
 	}
 }

@@ -42,6 +42,7 @@
     <ClCompile Include="..\..\src\RailRoadSplitter.cpp" />
     <ClCompile Include="..\..\src\RailRoadTangent.cpp" />
     <ClCompile Include="..\..\src\RailRoadTerraformer.cpp" />
+    <ClCompile Include="..\..\src\RenderRateGuard.cpp" />
     <ClCompile Include="..\..\src\RoadNetworkManager.cpp" />
     <ClCompile Include="..\..\src\SceneContent.cpp" />
     <ClCompile Include="..\..\src\ScreenSizeManipulator.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="..\..\src\RailRoadTerraformer.h" />
     <ClInclude Include="..\..\src\RailRoadUpdateEvent.h" />
     <ClInclude Include="..\..\src\RailRoadUtils.h" />
+    <ClInclude Include="..\..\src\RenderRateGuard.h" />
     <ClInclude Include="..\..\src\RoadEventStateMachine.h" />
     <ClInclude Include="..\..\src\RoadNetworkManager.h" />
     <ClInclude Include="..\..\src\Rotation.h" />
@@ -379,6 +381,8 @@
     <Import Project="..\props\CommonSources.props" />
     <Import Project="..\props\OpenGL.props" />
     <Import Project="..\props\SDL2D.props" />
+    <Import Project="..\props\libpng.props" />
+    <Import Project="..\props\zlib.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -412,6 +416,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

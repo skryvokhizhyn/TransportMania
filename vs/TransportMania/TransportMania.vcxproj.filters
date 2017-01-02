@@ -453,6 +453,9 @@
     <ClCompile Include="..\..\src\LinearHeightGetter.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\RenderRateGuard.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -1057,6 +1060,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\MakeUniquePtr.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RenderRateGuard.h">
+      <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
