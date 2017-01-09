@@ -42,6 +42,7 @@
     <ClCompile Include="..\..\src\RailRoadSplitter.cpp" />
     <ClCompile Include="..\..\src\RailRoadTangent.cpp" />
     <ClCompile Include="..\..\src\RailRoadTerraformer.cpp" />
+    <ClCompile Include="..\..\src\RenderThreadedExecutor.cpp" />
     <ClCompile Include="..\..\src\RenderRateGuard.cpp" />
     <ClCompile Include="..\..\src\RoadNetworkManager.cpp" />
     <ClCompile Include="..\..\src\SceneContent.cpp" />
@@ -106,6 +107,7 @@
     <ClCompile Include="..\..\src\TerrainSceneObject.cpp" />
     <ClCompile Include="..\..\src\TextureLoader.cpp" />
     <ClCompile Include="..\..\src\TextureManager.cpp" />
+    <ClCompile Include="..\..\src\ThreadPool.cpp" />
     <ClCompile Include="..\..\src\Train.cpp" />
     <ClCompile Include="..\..\src\TrainDrawableObject.cpp" />
     <ClCompile Include="..\..\src\TrainDrawableObjectFactory.cpp" />
@@ -156,6 +158,7 @@
     <ClInclude Include="..\..\src\EventDispatcher.h" />
     <ClInclude Include="..\..\src\EventHandlerLocator.h" />
     <ClInclude Include="..\..\src\CachedHandlerLocatorProxy.h" />
+    <ClInclude Include="..\..\src\FutureTaskWrapper.h" />
     <ClInclude Include="..\..\src\LinearHeightGetter.h" />
     <ClInclude Include="..\..\src\MakeUniquePtr.h" />
     <ClInclude Include="..\..\src\MouseModeChangeEvent.h" />
@@ -176,6 +179,7 @@
     <ClInclude Include="..\..\src\RailRoadTerraformer.h" />
     <ClInclude Include="..\..\src\RailRoadUpdateEvent.h" />
     <ClInclude Include="..\..\src\RailRoadUtils.h" />
+    <ClInclude Include="..\..\src\RenderThreadedExecutor.h" />
     <ClInclude Include="..\..\src\RenderRateGuard.h" />
     <ClInclude Include="..\..\src\RoadEventStateMachine.h" />
     <ClInclude Include="..\..\src\RoadNetworkManager.h" />
@@ -201,8 +205,11 @@
     <ClInclude Include="..\..\src\TerrainPointCollector.h" />
     <ClInclude Include="..\..\src\TerrainHeightCheck.h" />
     <ClInclude Include="..\..\src\TerrainPositionLocator.h" />
+    <ClInclude Include="..\..\src\TerrainRenderingFinishedEvent.h" />
+    <ClInclude Include="..\..\src\TerrainSceneProcessor.h" />
     <ClInclude Include="..\..\src\TextRendererProxy.h" />
     <ClInclude Include="..\..\src\TextureIdHashImpl.h" />
+    <ClInclude Include="..\..\src\ThreadPool.h" />
     <ClInclude Include="..\..\src\UserEventData.h" />
     <ClInclude Include="..\..\src\WindowItemBox.h" />
     <ClInclude Include="..\..\src\WindowCloseEvent.h" />

@@ -3,6 +3,7 @@
 
 #include "ModelDrawerPool.h"
 #include "Terrain.h"
+#include "RenderThreadedExecutor.h"
 #include "Matrix.h"
 #include <boost/noncopyable.hpp>
 #include <memory>
@@ -18,8 +19,8 @@ namespace trm
 	public:
 		TerrainSceneObject(const TerrainPtr & terrain);
 
-		void Update(const WorldProjection & wp);
 		void Render(const WorldProjection & wp);
+		void Actualize();
 		void Draw() const;
 
 		void UpdateRequired();
@@ -29,9 +30,7 @@ namespace trm
 	private:
 		ModelDrawerPool modelDrawerPool_;
 		TerrainPtr terrainPtr_;
-		Matrix modelMatrix_;
-		bool tasselated_ = false;
-		bool updated_ = false;
+		RenderThreadedExecutor renderer_;
 	};
 
 	typedef std::shared_ptr<TerrainSceneObject> TerrainSceneObjectPtr;

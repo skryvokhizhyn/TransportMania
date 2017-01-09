@@ -4,58 +4,49 @@
 #include "Logger.h"
 #include "Point2d.h"
 #include "Point3d.h"
+#include "WorldProjection.h"
 
 using namespace trm;
 
 TerrainSceneObject::TerrainSceneObject(const TerrainPtr & terrainPtr)
 	: terrainPtr_(terrainPtr)
-	, modelMatrix_(MatrixFactory::Identity())
 {
-}
-
-void 
-TerrainSceneObject::Update(const WorldProjection & wp)
-{
-	if (!updated_)
-	{
-		terrainPtr_->Update(wp);
-		updated_ = true;
-	}
+	UpdateRequired();
 }
 
 void
 TerrainSceneObject::UpdateRequired()
 {
-	tasselated_ = false;
-	updated_ = false;
+	renderer_.Schedule();
 }
 
 void 
 TerrainSceneObject::Render(const WorldProjection & wp)
 {
-	if (!tasselated_)
-	{
-		const bool tasselateMore = terrainPtr_->Tasselate(wp);
-		tasselated_ = !tasselateMore;
-		terrainPtr_->Render();
-	
-		modelDrawerPool_.Release();
-
-		ModelData modelData;
-		while (terrainPtr_->GetNextRenderResult(modelData))
-		{
-			if (!modelData.Valid())
-			{
-				continue;
-			}
-
-			modelDrawerPool_.Push(modelData);
-
-			modelData.Clear();
-		}
-	}
+	renderer_.Render(*terrainPtr_, wp);
 }
-		
+
+void 
+TerrainSceneObject::Actualize()
+{
+	modelDrawerPool_.Release();
+
+	ModelData modelData;
+	while (terrainPtr_->GetNextRenderResult(modelData))
+	{
+		if (!modelData.Valid())
+		{
+			continue;
+		}
+
+		modelDrawerPool_.Push(modelData);
+
+		modelData.Clear();
+	}
+
+	renderer_.Actualized();
+}
+
 void 
 TerrainSceneObject::Draw() const
 {
@@ -65,5 +56,6 @@ TerrainSceneObject::Draw() const
 const Matrix &
 TerrainSceneObject::GetModelMatrix() const
 {
-	return modelMatrix_;
+	static Matrix modelMatrix = MatrixFactory::Identity();
+	return modelMatrix;
 }

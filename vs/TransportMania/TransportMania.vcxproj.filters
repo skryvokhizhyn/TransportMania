@@ -456,6 +456,12 @@
     <ClCompile Include="..\..\src\RenderRateGuard.cpp">
       <Filter>Application</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\RenderThreadedExecutor.cpp">
+      <Filter>Terrain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\ThreadPool.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\SafeExecute.h">
@@ -1062,6 +1068,21 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\RenderRateGuard.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\RenderThreadedExecutor.h">
+      <Filter>Terrain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\FutureTaskWrapper.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainRenderingFinishedEvent.h">
+      <Filter>Events\SingleEvents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\ThreadPool.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\TerrainSceneProcessor.h">
       <Filter>Application</Filter>
     </ClInclude>
   </ItemGroup>

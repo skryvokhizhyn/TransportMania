@@ -70,7 +70,7 @@ namespace
 	}
 
 	bool CheckPatchVisible(const CornerValues & heights, const Size2d & s, 
-		const WorldProjection & wp, size_t patchSize)
+		const Matrix & pv, size_t patchSize)
 	{
 		/*if (s.x() > 20 || s.y() > 20)
 			return false;
@@ -90,14 +90,6 @@ namespace
 		const Point3d ru = GetCornerPoint(heights, s2d + Point2d(psf, psf), PatchCorner::RightUp);
 		// right bottom
 		const Point3d rb = GetCornerPoint(heights, s2d + Point2d(psf, 0), PatchCorner::RightBottom);
-
-		/*const auto & screenCenter = wp.GetCameraPosition();
-		const Point3d patchCenter = (lb + ru) / 2.0f;
-
-		if (utils::GetDistance(screenCenter, patchCenter) > 100.0f)
-			return false;*/
-
-		const Matrix & pv = wp.GetProjectionViewMatrix();
 
 		return CheckPolygonIsVisible(pv, {lb, lu, ru, rb});
 	}
@@ -220,7 +212,7 @@ PatchGrid::LoadHeightMap(const Size2d & pos, HeightMap & hm) const
 }
 
 void
-PatchGrid::Update(const WorldProjection & wp)
+PatchGrid::Update(const Matrix & projectionViewMatrix)
 {
 	auto it = grid_.Begin();
 	auto end = grid_.End();
@@ -242,7 +234,7 @@ PatchGrid::Update(const WorldProjection & wp)
 		{
 			cornerValues = GetPatchCornerHeights(*hmlPtr_, pos, patchSize_);
 		}
-		const bool isVisible = CheckPatchVisible(cornerValues, pos, wp, patchSize_);
+		const bool isVisible = CheckPatchVisible(cornerValues, pos, projectionViewMatrix, patchSize_);
 
 		/*bool isVisible = false;
 		if (pos == Size2d(32, 0))
@@ -286,11 +278,9 @@ PatchGrid::Update(const WorldProjection & wp)
 }
 
 bool 
-PatchGrid::Tasselate(const WorldProjection & wp)
+PatchGrid::Tasselate(const Point3d & camera)
 {
 	bool wasUpdated = false;
-
-	const Point3d & camera = wp.GetCameraPosition();
 
 	DoForAllValid(grid_, 
 		[&wasUpdated, &camera](const PatchGridNode & node)

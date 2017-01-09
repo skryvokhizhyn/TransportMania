@@ -19,6 +19,7 @@ namespace trm
 		void Visit(UserEventData::ChangeMouseMode & e);
 		void Visit(UserEventData::SubmitDraftRoads & e);
 		void Visit(UserEventData::RoadAffectedIds & e);
+		void Visit(UserEventData::ActualizeTerrainRenderedData & e);
 
 	private:
 		Application & app_;

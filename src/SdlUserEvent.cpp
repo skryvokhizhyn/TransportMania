@@ -1,6 +1,7 @@
 #include "SdlUserEvent.h"
 #include "UserEventData.h"
 #include "SdlUserEventVisitor.h"
+#include "Logger.h"
 
 #include <boost/format.hpp>
 
@@ -84,7 +85,7 @@ SdlUserEventWrapper::~SdlUserEventWrapper()
 {
 	if (!emitted_)
 	{
-		// ok to call with overhead as this MUST NOT happen
+		// ok to call with overhed as this MUST NOT happen
 		// it will identify the type and free memory correctly
 		SdlUserEventCoder::Decode(evt_);
 	}
@@ -93,8 +94,24 @@ SdlUserEventWrapper::~SdlUserEventWrapper()
 void
 SdlUserEventWrapper::Emit()
 {
-	SDL_PushEvent(&evt_);
-	emitted_ = true;
+	const auto result = SDL_PushEvent(&evt_);
+
+	switch (result)
+	{
+	default:
+		emitted_ = true;
+		return;
+
+	case 0: 
+		utils::Logger().Debug() << "Event of type " << std::to_string(evt_.user.code) << " has been filttered out";
+		break;
+
+	case -1:
+		utils::Logger().Error() << "Failed to schedule Event of type " << std::to_string(evt_.user.code) << ". Error: " << SDL_GetError();
+		break;
+	};
+
+	emitted_ = false;
 }
 
 #define USER_EVENT_TO_ENUM_TYPE(cls, typ) \
@@ -115,7 +132,8 @@ namespace priv
 		PauseApplicationType,
 		MouseModeChangeType,
 		SubmitDraftRoadsType,
-		RailRoadAffectedIdsType
+		RailRoadAffectedIdsType,
+		ActualizeTerrainRenderedDataType
 	};
 
 	// specialize for every user event data
@@ -124,6 +142,7 @@ namespace priv
 	USER_EVENT_TO_ENUM_TYPE(ChangeMouseMode, MouseModeChangeType);
 	USER_EVENT_TO_ENUM_TYPE(SubmitDraftRoads, SubmitDraftRoadsType);
 	USER_EVENT_TO_ENUM_TYPE(RoadAffectedIds, RailRoadAffectedIdsType);
+	USER_EVENT_TO_ENUM_TYPE(ActualizeTerrainRenderedData, ActualizeTerrainRenderedDataType);
 
 } // namespace priv
 
@@ -132,6 +151,7 @@ USER_EVENT_ENCODE_SPECIALIZATION(PauseApplication);
 USER_EVENT_ENCODE_SPECIALIZATION(ChangeMouseMode);
 USER_EVENT_ENCODE_SPECIALIZATION(SubmitDraftRoads);
 USER_EVENT_ENCODE_SPECIALIZATION(RailRoadAffectedIds);
+USER_EVENT_ENCODE_SPECIALIZATION(ActualizeTerrainRenderedData);
 
 SdlUserEventPtr 
 SdlUserEventCoder::Decode(const SDL_Event & e)
@@ -145,6 +165,7 @@ SdlUserEventCoder::Decode(const SDL_Event & e)
 		USER_EVENT_DECODE_SWITCH_CASE(MouseModeChangeType, ChangeMouseMode);
 		USER_EVENT_DECODE_SWITCH_CASE(SubmitDraftRoadsType, SubmitDraftRoads);
 		USER_EVENT_DECODE_SWITCH_CASE(RailRoadAffectedIdsType, RoadAffectedIds);
+		USER_EVENT_DECODE_SWITCH_CASE(ActualizeTerrainRenderedDataType, ActualizeTerrainRenderedData);
 
 	default:
 		throw std::runtime_error((boost::format("Unknown User Event id=%d given for decoding") % e.user.code).str());

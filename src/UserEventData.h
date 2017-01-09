@@ -23,5 +23,7 @@ namespace UserEventData
 
 	using RoadAffectedIds = RailRoadAffectedIds;
 
+	struct ActualizeTerrainRenderedData {};
+
 } // namespace UserEventData
 } // namespace trm

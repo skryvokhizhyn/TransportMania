@@ -30,6 +30,8 @@ namespace trm
 	class Application
 	{
 	public:
+		Application();
+
 		bool InitApplication(const size_t width, const size_t height);
 		bool InitView();
 		bool ReleaseView();
@@ -70,6 +72,7 @@ namespace trm
 		void SubmitDraftRoads(bool yesNo);
 		void DrawPermanentRailRoad(UniqueId id);
 		void DrawTemporaryRailRoad(UniqueId id);
+		void ActualizeRenderedData();
 
 	private:
 		typedef std::vector<StaticSceneObjectPtr> StaticSceneObjects;

@@ -45,3 +45,9 @@ SdlUserEventVisitor::Visit(UserEventData::RoadAffectedIds & e)
 
 	boost::for_each(e.addedIds, boost::bind(cb, boost::ref(app_), _1));
 }
+
+void
+SdlUserEventVisitor::Visit(UserEventData::ActualizeTerrainRenderedData & /*e*/)
+{
+	app_.ActualizeRenderedData();
+}

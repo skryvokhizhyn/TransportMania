@@ -3,13 +3,13 @@
 #include "HeightMapLoader.h"
 #include "PatchGridMap.h"
 #include "PointNormaleMap.h"
+#include "Matrix.h"
 
 #include <boost/noncopyable.hpp>
 
 namespace trm
 {
 	struct ModelData;
-	class WorldProjection;
 
 namespace terrain
 {
@@ -28,8 +28,8 @@ namespace lod
 		PatchGrid(PatchGrid && pg);
 		void Init();
 
-		void Update(const WorldProjection & wp);
-		bool Tasselate(const WorldProjection & wp);
+		void Update(const Matrix & projectionViewMatrix);
+		bool Tasselate(const Point3d & camera);
 		void Render();
 		bool GetNextRenderResult(ModelData & md);
 		void Flush();

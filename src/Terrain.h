@@ -3,12 +3,14 @@
 
 #include "PatchGrid.h"
 #include "HeightMapLoader.h"
+#include "Matrix.h"
+
 #include <boost/noncopyable.hpp>
+
 #include <memory>
 
 namespace trm
 {
-	class WorldProjection;
 	class Terraformer;
 
 	class Terrain
@@ -23,8 +25,8 @@ namespace trm
 		Terrain(const terrain::HeightMapLoaderPtr & mdl);
 		Terrain(Terrain && t);
 
-		void Update(const WorldProjection & wp);
-		bool Tasselate(const WorldProjection & wp);
+		void Update(const Matrix & projectionViewMatrix);
+		bool Tasselate(const Point3d & camera);
 		void Render();
 		bool GetNextRenderResult(ModelData & md);
 		

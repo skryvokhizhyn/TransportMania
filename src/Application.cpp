@@ -12,6 +12,7 @@
 #include "TerrainPositionLocator.h"
 #include "TerrainPointCollector.h"
 #include "SceneContent.h"
+
 #include "RailRoadRangeGenerator.h"
 #include "RailRoadTerraformer.h"
 #include "RailRoadConnectionResult.h"
@@ -32,6 +33,10 @@
 
 using namespace trm;
 using namespace trm::terrain;
+
+Application::Application()
+{
+}
 
 bool 
 Application::InitApplication(const size_t width, const size_t height)
@@ -126,22 +131,12 @@ Application::Stop()
 void 
 Application::Update()
 {
-	if (processTerrainUpdate_)
-		terrainScenePtr_->Update(worldProjection_);
-
 	if (!paused_)
 	{
 		boost::for_each(managers_, std::bind(&TransportManager::Update, std::placeholders::_1));
 	}
 
 	componentHolder_.Update(worldProjection_);
-}
-
-void 
-Application::Render()
-{
-	if (processTerrainUpdate_)
-		terrainScenePtr_->Render(worldProjection_);
 }
 
 void 
@@ -171,6 +166,14 @@ Application::Draw()
 	const Matrix & ovm = worldProjection_.GetOrthoViewMatrix();
 	textManager_.Draw(context_, ovm);
 	windowManager_.Draw(context_, ovm);
+}
+
+void trm::Application::Render()
+{
+	if (processTerrainUpdate_)
+	{
+		terrainScenePtr_->Render(worldProjection_);
+	}
 }
 
 void 
@@ -445,4 +448,10 @@ Application::DrawTemporaryRailRoad(UniqueId id)
 	terrainPtr_->Apply(t);
 
 	tempRoadObjects_.push_back(StaticSceneObjectFactory::ForTerrainCover(tpc.GetPoints()));
+}
+
+void 
+Application::ActualizeRenderedData()
+{
+	terrainScenePtr_->Actualize();
 }

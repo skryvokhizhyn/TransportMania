@@ -155,10 +155,9 @@ Game::Run()
 			{
 				app_.Commit();
 			}
-
-			app_.Update();
 		}
 	
+		app_.Update();
 		app_.Render();
 		app_.Draw();
 

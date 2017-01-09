@@ -31,15 +31,15 @@ Terrain::Terrain(Terrain && t)
 }
 
 void
-Terrain::Update(const WorldProjection & wp)
+Terrain::Update(const Matrix & projectionViewMatrix)
 {
-	patchGrid_.Update(wp);
+	patchGrid_.Update(projectionViewMatrix);
 }
 
 bool 
-Terrain::Tasselate(const WorldProjection & wp)
+Terrain::Tasselate(const Point3d & camera)
 {
-	return patchGrid_.Tasselate(wp);
+	return patchGrid_.Tasselate(camera);
 }
 
 void
