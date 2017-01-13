@@ -55,7 +55,6 @@ RenderThreadedExecutor::IsScheduled() const
 void
 RenderThreadedExecutor::Schedule()
 {
-	utils::Logger().Trace() << "Schedule";
 	updateRequested_ = true;
 
 	if (state_ == State::Idle)
@@ -148,7 +147,7 @@ RenderThreadedExecutor::ScheduleTasselation(Terrain & t, const Point3d & camera)
 {
 	auto asyncRenderFunction = [&, camera]()
 	{
-		const bool wasTasselated =t.Tasselate(camera);
+		const bool wasTasselated = t.Tasselate(camera);
 
 		t.Render();
 

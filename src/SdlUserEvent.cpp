@@ -4,6 +4,7 @@
 #include "Logger.h"
 
 #include <boost/format.hpp>
+#include <boost/lexical_cast.hpp>
 
 #include <map>
 #include <cassert>
@@ -103,11 +104,11 @@ SdlUserEventWrapper::Emit()
 		return;
 
 	case 0: 
-		utils::Logger().Debug() << "Event of type " << std::to_string(evt_.user.code) << " has been filttered out";
+		utils::Logger().Debug() << "Event of type " << boost::lexical_cast<std::string>(evt_.user.code) << " has been filtered out";
 		break;
 
 	case -1:
-		utils::Logger().Error() << "Failed to schedule Event of type " << std::to_string(evt_.user.code) << ". Error: " << SDL_GetError();
+		utils::Logger().Error() << "Failed to schedule Event of type " << boost::lexical_cast<std::string>(evt_.user.code) << ". Error: " << SDL_GetError();
 		break;
 	};
 

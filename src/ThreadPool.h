@@ -6,6 +6,7 @@
 #include <deque>
 #include <vector>
 #include <mutex>
+#include <condition_variable>
 #include <functional>
 #include <atomic>
 #include <cstdint>

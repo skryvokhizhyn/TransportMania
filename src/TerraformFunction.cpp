@@ -176,7 +176,7 @@ TerraformFunctionFactory::GetLinear(const Point3d & p1, const Point3d & p2)
 {
 	LinearHeightGetter heightGetter(p1, p2);
 
-	return MakeTerraformFunctoinPtr([=](auto p, auto & h)
+	return MakeTerraformFunctoinPtr([=](const Point2d & p, AxisType & h)
 	{
 		h = heightGetter(p);
 
