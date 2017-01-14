@@ -111,7 +111,6 @@ BmpHandler::GetPositionOffset(const size_t x, const size_t y) const
 void 
 BmpHandler::Get(const size_t x, const size_t y, ValueType * pBuff, const size_t cnt) const
 {
-	//const size_t currentOffset = (height_ - y - 1) * rowSize_ + x;
 	const size_t currentOffset = GetPositionOffset(x, y);
 
 	if (currentOffset + cnt > rowSize_ * height_)

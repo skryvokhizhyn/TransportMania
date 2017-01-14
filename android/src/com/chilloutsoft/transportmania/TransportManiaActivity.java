@@ -3,14 +3,15 @@ package com.chilloutsoft.transportmania;
 import org.libsdl.app.SDLActivity;
 
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+//import android.preference.PreferenceManager;
 import android.util.Log;
-import android.content.SharedPreferences;
+import android.content.Context;
+//import android.content.SharedPreferences;
 import android.content.res.AssetManager;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileOutputStream;
-import android.os.Environment;
+//import android.os.Environment;
 import java.io.File;
 import java.lang.Exception;
 
@@ -19,39 +20,33 @@ public class TransportManiaActivity extends SDLActivity {
 		System.loadLibrary("TransportManiaNative");
 	}
 
-	private static final String PREFERENCE_FIRST_RUN = "PREFERENCE_FIRST_RUN";
+	//private static final String PREFERENCE_FIRST_RUN = "PREFERENCE_FIRST_RUN";
 	private static boolean FORCE_RESET_ASSETS = false;
 	private static final String ASSETS_LOCATION = "/TransportMania/";
 
-	void createParentFolderIfNotExist(String path) throws Exception {
-		File parentFolder = new File(path).getParentFile();
+	void createFolderIfNotExist(String path) throws Exception {
+		File folder = new File(path);
 
 		boolean success = true;
-		if (!parentFolder.exists()) {
-			success = parentFolder.mkdirs();
+		if (!folder.exists()) {
+			success = folder.mkdirs();
 		}
 		if (!success) {
 			throw new Exception("Failed to create folder: " + path);
 		}
 	}
 
-	private void copyFile(String fileName) throws Exception {
+	private void copyFromAssets(String assetsFolder, String folderPath, String fileName) throws Exception {
 		
-		Log.v("TRM", Environment.getExternalStorageDirectory().toString());
-		
-		String path = new String(Environment.getExternalStorageDirectory()
-				.getPath() + ASSETS_LOCATION + fileName);
-		
-		Log.v("TRM", fileName);
-		Log.v("TRM", path);
-		
+		String pathOnPhone = folderPath + "/" + fileName;
+		String pathInAssets = assetsFolder + "/" + fileName;
+
+		createFolderIfNotExist(folderPath);
+
 		AssetManager assetManager = getAssets();
+		InputStream in = assetManager.open(pathInAssets);
 		
-		InputStream in = assetManager.open(fileName);
-
-		createParentFolderIfNotExist(path);
-
-		OutputStream out = new FileOutputStream(path);
+		OutputStream out = new FileOutputStream(pathOnPhone);
 
 		byte[] buffer = new byte[1024];
 
@@ -70,50 +65,39 @@ public class TransportManiaActivity extends SDLActivity {
 		Log.v("TRM", "File " + fileName + " copied");
 	}
 
-	private void copyFilesFromFolder(String folder) throws Exception {
-		String pathToFolder = new String(Environment.getExternalStorageDirectory()
-			.getPath() + ASSETS_LOCATION + folder);
+	private void copyFilesFromAssets(String pathToPhoneAssets, String assetsFolder) throws Exception {
 
-		File filesFolder = new File(pathToFolder);
-		File [] files = filesFolder.listFiles();
+		String pathToFolderOnPhone = new String(pathToPhoneAssets + ASSETS_LOCATION + assetsFolder);
 		
-		for (File f : files) {
+		AssetManager assetManager = getAssets();
+		String [] assetsInFolder = assetManager.list(assetsFolder);
+
+		for (String f : assetsInFolder)
+		{
+			if (!FORCE_RESET_ASSETS)
+			{
+				String pathToFileOnPhone = pathToFolderOnPhone + "/" + f;
+				
+				if (new File(pathToFileOnPhone).exists())
+					continue;
+			}
 			
-			if (f.exists() || !FORCE_RESET_ASSETS)
-				continue;
-			
-		    copyFile(folder + '/' + f.getName());
+			copyFromAssets(assetsFolder, pathToFolderOnPhone, f);
 		}
 	}
 	
-	private void copyFonts() throws Exception {
-		Log.v("TRM", "Fonts...");
-		copyFilesFromFolder("Fonts");
-	}
-
-	private void copyHeightMaps() throws Exception {
-		Log.v("TRM", "Height Maps...");
-		copyFilesFromFolder("HeightMaps");
-	}
-
-	private void copyModels() throws Exception {
-		Log.v("TRM", "Models...");
-		copyFilesFromFolder("Models");
-	}
-
-	private void copyTextures() throws Exception {
-		Log.v("TRM", "Textures...");
-		copyFilesFromFolder("Textures");
-	}
-
-	private void resetAssets() {
+	private void resetAssets(String pathToPhoneAssets) {
 		Log.v("TRM", "Resetting assets...");
-
+		
 		try {
-			copyFonts();
-			copyHeightMaps();
-			copyModels();
-			copyTextures();
+			Log.v("TRM", "Fonts...");
+			copyFilesFromAssets(pathToPhoneAssets, "Fonts");
+			Log.v("TRM", "Height Maps...");
+			copyFilesFromAssets(pathToPhoneAssets, "HeightMaps");
+			Log.v("TRM", "Models...");
+			copyFilesFromAssets(pathToPhoneAssets, "Models");
+			Log.v("TRM", "Textures...");
+			copyFilesFromAssets(pathToPhoneAssets, "Textures");
 		} catch (Exception e) {
 			Log.e("TRM", "Failed to reset assets: " + e.toString());
 		}
@@ -126,14 +110,10 @@ public class TransportManiaActivity extends SDLActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// do first run assets deployment
-		//SharedPreferences p = PreferenceManager
-		//		.getDefaultSharedPreferences(this);
-		//boolean firstRun = p.getBoolean(PREFERENCE_FIRST_RUN, true);
+		//Context context = getContext();
+		//String pathToAssetsOnPhone = context.getExternalFilesDir(null).toString();
+		String pathToAssetsOnPhone = "/sdcard";
 
-		//if (FORCE_RESET_ASSETS || firstRun) {
-			resetAssets();
-			//p.edit().putBoolean(PREFERENCE_FIRST_RUN, false).commit();
-		//}
+		resetAssets(pathToAssetsOnPhone);
 	}
 }
