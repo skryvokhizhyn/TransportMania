@@ -45,7 +45,7 @@ namespace trm
 		void RotateScene(const Angle angle);
 		void BendScene(const Angle dtheta, const Angle dpsi);
 		void PressScene(const float x, const float y);
-		void Commit();
+		void CommitSceneActions();
 		
 		// invalidates terrain so it starts tasselation
 		void UpdateTerrain();

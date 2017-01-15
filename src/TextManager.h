@@ -12,7 +12,7 @@ namespace trm
 	public:
 		void Init(const Size2d & screenSize);
 
-		void PutFrameRate(const unsigned rate);
+		void PutFrameRate(const unsigned rate, std::uint8_t load);
 
 		void Draw(const DrawContext & c, const Matrix & orthoViewMatrix) const;
 

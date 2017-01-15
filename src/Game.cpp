@@ -153,7 +153,7 @@ Game::Run()
 			// if it's the last update for this frame
 			if (!updateRate.NeedMore())
 			{
-				app_.Commit();
+				app_.CommitSceneActions();
 			}
 		}
 	
@@ -163,13 +163,6 @@ Game::Run()
 
 		SDL_GL_SwapWindow(windowPtr_.get());
 
-		if (fpsCounter.Tick())
-		{
-			const unsigned frames = fpsCounter.GetFrames();
-
-			TextManagerProxy()->PutFrameRate(frames);
-		}
-
 		const unsigned cnt = updateRate.Tick();
 		if (cnt > 1)
 		{
@@ -177,6 +170,13 @@ Game::Run()
 		}
 
 		// guarantees that render rate will be as specified by render rate guard
-		renderRateGuard.Snooze();
+		auto load = renderRateGuard.Snooze();
+
+		if (fpsCounter.Tick())
+		{
+			const unsigned frames = fpsCounter.GetFrames();
+
+			TextManagerProxy()->PutFrameRate(frames, load);
+		}
 	}
 }

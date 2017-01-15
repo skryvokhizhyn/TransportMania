@@ -23,10 +23,10 @@ TextManager::Init(const Size2d & sz)
 }
 
 void
-TextManager::PutFrameRate(const unsigned rate)
+TextManager::PutFrameRate(const unsigned rate, std::uint8_t load)
 {
 	drawableItems_.clear();
-	const std::wstring text = boost::str(boost::wformat(L"Frame rate: %d") % rate);
+	const std::wstring text = boost::str(boost::wformat(L"Frame rate: %d, load rate: %d%%") % rate % load);
 
 #ifndef DRAWING_MODE_FULL
 	TextData data = TextRendererProxy()->Render(text);

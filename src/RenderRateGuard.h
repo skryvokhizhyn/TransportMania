@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <cstdint>
 
 namespace trm
 {
@@ -9,7 +10,7 @@ namespace trm
 	public:
 		RenderRateGuard(unsigned rate);
 
-		void Snooze();
+		std::uint8_t Snooze();
 
 	private:
 		const std::chrono::milliseconds renderDuration_;

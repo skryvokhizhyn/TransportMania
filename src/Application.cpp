@@ -219,7 +219,7 @@ Application::PressScene(const float x, const float y)
 }
 
 void
-Application::Commit()
+Application::CommitSceneActions()
 {
 	sceneHandlerPtr_->Commit();
 }
