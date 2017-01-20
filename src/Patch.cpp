@@ -50,15 +50,23 @@ Patch::ComputeVariance()
 bool
 Patch::Tasselate(const Point3d & camera)
 {
-	const bool upWasUpdated = rootUpCache_.Tasselate(detalization_, varianceUp_, 
-		*pHeightMap_, UPPER_TRIANGLE_MAPPER, camera);
-	const bool downWasUpdate = rootDownCache_.Tasselate(detalization_, varianceDown_, 
-		*pHeightMap_, LOWER_TRIANGLE_MAPPER, camera);
+	bool wasUpdated = false;
 
-	//assert(pRootUp_->IsValid());
-	//assert(pRootDown_->IsValid());
+	//do
+	{
+		bool upWasUpdated = rootUpCache_.Tasselate(detalization_, varianceUp_,
+			*pHeightMap_, UPPER_TRIANGLE_MAPPER, camera);
+		bool downWasUpdated = rootDownCache_.Tasselate(detalization_, varianceDown_,
+			*pHeightMap_, LOWER_TRIANGLE_MAPPER, camera);
 
-	return upWasUpdated || downWasUpdate;
+		wasUpdated = upWasUpdated || downWasUpdated;
+
+		//assert(pRootUp_->IsValid());
+		//assert(pRootDown_->IsValid());
+	} 
+	//while (wasUpdated);
+
+	return wasUpdated;
 }
 
 void
