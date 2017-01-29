@@ -37,7 +37,9 @@ Variance::Generate(const size_t num, const size_t level,
 	const HeightMap & hm, const Triangle3d & t)
 {
 	if (!ShouldContinue(level))
-		return 0;
+	{
+		return GetForcedVariance(t);
+	}
 
 	const Triangle3dPair tp = utils::SplitTriangle(t, hm);
 
@@ -57,10 +59,51 @@ Variance::Generate(const size_t num, const size_t level,
 	return accumulatedVariance;
 }
 
+HeightMap::Value 
+Variance::GetForcedVariance(const Triangle3d & t)
+{
+	if (forcedPoints_.empty())
+	{
+		return 0;
+	}
+
+	auto foundEdgeIt = forcedPoints_.find(Size2d::Cast(t.e()));
+
+	if (foundEdgeIt != forcedPoints_.end())
+	{
+		forcedPoints_.erase(foundEdgeIt);
+		return std::numeric_limits<HeightMap::Value>::max();
+	}
+
+	auto foundLeftIt = forcedPoints_.find(Size2d::Cast(t.l()));
+
+	if (foundLeftIt != forcedPoints_.end())
+	{
+		forcedPoints_.erase(foundLeftIt);
+		return std::numeric_limits<HeightMap::Value>::max();
+	}
+
+	auto foundRightIt = forcedPoints_.find(Size2d::Cast(t.r()));
+
+	if (foundRightIt != forcedPoints_.end())
+	{
+		forcedPoints_.erase(foundRightIt);
+		return std::numeric_limits<HeightMap::Value>::max();
+	}
+
+	return 0;
+}
+
 size_t
 Variance::GetSize() const
 {
 	return variance_.size();
+}
+
+void 
+Variance::PutForcedPoint(const Size2d & p)
+{
+	forcedPoints_.insert(p);
 }
 
 void 

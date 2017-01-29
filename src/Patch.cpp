@@ -14,6 +14,17 @@ using namespace trm;
 using namespace trm::terrain;
 using namespace trm::terrain::lod;
 
+namespace
+{
+	bool CheckPointBelongsToUpperTriangle(const Size2d & p)
+	{
+		if (p.x() >= p.y())
+			return false;
+
+		return true;
+	}
+}
+
 Patch::Patch()
 	: pRootUp_(nullptr)
 	, pRootDown_(nullptr)
@@ -45,6 +56,21 @@ Patch::ComputeVariance()
 
 	varianceUp_.Generate(detalization_, *pHeightMap_, tp.first);
 	varianceDown_.Generate(detalization_, *pHeightMap_, tp.second);
+}
+
+void 
+Patch::PutForcedPoint(const Point2d & p)
+{
+	const Size2d s = Size2d::Cast(p);
+
+	if (CheckPointBelongsToUpperTriangle(s))
+	{
+		varianceUp_.PutForcedPoint(s);
+	}
+	else
+	{
+		varianceDown_.PutForcedPoint(s);
+	}
 }
 
 bool

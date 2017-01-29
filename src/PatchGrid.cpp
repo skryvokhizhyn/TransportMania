@@ -423,7 +423,11 @@ PatchGrid::Set(const Point2d & p, const HeightMap::Value z)
 			HeightMap & hm = found->data.heightMap;
 			LoadHeightMap(found->pos, hm);
 
-			hm.Set(p - Point2d::Cast(s), z);
+			const Point2d shiftedPoint = p - Point2d::Cast(s);
+
+			hm.Set(shiftedPoint, z);
+
+			found->data.patch.PutForcedPoint(shiftedPoint);
 
 			found->data.dirty = true;
 

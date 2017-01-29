@@ -48,7 +48,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CRTDBG_MAP_ALLOC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRTDBG_MAP_ALLOC;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ForcedIncludeFiles>%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
     <Link>
@@ -71,13 +71,50 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Angle.cpp" />
+    <ClCompile Include="..\..\src\BmpHandler.cpp" />
+    <ClCompile Include="..\..\src\GeometryUtils.cpp" />
+    <ClCompile Include="..\..\src\HeightMap.cpp" />
+    <ClCompile Include="..\..\src\HeightMapLoaderCache.cpp" />
+    <ClCompile Include="..\..\src\HeightMapLoaderFactory.cpp" />
+    <ClCompile Include="..\..\src\HeightMapLoaderFile.cpp" />
+    <ClCompile Include="..\..\src\HeightMapLoaderTest.cpp" />
+    <ClCompile Include="..\..\src\Line.cpp" />
+    <ClCompile Include="..\..\src\LinearHeightGetter.cpp" />
+    <ClCompile Include="..\..\src\MatrixFactory.cpp" />
+    <ClCompile Include="..\..\src\MatrixUtils.cpp" />
+    <ClCompile Include="..\..\src\Patch.cpp" />
+    <ClCompile Include="..\..\src\PatchGrid.cpp" />
+    <ClCompile Include="..\..\src\PatchTriangleMapper.cpp" />
+    <ClCompile Include="..\..\src\PointHash.cpp" />
+    <ClCompile Include="..\..\src\PointNormaleMap.cpp" />
+    <ClCompile Include="..\..\src\PolygonVisibilityChecker.cpp" />
+    <ClCompile Include="..\..\src\PoolUsageCounter.cpp" />
+    <ClCompile Include="..\..\src\PoolUsageCounterHolder.cpp" />
+    <ClCompile Include="..\..\src\RangeRectangle.cpp" />
+    <ClCompile Include="..\..\src\Settings.cpp" />
+    <ClCompile Include="..\..\src\Terraformer.cpp" />
+    <ClCompile Include="..\..\src\TerraformFunction.cpp" />
+    <ClCompile Include="..\..\src\Terrain.cpp" />
+    <ClCompile Include="..\..\src\TerrainRange.cpp" />
+    <ClCompile Include="..\..\src\TerrainRangeArc.cpp" />
+    <ClCompile Include="..\..\src\TerrainRangeCircle.cpp" />
+    <ClCompile Include="..\..\src\TerrainRangeLine.cpp" />
+    <ClCompile Include="..\..\src\TriangleMapper.cpp" />
+    <ClCompile Include="..\..\src\TriangleNode.cpp" />
+    <ClCompile Include="..\..\src\TriangleNodeCache.cpp" />
+    <ClCompile Include="..\..\src\TriangleNodeHandler.cpp" />
+    <ClCompile Include="..\..\src\TriangleNodePool.cpp" />
+    <ClCompile Include="..\..\src\Variance.cpp" />
+    <ClCompile Include="..\..\src\WorldProjection.cpp" />
     <ClCompile Include="..\TransportMania\LeakDetectorInitializer.cpp" />
+    <ClCompile Include="..\TransportMania\Logger.cpp" />
     <ClCompile Include="FunctionalTest.cpp" />
+    <ClCompile Include="TerrainPerformance.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LeakDetectorNew.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>

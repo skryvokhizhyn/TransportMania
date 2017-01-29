@@ -8,7 +8,7 @@ using namespace trm;
 using namespace trm::terrain;
 using namespace trm::terrain::lod;
 
-const size_t Terrain::PATCH_SIZE = 9u; // points
+const size_t Terrain::PATCH_SIZE = 33u; // points
 const float Terrain::MAX_HEIGHT = 40.0f;
 const float Terrain::MIN_HEIGHT = -5.0f;
 

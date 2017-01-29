@@ -26,6 +26,7 @@ namespace lod
 		bool Tasselate(const Point3d & camera);
 		void Render(ModelData & md, PointNormaleMap & normales);
 		void ComputeVariance();
+		void PutForcedPoint(const Point2d & p);
 		void Attach(Patch & p, const Direction dir);
 
 		void Clear();
