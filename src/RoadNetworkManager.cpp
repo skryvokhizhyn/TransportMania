@@ -197,8 +197,8 @@ RoadNetworkManager::ClearTemporaryData()
 	tempRoadIds_.clear();
 }
 
-auto 
-RoadNetworkManager::AdjustPoint(const Point3d & p) const -> AdjustedPoint
+RailRoadPtr
+RoadNetworkManager::GetTouchedRoad(const Point3d & p) const
 {
 	const Point2d p2d = Point2d::Cast(p);
 
@@ -207,25 +207,25 @@ RoadNetworkManager::AdjustPoint(const Point3d & p) const -> AdjustedPoint
 	auto ids = locator_.At(ConvertRangeToPolygon(circle.GetRanges()));
 
 	if (ids.empty())
-		return {p, RailRoadPtr()};
+		return RailRoadPtr();
 
 	const RailRoadPtr & foundRoad = roadMap_.at(ids.front());
 
-	return {p, foundRoad};
+	return foundRoad;
 }
 
 RailRoadConnectionResult 
 RoadNetworkManager::CreateRoad(const Point3d & from, const Point3d & to) const
 {
-	const AdjustedPoint adjustedFrom = AdjustPoint(from);
-	const AdjustedPoint adjustedTo = AdjustPoint(to);
-
-	if (adjustedFrom.first != adjustedTo.first)
+	if (from == to)
 	{
-		return RailRoadConnector::GetRoads(adjustedFrom.first, adjustedFrom.second, adjustedTo.first, adjustedTo.second);
+		return RailRoadConnectionResult();
 	}
 
-	return RailRoadConnectionResult();
+	const RailRoadPtr & touchedFrom = GetTouchedRoad(from);
+	const RailRoadPtr & touchedTo = GetTouchedRoad(to);
+
+	return RailRoadConnector::GetRoads(from, touchedFrom, to, touchedTo);
 }
 
 RailRoadAffectedIds 
@@ -266,7 +266,8 @@ RoadNetworkManager::CommitTemporaryRoads()
 
 		if (removedId)
 		{
-			result.addedIds.reserve(splitResult.size());
+			result.removedIds.push_back(removedId.get());
+			result.addedIds.reserve(result.addedIds.size() + splitResult.size());
 
 			for (const auto & roadToInsert : splitResult)
 			{

@@ -71,7 +71,6 @@ Variance::GetForcedVariance(const Triangle3d & t)
 
 	if (foundEdgeIt != forcedPoints_.end())
 	{
-		forcedPoints_.erase(foundEdgeIt);
 		return std::numeric_limits<HeightMap::Value>::max();
 	}
 
@@ -79,7 +78,6 @@ Variance::GetForcedVariance(const Triangle3d & t)
 
 	if (foundLeftIt != forcedPoints_.end())
 	{
-		forcedPoints_.erase(foundLeftIt);
 		return std::numeric_limits<HeightMap::Value>::max();
 	}
 
@@ -87,7 +85,6 @@ Variance::GetForcedVariance(const Triangle3d & t)
 
 	if (foundRightIt != forcedPoints_.end())
 	{
-		forcedPoints_.erase(foundRightIt);
 		return std::numeric_limits<HeightMap::Value>::max();
 	}
 

@@ -57,14 +57,14 @@ namespace trm
 		void Upper(const AxisType x, const AxisType y, const AxisType radii);
 
 		void PutRoad(const Point2d & from, const Point2d & to, bool commit);
-		void PutRailRoadLine(const Point3d & from, const Point3d & to);
-		void PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a);
-		void PutRailRoad(const RailRoadPtr & rrp);
+		//void PutRailRoadLine(const Point3d & from, const Point3d & to);
+		//void PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a);
+		//void PutRailRoad(const RailRoadPtr & rrp);
 		void PutRoadDraft(const RailRoadPtr & rrp);
 		//void PutLineDraft(const Point3d & from, const Point3d & to);
 
-		void EmulateDynamicScene1();
-		void EmulateDynamicScene2();
+		//void EmulateDynamicScene1();
+		//void EmulateDynamicScene2();
 
 		void CloseWindow(UniqueId id);
 		void Pause();
@@ -72,10 +72,11 @@ namespace trm
 		void SubmitDraftRoads(bool yesNo);
 		void DrawPermanentRailRoad(UniqueId id);
 		void DrawTemporaryRailRoad(UniqueId id);
+		void RemoveDrawnRailRoad(UniqueId id);
 		void ActualizeRenderedData();
 
 	private:
-		typedef std::vector<StaticSceneObjectPtr> StaticSceneObjects;
+		typedef std::unordered_map<UniqueId, StaticSceneObjectPtr> StaticSceneObjects;
 		typedef std::vector<RoadRoutePtr> RoadRoutePtrs;
 		typedef std::vector<TransportManager> TransportManagers;
 

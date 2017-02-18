@@ -17,6 +17,7 @@ namespace trm
 
 		Type type;
 		UniqueIdVector addedIds;
+		UniqueIdVector removedIds;
 	};
 
 } // namespace trm

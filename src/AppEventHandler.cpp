@@ -47,9 +47,9 @@ AppEventHandler::OnKeyDown(const SDL_Event & e, Application & app)
 		app.UpdateTerrain();
 		break;
 
-	case SDLK_1:
+	/*case SDLK_1:
 		app.EmulateDynamicScene1();
-		break;
+		break;*/
 
 	case SDLK_SPACE:
 	case SDLK_AC_BACK:

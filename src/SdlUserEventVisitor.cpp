@@ -43,6 +43,7 @@ SdlUserEventVisitor::Visit(UserEventData::RoadAffectedIds & e)
 	else
 		cb = &Application::DrawTemporaryRailRoad;
 
+	boost::for_each(e.removedIds, boost::bind(&Application::RemoveDrawnRailRoad, boost::ref(app_), _1));
 	boost::for_each(e.addedIds, boost::bind(cb, boost::ref(app_), _1));
 }
 

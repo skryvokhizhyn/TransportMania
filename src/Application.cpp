@@ -153,11 +153,11 @@ Application::Draw()
 
 	// uses context transformation of terrain so no Transform method call
 	std::for_each(staticSceneObjects_.cbegin(), staticSceneObjects_.cend(), 
-		[](const StaticSceneObjectPtr & ssoPtr){ssoPtr->Draw();});
+		[](const StaticSceneObjects::value_type & sso){sso.second->Draw();});
 
 	// uses context transformation of terrain so no Transform method call
 	std::for_each(tempRoadObjects_.cbegin(), tempRoadObjects_.cend(), 
-		[](const StaticSceneObjectPtr & ssoPtr){ssoPtr->Draw();});
+		[](const StaticSceneObjects::value_type & sso){sso.second->Draw();});
 
 	componentHolder_.Draw(context_, pvm);
 
@@ -242,34 +242,34 @@ Application::ResumeTerrainUpdate()
 	processTerrainUpdate_ = true;
 }
 
-void 
-Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*radii*/)
-{
-	//TerrainRangeLine range(trm::Point2d(x, y), trm::Point2d(x + 10.0f, y), radii);
-	//TerrainRangeArc range(TerrainRangeArc::Data(Point2d(5, 15), Degrees(150), Point2d(15, 15), Rotation::AntiClockwise), 1);
-	//TerrainRangeCircle range(trm::Point2d(x, y), radii);
+//void 
+//Application::Upper(const AxisType /*x*/, const AxisType /*y*/, const AxisType /*radii*/)
+//{
+//	TerrainRangeLine range(trm::Point2d(x, y), trm::Point2d(x + 10.0f, y), radii);
+//	TerrainRangeArc range(TerrainRangeArc::Data(Point2d(5, 15), Degrees(150), Point2d(15, 15), Rotation::AntiClockwise), 1);
+//	TerrainRangeCircle range(trm::Point2d(x, y), radii);
+//
+//	TerrainRangeLine range(trm::Point2d(10, 10), trm::Point2d(50, 10), 10);
+//
+//	/*auto tf = TerraformFunctionFactory::GetConstant(0.0f);
+//	Terraformer t(range, *tf.get());
+//	terrainPtr_->Apply(t);
+//
+//	terrainScenePtr_->UpdateRequired();*/
+//}
 
-	//TerrainRangeLine range(trm::Point2d(10, 10), trm::Point2d(50, 10), 10);
-
-	/*auto tf = TerraformFunctionFactory::GetConstant(0.0f);
-	Terraformer t(range, *tf.get());
-	terrainPtr_->Apply(t);
-
-	terrainScenePtr_->UpdateRequired();*/
-}
-
-void 
-Application::PutRailRoad(const RailRoadPtr & rrp)
-{
-	OptionalUniqueId roadId = roadNetworkManager_.InsertPermanentRoad(rrp);
-	
-	if (!roadId)
-	{
-		return;
-	}
-
-	DrawPermanentRailRoad(roadId.get());
-}
+//void 
+//Application::PutRailRoad(const RailRoadPtr & rrp)
+//{
+//	OptionalUniqueId roadId = roadNetworkManager_.InsertPermanentRoad(rrp);
+//	
+//	if (!roadId)
+//	{
+//		return;
+//	}
+//
+//	DrawPermanentRailRoad(roadId.get());
+//}
 
 void 
 Application::DrawPermanentRailRoad(UniqueId id)
@@ -292,67 +292,67 @@ Application::DrawPermanentRailRoad(UniqueId id)
 	Terraformer t(rrrg.GetRange(), *tFuncPtr);
 	terrainPtr_->Apply(t);
 
-	staticSceneObjects_.push_back(StaticSceneObjectFactory::ForRailRoad(rrp));
+	staticSceneObjects_.emplace(id, StaticSceneObjectFactory::ForRailRoad(rrp));
 
 	terrainScenePtr_->UpdateRequired();
 }
 
-void 
-Application::PutRailRoadLine(const Point3d & from, const Point3d & to)
-{
-	const RailRoadPtr rrp = RailRoadFactory::Line(from, to);
-	PutRailRoad(rrp);
-}
+//void 
+//Application::PutRailRoadLine(const Point3d & from, const Point3d & to)
+//{
+//	const RailRoadPtr rrp = RailRoadFactory::Line(from, to);
+//	PutRailRoad(rrp);
+//}
+//
+//void 
+//Application::PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a)
+//{
+//	const RailRoadPtr rrp = RailRoadFactory::Arc(from, a, c);
+//	PutRailRoad(rrp);
+//}
 
-void 
-Application::PutRailRoadArc(const Point3d & from, const Point2d & c, const Angle a)
-{
-	const RailRoadPtr rrp = RailRoadFactory::Arc(from, a, c);
-	PutRailRoad(rrp);
-}
-
-void 
-Application::EmulateDynamicScene1()
-{
-	const Point3d p1(30, 10, 6);
-	const Point3d p2(50, 10, 13);
-	const Point3d p3(10, 30, 6);
-	
-	//const RailRoadPtr rrp = RailRoadFactory::Line(p1, p2);
-	
-	//roadNetwork_.Insert(rrp);
-
-	PutRailRoadLine(p1, p2);
-	PutRailRoadArc(p3, Point2d(30, 30), Degrees(90));
-
-	const RoadRoutePtr rrPtr = roadNetworkManager_.GetRoute(p3, p2);
-
-	managers_.emplace_back(RoadRouteHolder(rrPtr, Heading::Forward));
-}
-
-void 
-Application::EmulateDynamicScene2()
-{
-	const Point3d p1(10, 10, 3);
-	const Point3d p2(30, 10, 3);
-	const Point2d c1(30, 20);
-	const Angle a = Degrees(180);
-	const Point3d p3(30, 30, 3);
-	const Point3d p4(20, 30, 3);
-	const Point2d c2(20, 40);
-	const Point3d p5(20, 50, 3);
-	const Point3d p6(40, 50, 3);
-
-	PutRailRoadLine(p1, p2);
-	PutRailRoadArc(p2, c1, a);
-	PutRailRoadLine(p3, p4);
-	PutRailRoadArc(p4, c2, a * -1.0f);
-	PutRailRoadLine(p5, p6);
-	 
-	const RoadRoutePtr rrPtr = roadNetworkManager_.GetRoute(p1, p6);
-
-	roadRoutePtrs_.push_back(rrPtr);
-}
+//void 
+//Application::EmulateDynamicScene1()
+//{
+//	const Point3d p1(30, 10, 6);
+//	const Point3d p2(50, 10, 13);
+//	const Point3d p3(10, 30, 6);
+//	
+//	//const RailRoadPtr rrp = RailRoadFactory::Line(p1, p2);
+//	
+//	//roadNetwork_.Insert(rrp);
+//
+//	PutRailRoadLine(p1, p2);
+//	PutRailRoadArc(p3, Point2d(30, 30), Degrees(90));
+//
+//	const RoadRoutePtr rrPtr = roadNetworkManager_.GetRoute(p3, p2);
+//
+//	managers_.emplace_back(RoadRouteHolder(rrPtr, Heading::Forward));
+//}
+//
+//void 
+//Application::EmulateDynamicScene2()
+//{
+//	const Point3d p1(10, 10, 3);
+//	const Point3d p2(30, 10, 3);
+//	const Point2d c1(30, 20);
+//	const Angle a = Degrees(180);
+//	const Point3d p3(30, 30, 3);
+//	const Point3d p4(20, 30, 3);
+//	const Point2d c2(20, 40);
+//	const Point3d p5(20, 50, 3);
+//	const Point3d p6(40, 50, 3);
+//
+//	PutRailRoadLine(p1, p2);
+//	PutRailRoadArc(p2, c1, a);
+//	PutRailRoadLine(p3, p4);
+//	PutRailRoadArc(p4, c2, a * -1.0f);
+//	PutRailRoadLine(p5, p6);
+//	 
+//	const RoadRoutePtr rrPtr = roadNetworkManager_.GetRoute(p1, p6);
+//
+//	roadRoutePtrs_.push_back(rrPtr);
+//}
 
 void
 Application::CloseWindow(UniqueId id)
@@ -392,14 +392,43 @@ Application::SubmitDraftRoads(bool yesNo)
 }
 
 void 
-Application::PutRoad(const Point2d & from, const Point2d & to, bool commit)
+Application::PutRoad
+//(const Point2d & /*from*/, const Point2d & /*to*/, bool commit)
+(const Point2d & from1, const Point2d & to1, bool commit)
 {
+	//Point2d from(212, 519);
+	//Point2d to(524, 292);
+	//198, 546; 533, 526
+	
+	Point2d from = from1;
+	Point2d to = to1;
+
+	/*Point2d from;
+	Point2d to;*/
+
 	if (commit)
 	{
+		utils::Logger().Trace() << from1 << to1;
+
+		/*static int i = 0;
+
+		if (i == 0)
+		{
+			from = Point2d(208, 537);
+			to = Point2d(683, 512);
+		}
+		else
+		{
+			from = Point2d(482, 524);
+			to = Point2d(803, 212);
+		}
+
+		++i;*/
+
 		const auto foundFrom = GetTerrainPosition(from, worldProjection_, screenConverter_, terrainPtr_);
 		const auto foundTo = GetTerrainPosition(to, worldProjection_, screenConverter_, terrainPtr_);
 
-		if (foundFrom && foundTo && foundFrom != foundTo)
+		if (foundFrom && foundTo)
 		{
 			const RailRoadConnectionResult connectionResult = roadNetworkManager_.CreateRoad(*foundFrom, *foundTo);
 
@@ -447,7 +476,13 @@ Application::DrawTemporaryRailRoad(UniqueId id)
 	Terraformer t(rrrg.GetRange(), tpc);
 	terrainPtr_->Apply(t);
 
-	tempRoadObjects_.push_back(StaticSceneObjectFactory::ForTerrainCover(tpc.GetPoints()));
+	tempRoadObjects_.emplace(id, StaticSceneObjectFactory::ForTerrainCover(tpc.GetPoints()));
+}
+
+void 
+Application::RemoveDrawnRailRoad(UniqueId id)
+{
+	staticSceneObjects_.erase(id);
 }
 
 void 

@@ -40,7 +40,7 @@ namespace trm
 		using TempRoadIds = std::unordered_set<UniqueId>;
 
 	private:
-		AdjustedPoint AdjustPoint(const Point3d & p) const;
+		RailRoadPtr GetTouchedRoad(const Point3d & p) const;
 
 	private:
 		RoadNetwork roadNetwork_;
