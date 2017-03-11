@@ -16,6 +16,7 @@ namespace trm
 		void Activate(ShaderProgramType type);
 
 		void Transform(const Matrix & pv, const Matrix & m) const;
+		void SetLightPosition(const Point3d & p) const;
 
 	private:
 		ShaderProgram terrainProgram_;

@@ -15,7 +15,7 @@ namespace
 	const Point3d SHIFT_DEFAULT_POSITION(0, 0, 100.0f);
 	const float CAMERA_MAX_HEIGHT = 500.0f;
 	const float DEFAULT_BEND_VALUE = 0.1f;
-	const float SHIFT_SLOWDOWN_COEF = 0.0005f;
+	const float SHIFT_SLOWDOWN_COEF = 0.1f;
 
 	bool CheckHeight(const float height)
 	{
@@ -111,7 +111,7 @@ void
 WorldProjection::Shift(const float x, const float y)
 {
 	Point2d xyShift(x, y);
-	xyShift *= shiftPosition_.GetLength() * SHIFT_SLOWDOWN_COEF;
+	xyShift *= SHIFT_SLOWDOWN_COEF;
 
 	const Point2d rotatedXyShift = utils::RotateVector(xyShift, zAngle_);
 

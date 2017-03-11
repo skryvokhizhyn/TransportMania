@@ -11,6 +11,7 @@ namespace
 	const GLuintType UNDEFINED_ID = std::numeric_limits<GLuintType>::max();
 	const char * PV_MATRIX_SHADER_VARIABLE = "u_myPVMatrix";
 	const char * Mv_MATRIX_SHADER_VARIABLE = "u_myMvMatrix";
+	const char * LIGHT_POSITION_VARIABLE = "u_lightPosition";
 }
 
 ShaderProgram::ShaderProgram()
@@ -19,6 +20,7 @@ ShaderProgram::ShaderProgram()
 	, m_uiProgramObject(UNDEFINED_ID)
 	, m_pvLocation(UNDEFINED_ID)
 	, m_mvLocation(UNDEFINED_ID)
+	, m_lightPosition(UNDEFINED_ID)
 {}
 
 void
@@ -66,6 +68,11 @@ ShaderProgram::Init(ShaderProgramType type)
 	// First gets the location of that variable in the shader using its name
 	m_pvLocation = glGetUniformLocation(m_uiProgramObject, PV_MATRIX_SHADER_VARIABLE);
 	m_mvLocation = glGetUniformLocation(m_uiProgramObject, Mv_MATRIX_SHADER_VARIABLE);
+
+	if (type == ShaderProgramType::Terrain)
+	{
+		m_lightPosition = glGetUniformLocation(m_uiProgramObject, LIGHT_POSITION_VARIABLE);
+	}
 }
 
 void
@@ -94,4 +101,12 @@ GLuintType
 ShaderProgram::MVLocation() const
 {
 	return m_mvLocation;
+}
+
+GLuintType
+ShaderProgram::LightPosition() const
+{
+	assert(m_lightPosition != UNDEFINED_ID);
+
+	return m_lightPosition;
 }

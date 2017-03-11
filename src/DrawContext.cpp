@@ -58,10 +58,13 @@ void DrawContext::Activate(ShaderProgramType type)
 
 void DrawContext::Transform(const Matrix & pv, const Matrix & m) const
 {
-	// data of matrix is transponated because OGL expects it in column_major way but we have row_major
-	// thus in shaders we do vec * matrix instead of matrix * vec
 	glUniformMatrix4fv(activeProgram_->PVLocation(), 1, GL_FALSE, pv.data());
 	glUniformMatrix4fv(activeProgram_->MVLocation(), 1, GL_FALSE, m.data());
+}
+
+void trm::DrawContext::SetLightPosition(const Point3d & p) const
+{
+	glUniform3f(activeProgram_->LightPosition(), p.x(), p.y(), p.z());
 }
 
 void DrawContext::Clear() const

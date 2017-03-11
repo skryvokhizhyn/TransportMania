@@ -148,6 +148,8 @@ Application::Draw()
 
 	const Matrix & pvm = worldProjection_.GetProjectionViewMatrix();
 
+	context_.SetLightPosition(worldProjection_.GetCameraPosition());
+
 	context_.Transform(pvm, terrainScenePtr_->GetModelMatrix());
 	terrainScenePtr_->Draw();
 

@@ -36,9 +36,9 @@ namespace
 		varying vec3 v_normal;\
 		varying vec2 v_texture;\
 		uniform sampler2D u_texture;\
+		uniform vec3 u_lightPosition;\
 		void main(void)\
 		{\
-			vec3 u_lightPosition = vec3(0.0, 0.0, 100.0);\
 			vec3 n_normal = normalize(v_normal);\
 			vec3 lightVector = normalize(u_lightPosition - v_vertex);\
 			float diffuse = 0.8 * max(dot(n_normal, lightVector), 0.0);\

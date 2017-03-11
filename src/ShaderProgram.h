@@ -21,6 +21,7 @@ namespace trm
 		GLuintType Id() const;
 		GLuintType PVLocation() const;
 		GLuintType MVLocation() const;
+		GLuintType LightPosition() const;
 
 	private:
 		// The program object containing the 2 shader objects
@@ -30,6 +31,7 @@ namespace trm
 		GLuintType m_uiFragShader;
 		GLuintType m_pvLocation;
 		GLuintType m_mvLocation;
+		GLuintType m_lightPosition;
 	};
 
 } // namespace trm
